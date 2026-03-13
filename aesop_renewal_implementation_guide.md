@@ -471,13 +471,13 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
 
 ```scss
 $mobile: 767px;
-$tablet: 1199px;
-$desktop: 1600px;
+$tablet: 1023px;
+$desktop: 1920px;
 ```
 
 - 모바일: `max-width: 767px`
-- 태블릿: `max-width: 1199px`
-- 데스크탑 유틸: `max-width: 1600px`
+- 태블릿: `max-width: 1023px`
+- 데스크탑 유틸: `max-width: 1920px`
 
 ## 6-5. Spacing 시스템
 
