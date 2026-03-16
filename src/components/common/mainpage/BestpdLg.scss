@@ -1,0 +1,43 @@
+@import "../../../globals.scss";
+
+.bestpdLg {
+    /* 요청하신 큰 사이즈 크기 반영 */
+    width: 570px;
+    height: 655px;
+
+    background-color: $bg-product;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .badges {
+        display: flex;
+        gap: 8px;
+        padding: 24px 36px;
+        align-items: center;
+    }
+
+    .imgs {
+        width: 100%;
+        /* 1:1 비율 유지 */
+        aspect-ratio: 1 / 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    p {
+        @extend .suit-18-m;
+        color: $brown-700;
+        padding: 36px 48px;
+        /* 카드 사이즈가 커졌으므로 폰트는 그대로 두되 패딩(여백)을 조금 더 여유있게 조정했습니다. */
+    }
+}
