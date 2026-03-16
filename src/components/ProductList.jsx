@@ -2,26 +2,12 @@ import React, { useState, useMemo } from 'react';
 import products from '../data/products.json';
 import './ProductList.css';
 
-// 1. 새로운 데이터 구조에 맞춘 인터페이스
-export interface ProductVariant {
-    capacity: string;
-    price: string | number;
-    image: string;
-}
-
-export interface Product {
-    category: string;
-    name: string;
-    description: string;
-    variants: ProductVariant[]; // 배열 구조로 변경
-}
-
 // 개별 제품 카드를 위한 컴포넌트 (용량 선택 기능 포함)
-const ProductCard: React.FC<{ item: Product }> = ({ item }) => {
+const ProductCard = ({ item }) => {
     // 각 카드마다 어떤 용량이 선택되었는지 관리합니다. (기본값: 첫 번째 용량)
     const [selectedVariant, setSelectedVariant] = useState(item.variants[0]);
 
-    const formatPrice = (price: number | string): string => {
+    const formatPrice = (price) => {
         if (!price) return "가격 정보 없음";
         const num = typeof price === 'string' ? parseInt(price.replace(/[^0-9]/g, ''), 10) : price;
         return isNaN(num) ? "가격 정보 없음" : `${num.toLocaleString()}원`;
@@ -58,16 +44,16 @@ const ProductCard: React.FC<{ item: Product }> = ({ item }) => {
     );
 };
 
-const ProductList: React.FC = () => {
+const ProductList = () => {
     const categories = useMemo(() => {
         const cats = Array.from(new Set(products.map((p) => p.category)));
         return ['All', ...cats];
     }, []);
 
-    const [activeCategory, setActiveCategory] = useState<string>('All');
+    const [activeCategory, setActiveCategory] = useState('All');
 
     const filteredProducts = useMemo(() => {
-        const list = products as Product[]; // 타입 단언
+        const list = products;
         if (activeCategory === 'All') return list;
         return list.filter((p) => p.category === activeCategory);
     }, [activeCategory]);
@@ -94,7 +80,7 @@ const ProductList: React.FC = () => {
             <div className="product-grid">
                 {filteredProducts.map((item, index) => (
                     // 개별 컴포넌트로 호출하여 각자 용량 상태를 가지게 합니다.
-                    <ProductCard key={index} item={item as Product} />
+                    <ProductCard key={index} item={item} />
                 ))}
             </div>
         </div>

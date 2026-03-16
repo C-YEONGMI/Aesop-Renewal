@@ -1,0 +1,26 @@
+// src/components/common/badge/Badge.scss
+@import '../../../globals.scss';
+
+.badge {
+    padding: 0px 12px;
+    align-items: center;
+    justify-content: center;
+
+    @extend .suit-14-m;
+    line-height: 1;
+    color: $oatmeal;
+    /* 글씨 색상 */
+    white-space: nowrap;
+}
+
+.badge-best {
+    background-color: $point-pink;
+}
+
+.badge-new {
+    background-color: $point-green;
+}
+
+.badge-exclusive {
+    background-color: $brown-500;
+}

@@ -1,0 +1,181 @@
+// src/components/common/Footer/Footer.scss
+@import '../../../globals.scss';
+
+#footer {
+    width: 100%;
+    background-color: $bg-primary; // 베이지색 푸터 배경 ($eee5da)
+    padding: 96px 0 64px;
+    color: $brown-900;
+}
+
+#footer .inner {
+    width: 100%;
+    padding: 0 4%;
+    /* 좌우 여백 */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 46px;
+}
+
+/* ==================
+   Footer Top
+================== */
+#footer .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+#footer .slogan {
+    span {
+        @extend .suit-80-el;
+    }
+
+    .point-text {
+        @extend .montage-80;
+    }
+}
+
+#footer .links-group {
+    display: flex;
+    gap: 120px;
+    /* 두 개의 컬럼 사이의 간격 */
+}
+
+#footer .bttext {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .title {
+        @extend .suit-20-r;
+        color: $brown-300;
+    }
+
+    .text {
+        @extend .suit-16-r;
+        color: $brown-700;
+
+        a {
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: $brown-900;
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+/* ==================
+   Footer Middle (Logo)
+================== */
+#footer .btlogo {
+    width: 100%;
+
+    span {
+        display: block;
+        width: 100%;
+
+        svg {
+            width: 100%;
+            /* 로고가 브라우저 폭 전체를 차지하도록 100% 설정 */
+            height: auto;
+            color: $brown-200;
+            /* 연한 브라운 색상으로 큰 워드마크 표현 */
+        }
+    }
+}
+
+
+/* ==================
+   Footer Bottom
+================== */
+#footer .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: -32px;
+}
+
+#footer .info-text {
+    gap: 8px;
+
+    .copy {
+        color: $brown-200;
+        padding-bottom: 8px;
+    }
+
+    .text {
+        @extend .suit-12-r;
+        color: $brown-700;
+    }
+}
+
+#footer .footer-bottom-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 24px;
+}
+
+#footer .sns {
+    display: flex;
+    gap: 16px;
+
+    a {
+        color: $brown-900;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.6;
+        }
+    }
+}
+
+#footer .btservice {
+    display: flex;
+    gap: 24px;
+
+    .text {
+        @extend .suit-12-r;
+        color: $brown-900;
+        font-weight: 500;
+
+        a {
+            transition: opacity 0.3s ease;
+
+            &:hover {
+                opacity: 0.6;
+            }
+        }
+    }
+}
+
+/* ==================
+   Responsive
+================== */
+@media (max-width: 1023px) {
+    #footer .footer-top {
+        flex-direction: column;
+        gap: 64px;
+    }
+}
+
+@media (max-width: 767px) {
+    #footer .links-group {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    #footer .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+    }
+
+    #footer .footer-bottom-right {
+        align-items: flex-start;
+    }
+}

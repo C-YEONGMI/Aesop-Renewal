@@ -1,0 +1,68 @@
+// src/components/common/btn/Btn.scss
+@import '../../../globals.scss';
+
+/* 공통 화살표 전환 효과 */
+%btn-base {
+    @extend .montage-16;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* 텍스트와 화살표 사이 간격 */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+
+    svg {
+        transition: transform 0.3s ease;
+    }
+
+    /* 호버 시 화살표 우측으로 살짝 이동 */
+    &:hover svg {
+        transform: translateX(4px);
+    }
+}
+
+/* ==================
+   1. btn-more (텍스트형 - 호버시 밑줄 생성)
+================== */
+.btn-more {
+    @extend %btn-base;
+    color: $brown-500;
+    border-bottom: 1px solid transparent; 
+    padding-bottom: 4px; /* 밑줄과 글자 간격 설정 */
+
+    &:hover {
+        border-bottom-color: $brown-500;
+    }
+}
+
+/* ==================
+   2. btn-more-box (브라운 박스형)
+================== */
+.btn-more-box {
+    @extend %btn-base;
+    color: $brown-500;
+    border: 1px solid $brown-500;
+    padding: 16px 24px;
+    background-color: transparent;
+
+    &:hover {
+        background-color: $brown-500;
+        color: $oatmeal;
+    }
+}
+
+/* ==================
+   3. btn-more-wh-box (오트밀(화이트) 박스형)
+================== */
+.btn-more-wh-box {
+    @extend %btn-base;
+    color: $oatmeal;
+    border: 1px solid $oatmeal;
+    padding: 16px 24px;
+    background-color: transparent;
+
+    &:hover {
+        background-color: $oatmeal;
+        color: $brown-500;
+    }
+}

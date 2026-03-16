@@ -1,39 +1,21 @@
 import React, { useState } from 'react';
 
-// 1. 데이터 구조에 맞는 인터페이스 정의
-interface ProductVariant {
-    capacity: string;
-    price: string | number;
-    image: string;
-}
-
-interface Product {
-    category: string;
-    name: string;
-    description: string;
-    variants: ProductVariant[];
-}
-
-interface ProductCardProps {
-    product: Product;
-}
-
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard = ({ product }) => {
     // 2. 현재 선택된 용량 정보를 상태로 관리합니다. (기본값: 첫 번째 용량)
-    const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
+    const [selectedVariant, setSelectedVariant] = useState(product.variants[0]);
 
     // 3. (중요) '더보기' 상태 정의: isExpanded 상태가 없어서 오류가 났습니다.
     const [isExpanded, setIsExpanded] = useState(false);
 
     // 4. (중요) 이미지 주소 보정: 상대 경로('/dw/image/...')면 도메인을 붙여줍니다. 엑박 문제의 주원인입니다.
-    const getFullImageUrl = (url: string) => {
+    const getFullImageUrl = (url) => {
         if (!url) return '';
         // 이미 주소에 http가 포함되어 있다면 그대로 사용, 아니면 도메인을 앞에 붙여줍니다.
         return url.startsWith('http') ? url : `https://kr.aesop.com${url}`;
     };
 
     // 가격 포맷팅 함수 (숫자일 경우 콤마 추가)
-    const formatPrice = (price: string | number) => {
+    const formatPrice = (price) => {
         const num = typeof price === 'string' ? parseInt(price.replace(/[^0-9]/g, '')) : price;
         return num.toLocaleString();
     };
