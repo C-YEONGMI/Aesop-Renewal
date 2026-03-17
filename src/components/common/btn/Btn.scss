@@ -1,5 +1,5 @@
 // src/components/common/btn/Btn.scss
-@import '../../../globals.scss';
+@use '../../../globals.scss' as *;
 
 /* 공통 화살표 전환 효과 */
 %btn-base {
@@ -68,5 +68,23 @@
     &:hover {
         background-color: $oatmeal;
         color: $brown-500;
+    }
+}
+
+.btn-cart {
+    @extend %btn-base;
+    @extend .suit-18-m;
+    width: auto;
+    min-width: 0;
+    height: 50px;
+    padding: 0 24px;
+    justify-content: center;
+    background-color: $brown-500;
+    color: $oatmeal;
+    border: 0;
+    white-space: nowrap;
+
+    &:hover {
+        background-color: $brown-700;
     }
 }

@@ -1,4 +1,4 @@
-@import "../../globals.scss";
+@use "../../globals.scss" as *;
 
 /* Main.jsx가 홈 섹션 조립자 역할만 하도록
  * 개별 섹션이 자체 padding을 관리하므로 여기서는 레이아웃만 정의 */

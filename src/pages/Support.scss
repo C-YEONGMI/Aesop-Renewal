@@ -1,4 +1,4 @@
-@import "../globals.scss";
+@use "../globals.scss" as *;
 
 .support-page {
     background-color: $oatmeal;

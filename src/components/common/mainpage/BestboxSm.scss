@@ -1,50 +1,133 @@
-@import "../../../globals.scss";
+@use "../../../globals.scss" as *;
 
 .bestboxSm {
-    width: 100%;
-    aspect-ratio: 486 / 554;
+    width: 486px;
+    height: 554px;
+    max-width: 100%;
     background-color: $bg-product;
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;
+    cursor: pointer;
 
     .badges {
         display: flex;
         gap: 8px;
-        padding: clamp(10px, 1.5vw, 20px) clamp(16px, 2vw, 30px);
+        padding: 20px 30px;
         align-items: center;
+        position: relative;
+        z-index: 2;
     }
 
     .imgs {
-        width: 100%;
-        flex: 1;
+        width: 350px;
+        height: 350px;
+        flex: 0 0 350px;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        padding: 0 clamp(12px, 2vw, 24px);
+        align-self: center;
+        box-sizing: border-box;
+        padding: 0 16px 18px;
+        margin: 10px auto 0;
+        z-index: 1;
 
         img {
-            width: 350px;
-            height: 350px;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
+            display: block;
         }
     }
 
-    p {
+    .info {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2px;
+        height: 87px;
+        padding: 10px 40px 12px;
+        color: $brown-700;
+        background: transparent;
+        z-index: 3;
+        transition: bottom 0.25s ease;
+    }
+
+    .product-name {
         @extend .suit-18-m;
         color: $brown-700;
-        display: flex;
-        width: 202px;
-        height: 27px;
-        padding: 30px 40px;
-        align-items: center;
-        gap: 10px;
-        align-self: stretch;
-        margin-top: 0;
+        line-height: 1.35;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        box-sizing: border-box;
+    }
+
+    .product-price {
+        @extend .suit-26-sb;
+        color: $brown-700;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        line-height: 1.05;
+        transform: translateY(6px);
+        transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.25s ease, margin-top 0.25s ease;
+    }
+
+    .cart-cta {
+        @extend .suit-18-m;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: $brown-500;
+        color: $oatmeal;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 0;
+        opacity: 0;
+        overflow: hidden;
+        z-index: 4;
+        transition: height 0.25s ease, opacity 0.2s ease;
+    }
+
+    &:hover {
+        .info {
+            bottom: 50px;
+        }
+
+        .product-price {
+            max-height: 28px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cart-cta {
+            height: 50px;
+            opacity: 1;
+        }
+    }
+
+    @media (hover: none) {
+        .info {
+            bottom: 50px;
+        }
+
+        .product-price {
+            max-height: 28px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cart-cta {
+            height: 50px;
+            opacity: 1;
+        }
     }
 }

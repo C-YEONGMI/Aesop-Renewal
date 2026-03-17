@@ -1,17 +1,11 @@
-@import "../../../globals.scss";
+@use "../../../globals.scss" as *;
 
 .pnav {
     position: relative;
     width: 100%;
-    max-width: 1920px;
-    height: 1080px;
-    margin: 0 auto;
+    min-height: 1080px;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
-    /* 배경 이미지 레이어 */
     &__bg {
         position: absolute;
         inset: 0;
@@ -20,7 +14,6 @@
         z-index: 0;
     }
 
-    /* 컬러 박스 오버레이 (bg-overlay 80%) */
     &__overlay {
         position: absolute;
         inset: 0;
@@ -31,46 +24,52 @@
     &__inner {
         position: relative;
         z-index: 2;
-        width: 100%;
-        max-width: 1680px; // 시안에 맞춘 양측 최대 여백 제어용
-        padding: 0 4%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 120px; // 위쪽 Product 타이틀 그룹과 아래 카테고리 그룹 간의 큰 간격
+        width: min(1680px, calc(100% - 240px));
+        min-height: 1080px;
+        margin: 0 auto;
     }
 
-    /* 상단 헤더 그룹 */
     &__header {
+        position: absolute;
+        top: 152px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 783px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        position: relative;
+        gap: 16px;
         text-align: center;
-        gap: 20px;
     }
 
     &__title {
-        color: $oatmeal;
+        width: 100%;
         margin: 0;
-        line-height: 1;
+        color: $oatmeal;
+        line-height: normal;
+        letter-spacing: -4.4px;
     }
 
     &__desc {
-        color: $oatmeal;
+        width: 100%;
         margin: 0;
+        color: rgba($oatmeal, 0.7);
+        line-height: 1.5;
     }
 
-    /* 하단 카테고리 네비게이션 그룹 */
     &__cats {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        position: absolute;
+        top: 516px;
+        left: 0;
+        right: 0;
+        min-height: 240px;
     }
 
     &__center {
-        flex: 1;
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -79,28 +78,34 @@
     &__center-cat {
         color: $oatmeal;
         text-decoration: none;
+        line-height: normal;
+        letter-spacing: -2px;
+        white-space: nowrap;
         transition: opacity 0.3s ease;
-        line-height: 1;
 
         &:hover {
             opacity: 0.8;
         }
     }
 
-    /* 좌/우 카테고리 리스트 */
     &__cat-list {
+        position: absolute;
+        top: 0;
         list-style: none;
+        width: 235px;
         padding: 0;
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 24px; // 각 카테고리 행 간격
+        gap: 16px;
 
         &--left {
+            left: 0;
             align-items: flex-start;
         }
 
         &--right {
+            right: 0;
             align-items: flex-end;
         }
     }
@@ -108,67 +113,128 @@
     &__cat-item {
         display: flex;
         align-items: center;
-        gap: 16px; // 다이아몬드와 텍스트 간격
+        gap: 16px;
+        width: 100%;
+
+        button {
+            background: none;
+            border: 0;
+            padding: 0;
+            color: $oatmeal;
+            cursor: pointer;
+            text-align: inherit;
+            white-space: nowrap;
+            transition: opacity 0.3s ease;
+        }
     }
 
-    /* 각 카테고리 버튼 */
-    button {
-        background: none;
-        border: none;
-        padding: 0;
-        color: $oatmeal;
-        cursor: pointer;
+    &__cat-list--left .pnav__cat-item {
+        justify-content: flex-start;
+    }
+
+    &__cat-list--right .pnav__cat-item {
+        justify-content: flex-end;
+    }
+
+    &__cat-list--right button {
+        text-align: right;
+    }
+
+    button.active {
+        opacity: 1;
+    }
+
+    button:not(.active) {
         opacity: 0.4;
-        transition: opacity 0.3s ease, color 0.3s ease;
-
-        &:hover {
-            opacity: 0.8;
-        }
-
-        &.active {
-            opacity: 1;
-        }
     }
 
-    /* 다이아몬드 수식 기호 (8x8 px, 마름모) */
+    button:hover {
+        opacity: 0.8;
+    }
+
     &__diamond {
-        display: inline-block;
         width: 8px;
         height: 8px;
+        flex: 0 0 8px;
         background-color: $oatmeal;
-        transform: rotate(45deg); // 마름모 모양 회전
+        transform: rotate(45deg);
     }
 
-    /* ──────────── Response ──────────── */
-    @media (max-width: 1440px) {
-        height: auto;
-        padding: 80px 0;
-
-        &__cats {
-            gap: 40px;
-        }
-
-        &__cat-item button {
-            font-size: 32px;
-        }
-
-        &__center-cat {
-            font-size: 72px;
+    @media (max-width: 1919px) {
+        &__inner {
+            width: calc(100% - 240px);
         }
     }
 
-    @media (max-width: 1024px) {
-        &__cats {
+    @media (max-width: 1279px) {
+        min-height: auto;
+        padding: 120px 0;
+
+        &__inner {
+            width: calc(100% - 80px);
+            min-height: auto;
+            display: flex;
             flex-direction: column;
-            gap: 60px;
+            align-items: center;
+            gap: 72px;
+        }
+
+        &__header,
+        &__cats,
+        &__center,
+        &__cat-list {
+            position: static;
+            transform: none;
+        }
+
+        &__header {
+            width: min(783px, 100%);
+        }
+
+        &__cats {
+            width: 100%;
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+            align-items: center;
         }
 
         &__center {
-            order: -1; // 모바일에서는 중앙 타이틀이 맨 위로
+            order: -1;
         }
 
-        &__cat-list {
+        &__cat-list,
+        &__cat-list--left,
+        &__cat-list--right {
+            width: 100%;
             align-items: center;
+        }
+
+        &__cat-item,
+        &__cat-list--right .pnav__cat-item {
+            justify-content: center;
+        }
+
+        &__cat-list--right button {
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 767px) {
+        &__inner {
+            width: calc(100% - 40px);
+            gap: 56px;
+        }
+
+        &__title {
+            font-size: 120px;
+            letter-spacing: -2px;
+        }
+
+        &__center-cat {
+            font-size: 64px;
+            letter-spacing: -1.2px;
         }
     }
 }

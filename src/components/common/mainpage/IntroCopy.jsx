@@ -38,18 +38,18 @@ const IntroCopy = () => {
                 {/* 상단 뱃지: 별 아이콘 + SELECTED FAVOURITES */}
                 <div className="intro__badge">
                     <MainStar className="intro__badge-star" aria-hidden="true" />
-                    <span className="intro__badge-text montage-16">SELECTED<br />FAVOURITES</span>
+                    <span className="intro__badge-text montage-18">SELECTED<br />FAVOURITES</span>
                 </div>
 
                 {/* 메인 한글 카피 */}
-                <p className="intro__main suit-16-r">
+                <p className="intro__main suit-20-m">
                     {introCopyContent.mainCopy.split('\n').map((line, i) => (
                         <span key={i}>{line}<br /></span>
                     ))}
                 </p>
 
                 {/* 서브 영문 카피 */}
-                <p className="intro__sub suit-14-r">
+                <p className="intro__sub optima-18">
                     {introCopyContent.subCopy.split('\n').map((line, i) => (
                         <span key={i}>{line}<br /></span>
                     ))}

@@ -1,35 +1,35 @@
-// src/components/common/Footer/Footer.scss
-@import '../../../globals.scss';
+@use '../../../globals.scss' as *;
 
 #footer {
     width: 100%;
-    background-color: $bg-primary; // 베이지색 푸터 배경 ($eee5da)
-    padding: 96px 0 64px;
-    color: $brown-900;
+    background-color: $bg-primary;
+    padding: 76px 0 36px;
+    color: $brown-700;
+    overflow: hidden;
 }
 
 #footer .inner {
     width: 100%;
-    padding: 0 4%;
-    /* 좌우 여백 */
+    max-width: 1680px;
+    padding: 0 10px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 46px;
 }
 
-/* ==================
-   Footer Top
-================== */
 #footer .footer-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 70px;
 }
 
 #footer .slogan {
+    color: $brown-700;
+
     span {
         @extend .suit-80-el;
+        line-height: 0.92;
     }
 
     .point-text {
@@ -39,93 +39,108 @@
 
 #footer .links-group {
     display: flex;
+    align-items: flex-start;
     gap: 120px;
-    /* 두 개의 컬럼 사이의 간격 */
+    padding-top: 14px;
 }
 
 #footer .bttext {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    align-items: flex-start;
+}
 
-    .title {
-        @extend .suit-20-r;
-        color: $brown-300;
-    }
+#footer .bttext .title {
+    @extend .suit-20-r;
+    color: $brown-300;
+}
 
-    .text {
-        @extend .suit-16-r;
-        color: $brown-700;
+#footer .btlinks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+}
 
-        a {
-            transition: color 0.3s ease;
+#footer .bttext .text {
+    @extend .suit-16-r;
+    color: $brown-700;
 
-            &:hover {
-                color: $brown-900;
-                text-decoration: underline;
-            }
+    a {
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.6;
         }
     }
 }
 
-/* ==================
-   Footer Middle (Logo)
-================== */
 #footer .btlogo {
     width: 100%;
-
-    span {
-        display: block;
-        width: 100%;
-
-        svg {
-            width: 100%;
-            /* 로고가 브라우저 폭 전체를 차지하도록 100% 설정 */
-            height: auto;
-            color: $brown-200;
-            /* 연한 브라운 색상으로 큰 워드마크 표현 */
-        }
-    }
+    height: 355px;
+    overflow: hidden;
+    border-bottom: 0;
 }
 
+#footer .btlogo span {
+    display: block;
+    width: 1704px;
+    max-width: 100%;
+    margin: 0 auto;
+}
 
-/* ==================
-   Footer Bottom
-================== */
+#footer .btlogo svg {
+    display: block;
+    width: 1704px;
+    max-width: 100%;
+    height: auto;
+    color: $brown-200;
+}
+
 #footer .footer-bottom {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: -32px;
+    padding-top: 14px;
 }
 
 #footer .info-text {
+    width: 695px;
+    padding: 0 10px;
+    gap: 16px;
+}
+
+#footer .info-text .copy {
+    @extend .suit-20-r;
+    color: $brown-200;
+}
+
+#footer .info-lines {
+    display: flex;
+    flex-direction: column;
     gap: 8px;
+}
 
-    .copy {
-        color: $brown-200;
-        padding-bottom: 8px;
-    }
-
-    .text {
-        @extend .suit-12-r;
-        color: $brown-700;
-    }
+#footer .info-text .text {
+    @extend .suit-20-r;
+    color: $brown-700;
 }
 
 #footer .footer-bottom-right {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    width: 623px;
     gap: 24px;
 }
 
 #footer .sns {
     display: flex;
     gap: 16px;
+    padding: 0 10px;
 
     a {
-        color: $brown-900;
+        color: $brown-700;
         transition: opacity 0.3s ease;
 
         &:hover {
@@ -136,37 +151,42 @@
 
 #footer .btservice {
     display: flex;
-    gap: 24px;
+    gap: 32px;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+}
 
-    .text {
-        @extend .suit-12-r;
-        color: $brown-900;
-        font-weight: 500;
+#footer .btservice .text {
+    @extend .suit-20-r;
+    color: $brown-700;
 
-        a {
-            transition: opacity 0.3s ease;
+    a {
+        transition: opacity 0.3s ease;
 
-            &:hover {
-                opacity: 0.6;
-            }
+        &:hover {
+            opacity: 0.6;
         }
     }
 }
 
-/* ==================
-   Responsive
-================== */
-@media (max-width: 1023px) {
+@media (max-width: 1279px) {
+    #footer {
+        padding: 64px 0 32px;
+    }
+
     #footer .footer-top {
         flex-direction: column;
-        gap: 64px;
+        gap: 56px;
+        margin-bottom: 56px;
     }
-}
 
-@media (max-width: 767px) {
     #footer .links-group {
-        flex-direction: column;
-        gap: 32px;
+        padding-top: 0;
+    }
+
+    #footer .btlogo {
+        height: auto;
     }
 
     #footer .footer-bottom {
@@ -177,5 +197,28 @@
 
     #footer .footer-bottom-right {
         align-items: flex-start;
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    #footer .inner {
+        padding: 0 20px;
+    }
+
+    #footer .links-group {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    #footer .btservice {
+        flex-wrap: wrap;
+        gap: 16px 24px;
+    }
+
+    #footer .info-text .text,
+    #footer .btservice .text,
+    #footer .info-text .copy {
+        font-size: 16px;
     }
 }

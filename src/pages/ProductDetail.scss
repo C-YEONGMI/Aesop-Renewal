@@ -1,4 +1,4 @@
-@import "../globals.scss";
+@use "../globals.scss" as *;
 
 .product-detail {
     background-color: $oatmeal;

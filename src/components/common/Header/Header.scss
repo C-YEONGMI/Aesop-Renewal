@@ -1,5 +1,5 @@
 /* src/components/common/Header/Header.scss */
-@import '../../../globals.scss';
+@use '../../../globals.scss' as *;
 
 /* 기본 컬러와 배경 (구현 기준서 참고) */
 #header {

@@ -1,84 +1,266 @@
-@import "../../../globals.scss";
+@use "../../../globals.scss" as *;
 
 .about-teaser {
-    width: 100%;
-    max-width: 1920px;
-    height: 1080px;
-    margin: 0 auto;
-    background-color: $brown-900;
     position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    height: calc(100vh + var(--about-scroll-distance, 2200px));
+    min-height: calc(100vh + var(--about-scroll-distance, 2200px));
+    overflow: clip;
+    background-color: $brown-900;
 
     &__inner {
-        width: 100%;
-        height: 100%;
         position: relative;
-        max-width: 1400px; // 내부 콘텐츠 최대 너비 제어
+        width: 100%;
+        height: 100vh;
     }
 
-    /* 중앙 비디오 영역 (850*478) */
     &__video-box {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
         width: 850px;
         height: 478px;
-        background-color: #000;
         overflow: hidden;
+        background-color: #000;
+        max-width: none;
+        z-index: 1;
+        will-change: transform, width, height, border-radius;
     }
 
     &__video {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        will-change: transform, filter;
     }
 
-    /* 좌측 하단 About SVG 로고 */
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background:
+            radial-gradient(circle at 50% 18%, rgba(255, 251, 243, 0.06), transparent 32%),
+            linear-gradient(180deg, rgba(18, 17, 15, 0.54) 0%, rgba(18, 17, 15, 0.98) 100%);
+        backdrop-filter: blur(18px) saturate(0.78);
+        -webkit-backdrop-filter: blur(18px) saturate(0.78);
+        pointer-events: none;
+        will-change: opacity, clip-path;
+    }
+
+    &__content {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    &__content-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__headline {
+        position: absolute;
+        top: 111px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        color: $oatmeal;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    &__divider {
+        position: absolute;
+        top: 233px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 32px;
+        background-color: rgba($oatmeal, 0.6);
+    }
+
+    &__body {
+        position: absolute;
+        top: 282px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 936px;
+        margin: 0;
+        color: $oatmeal;
+        text-align: center;
+    }
+
+    &__pillars {
+        position: absolute;
+        top: 457px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1280px;
+        display: grid;
+        grid-template-columns: repeat(3, 300px);
+        justify-content: space-between;
+        gap: 0;
+    }
+
+    &__pillar {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: $oatmeal;
+        text-align: center;
+    }
+
+    &__pillar-visual {
+        width: 300px;
+        height: 394px;
+        overflow: hidden;
+        border: 1px solid rgba($oatmeal, 0.14);
+        background-color: rgba(255, 251, 243, 0.06);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+    }
+
+    &__pillar--vegan .about-teaser__pillar-visual {
+        background:
+            linear-gradient(180deg, rgba(130, 122, 96, 0.08), rgba(18, 17, 15, 0.2)),
+            radial-gradient(circle at 35% 28%, rgba(255, 251, 243, 0.22), transparent 32%),
+            linear-gradient(135deg, rgba(86, 69, 48, 0.16), rgba(18, 17, 15, 0.44));
+    }
+
+    &__pillar--recycled .about-teaser__pillar-visual {
+        background:
+            linear-gradient(180deg, rgba(130, 122, 96, 0.08), rgba(18, 17, 15, 0.2)),
+            radial-gradient(circle at 50% 18%, rgba(184, 153, 103, 0.24), transparent 30%),
+            linear-gradient(135deg, rgba(101, 81, 52, 0.18), rgba(18, 17, 15, 0.48));
+    }
+
+    &__pillar--sourcing .about-teaser__pillar-visual {
+        background:
+            linear-gradient(180deg, rgba(130, 122, 96, 0.08), rgba(18, 17, 15, 0.2)),
+            radial-gradient(circle at 72% 30%, rgba(255, 228, 181, 0.2), transparent 28%),
+            linear-gradient(135deg, rgba(72, 55, 38, 0.18), rgba(18, 17, 15, 0.5));
+    }
+
+    &__pillar-title {
+        margin-top: 23px;
+        color: $oatmeal;
+        line-height: normal;
+    }
+
+    &__pillar-subtitle {
+        margin-top: 3px;
+        color: $oatmeal;
+        white-space: nowrap;
+    }
+
     &__logo {
         position: absolute;
+        top: 836px;
         left: 0;
-        bottom: 0; // 하단에 정박
-        transform: translateY(20%); // 이미지를 보면 글자 밑둥이 살짝 잘리거나 끝에 걸림
-        width: 600px; // 임의의 큰 사이즈 (이미지와 비슷한 비율로 추후 조정 가능)
-        z-index: 10;
-        opacity: 0.15; // 배경에 묻히는 워터마크 느낌
+        width: 874px;
+        z-index: 0;
+        color: $brown-700;
 
         svg {
+            display: block;
             width: 100%;
             height: auto;
-            fill: $brown-400; // 어두운 브라운 배경에 어울리는 색상
+            fill: currentColor;
         }
     }
 
-    /* ──────────── 반응형 ──────────── */
-    @media (max-width: 1024px) {
-        height: 800px;
-        
-        &__video-box {
-            width: 80%;
-            height: auto;
-            aspect-ratio: 850 / 478;
+    @media (max-width: 1279px) {
+        &__logo {
+            width: min(55vw, 640px);
+            top: auto;
+            bottom: 36px;
         }
 
-        &__logo {
-            width: 50%;
+        &__content-inner {
+            width: 100%;
+        }
+
+        &__headline {
+            position: static;
+            transform: none;
+            font-size: 54px;
+            white-space: normal;
+        }
+
+        &__divider,
+        &__body {
+            position: static;
+            transform: none;
+            width: min(936px, 100%);
+            margin: 0 auto;
+            font-size: 18px;
+        }
+
+        &__divider {
+            margin: 20px auto 17px;
+        }
+
+        &__pillars {
+            position: static;
+            transform: none;
+            width: min(1280px, 100%);
+            margin: 120px auto 0;
+            flex-wrap: wrap;
+            display: flex;
+            justify-content: center;
+            gap: 32px 24px;
         }
     }
 
     @media (max-width: 767px) {
-        height: 600px;
-
         &__video-box {
-            width: 90%;
+            width: calc(100% - 40px);
             height: auto;
+            aspect-ratio: 850 / 478;
+        }
+
+        &__content-inner {
+            width: 100%;
+            padding: 72px 20px 0;
+        }
+
+        &__headline {
+            font-size: 38px;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        &__body {
+            width: 100%;
+            font-size: 16px;
+        }
+
+        &__pillars {
+            width: 100%;
+            margin-top: 72px;
+            gap: 24px;
+        }
+
+        &__pillar {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        &__pillar-visual {
+            width: 100%;
+            height: 260px;
+        }
+
+        &__pillar-subtitle {
+            white-space: normal;
         }
 
         &__logo {
-            width: 80%;
+            width: min(78vw, 420px);
+            bottom: 16px;
         }
     }
 }

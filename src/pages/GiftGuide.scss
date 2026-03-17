@@ -1,4 +1,4 @@
-@import "../globals.scss";
+@use "../globals.scss" as *;
 
 .gift-guide-page {
     background-color: $oatmeal;
