@@ -1,0 +1,201 @@
+/* src/components/common/Header/Header_wh.scss */
+@import '../../../globals.scss';
+
+/* 투명 배경 및 밝은 텍스트(oatmeal) 컬러 적용 */
+#header-wh {
+    width: 100%;
+    background-color: transparent;
+    position: absolute;
+    /* 배경 이미지/비디오 위해 absolute 또는 fixed 처리 고려 */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    @extend .optima-16;
+    color: $oatmeal;
+}
+
+#header-wh .inner {
+    width: 100%;
+    padding: 0 4%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    box-sizing: border-box;
+}
+
+/* ==================
+   GNB (Global Navigation)
+================== */
+#header-wh .nav {
+    flex: 1;
+}
+
+#header-wh .depth1 {
+    display: flex;
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 10px 12px;
+}
+
+#header-wh .depth1>li {
+    position: relative;
+}
+
+#header-wh .depth1>li>a {
+    text-decoration: none;
+    color: $oatmeal;
+    /* 기본 헤더의 $brown-900 대신 $oatmeal 사용 */
+    @extend .optima-16;
+    transition: opacity 0.3s ease;
+    display: inline-block;
+    padding: 12px 10px;
+}
+
+#header-wh .depth1>li>a:hover {
+    opacity: 0.6;
+}
+
+/* ==================
+   Dropdown Menu (depth2)
+================== */
+#header-wh .depth2 {
+    position: absolute;
+    top: 70px;
+    left: -20px;
+    background-color: $brown-50;
+    /* 드롭다운은 가독성을 위해 기존 색상 유지 혹은 디자인에 따라 변경 가능 */
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    padding: 16px 20px 24px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 4px 4px;
+    list-style: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#header-wh .depth1>li:hover .depth2 {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#header-wh .depth2>li>a {
+    @extend .optima-16;
+    font-size: 14px;
+    color: $brown-700;
+    /* 드롭다운 내부는 짙은 색 유지 */
+    text-decoration: none;
+    padding: 0;
+}
+
+#header-wh .depth2>li>a:hover {
+    color: $brown-900;
+    opacity: 1;
+}
+
+/* ==================
+   Logo
+================== */
+#header-wh h1 {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+#header-wh h1 a {
+    display: inline-flex;
+    text-decoration: none;
+    align-items: center;
+    color: $oatmeal;
+    /* 로고 SVG 색상을 $oatmeal로 상속받게 함 (SVG 자체 fill 속성에 따라 currentColor 등을 쓸 수 있음) */
+}
+
+#header-wh .logo-svg {
+    width: 120px;
+    height: auto;
+    fill: $oatmeal;
+    /* SVG 내부 색상을 덮어씌움 */
+}
+
+/* svg 자체에 원본 컬러 코드가 박혀있을 수 있으므로 이 부분 주의 */
+#header-wh .logo-svg path {
+    fill: $oatmeal;
+}
+
+
+/* ==================
+   UTL (Utility Menu)
+================== */
+#header-wh .utl {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#header-wh .utl li a {
+    text-decoration: none;
+    color: $oatmeal;
+    /* 아이콘 색상 $oatmeal 적용 */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: opacity 0.3s ease;
+}
+
+#header-wh .utl li a:hover {
+    opacity: 0.6;
+}
+
+#header-wh .cart-count {
+    background-color: #f7a28e;
+    color: $brown-500;
+    font-size: 11px;
+    font-family: $font-optima;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    margin-left: -2px;
+}
+
+/* ==================
+   Responsive
+================== */
+@media (max-width: 1023px) {
+    #header-wh .inner {
+        height: 68px;
+    }
+
+    #header-wh .depth1 {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    #header-wh .inner {
+        height: 60px;
+    }
+
+    #header-wh .depth1 {
+        display: none;
+    }
+}

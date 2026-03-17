@@ -162,20 +162,19 @@
 
 #header .cart-count {
     /* 사진에 나온 장바구니 카운트 동그란 뱃지 스타일 */
-    background-color: #f7a28e;
+    background-color: $point-pink;
     /* 장바구니 숫자의 코랄/살구 계열 느낌 */
-    color: #fff;
+    color: $brown-500;
     font-size: 11px;
     font-family: $font-optima;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 500;
     margin-left: -2px;
-    transform: translateY(-4px);
     /* 살짝 위로 띄워주기 */
 }
 
