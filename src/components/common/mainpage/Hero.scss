@@ -40,51 +40,51 @@
 
     /* 하단 콘텐츠 영역 */
     &__content {
-        position: relative;
+        position: absolute;
+        bottom: -2%;
+        left: 0;
         z-index: 1;
         width: 100%;
-        padding: 0 4% 60px;
+        padding: 0;
         color: $oatmeal;
     }
 
-    /* 워드마크: Aesop + Ritual */
+    /* 워드마크: Aesop + Ritual 가로 한 줄 배치 */
     &__wordmark {
         display: flex;
-        flex-direction: column;
-        gap: 0;
-        line-height: 1;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100%;
+        line-height: 0.85;
+        white-space: nowrap;
 
         svg {
-            width: auto;
-            height: auto;
             fill: $oatmeal;
             color: $oatmeal;
+            display: block;
+            width: 100%;
+            height: auto;
         }
     }
 
     &__wordmark-aesop {
         display: block;
-        svg {
-            max-height: 120px;
-            @media (max-width: 767px) {
-                max-height: 60px;
-            }
-        }
+        /* Aesop SVG 원본 비율: 966 / (966+874) ≈ 52.5% */
+        flex: 0 0 52.5%;
     }
 
     &__wordmark-ritual {
         display: block;
-        svg {
-            max-height: 120px;
-            @media (max-width: 767px) {
-                max-height: 60px;
-            }
-        }
+        /* Ritual SVG 원본 비율: 874 / (966+874) ≈ 47.5% */
+        flex: 0 0 47.5%;
     }
 
     /* 서브텍스트 */
     &__subtitle {
-        margin-top: 20px;
+        padding: 0 2%;
+        margin-top: 12px;
+        margin-bottom: 24px;
         color: rgba($oatmeal, 0.85);
         letter-spacing: 0.1em;
     }
@@ -92,7 +92,7 @@
     /* ──────────── 반응형 ──────────── */
     @media (max-width: 767px) {
         &__content {
-            padding: 0 5% 40px;
+            bottom: -1%;
         }
     }
 }

@@ -8,7 +8,7 @@ import './Products.scss';
 // 카테고리 레이블 매핑
 const CATEGORY_LABELS = {
     skincare: 'Skin Care',
-    fragrance: 'Fragrance',
+    fragrance: 'Perfume',
     home: 'Home & Living',
     hair: 'Hair & Shaving',
     body: 'Hand & Body',
@@ -37,9 +37,10 @@ const Products = () => {
 
     const filtered = useMemo(() => {
         let list = category
-            ? products.filter(p =>
-                p.category.toLowerCase().replace(/\s/g, '') === categoryLabel.toLowerCase().replace(/\s/g, '')
-            )
+            ? products.filter(p => {
+                const targetCategory = category === 'fragrance' ? 'fragrance' : categoryLabel;
+                return p.category.toLowerCase().replace(/\s/g, '') === targetCategory.toLowerCase().replace(/\s/g, '');
+            })
             : [...products];
 
         if (activeBadge) {
@@ -123,7 +124,9 @@ const Products = () => {
                                             <span key={b} className={`badge badge-${b.toLowerCase()} suit-12-r`}>{b}</span>
                                         ))}
                                     </div>
-                                    <p className="products-page__card-category suit-12-r">{product.category}</p>
+                                    <p className="products-page__card-category suit-12-r">
+                                        {product.category === 'Fragrance' ? 'Perfume' : product.category}
+                                    </p>
                                     <p className="products-page__card-name suit-18-m">{product.name}</p>
                                     <p className="products-page__card-desc suit-14-m">{product.description}</p>
                                     <p className="products-page__card-price suit-16-r">

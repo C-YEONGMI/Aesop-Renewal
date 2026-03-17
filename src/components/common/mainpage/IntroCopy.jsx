@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { introCopyContent } from '../../../data/mainPageContent';
+import MainStar from '../../../assets/Main_star.svg?react';
 import './IntroCopy.scss';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +14,7 @@ const IntroCopy = () => {
     useEffect(() => {
         const ctx = gsap.context(() => {
             gsap.fromTo(
-                sectionRef.current.querySelectorAll('.intro__main, .intro__sub'),
+                sectionRef.current.querySelectorAll('.intro__badge, .intro__main, .intro__sub'),
                 { opacity: 0, y: 24 },
                 {
                     opacity: 1,
@@ -34,12 +35,21 @@ const IntroCopy = () => {
     return (
         <section className="intro" ref={sectionRef}>
             <div className="intro__inner">
-                <p className="intro__main optima-20">
+                {/* 상단 뱃지: 별 아이콘 + SELECTED FAVOURITES */}
+                <div className="intro__badge">
+                    <MainStar className="intro__badge-star" aria-hidden="true" />
+                    <span className="intro__badge-text montage-16">SELECTED<br />FAVOURITES</span>
+                </div>
+
+                {/* 메인 한글 카피 */}
+                <p className="intro__main suit-16-r">
                     {introCopyContent.mainCopy.split('\n').map((line, i) => (
                         <span key={i}>{line}<br /></span>
                     ))}
                 </p>
-                <p className="intro__sub suit-16-r">
+
+                {/* 서브 영문 카피 */}
+                <p className="intro__sub suit-14-r">
                     {introCopyContent.subCopy.split('\n').map((line, i) => (
                         <span key={i}>{line}<br /></span>
                     ))}

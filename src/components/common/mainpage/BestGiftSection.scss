@@ -1,156 +1,175 @@
 @import "../../../globals.scss";
 
-/* ────────────────────────────────────────────────
-   Best Gift 섹션 - 짙은 브라운 배경, 선물 확신 구간
-──────────────────────────────────────────────── */
-.gift {
+.best-gift {
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    margin: 0 auto;
     background-color: $brown-900;
-    padding: 100px 4%;
     color: $oatmeal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 
     &__inner {
-        display: flex;
-        gap: 40px;
-        align-items: center;
-        justify-content: center;
+        width: 100%;
         max-width: 1400px;
-        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 60px;
+        padding: 0 4%;
     }
 
-    /* 좌우 보조 영역 */
-    &__side {
-        flex: 0 0 220px;
+    /* ──── 1. Left (번호 & 작은 이미지) ──── */
+    &__left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center; // 세로 중앙 정렬을 위해
+        gap: 20px;
+        flex: 1;
+        padding-bottom: 120px; // 번호와 이미지 사이 간격을 띄우기 위해
+    }
+
+    &__pagination {
+        display: flex;
+        align-items: baseline; // 01과 /03 밑선 맞춤
+        gap: 4px;
+        color: $oatmeal;
+        margin-bottom: 24px;
+    }
+
+    &__current {
+        @extend .montage-48;
+    }
+
+    &__slash, &__total {
+        @extend .montage-24;
+        opacity: 0.6;
+    }
+
+    &__img-small {
+        width: 267px;
+        height: 334px;
+        background-color: #dbcbb8; // 임시 색상 박스
+        position: relative;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    /* ──── 2. Center (아치형 이미지) ──── */
+    &__center {
+        display: flex;
+        justify-content: center;
+        flex: 1.5;
+    }
+
+    &__img-arch {
+        width: 496px;
+        height: 749px;
+        background-color: #a48e7e; // 임시 색상 박스
+        border-top-left-radius: 248px; // 아치 형태 윗부분 (width/2)
+        border-top-right-radius: 248px;
+        position: relative;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    /* ──── 3. Right (포인트 이미지 & 텍스트) ──── */
+    &__right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 40px;
+        flex: 1;
+        padding-bottom: 40px; // 우측 전체적인 상하 수직 위치 비율 조정
+    }
+
+    &__img-point {
+        width: 160px;
+        height: 160px;
+        background-color: #724128; // 임시 색상 박스
+        align-self: flex-end; // 우측 정렬을 위해
+        overflow: hidden;
+        margin-right: 20px; // 임의 위치
+        margin-bottom: 20px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__text-box {
         display: flex;
         flex-direction: column;
         gap: 24px;
-
-        &--left {
-            align-items: flex-end;
-            text-align: right;
-        }
-
-        &--right {
-            align-items: flex-start;
-            text-align: left;
-        }
-    }
-
-    &__side-img {
-        width: 180px;
-        height: 220px;
-        background-color: $brown-800;
-        overflow: hidden;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 16px;
-        }
-    }
-
-    &__side-text {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    &__label {
-        color: $brown-300;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-    }
-
-    &__side-desc {
-        color: $brown-200;
-        line-height: 1.8;
-    }
-
-    /* 중앙 메인 영역 */
-    &__center {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 28px;
-        text-align: center;
-    }
-
-    &__center-text {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
+        max-width: 380px;
     }
 
     &__title {
+        @extend .montage-48;
         color: $oatmeal;
         margin: 0;
-        line-height: 1;
+        margin-bottom: 40px; // 타이틀과 아래 상품정보 간의 큰 간격
     }
 
-    &__subtitle {
-        color: $brown-200;
-        line-height: 1.7;
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
 
-    &__center-img {
-        width: 300px;
-        height: 360px;
-        background-color: $brown-800;
-        overflow: hidden;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 24px;
-        }
-    }
-
-    &__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+    &__name-eng {
+        @extend .montage-24;
         color: $oatmeal;
-        @extend .optima-16;
-        text-decoration: none;
-        border-bottom: 1px solid rgba($oatmeal, 0.4);
-        padding-bottom: 4px;
-        transition: opacity 0.3s ease;
-
-        &:hover {
-            opacity: 0.7;
-        }
+        margin: 0;
     }
 
-    /* ──────────── 반응형 ──────────── */
-    @media (max-width: 1023px) {
+    &__name-kr {
+        @extend .suit-24-sb;
+        color: $oatmeal;
+        margin: 0;
+    }
+
+    &__desc {
+        @extend .suit-16-r;
+        color: $brown-200;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    /* ──── 반응형 ──── */
+    @media (max-width: 1200px) {
+        height: auto;
+        padding: 100px 0;
+
         &__inner {
             flex-direction: column;
-            gap: 48px;
+            gap: 60px;
         }
 
-        &__side {
-            flex: none;
-            width: 100%;
+        &__left, &__center, &__right {
             align-items: center;
             text-align: center;
-
-            &--left,
-            &--right {
-                align-items: center;
-                text-align: center;
-            }
         }
-    }
 
-    @media (max-width: 767px) {
-        padding: 64px 5%;
-
-        &__center-img {
-            width: 240px;
-            height: 280px;
+        &__img-point {
+            align-self: center;
         }
     }
 }

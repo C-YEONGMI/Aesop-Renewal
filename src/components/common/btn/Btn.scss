@@ -42,7 +42,9 @@
     @extend %btn-base;
     color: $brown-500;
     border: 1px solid $brown-500;
-    padding: 16px 24px;
+    width: 134px;
+    height: 34px;
+    justify-content: center;
     background-color: transparent;
 
     &:hover {
@@ -58,7 +60,9 @@
     @extend %btn-base;
     color: $oatmeal;
     border: 1px solid $oatmeal;
-    padding: 16px 24px;
+    width: 134px;
+    height: 34px;
+    justify-content: center;
     background-color: transparent;
 
     &:hover {

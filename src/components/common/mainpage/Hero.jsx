@@ -56,10 +56,6 @@ const Hero = () => {
                         <HeroRitual aria-label="Ritual" />
                     </span>
                 </div>
-                {/* 서브텍스트 */}
-                <p className="hero__subtitle suit-18-r" ref={subtitleRef}>
-                    당신의 하루를 특별한 리추얼로
-                </p>
             </div>
         </section>
     );

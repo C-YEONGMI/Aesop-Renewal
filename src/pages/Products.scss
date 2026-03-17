@@ -215,12 +215,3 @@
     }
 }
 
-/* 배지 스타일 (globals.scss에 없을 경우를 위해) */
-.badge {
-    padding: 3px 8px;
-    font-size: 11px;
-
-    &-best { background-color: $brown-200; color: $brown-700; }
-    &-new { background-color: $point-green; color: $oatmeal; }
-    &-exclusive { background-color: $point-pink; color: $brown-700; }
-}

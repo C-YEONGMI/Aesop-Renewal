@@ -1,8 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Header_wh.scss';
 import GNB_Logo from "../../../assets/GNB_Logo.svg?react";
+import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
+import useAuthStore from '../../../store/useAuthStore';
+import useCartStore from '../../../store/useCartStore';
 
 const Header_wh = () => {
+    const navigate = useNavigate();
+    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+    const totalCount = useCartStore(state =>
+        state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
+    );
+
     return (
         <header id="header-wh">
             <div className="inner">
@@ -14,7 +24,7 @@ const Header_wh = () => {
                             <a href="/products">PRODUCTS</a>
                             <ul className="depth2">
                                 <li><a href="/products/skincare">SKIN CARE</a></li>
-                                <li><a href="/products/fragrance">FRAGRANCE</a></li>
+                                <li><a href="/products/fragrance">Perfume</a></li>
                                 <li><a href="/products/home">HOME & LIVING</a></li>
                                 <li><a href="/products/hair">HAIR & SHAVING</a></li>
                                 <li><a href="/products/body">HAND & BODY</a></li>
@@ -36,23 +46,37 @@ const Header_wh = () => {
 
                 {/* Utility Menu */}
                 <ul className="utl">
-                    <li>
-                        <a href="/search" aria-label="Search">
-                            {/* Search Icon */}
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
-                        </a>
+                    <li className="search-li">
+                        <ExpandableSearchBar 
+                            expandDirection="left" 
+                            width={300} 
+                            onSearch={(q) => {
+                                if(q.trim()) navigate('/search?q=' + encodeURIComponent(q));
+                            }} 
+                        />
                     </li>
                     <li>
-                        <a href="/login" aria-label="Login">
-                            {/* User Icon */}
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                        <a href={isLoggedIn ? '/mypage' : '/login'} aria-label={isLoggedIn ? 'Mypage' : 'Login'}>
+                            {/* User / Login Icon */}
+                            {isLoggedIn ? (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            ) : (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                                    <polyline points="10 17 15 12 10 7" />
+                                    <line x1="15" y1="12" x2="3" y2="12" />
+                                </svg>
+                            )}
                         </a>
                     </li>
                     <li>
                         <a href="/cart" aria-label="Cart">
                             {/* Cart Icon */}
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
-                            <span className="cart-count">0</span>
+                            <span className="cart-count">{totalCount}</span>
                         </a>
                     </li>
                 </ul>

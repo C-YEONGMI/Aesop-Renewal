@@ -2,9 +2,8 @@
 
 .bestboxSm {
     width: 100%;
-    height: 100%;
-    background-color:$bg-product;
-    padding: 20px;
+    aspect-ratio: 486 / 554;
+    background-color: $bg-product;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -12,7 +11,7 @@
     .badges {
         display: flex;
         gap: 8px;
-        padding: 20px 30px;
+        padding: clamp(10px, 1.5vw, 20px) clamp(16px, 2vw, 30px);
         align-items: center;
     }
 
@@ -23,6 +22,7 @@
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        padding: 0 clamp(12px, 2vw, 24px);
 
         img {
             max-width: 100%;
@@ -34,6 +34,11 @@
     p {
         @extend .suit-18-m;
         color: $brown-700;
-        padding: 30px 40px;
+        padding: clamp(16px, 2vw, 30px) clamp(20px, 3vw, 40px);
+        margin-top: clamp(8px, 1vw, 16px);
+        font-size: clamp(13px, 1.1vw, 18px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

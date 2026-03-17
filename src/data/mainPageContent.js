@@ -11,18 +11,11 @@ export const BEST_PRODUCT_NAMES = [
 ];
 
 // ────────────────────────────────────────────────────────────
-// Hero 섹션
-// ────────────────────────────────────────────────────────────
-export const heroContent = {
-    subtitle: "당신의 하루를 특별한 리추얼로",
-};
-
-// ────────────────────────────────────────────────────────────
 // Intro Copy 섹션
 // ────────────────────────────────────────────────────────────
 export const introCopyContent = {
-    mainCopy: "일상의 향기로운 리추얼.\n섬세하게 고른 성분과 조화로운 향이\n당신의 감각을 깨웁니다.",
-    subCopy: "이솝은 1987년 호주 멜버른에서 시작된 이래,\n과학적으로 검증된 식물성 성분을 중심으로\n피부, 모발, 신체를 위한 제품을 만들어왔습니다.",
+    mainCopy: "시간이 지나도 변함없는 가치. 세심하게 조제되어\n모든 시간 꾸준히 사랑받아 온 이솝의 대표 제품들을 소개합니다.",
+    subCopy: "A value that remains over time. Carefully formulated and\nquietly beloved, these are some of\nAesop’s most enduring favourites.",
 };
 
 // ────────────────────────────────────────────────────────────

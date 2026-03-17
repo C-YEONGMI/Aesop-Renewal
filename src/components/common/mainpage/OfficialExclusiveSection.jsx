@@ -1,37 +1,40 @@
 import React, { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { officialExclusiveContent } from '../../../data/mainPageContent';
-import productsData from '../../../data/products.json';
+import MoreBox from '../btn/MoreBox';
+import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
 import './OfficialExclusiveSection.scss';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Official Online Exclusive 섹션
-// "왜 공식몰에서 사야 하는가"를 에디토리얼 콜라주 레이아웃으로 전달
 const OfficialExclusiveSection = () => {
     const sectionRef = useRef(null);
 
-    // Exclusive 배지 상품에서 이미지 3개 가져오기
-    const exclusiveProducts = productsData
-        .filter(p => p.badge.includes('Exclusive'))
-        .slice(0, 3);
+    // 추후 인터렉션을 위해 이미지(박스) 참조 배열 생성
+    const imgRefs = useRef([]);
+    imgRefs.current = [];
+
+    const addToRefs = (el) => {
+        if (el && !imgRefs.current.includes(el)) {
+            imgRefs.current.push(el);
+        }
+    };
 
     useEffect(() => {
+        // 기본 페이드 인 & 패럴랙스 준비
         const ctx = gsap.context(() => {
             gsap.fromTo(
-                sectionRef.current.querySelectorAll('.official__text-block, .official__item-img'),
-                { opacity: 0, y: 20 },
+                imgRefs.current,
+                { opacity: 0, y: 50 },
                 {
                     opacity: 1,
                     y: 0,
-                    duration: 0.9,
-                    stagger: 0.12,
-                    ease: 'power2.out',
+                    duration: 1.2,
+                    stagger: 0.1,
+                    ease: 'power3.out',
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: 'top 70%',
+                        start: 'top 60%',
                     },
                 }
             );
@@ -40,65 +43,43 @@ const OfficialExclusiveSection = () => {
     }, []);
 
     return (
-        <section className="official" ref={sectionRef}>
-            <div className="official__inner">
+        <section className="official-exclusive" ref={sectionRef}>
+            {/* 배경 로고 */}
+            <div className="official-exclusive__bg-logo">
+                <GNB_Logo />
+            </div>
 
-                {/* 좌측 소형 이미지 */}
-                <div className="official__col-left">
-                    {exclusiveProducts[0] && (
-                        <div className="official__item-img official__item-img--sm">
-                            <img
-                                src={exclusiveProducts[0].variants[0]?.image}
-                                alt={exclusiveProducts[0].name}
-                            />
-                        </div>
-                    )}
-                    {exclusiveProducts[1] && (
-                        <div className="official__item-img official__item-img--md">
-                            <img
-                                src={exclusiveProducts[1].variants[0]?.image}
-                                alt={exclusiveProducts[1].name}
-                            />
-                        </div>
-                    )}
-                </div>
+            <div className="official-exclusive__inner">
+                {/* 흩뿌려진 이미지 플레이스홀더들 (임시 색상 박스) */}
+                <div className="official-exclusive__img official-exclusive__img--1" ref={addToRefs}></div>
+                <div className="official-exclusive__img official-exclusive__img--2" ref={addToRefs}></div>
+                <div className="official-exclusive__img official-exclusive__img--3" ref={addToRefs}></div>
+                <div className="official-exclusive__img official-exclusive__img--4" ref={addToRefs}></div>
+                <div className="official-exclusive__img official-exclusive__img--5" ref={addToRefs}></div>
+                <div className="official-exclusive__img official-exclusive__img--6" ref={addToRefs}></div>
 
-                {/* 중앙 텍스트 블록 */}
-                <div className="official__text-block">
-                    <span className="official__label suit-14-m">공식몰 단독</span>
-                    <h2 className="official__title montage-48">
-                        {officialExclusiveContent.title.split(' ').map((word, i) => (
-                            <span key={i} className="official__title-word">{word} </span>
-                        ))}
+                {/* 중앙 텍스트 콘텐츠 */}
+                <div className="official-exclusive__content">
+                    <h2 className="official-exclusive__title montage-48">
+                        Official Online Exclusive
                     </h2>
-                    <p className="official__desc suit-18-r">
-                        {officialExclusiveContent.description.split('\n').map((line, i) => (
-                            <span key={i}>{line}<br /></span>
-                        ))}
+                    
+                    <p className="official-exclusive__subtitle suit-24-r">
+                        공식 온라인 몰만의 특별한 서비스
                     </p>
-                    <ul className="official__benefits">
-                        {officialExclusiveContent.items.map((item, i) => (
-                            <li key={i} className="suit-16-r">· {item}</li>
-                        ))}
-                    </ul>
-                    <Link to="/benefits/official" className="official__cta">
-                        혜택 자세히 보기
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path d="M4 14h15M19 14l-6-6" />
-                        </svg>
-                    </Link>
-                </div>
 
-                {/* 우측 소형 이미지 */}
-                <div className="official__col-right">
-                    {exclusiveProducts[2] && (
-                        <div className="official__item-img official__item-img--md">
-                            <img
-                                src={exclusiveProducts[2].variants[0]?.image}
-                                alt={exclusiveProducts[2].name}
-                            />
-                        </div>
-                    )}
+                    <p className="official-exclusive__badges suit-12-r">
+                        무료 배송 및 반품 · 시그니처 코튼백 포장 · 맞춤형 샘플
+                    </p>
+
+                    <p className="official-exclusive__desc suit-16-r">
+                        무료 배송과 반품, 샘플 증정, 기프트 포장 서비스까지<br/>
+                        공식몰에서만 경험할 수 있는 세심한 배려를 만나보세요.
+                    </p>
+
+                    <div className="official-exclusive__btn-wrapper">
+                        <MoreBox to="/benefits/official" />
+                    </div>
                 </div>
             </div>
         </section>

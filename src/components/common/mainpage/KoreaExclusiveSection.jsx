@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import MoreBox from '../btn/MoreBox';
 import { koreaExclusiveContent } from '../../../data/mainPageContent';
 import productsData from '../../../data/products.json';
 import './KoreaExclusiveSection.scss';
@@ -46,33 +46,27 @@ const KoreaExclusiveSection = () => {
 
                 {/* 좌측 텍스트 */}
                 <div className="korea__text">
-                    <span className="korea__label suit-14-m">{koreaExclusiveContent.label}</span>
-                    <h2 className="korea__title montage-48">{koreaExclusiveContent.title}</h2>
-                    <p className="korea__desc suit-18-r">
-                        {koreaExclusiveContent.description.split('\n').map((line, i) => (
-                            <span key={i}>{line}<br /></span>
-                        ))}
+                    <h2 className="korea__title montage-48">Korea Exclusive</h2>
+                    <h3 className="korea__subtitle suit-24-r">한국 한정 제품</h3>
+                    <p className="korea__desc suit-16-r">
+                        한국의 약재 쑥과 흑임자를 담은<br />
+                        이솝 코리아만의 특별한 제품을<br />
+                        한정 보자기 패키지와 함께 만나보세요.
                     </p>
-                    <Link to={koreaExclusiveContent.ctaLink} className="korea__cta">
-                        {koreaExclusiveContent.ctaText}
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path d="M4 14h15M19 14l-6-6" />
-                        </svg>
-                    </Link>
+                    {/* 클릭 시 해당 제품 상세페이지로 이동하도록 Link 설정 (임시 url) */}
+                    <MoreBox to="/product/Korea%20Exclusive%20Set" />
                 </div>
 
-                {/* 중앙 대표 이미지 */}
+                {/* 중앙 대표 이미지 (522x729) */}
                 <div className="korea__img-main">
-                    {mainProduct && (
-                        <img src={mainProduct.variants[0]?.image} alt={mainProduct.name} />
-                    )}
+                    {/* 임시 컬러 박스 (추후 이미지 대체) */}
+                    {/* <img src={mainProduct?.variants[0]?.image} alt={mainProduct?.name} /> */}
                 </div>
 
-                {/* 우측 보조 이미지 */}
+                {/* 우측 보조 이미지 (330x330) */}
                 <div className="korea__img-sub">
-                    {subProduct && (
-                        <img src={subProduct.variants[0]?.image} alt={subProduct.name} />
-                    )}
+                    {/* 임시 컬러 박스 (추후 이미지 대체) */}
+                    {/* <img src={subProduct?.variants[0]?.image} alt={subProduct?.name} /> */}
                 </div>
 
             </div>

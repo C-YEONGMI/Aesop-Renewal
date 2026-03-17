@@ -1,0 +1,70 @@
+@import "../../../globals.scss";
+
+.floating-buttons {
+    position: fixed;
+    bottom: clamp(20px, 2.5vw, 40px);
+    right: clamp(20px, 2.5vw, 40px);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    
+    // 개별 버튼에서 opacity 제어
+}
+
+// 각 버튼의 숨김 상태 기본 스타일
+.btn-top, .floating-btn-group {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+
+    &.visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+}
+
+.floating-btn {
+    width: clamp(32px, 2.08vw, 40px);
+    height: clamp(32px, 2.08vw, 40px);
+    border-radius: 50%;
+    background-color: $brown-900;
+    color: $oatmeal;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    svg {
+        width: clamp(16px, 1.04vw, 20px);
+        height: clamp(16px, 1.04vw, 20px);
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        opacity: 0.8;
+    }
+}
+
+.floating-btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-label {
+    @extend .suit-16-r; 
+    color: $brown-900;
+    font-size: clamp(14px, 1vw, 18px);
+    text-align: center;
+    white-space: nowrap;
+}

@@ -1,102 +1,84 @@
 @import "../../../globals.scss";
 
-/* ────────────────────────────────────────────────
-   About Teaser 섹션 - 어두운 배경 + 대형 워드마크
-──────────────────────────────────────────────── */
 .about-teaser {
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    margin: 0 auto;
+    background-color: $brown-900;
     position: relative;
-    background-color: $bg-overlay;
-    padding: 80px 4%;
     overflow: hidden;
-    min-height: 480px;
     display: flex;
     align-items: center;
-
-    /* 배경 이미지 영역 (실제 이미지로 교체) */
-    &__bg {
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(
-            160deg,
-            $brown-900 0%,
-            $bg-overlay 50%,
-            $brown-800 100%
-        );
-        opacity: 0.8;
-        z-index: 0;
-    }
+    justify-content: center;
 
     &__inner {
-        position: relative;
-        z-index: 1;
         width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 40px;
-        max-width: 1400px;
-        margin: 0 auto;
+        height: 100%;
+        position: relative;
+        max-width: 1400px; // 내부 콘텐츠 최대 너비 제어
     }
 
-    /* 대형 워드마크 */
-    &__wordmark {
-        color: $oatmeal;
-        opacity: 0.85;
-        margin: 0;
-        line-height: 0.9;
-        letter-spacing: -0.02em;
-        // 화면보다 크게 잘려 나오는 편집 효과
-        white-space: nowrap;
-
-        @media (max-width: 1023px) {
-            font-size: 100px;
-        }
-
-        @media (max-width: 767px) {
-            font-size: 64px;
-        }
+    /* 중앙 비디오 영역 (850*478) */
+    &__video-box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 850px;
+        height: 478px;
+        background-color: #000;
+        overflow: hidden;
     }
 
-    /* 우측 텍스트 영역 */
-    &__text {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-        flex-shrink: 0;
-        max-width: 300px;
+    &__video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    &__desc {
-        color: $brown-200;
-        line-height: 1.8;
-    }
+    /* 좌측 하단 About SVG 로고 */
+    &__logo {
+        position: absolute;
+        left: 0;
+        bottom: 0; // 하단에 정박
+        transform: translateY(20%); // 이미지를 보면 글자 밑둥이 살짝 잘리거나 끝에 걸림
+        width: 600px; // 임의의 큰 사이즈 (이미지와 비슷한 비율로 추후 조정 가능)
+        z-index: 10;
+        opacity: 0.15; // 배경에 묻히는 워터마크 느낌
 
-    &__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: $oatmeal;
-        @extend .optima-16;
-        text-decoration: none;
-        border-bottom: 1px solid rgba($oatmeal, 0.4);
-        padding-bottom: 4px;
-        align-self: flex-start;
-        transition: opacity 0.3s ease;
-
-        &:hover {
-            opacity: 0.7;
+        svg {
+            width: 100%;
+            height: auto;
+            fill: $brown-400; // 어두운 브라운 배경에 어울리는 색상
         }
     }
 
     /* ──────────── 반응형 ──────────── */
-    @media (max-width: 767px) {
-        &__inner {
-            flex-direction: column;
-            align-items: flex-start;
+    @media (max-width: 1024px) {
+        height: 800px;
+        
+        &__video-box {
+            width: 80%;
+            height: auto;
+            aspect-ratio: 850 / 478;
         }
 
-        &__text {
-            max-width: 100%;
+        &__logo {
+            width: 50%;
+        }
+    }
+
+    @media (max-width: 767px) {
+        height: 600px;
+
+        &__video-box {
+            width: 90%;
+            height: auto;
+        }
+
+        &__logo {
+            width: 80%;
         }
     }
 }

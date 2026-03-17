@@ -5,7 +5,7 @@
 ──────────────────────────────────────────────── */
 .intro {
     background-color: $oatmeal;
-    padding: 100px 4%;
+    padding: 80px 4%;
 
     &__inner {
         max-width: 640px;
@@ -13,20 +13,54 @@
         text-align: center;
         display: flex;
         flex-direction: column;
-        gap: 32px;
+        align-items: center;
+        gap: 28px;
+    }
+
+    /* 상단 뱃지: 별 아이콘 + 텍스트 + 세로 선 */
+    &__badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 20px 32px;
+
+        /* SELECTED FAVOURITES 아래 세로 선 */
+        &::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 22px;
+            background-color: $brown-300;
+            margin-top: 0;
+        }
+    }
+
+    &__badge-star {
+        width: 20px;
+        height: 22px;
+    }
+
+    &__badge-text {
+        color: $brown-400;
+        text-align: center;
+        letter-spacing: 0.15em;
+        line-height: 1.5;
+        font-size: 11px;
     }
 
     &__main {
         color: $brown-800;
-        line-height: 1.8;
+        line-height: 1.9;
     }
 
     &__sub {
         color: $brown-400;
-        line-height: 1.9;
+        line-height: 1.8;
+        font-size: 13px;
     }
 
     @media (max-width: 767px) {
-        padding: 64px 6%;
+        padding: 56px 6%;
     }
 }

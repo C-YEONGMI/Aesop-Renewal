@@ -148,7 +148,8 @@
     padding: 0;
 }
 
-#header-wh .utl li a {
+#header-wh .utl li a,
+#header-wh .utl li.search-li {
     text-decoration: none;
     color: $oatmeal;
     /* 아이콘 색상 $oatmeal 적용 */
@@ -158,7 +159,8 @@
     transition: opacity 0.3s ease;
 }
 
-#header-wh .utl li a:hover {
+#header-wh .utl li a:hover,
+#header-wh .utl li.search-li:hover {
     opacity: 0.6;
 }
 

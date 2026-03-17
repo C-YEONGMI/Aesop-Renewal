@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import useProductStore from '../store/useProductStore';
 import './Search.scss';
 
 const Search = () => {
     const searchProducts = useProductStore(s => s.searchProducts);
+    const [searchParams, setSearchParams] = useSearchParams();
+    
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [searched, setSearched] = useState(false);
 
+    // URL의 파라미터가 변경될 때마다 자동 검색
+    useEffect(() => {
+        const q = searchParams.get('q');
+        if (q) {
+            setQuery(q);
+            setResults(searchProducts(q));
+            setSearched(true);
+        } else {
+            setQuery('');
+            setResults([]);
+            setSearched(false);
+        }
+    }, [searchParams, searchProducts]);
+
     const handleSearch = e => {
         e.preventDefault();
         if (!query.trim()) return;
-        setResults(searchProducts(query));
-        setSearched(true);
+        // 검색 버튼 누르면 URL 업데이트만 수행 (실제 검색은 useEffect에서 처리)
+        setSearchParams({ q: query });
     };
 
     return (

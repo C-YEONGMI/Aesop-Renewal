@@ -219,10 +219,3 @@
     &__no-review { color: $brown-300; }
 }
 
-.badge {
-    padding: 3px 8px;
-    font-size: 11px;
-    &-best { background-color: $brown-200; color: $brown-700; }
-    &-new { background-color: $point-green; color: $oatmeal; }
-    &-exclusive { background-color: $point-pink; color: $brown-700; }
-}

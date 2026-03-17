@@ -1,147 +1,168 @@
 @import "../../../globals.scss";
 
-/* ────────────────────────────────────────────────
-   Official Online Exclusive 섹션 - 에디토리얼 콜라주
-──────────────────────────────────────────────── */
-.official {
-    background-color: $bg-primary;
-    padding: 100px 4%;
+.official-exclusive {
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    margin: 0 auto;
+    background-color: $bg-primary; /* 따뜻한 크림 배경색 (가정) */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    &__inner {
+    &__bg-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 574px;   // 1920 해상도 기준 너비
+        height: 186px;  // 1920 해상도 기준 높이
+        z-index: 1;     // 이미지나 텍스트 뒤에 깔림
         display: flex;
-        gap: 40px;
-        align-items: center;
         justify-content: center;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
+        align-items: center;
 
-    /* 좌우 소형 이미지 열 */
-    &__col-left,
-    &__col-right {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        flex: 0 0 200px;
-    }
-
-    &__col-left {
-        align-items: flex-end;
-    }
-
-    &__col-right {
-        align-items: flex-start;
-    }
-
-    /* 이미지 카드 */
-    &__item-img {
-        background-color: $bg-product;
-        overflow: hidden;
-
-        img {
+        svg {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            padding: 12px;
-            transition: transform 0.5s ease;
-
-            &:hover {
-                transform: scale(1.04);
-            }
-        }
-
-        &--sm {
-            width: 120px;
-            height: 140px;
-        }
-
-        &--md {
-            width: 160px;
-            height: 200px;
+            fill: $brown-300;
+            opacity: 0.1; // 불투명도 10%
         }
     }
 
-    /* 중앙 텍스트 */
-    &__text-block {
-        flex: 1;
-        max-width: 480px;
+    &__inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__content {
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 20px;
-    }
-
-    &__label {
-        color: $brown-400;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        z-index: 20; 
+        pointer-events: none;
+        
+        & > * {
+            pointer-events: auto;
+        }
     }
 
     &__title {
-        color: $brown-800;
-        line-height: 1.15;
-        margin: 0;
+        color: $brown-900;
+        margin-bottom: 24px;
+    }
 
-        &-word {
-            display: inline-block;
-        }
+    &__subtitle {
+        color: $brown-900;
+        margin-bottom: 12px;
+        letter-spacing: -0.02em;
+    }
+
+    &__badges {
+        color: $brown-500;
+        margin-bottom: 40px;
+        letter-spacing: -0.01em;
     }
 
     &__desc {
-        color: $brown-600;
-        line-height: 1.9;
-    }
-
-    &__benefits {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        color: $brown-500;
-
-        li {
-            @extend .suit-16-r;
-        }
-    }
-
-    &__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
         color: $brown-700;
-        @extend .optima-16;
-        text-decoration: none;
-        margin-top: 8px;
-        transition: opacity 0.3s ease;
+        line-height: 1.6;
+        margin-bottom: 40px;
+    }
 
-        &:hover {
-            opacity: 0.6;
+    &__btn-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* 반응형 크기를 위한 약간의 스케일 조절 (1920보다 작아질 때) */
+    @media (max-width: 1440px) {
+        height: 800px;
+    }
+    @media (max-width: 1024px) {
+        height: auto;
+        padding: 100px 20px;
+        &__bg-logo {
+            width: 80%;
+            height: auto;
         }
     }
 
-    /* ──────────── 반응형 ──────────── */
-    @media (max-width: 1023px) {
-        &__inner {
-            flex-direction: column;
-            gap: 32px;
+    /* ──── 흩뿌려진 이미지 플레이스홀더 (임시 박스) ──── */
+    &__img {
+        position: absolute;
+        // 시안 배경과 유사한 따뜻한 베이지 계열 (임시)
+        z-index: 5;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+
+        // 1번 (좌측상단 뒤)
+        &--1 {
+            width: 120px;
+            height: 160px;
+            top: 25%;
+            left: 8%;
+            background-color: #d1c1af;
+            z-index: 4; 
         }
 
-        &__col-left,
-        &__col-right {
-            flex-direction: row;
-            flex: none;
+        // 2번 (좌측상단 앞)
+        &--2 {
+            width: 240px;
+            height: 320px;
+            top: 32%;
+            left: 5%;
+            background-color: #554438; 
+            z-index: 6;
         }
-    }
 
-    @media (max-width: 767px) {
-        padding: 64px 5%;
+        // 3번 (좌측하단 약간 오른쪽)
+        &--3 {
+            width: 240px;
+            height: 240px;
+            bottom: 8%;
+            left: 28%;
+            background-color: #a4b2c1;
+        }
 
-        &__col-left,
-        &__col-right {
-            display: none; // 모바일에서는 이미지 숨김, 텍스트 우선
+        // 4번 (우측상단)
+        &--4 {
+            width: 280px;
+            height: 480px;
+            top: 10%;
+            right: 8%;
+            background-color: #925828;
+            z-index: 4;
+        }
+
+        // 5번 (우측중단 - 약간 병렬)
+        &--5 {
+            width: 160px;
+            height: 180px;
+            top: 48%;
+            right: 6%;
+            background-color: #724128;
+            z-index: 5;
+        }
+
+        // 6번 (우측하단 - 작은 방)
+        &--6 {
+            width: 140px;
+            height: 180px;
+            bottom: 22%;
+            right: 22%;
+            background-color: #4f3325;
+        }
+
+        @media (max-width: 1024px) {
+            display: none; // 모바일/태블릿에서는 임시로 숨김 (추후 레이아웃 재정리 필요)
         }
     }
 }

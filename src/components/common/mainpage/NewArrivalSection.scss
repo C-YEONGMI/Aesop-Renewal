@@ -1,147 +1,158 @@
 @import "../../../globals.scss";
 
-/* ────────────────────────────────────────────────
-   New Arrival 섹션 - 좌측 텍스트, 우측 대형 이미지
-──────────────────────────────────────────────── */
 .new-arrival {
     background-color: $bg-primary;
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 100px 4%;
 
     &__inner {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 60px;
+        width: 100%;
+        max-width: 1680px;
+        display: flex;
         align-items: center;
-        max-width: 1400px;
-        margin: 0 auto;
+        justify-content: space-between;
+        gap: 60px;
     }
 
-    /* 좌측 영역 */
+    /* ──── Left Area ──── */
     &__left {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 40px;
+        align-items: center;
+        max-width: 740px; // 350 + 350 + gap(40)
     }
 
-    &__text {
+    &__header {
+        width: 100%;
         display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    &__label {
-        color: $brown-400;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        justify-content: center;
+        align-items: baseline;
+        position: relative;
+        margin-bottom: 40px;
     }
 
     &__title {
         color: $brown-800;
         margin: 0;
-        line-height: 1.2;
+        text-align: center;
+    }
+
+    &__more-wrapper {
+        position: absolute;
+        right: 0;
+        bottom: 0; // 기준선에 맞추기 위해
+    }
+
+    &__images-small {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    &__img-sm {
+        width: 350px;
+        height: 350px;
+        background-color: #d1c1af; // 컬러 박스 (시안 임시 색)
+        overflow: hidden;
+
+        &--2 {
+            background-color: #554438; // 2번째 이미지 박스
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px; // 타이틀과 서브타이틀 사이 등
+        color: $brown-500;
+    }
+
+    &__name {
+        color: $brown-800; // 조금 더 짙은 갈색
+        margin: 0;
+    }
+
+    &__type {
+        color: $brown-400; // Eau de Parfum
+        margin: 0;
+        margin-bottom: 16px;
     }
 
     &__desc {
         color: $brown-500;
-        line-height: 1.9;
+        line-height: 1.6;
+        margin: 0;
     }
 
-    &__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: $brown-700;
-        @extend .optima-16;
-        text-decoration: none;
-        align-self: flex-start;
-        transition: opacity 0.3s ease;
-
-        &:hover {
-            opacity: 0.6;
-        }
+    /* ──── Right Area ──── */
+    &__right {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
     }
 
-    /* 서브 이미지 */
-    &__sub-img {
-        width: 200px;
-        height: 240px;
-        background-color: $bg-product;
+    &__img-lg {
+        width: 847px;
+        height: 847px;
+        background-color: #2a2a2a; // 블랙에 가까운 메인 이미지 임시 색
         overflow: hidden;
 
         img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            padding: 16px;
+            object-fit: cover;
         }
     }
 
-    /* 우측 대형 이미지 */
-    &__right {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    /* ──────────── Response ──────────── */
+    @media (max-width: 1440px) {
+        height: auto;
 
-    &__main-img {
-        background-color: $bg-product;
-        width: 100%;
-        max-width: 480px;
-        aspect-ratio: 3 / 4;
-        overflow: hidden;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        img {
-            width: 100%;
-            height: 80%;
-            object-fit: contain;
-            padding: 24px;
-            transition: transform 0.5s ease;
-
-            &:hover {
-                transform: scale(1.03);
-            }
-        }
-    }
-
-    &__main-info {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba($oatmeal, 0.92);
-        padding: 20px 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        color: $brown-800;
-    }
-
-    &__new-badge {
-        color: $point-green;
-        letter-spacing: 0.08em;
-    }
-
-    /* ──────────── 반응형 ──────────── */
-    @media (max-width: 1023px) {
         &__inner {
-            grid-template-columns: 1fr;
-            gap: 48px;
+            flex-direction: column;
+            gap: 80px;
         }
 
-        &__sub-img {
-            display: none;
+        &__right {
+            justify-content: center;
+        }
+
+        &__img-lg {
+            width: 100%;
+            max-width: 847px;
+            height: auto;
+            aspect-ratio: 1 / 1;
+        }
+
+        &__images-small {
+            flex-wrap: wrap;
+            justify-content: center;
         }
     }
 
     @media (max-width: 767px) {
-        padding: 64px 5%;
+        padding: 60px 4%;
 
-        &__main-img {
-            max-width: 100%;
+        &__img-sm {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            aspect-ratio: 1 / 1;
         }
     }
 }

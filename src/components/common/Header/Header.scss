@@ -181,7 +181,8 @@
     padding: 0;
 }
 
-#header .utl li a {
+#header .utl li a,
+#header .utl li.search-li {
     text-decoration: none;
     color: $brown-900;
     display: flex;
@@ -190,7 +191,8 @@
     transition: opacity 0.3s ease;
 }
 
-#header .utl li a:hover {
+#header .utl li a:hover,
+#header .utl li.search-li:hover {
     opacity: 0.6;
 }
 

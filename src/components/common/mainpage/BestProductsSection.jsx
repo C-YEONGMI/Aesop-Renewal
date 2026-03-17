@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import BestboxSm from './BestboxSm';
 import BestpdLg from './BestpdLg';
+import More from '../btn/more';
 import { BEST_PRODUCT_NAMES } from '../../../data/mainPageContent';
 import productsData from '../../../data/products.json';
 import './BestProductsSection.scss';
@@ -46,12 +46,7 @@ const BestProductsSection = () => {
             {/* 섹션 헤더: 타이틀 + 더보기 */}
             <div className="best-products__header">
                 <h2 className="best-products__title optima-20">BEST PRODUCTS</h2>
-                <Link to="/products" className="best-products__more">
-                    더 보기
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <path d="M4 14h15M19 14l-6-6" />
-                    </svg>
-                </Link>
+                <More to="/products" />
             </div>
 
             {/* 상품 카드: 소형 1 - 대형 1 - 소형 1 */}

@@ -2,10 +2,8 @@
 
 .bestpdLg {
     width: 100%;
-    height: 100%;
-
+    aspect-ratio: 570 / 655;
     background-color: $bg-product;
-    padding: 24px;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -13,17 +11,19 @@
     .badges {
         display: flex;
         gap: 8px;
-        padding: 24px 36px;
+        padding: clamp(10px, 1.5vw, 20px) clamp(16px, 2vw, 30px);
         align-items: center;
     }
 
     .imgs {
+        /* 이미지 영역: 정사각형 비율 */
         width: 100%;
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        padding: 0 clamp(16px, 2.5vw, 32px);
 
         img {
             max-width: 100%;
@@ -35,7 +35,11 @@
     p {
         @extend .suit-18-m;
         color: $brown-700;
-        padding: 36px 48px;
-        /* 카드 사이즈가 커졌으므로 폰트는 그대로 두되 패딩(여백)을 조금 더 여유있게 조정했습니다. */
+        padding: clamp(16px, 2vw, 30px) clamp(20px, 3vw, 40px);
+        margin-top: clamp(4px, 0.5vw, 7px);
+        font-size: clamp(13px, 1.1vw, 18px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

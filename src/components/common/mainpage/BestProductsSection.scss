@@ -5,24 +5,34 @@
 ──────────────────────────────────────────────── */
 .best-products {
     background-color: $oatmeal;
+    max-width: 1580px;
+    margin: 0 auto;
     padding: 80px 4%;
 
     /* 섹션 헤더 */
     &__header {
+        position: relative;
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         margin-bottom: 40px;
+
+        /* More 버튼을 우측 끝에 배치 */
+        .btn-more {
+            position: absolute;
+            right: 0;
+        }
     }
 
     &__title {
         color: $brown-800;
         letter-spacing: 0.1em;
+        text-align: center;
     }
 
     &__more {
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         gap: 8px;
         color: $brown-600;
         @extend .optima-16;
@@ -52,27 +62,21 @@
     &__gallery {
         display: flex;
         gap: 20px;
-        align-items: stretch;
+        align-items: center;
     }
 }
 
 /* 카드 크기 제어 */
 .best__card {
-    display: flex;
-    flex-direction: column;
 
+    /* sm: 486px 기준 */
     &--sm {
-        flex: 1 1 0;
+        flex: 486 1 0;
     }
 
+    /* lg: 570px 기준 */
     &--lg {
-        flex: 1.33 1 0;
-    }
-
-    /* 내부 컴포넌트가 카드 높이를 꽉 채우도록 */
-    > * {
-        flex: 1;
-        height: 100%;
+        flex: 570 1 0;
     }
 }
 
@@ -85,6 +89,7 @@
     }
 
     .best__card {
+
         &--sm,
         &--lg {
             flex: none;
