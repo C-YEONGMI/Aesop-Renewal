@@ -1,0 +1,51 @@
+@import "../globals.scss";
+
+.benefits-page {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__inner { max-width: 960px; margin: 0 auto; padding: 60px 4% 100px; }
+
+    &__title { color: $brown-800; margin-bottom: 16px; }
+    &__desc { color: $brown-500; margin-bottom: 48px; }
+
+    &__nav {
+        display: flex;
+        gap: 32px;
+        border-bottom: 1px solid $brown-100;
+        margin-bottom: 48px;
+
+        a {
+            color: $brown-400;
+            text-decoration: none;
+            padding: 12px 0;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+
+            &.active, &:hover {
+                color: $brown-800;
+                border-bottom-color: $brown-700;
+            }
+        }
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        h2 { color: $brown-800; }
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        color: $brown-600;
+    }
+}

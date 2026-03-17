@@ -1,0 +1,160 @@
+@import "../globals.scss";
+
+.checkout-page {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 4% 100px;
+    }
+
+    &__title {
+        color: $brown-800;
+        margin-bottom: 48px;
+    }
+
+    &__form {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 60px;
+        align-items: start;
+
+        @media (max-width: 1023px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__section-title {
+        color: $brown-800;
+        padding-bottom: 12px;
+        border-bottom: 1px solid $brown-100;
+    }
+
+    &__fields {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label { color: $brown-600; @extend .suit-14-m; }
+
+        input, textarea {
+            padding: 12px 14px;
+            border: 1px solid $brown-200;
+            background: $oatmeal;
+            color: $brown-800;
+            outline: none;
+            font-family: $font-suit;
+            transition: border-color 0.2s;
+            resize: vertical;
+
+            &:focus { border-color: $brown-500; }
+            &::placeholder { color: $brown-200; }
+        }
+    }
+
+    &__check-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: $brown-600;
+        cursor: pointer;
+    }
+
+    &__payment-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* 요약 */
+    &__summary {
+        background-color: $bg-primary;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: sticky;
+        top: 90px;
+    }
+
+    &__summary-item {
+        display: flex;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid $brown-100;
+
+        img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background-color: $bg-product;
+            padding: 4px;
+        }
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: $brown-600;
+        }
+
+        p:first-child { color: $brown-800; }
+    }
+
+    &__summary-totals {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 8px;
+    }
+
+    &__summary-row {
+        display: flex;
+        justify-content: space-between;
+        color: $brown-500;
+    }
+
+    &__summary-total {
+        display: flex;
+        justify-content: space-between;
+        color: $brown-900;
+        padding-top: 12px;
+        border-top: 1px solid $brown-200;
+        margin-top: 4px;
+    }
+
+    &__submit {
+        width: 100%;
+        padding: 16px;
+        background-color: $brown-800;
+        color: $oatmeal;
+        border: none;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background-color 0.3s;
+
+        &:hover { background-color: $brown-900; }
+    }
+}

@@ -1,0 +1,124 @@
+@import "../../../globals.scss";
+
+/* ────────────────────────────────────────────────
+   Korea Exclusive 섹션 - 밝은 배경, 3분 구조
+──────────────────────────────────────────────── */
+.korea {
+    background-color: $oatmeal;
+    padding: 100px 4%;
+
+    &__inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr 0.6fr;
+        gap: 48px;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* 좌측 텍스트 */
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__label {
+        color: $brown-400;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        color: $brown-800;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    &__desc {
+        color: $brown-500;
+        line-height: 1.9;
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: $brown-700;
+        @extend .optima-16;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+        align-self: flex-start;
+
+        &:hover {
+            opacity: 0.6;
+        }
+    }
+
+    /* 중앙 대표 이미지 */
+    &__img-main {
+        background-color: $bg-product;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 24px;
+            transition: transform 0.5s ease;
+
+            &:hover {
+                transform: scale(1.03);
+            }
+        }
+    }
+
+    /* 우측 보조 이미지 */
+    &__img-sub {
+        background-color: $bg-primary;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 16px;
+        }
+    }
+
+    /* ──────────── 반응형 ──────────── */
+    @media (max-width: 1023px) {
+        &__inner {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+        }
+
+        &__text {
+            grid-column: 1 / 3;
+        }
+
+        &__img-sub {
+            display: none;
+        }
+    }
+
+    @media (max-width: 767px) {
+        padding: 64px 5%;
+
+        &__inner {
+            grid-template-columns: 1fr;
+        }
+
+        &__text {
+            grid-column: 1;
+        }
+    }
+}

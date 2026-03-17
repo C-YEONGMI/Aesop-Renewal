@@ -1,49 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import BestboxSm from '../common/mainpage/BestboxSm';
-import BestpdLg from '../common/mainpage/BestpdLg';
-import More from '../common/btn/More';
-import productsData from '../../data/products.json';
+import React from 'react';
+
+// 메인페이지 섹션 컴포넌트
+// 가이드 기준 섹션 순서 고정: Hero → Intro → Best → Store → Official → Gift → Korea → About → NewArrival → Navigator
+import Hero from '../common/mainpage/Hero';
+import IntroCopy from '../common/mainpage/IntroCopy';
+import BestProductsSection from '../common/mainpage/BestProductsSection';
+import StoreVisualSection from '../common/mainpage/StoreVisualSection';
+import OfficialExclusiveSection from '../common/mainpage/OfficialExclusiveSection';
+import BestGiftSection from '../common/mainpage/BestGiftSection';
+import KoreaExclusiveSection from '../common/mainpage/KoreaExclusiveSection';
+import AboutTeaserSection from '../common/mainpage/AboutTeaserSection';
+import NewArrivalSection from '../common/mainpage/NewArrivalSection';
+import ProductNavigatorSection from '../common/mainpage/ProductNavigatorSection';
+
 import './Main.scss';
 
 const Main = () => {
-    const [randomProducts, setRandomProducts] = useState([]);
-
-    useEffect(() => {
-        // 컴포넌트 마운트 시 랜덤한 세 개의 제품 선택
-        if (productsData && productsData.length > 0) {
-            const shuffled = [...productsData].sort(() => 0.5 - Math.random());
-            setRandomProducts(shuffled.slice(0, 3));
-        }
-    }, []);
-
     return (
-        <main className="main">
-            {/* BEST PRODUCTS Section */}
-            <section className="best-products-section">
-                <div className="section-header">
-                    <h2>BEST PRODUCTS</h2>
-                    <div className="more-btn-wrapper">
-                        <More />
-                    </div>
-                </div>
+        <>
+            {/* 1. Hero: 첫 화면 브랜드 무드 */}
+            <Hero />
 
-                <div className="product-gallery">
-                    {randomProducts.length === 3 && (
-                        <>
-                            <div className="product-box">
-                                <BestboxSm product={randomProducts[0]} />
-                            </div>
-                            <div className="product-box lg-box">
-                                <BestpdLg product={randomProducts[1]} />
-                            </div>
-                            <div className="product-box">
-                                <BestboxSm product={randomProducts[2]} />
-                            </div>
-                        </>
-                    )}
-                </div>
-            </section>
-        </main>
+            {/* 2. Intro Copy: 브랜드 결을 설명하는 짧은 카피 */}
+            <IntroCopy />
+
+            {/* 3. Best Products: 고정 큐레이션 3개 상품 (랜덤 금지) */}
+            <BestProductsSection />
+
+            {/* 4. Full-Bleed Store Visual: 오프라인 매장 비주얼 */}
+            <StoreVisualSection />
+
+            {/* 5. Official Online Exclusive: 공식몰만의 이유 제시 */}
+            <OfficialExclusiveSection />
+
+            {/* 6. Best Gift: 선물 구매자 확신 구간 */}
+            <BestGiftSection />
+
+            {/* 7. Korea Exclusive: 한국 단독 구성 */}
+            <KoreaExclusiveSection />
+
+            {/* 8. About Teaser: 브랜드 서사 완충 구간 */}
+            <AboutTeaserSection />
+
+            {/* 9. New Arrival: 신제품 자연스러운 제안 */}
+            <NewArrivalSection />
+
+            {/* 10. Product Navigator: 카테고리 탐색 진입점 */}
+            <ProductNavigatorSection />
+        </>
     );
 };
 

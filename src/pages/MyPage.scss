@@ -1,0 +1,184 @@
+@import "../globals.scss";
+
+.mypage {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 4% 100px;
+    }
+
+    &__head {
+        margin-bottom: 48px;
+        display: flex;
+        align-items: baseline;
+        gap: 20px;
+    }
+
+    &__title { color: $brown-800; }
+    &__welcome { color: $brown-400; }
+
+    &__layout {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 60px;
+        align-items: start;
+
+        @media (max-width: 767px) {
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+    }
+
+    /* 사이드 탭 */
+    &__nav {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: sticky;
+        top: 90px;
+
+        @media (max-width: 767px) {
+            flex-direction: row;
+            flex-wrap: wrap;
+            position: static;
+        }
+    }
+
+    &__nav-item {
+        padding: 12px 16px;
+        color: $brown-400;
+        text-decoration: none;
+        transition: all 0.2s;
+        border-left: 2px solid transparent;
+
+        &.active,
+        &:hover {
+            color: $brown-800;
+            border-left-color: $brown-700;
+        }
+
+        @media (max-width: 767px) {
+            border-left: none;
+            border-bottom: 2px solid transparent;
+            padding: 8px 12px;
+
+            &.active, &:hover {
+                border-left: none;
+                border-bottom-color: $brown-700;
+            }
+        }
+    }
+
+    &__logout {
+        margin-top: 16px;
+        padding: 12px 16px;
+        background: none;
+        border: none;
+        color: $brown-300;
+        cursor: pointer;
+        text-align: left;
+        font-family: $font-suit;
+        transition: color 0.2s;
+
+        &:hover { color: $brown-600; }
+    }
+
+    /* 콘텐츠 */
+    &__section { display: flex; flex-direction: column; gap: 24px; }
+    &__section-title { color: $brown-800; border-bottom: 1px solid $brown-100; padding-bottom: 16px; }
+    &__empty { color: $brown-300; padding: 40px 0; }
+
+    /* 주문 내역 */
+    &__order-list { display: flex; flex-direction: column; gap: 24px; }
+    &__order-card {
+        border: 1px solid $brown-100;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    &__order-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    &__order-id { color: $brown-700; }
+    &__order-date { color: $brown-300; }
+    &__order-status { color: $point-green; margin-left: auto; }
+    &__order-items { display: flex; flex-direction: column; gap: 12px; }
+    &__order-item {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+
+        img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background-color: $bg-product;
+            padding: 4px;
+        }
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: $brown-600;
+        }
+    }
+    &__order-total {
+        color: $brown-700;
+        text-align: right;
+        padding-top: 12px;
+        border-top: 1px solid $brown-100;
+    }
+
+    /* 위시리스트 */
+    &__wish-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+
+        @media (max-width: 767px) { grid-template-columns: repeat(2, 1fr); }
+    }
+    &__wish-card {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        color: $brown-700;
+
+        &:hover { color: $brown-900; }
+    }
+    &__wish-img {
+        background-color: $bg-product;
+        aspect-ratio: 1;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 16px;
+        }
+    }
+
+    /* 회원 정보 */
+    &__info-list { display: flex; flex-direction: column; gap: 0; }
+    &__info-row {
+        display: flex;
+        gap: 24px;
+        padding: 16px 0;
+        border-bottom: 1px solid $brown-100;
+        color: $brown-600;
+    }
+    &__info-label {
+        color: $brown-400;
+        min-width: 80px;
+    }
+}

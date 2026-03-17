@@ -1,0 +1,156 @@
+@import "../../../globals.scss";
+
+/* ────────────────────────────────────────────────
+   Best Gift 섹션 - 짙은 브라운 배경, 선물 확신 구간
+──────────────────────────────────────────────── */
+.gift {
+    background-color: $brown-900;
+    padding: 100px 4%;
+    color: $oatmeal;
+
+    &__inner {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+        justify-content: center;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* 좌우 보조 영역 */
+    &__side {
+        flex: 0 0 220px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        &--left {
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        &--right {
+            align-items: flex-start;
+            text-align: left;
+        }
+    }
+
+    &__side-img {
+        width: 180px;
+        height: 220px;
+        background-color: $brown-800;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 16px;
+        }
+    }
+
+    &__side-text {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__label {
+        color: $brown-300;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    &__side-desc {
+        color: $brown-200;
+        line-height: 1.8;
+    }
+
+    /* 중앙 메인 영역 */
+    &__center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        text-align: center;
+    }
+
+    &__center-text {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+
+    &__title {
+        color: $oatmeal;
+        margin: 0;
+        line-height: 1;
+    }
+
+    &__subtitle {
+        color: $brown-200;
+        line-height: 1.7;
+    }
+
+    &__center-img {
+        width: 300px;
+        height: 360px;
+        background-color: $brown-800;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 24px;
+        }
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: $oatmeal;
+        @extend .optima-16;
+        text-decoration: none;
+        border-bottom: 1px solid rgba($oatmeal, 0.4);
+        padding-bottom: 4px;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
+    /* ──────────── 반응형 ──────────── */
+    @media (max-width: 1023px) {
+        &__inner {
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        &__side {
+            flex: none;
+            width: 100%;
+            align-items: center;
+            text-align: center;
+
+            &--left,
+            &--right {
+                align-items: center;
+                text-align: center;
+            }
+        }
+    }
+
+    @media (max-width: 767px) {
+        padding: 64px 5%;
+
+        &__center-img {
+            width: 240px;
+            height: 280px;
+        }
+    }
+}

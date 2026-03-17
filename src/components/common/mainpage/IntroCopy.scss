@@ -1,0 +1,32 @@
+@import "../../../globals.scss";
+
+/* ────────────────────────────────────────────────
+   Intro Copy 섹션 - Hero 직후 브랜드 카피
+──────────────────────────────────────────────── */
+.intro {
+    background-color: $oatmeal;
+    padding: 100px 4%;
+
+    &__inner {
+        max-width: 640px;
+        margin: 0 auto;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    &__main {
+        color: $brown-800;
+        line-height: 1.8;
+    }
+
+    &__sub {
+        color: $brown-400;
+        line-height: 1.9;
+    }
+
+    @media (max-width: 767px) {
+        padding: 64px 6%;
+    }
+}

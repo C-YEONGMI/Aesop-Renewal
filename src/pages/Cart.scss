@@ -1,0 +1,185 @@
+@import "../globals.scss";
+
+.cart-page {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 4% 100px;
+    }
+
+    &__title {
+        color: $brown-800;
+        margin-bottom: 48px;
+    }
+
+    &__empty {
+        text-align: center;
+        padding: 80px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        color: $brown-400;
+    }
+
+    &__go-shopping {
+        color: $brown-700;
+        text-decoration: none;
+        border-bottom: 1px solid $brown-400;
+        padding-bottom: 2px;
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 60px;
+        align-items: start;
+
+        @media (max-width: 1023px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* 상품 목록 */
+    &__select-all {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 16px;
+        border-bottom: 1px solid $brown-100;
+        margin-bottom: 8px;
+        color: $brown-600;
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+    }
+
+    &__delete-selected {
+        background: none;
+        border: none;
+        color: $brown-400;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 24px 0;
+        border-bottom: 1px solid $brown-100;
+    }
+
+    &__item-check input { cursor: pointer; }
+
+    &__item-img {
+        width: 100px;
+        height: 100px;
+        background-color: $bg-product;
+        flex-shrink: 0;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+    }
+
+    &__item-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__item-cat { color: $brown-400; }
+    &__item-name { color: $brown-800; }
+    &__item-variant { color: $brown-400; }
+    &__item-price { color: $brown-500; }
+
+    &__item-qty {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        button {
+            width: 28px;
+            height: 28px;
+            border: 1px solid $brown-200;
+            background: none;
+            cursor: pointer;
+            color: $brown-600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover { background-color: $brown-100; }
+        }
+    }
+
+    &__item-total { color: $brown-800; min-width: 80px; text-align: right; }
+
+    &__item-delete {
+        background: none;
+        border: none;
+        color: $brown-300;
+        cursor: pointer;
+        padding: 4px;
+
+        &:hover { color: $brown-700; }
+    }
+
+    /* 주문 요약 */
+    &__summary {
+        background-color: $bg-primary;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: sticky;
+        top: 90px;
+    }
+
+    &__summary-title { color: $brown-800; margin-bottom: 8px; }
+
+    &__summary-row {
+        display: flex;
+        justify-content: space-between;
+        color: $brown-600;
+    }
+
+    &__free-msg { color: $point-pink; }
+
+    &__summary-total {
+        display: flex;
+        justify-content: space-between;
+        color: $brown-900;
+        padding-top: 16px;
+        border-top: 1px solid $brown-200;
+        margin-top: 4px;
+    }
+
+    &__order-btn {
+        width: 100%;
+        padding: 18px;
+        background-color: $brown-800;
+        color: $oatmeal;
+        border: none;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background-color 0.3s ease;
+
+        &:hover { background-color: $brown-900; }
+    }
+}

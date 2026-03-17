@@ -1,0 +1,105 @@
+@import "../../../globals.scss";
+
+/* ────────────────────────────────────────────────
+   Best Products 섹션 - 고정 큐레이션 3개 카드
+──────────────────────────────────────────────── */
+.best-products {
+    background-color: $oatmeal;
+    padding: 80px 4%;
+
+    /* 섹션 헤더 */
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    &__title {
+        color: $brown-800;
+        letter-spacing: 0.1em;
+    }
+
+    &__more {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: $brown-600;
+        @extend .optima-16;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.6;
+        }
+
+        svg {
+            transition: transform 0.3s ease;
+        }
+
+        &:hover svg {
+            transform: translateX(4px);
+        }
+    }
+
+    &__empty {
+        color: $brown-400;
+        padding: 40px;
+        text-align: center;
+    }
+
+    /* 카드 갤러리: 소형 - 대형 - 소형 */
+    &__gallery {
+        display: flex;
+        gap: 20px;
+        align-items: stretch;
+    }
+}
+
+/* 카드 크기 제어 */
+.best__card {
+    display: flex;
+    flex-direction: column;
+
+    &--sm {
+        flex: 1 1 0;
+    }
+
+    &--lg {
+        flex: 1.33 1 0;
+    }
+
+    /* 내부 컴포넌트가 카드 높이를 꽉 채우도록 */
+    > * {
+        flex: 1;
+        height: 100%;
+    }
+}
+
+/* ──────────── 반응형 ──────────── */
+@media (max-width: 1023px) {
+    .best-products {
+        &__gallery {
+            flex-direction: column;
+        }
+    }
+
+    .best__card {
+        &--sm,
+        &--lg {
+            flex: none;
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .best-products {
+        padding: 60px 5%;
+
+        &__gallery {
+            gap: 16px;
+        }
+    }
+}

@@ -5,11 +5,45 @@
 #header {
     width: 100%;
     background-color: $oatmeal;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
     z-index: 1000;
     @extend .optima-16;
     color: $brown-700;
+    transition: background-color 0.4s ease, color 0.4s ease;
+
+    /* 홈 Hero 구간 - transparent 오버레이 헤더 */
+    &.transparent {
+        background-color: transparent;
+        color: $oatmeal;
+
+        .depth1 > li > a,
+        .utl li a {
+            color: $oatmeal;
+        }
+
+        h1 a {
+            color: $oatmeal;
+        }
+
+        .logo-svg {
+            /* SVG fill 색상을 흰색 계열로 */
+            filter: brightness(0) invert(1);
+        }
+
+        .depth2 {
+            background-color: $brown-900;
+            > li > a {
+                color: $brown-100;
+            }
+        }
+
+        .cart-count {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: $oatmeal;
+        }
+    }
 }
 
 #header .inner {

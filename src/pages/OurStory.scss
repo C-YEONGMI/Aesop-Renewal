@@ -1,0 +1,54 @@
+@import "../globals.scss";
+
+.our-story-page {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__hero {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+    }
+
+    &__hero-bg {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, $brown-800 0%, $bg-overlay 100%);
+    }
+
+    &__hero-content {
+        position: relative;
+        z-index: 1;
+        padding: 0 4% 60px;
+        color: $oatmeal;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h1 { margin: 0; }
+    }
+
+    &__inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 80px 4% 100px;
+    }
+
+    &__section {
+        padding: 60px 0;
+        border-bottom: 1px solid $brown-100;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        h2 { color: $brown-800; }
+        p { color: $brown-500; line-height: 1.9; }
+
+        &:last-child { border-bottom: none; }
+    }
+}

@@ -1,0 +1,102 @@
+@import "../../../globals.scss";
+
+/* ────────────────────────────────────────────────
+   About Teaser 섹션 - 어두운 배경 + 대형 워드마크
+──────────────────────────────────────────────── */
+.about-teaser {
+    position: relative;
+    background-color: $bg-overlay;
+    padding: 80px 4%;
+    overflow: hidden;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+
+    /* 배경 이미지 영역 (실제 이미지로 교체) */
+    &__bg {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            160deg,
+            $brown-900 0%,
+            $bg-overlay 50%,
+            $brown-800 100%
+        );
+        opacity: 0.8;
+        z-index: 0;
+    }
+
+    &__inner {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* 대형 워드마크 */
+    &__wordmark {
+        color: $oatmeal;
+        opacity: 0.85;
+        margin: 0;
+        line-height: 0.9;
+        letter-spacing: -0.02em;
+        // 화면보다 크게 잘려 나오는 편집 효과
+        white-space: nowrap;
+
+        @media (max-width: 1023px) {
+            font-size: 100px;
+        }
+
+        @media (max-width: 767px) {
+            font-size: 64px;
+        }
+    }
+
+    /* 우측 텍스트 영역 */
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        flex-shrink: 0;
+        max-width: 300px;
+    }
+
+    &__desc {
+        color: $brown-200;
+        line-height: 1.8;
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: $oatmeal;
+        @extend .optima-16;
+        text-decoration: none;
+        border-bottom: 1px solid rgba($oatmeal, 0.4);
+        padding-bottom: 4px;
+        align-self: flex-start;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
+    /* ──────────── 반응형 ──────────── */
+    @media (max-width: 767px) {
+        &__inner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        &__text {
+            max-width: 100%;
+        }
+    }
+}

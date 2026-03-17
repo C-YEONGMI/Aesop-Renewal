@@ -1,0 +1,147 @@
+@import "../../../globals.scss";
+
+/* ────────────────────────────────────────────────
+   Official Online Exclusive 섹션 - 에디토리얼 콜라주
+──────────────────────────────────────────────── */
+.official {
+    background-color: $bg-primary;
+    padding: 100px 4%;
+
+    &__inner {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+        justify-content: center;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* 좌우 소형 이미지 열 */
+    &__col-left,
+    &__col-right {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        flex: 0 0 200px;
+    }
+
+    &__col-left {
+        align-items: flex-end;
+    }
+
+    &__col-right {
+        align-items: flex-start;
+    }
+
+    /* 이미지 카드 */
+    &__item-img {
+        background-color: $bg-product;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 12px;
+            transition: transform 0.5s ease;
+
+            &:hover {
+                transform: scale(1.04);
+            }
+        }
+
+        &--sm {
+            width: 120px;
+            height: 140px;
+        }
+
+        &--md {
+            width: 160px;
+            height: 200px;
+        }
+    }
+
+    /* 중앙 텍스트 */
+    &__text-block {
+        flex: 1;
+        max-width: 480px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    &__label {
+        color: $brown-400;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        color: $brown-800;
+        line-height: 1.15;
+        margin: 0;
+
+        &-word {
+            display: inline-block;
+        }
+    }
+
+    &__desc {
+        color: $brown-600;
+        line-height: 1.9;
+    }
+
+    &__benefits {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        color: $brown-500;
+
+        li {
+            @extend .suit-16-r;
+        }
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: $brown-700;
+        @extend .optima-16;
+        text-decoration: none;
+        margin-top: 8px;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.6;
+        }
+    }
+
+    /* ──────────── 반응형 ──────────── */
+    @media (max-width: 1023px) {
+        &__inner {
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        &__col-left,
+        &__col-right {
+            flex-direction: row;
+            flex: none;
+        }
+    }
+
+    @media (max-width: 767px) {
+        padding: 64px 5%;
+
+        &__col-left,
+        &__col-right {
+            display: none; // 모바일에서는 이미지 숨김, 텍스트 우선
+        }
+    }
+}

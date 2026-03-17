@@ -2,9 +2,10 @@
 @import '../../../globals.scss';
 
 .badge {
-    padding: 0px 12px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    padding: 3px 12px;
 
     @extend .suit-14-m;
     color: $oatmeal;

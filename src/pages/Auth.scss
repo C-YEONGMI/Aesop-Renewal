@@ -1,0 +1,100 @@
+@import "../globals.scss";
+
+.auth-page {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__inner {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 80px 4% 100px;
+    }
+
+    &__title {
+        color: $brown-800;
+        margin-bottom: 48px;
+        text-align: center;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        label { color: $brown-600; }
+
+        input {
+            padding: 14px 16px;
+            border: 1px solid $brown-200;
+            background-color: $oatmeal;
+            color: $brown-800;
+            outline: none;
+            transition: border-color 0.2s ease;
+            font-family: $font-suit;
+
+            &:focus { border-color: $brown-500; }
+            &::placeholder { color: $brown-200; }
+        }
+    }
+
+    &__error {
+        color: #c0392b;
+        text-align: center;
+    }
+
+    &__submit {
+        width: 100%;
+        padding: 16px;
+        background-color: $brown-800;
+        color: $oatmeal;
+        border: none;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background-color 0.3s ease;
+
+        &:hover { background-color: $brown-900; }
+    }
+
+    &__links {
+        text-align: center;
+        margin-top: 24px;
+        color: $brown-400;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+
+        a {
+            color: $brown-600;
+            text-decoration: none;
+            border-bottom: 1px solid $brown-300;
+
+            &:hover { color: $brown-800; }
+        }
+    }
+
+    &__test-btn {
+        display: block;
+        width: 100%;
+        margin-top: 16px;
+        padding: 12px;
+        background: none;
+        border: 1px dashed $brown-300;
+        color: $brown-400;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: $font-suit;
+
+        &:hover {
+            border-color: $brown-500;
+            color: $brown-600;
+        }
+    }
+}

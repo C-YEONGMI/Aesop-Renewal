@@ -1,0 +1,145 @@
+@import "../globals.scss";
+
+.support-page {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 60px 4% 100px;
+    }
+
+    &__title { color: $brown-800; margin-bottom: 40px; }
+
+    &__tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 1px solid $brown-100;
+        margin-bottom: 48px;
+        overflow-x: auto;
+    }
+
+    &__tab {
+        padding: 14px 24px;
+        color: $brown-400;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        white-space: nowrap;
+        transition: all 0.2s;
+
+        &.active, &:hover {
+            color: $brown-800;
+            border-bottom-color: $brown-700;
+        }
+    }
+
+    &__content { display: flex; flex-direction: column; gap: 0; }
+
+    /* 공지사항 */
+    &__notice {
+        padding: 24px 0;
+        border-bottom: 1px solid $brown-100;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    &__notice-title { color: $brown-800; }
+    &__notice-date { color: $brown-300; }
+    &__notice-content { color: $brown-500; }
+
+    /* FAQ */
+    &__faq {
+        border-bottom: 1px solid $brown-100;
+    }
+    &__faq-q {
+        width: 100%;
+        padding: 20px 0;
+        background: none;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        color: $brown-700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: $font-suit;
+        font-weight: 500;
+
+        &:hover { color: $brown-900; }
+    }
+    &__faq-cat {
+        background-color: $bg-primary;
+        padding: 3px 8px;
+        color: $brown-400;
+        flex-shrink: 0;
+    }
+    &__faq-arrow {
+        margin-left: auto;
+        transition: transform 0.3s;
+        flex-shrink: 0;
+        &.open { transform: rotate(180deg); }
+    }
+    &__faq-a {
+        padding: 0 0 20px 0;
+        color: $brown-500;
+        line-height: 1.8;
+    }
+
+    /* 문의하기 폼 */
+    &__form { display: flex; flex-direction: column; gap: 20px; }
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        label { color: $brown-600; }
+
+        input, textarea {
+            padding: 12px 14px;
+            border: 1px solid $brown-200;
+            background: $oatmeal;
+            color: $brown-800;
+            outline: none;
+            font-family: $font-suit;
+            resize: vertical;
+            transition: border-color 0.2s;
+
+            &:focus { border-color: $brown-500; }
+            &::placeholder { color: $brown-200; }
+        }
+    }
+    &__submit {
+        align-self: flex-start;
+        padding: 14px 32px;
+        background-color: $brown-800;
+        color: $oatmeal;
+        border: none;
+        cursor: pointer;
+        font-family: $font-suit;
+        transition: background-color 0.3s;
+
+        &:hover { background-color: $brown-900; }
+    }
+
+    /* 실시간 상담 */
+    &__live-chat {
+        padding: 40px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        color: $brown-600;
+
+        p:first-child { color: $brown-800; }
+    }
+    &__email-link {
+        color: $brown-700;
+        text-decoration: none;
+        border-bottom: 1px solid $brown-300;
+        align-self: flex-start;
+        margin-top: 8px;
+    }
+}

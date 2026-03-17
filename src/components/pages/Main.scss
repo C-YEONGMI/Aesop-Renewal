@@ -1,13 +1,12 @@
 @import "../../globals.scss";
 
+/* Main.jsx가 홈 섹션 조립자 역할만 하도록
+ * 개별 섹션이 자체 padding을 관리하므로 여기서는 레이아웃만 정의 */
 .main {
     width: 100%;
-    /* 데스크탑 기준 헤더를 제외한 기본 높이 확보 */
-    min-height: calc(100vh - 70px);
     display: flex;
     flex-direction: column;
-    padding: 100px 0;
-    /* 위아래 여백 */
+    padding: 0; /* 각 섹션 컴포넌트가 자체적으로 padding을 관리 */
 }
 
 /* ==================

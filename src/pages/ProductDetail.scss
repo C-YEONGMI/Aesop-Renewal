@@ -1,0 +1,228 @@
+@import "../globals.scss";
+
+.product-detail {
+    background-color: $oatmeal;
+    min-height: 100vh;
+
+    &__header-space { height: 70px; }
+
+    &__not-found {
+        text-align: center;
+        padding: 120px 4%;
+        color: $brown-500;
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: $brown-700;
+            text-decoration: none;
+            border-bottom: 1px solid $brown-300;
+        }
+    }
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 4% 100px;
+    }
+
+    &__breadcrumb {
+        color: $brown-400;
+        margin-bottom: 40px;
+
+        a {
+            color: $brown-400;
+            text-decoration: none;
+            &:hover { color: $brown-700; }
+        }
+    }
+
+    /* 메인 레이아웃 */
+    &__main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        margin-bottom: 80px;
+
+        @media (max-width: 767px) {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+    }
+
+    /* 이미지 */
+    &__img-wrap {
+        background-color: $bg-product;
+        aspect-ratio: 1 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    /* 정보 영역 */
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+
+    &__badges { display: flex; gap: 6px; }
+
+    &__category { color: $brown-400; }
+
+    &__name {
+        color: $brown-900;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    &__desc {
+        color: $brown-500;
+        line-height: 1.8;
+    }
+
+    &__price {
+        color: $brown-800;
+        margin: 8px 0;
+    }
+
+    /* Variant 선택 */
+    &__variants {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__variant-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    &__variant-btn {
+        padding: 10px 16px;
+        border: 1px solid $brown-200;
+        background: none;
+        color: $brown-600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.active,
+        &:hover {
+            border-color: $brown-800;
+            background-color: $brown-800;
+            color: $oatmeal;
+        }
+    }
+
+    /* 액션 버튼 */
+    &__actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    &__add-btn {
+        flex: 1;
+        padding: 16px;
+        background: none;
+        border: 1px solid $brown-700;
+        color: $brown-700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: $brown-700;
+            color: $oatmeal;
+        }
+    }
+
+    &__buy-btn {
+        flex: 1;
+        padding: 16px;
+        background-color: $brown-800;
+        border: 1px solid $brown-800;
+        color: $oatmeal;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover { background-color: $brown-900; }
+    }
+
+    &__wish-btn {
+        width: 52px;
+        border: 1px solid $brown-200;
+        background: none;
+        cursor: pointer;
+        color: $brown-400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s ease;
+
+        &.active, &:hover { color: $brown-700; }
+    }
+
+    /* 혜택 */
+    &__benefits {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        color: $brown-400;
+        border-top: 1px solid $brown-100;
+        padding-top: 16px;
+    }
+
+    /* 탭 */
+    &__tabs { border-top: 1px solid $brown-200; }
+
+    &__tab-list {
+        display: flex;
+        border-bottom: 1px solid $brown-100;
+        overflow-x: auto;
+    }
+
+    &__tab-btn {
+        padding: 16px 24px;
+        background: none;
+        border: none;
+        color: $brown-400;
+        cursor: pointer;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+        margin-bottom: -1px;
+
+        &.active,
+        &:hover {
+            color: $brown-800;
+            border-bottom-color: $brown-700;
+        }
+    }
+
+    &__tab-content {
+        padding: 40px 0;
+        color: $brown-500;
+        line-height: 1.9;
+    }
+
+    &__no-review { color: $brown-300; }
+}
+
+.badge {
+    padding: 3px 8px;
+    font-size: 11px;
+    &-best { background-color: $brown-200; color: $brown-700; }
+    &-new { background-color: $point-green; color: $oatmeal; }
+    &-exclusive { background-color: $point-pink; color: $brown-700; }
+}

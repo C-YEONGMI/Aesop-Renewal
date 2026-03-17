@@ -1,19 +1,11 @@
-// src/App.tsx
+// src/App.jsx
 import React from 'react';
-
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
 import './App.scss';
-import Footer from './components/common/Footer/Footer';
-import Header from './components/common/Header/Header';
-import Main from './components/pages/Main';
 
 const App = () => {
-    return (
-        <div>
-            <Header />
-            <Main />
-            <Footer />
-        </div>
-    );
+    return <RouterProvider router={router} />;
 };
 
 export default App;

@@ -1,0 +1,94 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+// 장바구니 스토어
+// cartId = productId + '-' + variantIndex (variant 기준 구분)
+const useCartStore = create(
+    persist(
+        (set, get) => ({
+            cartItems: [], // { cartId, productId, name, image, category, variant, quantity, price }
+
+            // 장바구니 담기
+            addToCart: (product, variantIndex = 0) => {
+                const variant = product.variants[variantIndex];
+                const cartId = `${product.name}-${variantIndex}`;
+                const items = get().cartItems;
+                const existing = items.find(item => item.cartId === cartId);
+
+                if (existing) {
+                    set({
+                        cartItems: items.map(item =>
+                            item.cartId === cartId
+                                ? { ...item, quantity: item.quantity + 1 }
+                                : item
+                        ),
+                    });
+                } else {
+                    set({
+                        cartItems: [
+                            ...items,
+                            {
+                                cartId,
+                                productName: product.name,
+                                category: product.category,
+                                image: variant.image,
+                                variant: variant.capacity || '',
+                                quantity: 1,
+                                price: variant.price,
+                                checked: true,
+                            },
+                        ],
+                    });
+                }
+            },
+
+            // 수량 변경
+            updateQuantity: (cartId, quantity) => {
+                if (quantity < 1) return;
+                set({
+                    cartItems: get().cartItems.map(item =>
+                        item.cartId === cartId ? { ...item, quantity } : item
+                    ),
+                });
+            },
+
+            // 개별 삭제
+            removeItem: (cartId) => {
+                set({ cartItems: get().cartItems.filter(item => item.cartId !== cartId) });
+            },
+
+            // 선택 상태 토글
+            toggleCheck: (cartId) => {
+                set({
+                    cartItems: get().cartItems.map(item =>
+                        item.cartId === cartId ? { ...item, checked: !item.checked } : item
+                    ),
+                });
+            },
+
+            // 전체 선택/해제
+            toggleAll: (checked) => {
+                set({ cartItems: get().cartItems.map(item => ({ ...item, checked })) });
+            },
+
+            // 선택 삭제
+            removeChecked: () => {
+                set({ cartItems: get().cartItems.filter(item => !item.checked) });
+            },
+
+            // 주문 완료 후 선택 항목 제거
+            removeOrderedItems: (cartIds) => {
+                set({ cartItems: get().cartItems.filter(item => !cartIds.includes(item.cartId)) });
+            },
+
+            // 전체 비우기
+            clearCart: () => set({ cartItems: [] }),
+        }),
+        {
+            name: 'aesop-cart',
+            partialize: (state) => ({ cartItems: state.cartItems }),
+        }
+    )
+);
+
+export default useCartStore;
