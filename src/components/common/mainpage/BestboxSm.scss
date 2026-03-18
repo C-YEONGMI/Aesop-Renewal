@@ -80,19 +80,14 @@
     }
 
     .cart-cta {
-        @extend .suit-18-m;
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: $brown-500;
-        color: $oatmeal;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         height: 0;
         opacity: 0;
         overflow: hidden;
+        padding: 0;
         z-index: 4;
         transition: height 0.25s ease, opacity 0.2s ease;
     }

@@ -4,7 +4,7 @@ import './Badge.scss';
 const Exclusive = () => {
     return (
         <span className="badge badge-exclusive">
-            Exclusive
+            EXCLUSIVE
         </span>
     );
 };

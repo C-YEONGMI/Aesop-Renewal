@@ -7,6 +7,7 @@
     background-color: $brown-900;
     color: $oatmeal;
     overflow: hidden;
+    cursor: grab;
 
     &__inner {
         width: min(1580px, calc(100% - 88px));
@@ -28,20 +29,62 @@
 
     &__pagination {
         display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 28px;
+    }
+
+    &__counter {
+        display: flex;
         align-items: baseline;
         gap: 6px;
-        margin-bottom: 28px;
     }
 
     &__current,
     &__slash,
-    &__total {
+    &__total,
+    &__count {
         color: $oatmeal;
+    }
+
+    &__current {
+        display: inline-flex;
+        align-items: flex-start;
+        height: 50px;
+        overflow: hidden;
+    }
+
+    &__count-wrapper {
+        display: flex;
+        flex-direction: column;
+        will-change: transform;
+    }
+
+    &__count {
+        display: block;
+        line-height: 1;
     }
 
     &__slash,
     &__total {
         opacity: 0.58;
+    }
+
+    &__progress {
+        width: 58px;
+        height: 2px;
+        margin-top: 14px;
+        background-color: rgba($oatmeal, 0.16);
+        overflow: hidden;
+    }
+
+    &__progress-fill {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: $oatmeal;
+        transform: scaleX(0);
+        transform-origin: left center;
     }
 
     &__center {
@@ -62,12 +105,15 @@
     &__img-point {
         position: relative;
         overflow: hidden;
+        user-select: none;
 
         img {
             display: block;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            user-select: none;
+            -webkit-user-drag: none;
         }
     }
 
@@ -93,16 +139,15 @@
     &__image-layer {
         position: absolute;
         inset: 0;
-        opacity: 0;
-        transform: scale(1.035);
-        transition:
-            opacity 0.55s ease,
-            transform 0.75s ease;
         pointer-events: none;
+        will-change: transform, opacity;
 
-        &.is-active {
-            opacity: 1;
-            transform: scale(1);
+        &.is-current {
+            z-index: 2;
+        }
+
+        &.is-previous {
+            z-index: 1;
         }
     }
 
@@ -139,6 +184,18 @@
         width: 431px;
         max-width: 431px;
         word-break: keep-all;
+    }
+
+    &__action {
+        will-change: transform, opacity;
+    }
+
+    &__drag-proxy {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
     }
 }
 
@@ -267,7 +324,7 @@
         }
 
         &__current {
-            font-size: 40px;
+            height: 42px;
         }
 
         &__slash,

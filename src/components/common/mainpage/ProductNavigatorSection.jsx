@@ -2,6 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import pnavHairShaving from '../../../assets/pnav_hair_shaving.png';
+import pnavHandBody from '../../../assets/pnav_hand_body.png';
+import pnavHomeLiving from '../../../assets/pnav_home_living.png';
+import pnavKits from '../../../assets/pnav_kits.png';
+import pnavPerfume from '../../../assets/pnav_perfume.png';
+import pnavSkincare from '../../../assets/pnav_skincare.png';
 import './ProductNavigatorSection.scss';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,42 +18,42 @@ const CATEGORY_DATA = [
         label: 'Skincare',
         centerLabel: 'Skincare',
         link: '/products/skincare',
-        bgImage: 'https://images.unsplash.com/photo-1615397323136-22e6c43c1b69?q=80&w=1920&auto=format&fit=crop',
+        bgImage: pnavSkincare,
     },
     {
         id: 'body',
         label: 'Hand · Body',
         centerLabel: 'Hand Body',
         link: '/products/body',
-        bgImage: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1920&auto=format&fit=crop',
+        bgImage: pnavHandBody,
     },
     {
         id: 'fragrance',
         label: 'Perfume',
         centerLabel: 'Perfume',
         link: '/products/fragrance',
-        bgImage: 'https://images.unsplash.com/photo-1595425970377-c9703d7408f9?q=80&w=1920&auto=format&fit=crop',
+        bgImage: pnavPerfume,
     },
     {
         id: 'home',
         label: 'Home · Living',
         centerLabel: 'Home Living',
         link: '/products/home',
-        bgImage: 'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?q=80&w=1920&auto=format&fit=crop',
+        bgImage: pnavHomeLiving,
     },
     {
         id: 'hair',
         label: 'Hair · Shaving',
         centerLabel: 'Hair Shaving',
         link: '/products/hair',
-        bgImage: 'https://images.unsplash.com/photo-1512496015851-a1cbf890abfc?q=80&w=1920&auto=format&fit=crop',
+        bgImage: pnavHairShaving,
     },
     {
         id: 'kits',
         label: 'Kits',
         centerLabel: 'Kits',
         link: '/products/kits',
-        bgImage: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1920&auto=format&fit=crop',
+        bgImage: pnavKits,
     },
 ];
 

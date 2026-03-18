@@ -6,13 +6,21 @@ import useCartStore from '../../../store/useCartStore';
 import useAuthStore from '../../../store/useAuthStore';
 import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
 
-// transparent prop: 홈 Hero 구간에서만 true (흰색 텍스트 오버레이)
 const Header = ({ transparent = false }) => {
     const navigate = useNavigate();
-    const totalCount = useCartStore(state =>
+    const totalCount = useCartStore((state) =>
         state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
     );
-    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+    const handleLogoClick = (event) => {
+        event.preventDefault();
+        navigate('/');
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        });
+    };
 
     return (
         <header id="header" className={transparent ? 'transparent' : ''}>
@@ -37,7 +45,7 @@ const Header = ({ transparent = false }) => {
                 </nav>
 
                 <h1>
-                    <Link to="/" aria-label="Aesop 홈">
+                    <Link to="/" aria-label="Aesop Home" onClick={handleLogoClick}>
                         <GNB_Logo className="logo-svg" data-header-logo aria-label="Aesop" />
                     </Link>
                 </h1>

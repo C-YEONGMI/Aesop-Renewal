@@ -1,22 +1,30 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header_wh.scss';
-import GNB_Logo from "../../../assets/GNB_Logo.svg?react";
+import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
 import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
 import useAuthStore from '../../../store/useAuthStore';
 import useCartStore from '../../../store/useCartStore';
 
 const Header_wh = () => {
     const navigate = useNavigate();
-    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
-    const totalCount = useCartStore(state =>
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const totalCount = useCartStore((state) =>
         state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
     );
+
+    const handleLogoClick = (event) => {
+        event.preventDefault();
+        navigate('/');
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        });
+    };
 
     return (
         <header id="header-wh">
             <div className="inner">
-                {/* Global Navigation Bar */}
                 <nav className="nav">
                     <ul className="depth1">
                         <li><a href="/gift-guide">GIFT GUIDE</a></li>
@@ -31,33 +39,31 @@ const Header_wh = () => {
                                 <li><a href="/products/kits">KITS</a></li>
                             </ul>
                         </li>
-
                         <li><a href="/benefits">BENEFITS</a></li>
                         <li><a href="/our-story">OUR STORY</a></li>
                     </ul>
                 </nav>
 
-                {/* Logo */}
                 <h1>
-                    <a href="/" aria-label="Aesop Home">
+                    <Link to="/" aria-label="Aesop Home" onClick={handleLogoClick}>
                         <GNB_Logo className="logo-svg" aria-label="Aesop" />
-                    </a>
+                    </Link>
                 </h1>
 
-                {/* Utility Menu */}
                 <ul className="utl">
                     <li className="search-li">
-                        <ExpandableSearchBar 
-                            expandDirection="left" 
-                            width={300} 
-                            onSearch={(q) => {
-                                if(q.trim()) navigate('/search?q=' + encodeURIComponent(q));
-                            }} 
+                        <ExpandableSearchBar
+                            expandDirection="left"
+                            width={300}
+                            onSearch={(query) => {
+                                if (query.trim()) {
+                                    navigate(`/search?q=${encodeURIComponent(query)}`);
+                                }
+                            }}
                         />
                     </li>
                     <li>
                         <a href={isLoggedIn ? '/mypage' : '/login'} aria-label={isLoggedIn ? 'Mypage' : 'Login'}>
-                            {/* User / Login Icon */}
                             {isLoggedIn ? (
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -74,8 +80,11 @@ const Header_wh = () => {
                     </li>
                     <li>
                         <a href="/cart" aria-label="Cart">
-                            {/* Cart Icon */}
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="8" cy="21" r="1" />
+                                <circle cx="19" cy="21" r="1" />
+                                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                            </svg>
                             <span className="cart-count">{totalCount}</span>
                         </a>
                     </li>

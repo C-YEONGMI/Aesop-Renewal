@@ -124,6 +124,15 @@ const Hero = () => {
                     },
                     0.06
                 )
+                .to(
+                    ritualRef.current,
+                    {
+                        opacity: 0,
+                        duration: 9.86,
+                        ease: 'none',
+                    },
+                    0.06
+                )
                 .to(flightRef.current, { opacity: 0, duration: 0.18 }, 9.7)
                 .to(headerLogo, { opacity: 1, duration: 0.24 }, 9.92)
                 .to(holdState, { value: 1, duration: 1.4 }, 10.24);

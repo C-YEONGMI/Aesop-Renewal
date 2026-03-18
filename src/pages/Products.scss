@@ -83,8 +83,12 @@
     /* 상품 그리드 */
     &__grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 40px 24px;
+
+        @media (max-width: 1279px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
 
         @media (max-width: 1023px) {
             grid-template-columns: repeat(2, 1fr);
@@ -107,14 +111,33 @@
         display: flex;
         flex-direction: column;
         gap: 0;
+        height: 100%;
     }
 
     &__card-img-wrap {
-        display: block;
         position: relative;
         background-color: $bg-product;
         aspect-ratio: 1 / 1;
         overflow: hidden;
+    }
+
+    &__card-overlay {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    &__card-img-link {
+        display: block;
+        width: 100%;
+        height: 100%;
     }
 
     &__card-img {
@@ -129,23 +152,6 @@
         }
     }
 
-    &__card-hover {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba($brown-800, 0.85);
-        color: $oatmeal;
-        padding: 14px;
-        text-align: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-
-        .products-page__card-img-wrap:hover & {
-            opacity: 1;
-        }
-    }
-
     &__card-info {
         padding: 20px 0;
         display: flex;
@@ -155,8 +161,19 @@
 
     &__card-badges {
         display: flex;
+        align-items: center;
         gap: 6px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        min-width: 0;
+        max-width: calc(100% - 30px);
+        pointer-events: auto;
+
+        .badge {
+            height: 18px;
+            padding: 0 8px;
+            font-size: 12px;
+            line-height: 1;
+        }
     }
 
     &__card-category {
@@ -169,6 +186,11 @@
 
     &__card-desc {
         color: $brown-400;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__card-price {
@@ -177,40 +199,46 @@
 
     &__card-actions {
         display: flex;
-        gap: 8px;
         margin-top: 4px;
         align-items: center;
     }
 
     &__add-btn {
         flex: 1;
-        padding: 12px;
-        background-color: $brown-800;
-        color: $oatmeal;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-
-        &:hover {
-            background-color: $brown-900;
-        }
     }
 
     &__wish-btn {
-        width: 40px;
-        height: 40px;
-        border: 1px solid $brown-200;
+        flex: 0 0 18px;
+        width: 18px;
+        height: 18px;
+        border: 0;
         background: none;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         color: $brown-400;
-        transition: color 0.3s ease;
+        transition: color 0.3s ease, transform 0.3s ease;
+        pointer-events: auto;
 
-        &.active,
+        &.active {
+            color: $point-pink;
+        }
+
         &:hover {
             color: $brown-700;
+        }
+
+        &.active:hover {
+            color: $point-pink;
+        }
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        svg {
+            display: block;
         }
     }
 }

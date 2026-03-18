@@ -1,31 +1,26 @@
 @use "../../../globals.scss" as *;
 
 .new-arrival {
-    background-color: $bg-primary;
     width: 100%;
-    height: 1080px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 100px 4%;
+    padding: clamp(80px, 8vw, 116px) clamp(20px, 6vw, 120px) clamp(88px, 8vw, 126px);
+    background-color: $bg-primary;
 
     &__inner {
-        width: 100%;
-        max-width: 1680px;
+        width: min(100%, 1680px);
         margin: 0 auto;
-        display: flex;
-        align-items: center;
+        display: grid;
+        grid-template-columns: minmax(0, 730px) minmax(0, 847px);
         justify-content: space-between;
-        gap: 60px;
+        align-items: start;
+        gap: clamp(40px, 5vw, 120px);
     }
 
-    /* ──── Left Area ──── */
-    &__left {
-        flex: 1;
+    &__content {
+        width: min(100%, 730px);
+        padding-top: clamp(24px, 6vw, 101px);
         display: flex;
         flex-direction: column;
         align-items: center;
-        max-width: 740px; // 350 + 350 + gap(40)
     }
 
     &__header {
@@ -38,120 +33,140 @@
     }
 
     &__title {
-        color: $brown-800;
         margin: 0;
-        text-align: center;
+        color: $brown-500;
+        line-height: 1;
     }
 
     &__more-wrapper {
         position: absolute;
         right: 0;
-        bottom: 0; // 기준선에 맞추기 위해
+        bottom: 0;
     }
 
-    &__images-small {
-        display: flex;
-        gap: 40px;
-        margin-bottom: 40px;
+    &__thumb-strip {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px;
     }
 
-    &__img-sm {
-        width: 350px;
-        height: 350px;
-        background-color: #d1c1af; // 컬러 박스 (시안 임시 색)
+    &__thumb {
+        width: 100%;
+        aspect-ratio: 1 / 1;
         overflow: hidden;
+        background-color: rgba($brown-200, 0.24);
+    }
 
-        &--2 {
-            background-color: #554438; // 2번째 이미지 박스
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    &__thumb-image,
+    &__visual-media {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     &__info {
-        text-align: center;
+        width: min(100%, 480px);
+        margin-top: 32px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 8px; // 타이틀과 서브타이틀 사이 등
-        color: $brown-500;
+        gap: 16px;
+        text-align: center;
+    }
+
+    &__info-head {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
     }
 
     &__name {
-        color: $brown-800; // 조금 더 짙은 갈색
         margin: 0;
+        color: $brown-500;
+        line-height: 1;
     }
 
     &__type {
-        color: $brown-400; // Eau de Parfum
         margin: 0;
-        margin-bottom: 16px;
+        color: $brown-300;
+        line-height: 1;
     }
 
     &__desc {
-        color: $brown-500;
-        line-height: 1.6;
         margin: 0;
+        color: $brown-400;
+        text-align: center;
     }
 
-    /* ──── Right Area ──── */
-    &__right {
-        flex: 1;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    &__img-lg {
-        width: 847px;
-        height: 847px;
-        background-color: #2a2a2a; // 블랙에 가까운 메인 이미지 임시 색
+    &__visual {
+        width: min(100%, 847px);
+        justify-self: end;
+        aspect-ratio: 1 / 1;
         overflow: hidden;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        background-color: #000;
     }
 
-    /* ──────────── Response ──────────── */
-    @media (max-width: 1440px) {
-        height: auto;
-
+    @media (max-width: 1279px) {
         &__inner {
-            flex-direction: column;
-            gap: 80px;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 56px;
         }
 
-        &__right {
-            justify-content: center;
+        &__content {
+            width: min(100%, 730px);
+            padding-top: 0;
+            margin: 0 auto;
         }
 
-        &__img-lg {
-            width: 100%;
-            max-width: 847px;
-            height: auto;
-            aspect-ratio: 1 / 1;
-        }
-
-        &__images-small {
-            flex-wrap: wrap;
-            justify-content: center;
+        &__visual {
+            width: min(100%, 847px);
+            justify-self: center;
         }
     }
 
     @media (max-width: 767px) {
-        padding: 60px 4%;
+        padding: 64px 20px 72px;
 
-        &__img-sm {
+        &__header {
+            margin-bottom: 28px;
+        }
+
+        &__title {
+            font-size: 38px;
+        }
+
+        &__thumb-strip {
+            gap: 12px;
+        }
+
+        &__info {
+            margin-top: 24px;
+            gap: 12px;
+        }
+
+        &__name,
+        &__type {
             width: 100%;
-            max-width: 350px;
-            height: auto;
-            aspect-ratio: 1 / 1;
+        }
+
+        &__name {
+            font-size: 28px;
+        }
+
+        &__type {
+            font-size: 24px;
+        }
+
+        &__desc {
+            font-size: 16px;
+
+            br {
+                display: none;
+            }
         }
     }
 }
