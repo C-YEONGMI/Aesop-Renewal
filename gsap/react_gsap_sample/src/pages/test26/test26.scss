@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap");
+
+.test26-wrapper {
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    font-family: "Inter", sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+
+    // Section1
+    .con1 {
+        background-color: #ffe5e5;
+        .inner {
+            max-width: 1400px;
+            min-height: 1080px;
+            margin: auto;
+            padding: 150px 2rem;
+            h2 { font-size: 2.5rem; font-weight: 600; }
+        }
+    }
+
+    // Section2 - My Project
+    .con2 {
+        background-color: #e5ffe5;
+        .inner {
+            max-width: 1400px;
+            margin: auto;
+            padding: 150px 2rem;
+        }
+
+        h2 {
+            font-size: clamp(5rem, 15vw, 12.5rem);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            span {
+                display: block;
+                text-align: center;
+                line-height: 1.2;
+            }
+        }
+
+        .list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+            list-style: none;
+            position: relative;
+            z-index: 2;
+
+            li {
+                width: 45%;
+                margin-top: 200px;
+
+                &:nth-child(2n) { margin-top: 0; }
+
+                a {
+                    text-decoration: none;
+                    color: inherit;
+                }
+
+                .pic img {
+                    width: 100%;
+                    border-radius: 8px;
+                }
+
+                .text h3 {
+                    font-size: 2.2rem;
+                    font-weight: 400;
+                    margin: 20px 0 5px;
+                }
+
+                .text .info {
+                    display: flex;
+                    justify-content: space-between;
+                    color: #888;
+                }
+            }
+        }
+    }
+
+    // Section3
+    .con3 {
+        background-color: #e5e5ff;
+        .inner {
+            max-width: 1400px;
+            min-height: 1080px;
+            margin: auto;
+            padding: 150px 2rem;
+            h2 { font-size: 2.5rem; font-weight: 600; }
+        }
+    }
+}

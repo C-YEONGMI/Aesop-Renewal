@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap");
+
+.test27-wrapper {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    font-family: "Inter",
+    sans-serif;
+
+    .con {
+        background-color: #f0f0f0;
+
+        .inner {
+            max-width: 1400px;
+            min-height: 1000px;
+            margin: auto;
+            position: relative;
+            padding: 150px 2rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 50px;
+        }
+    }
+
+    // Section1
+    .con1 {
+        background-color: #ffe5e5;
+    }
+
+    // Section2 - Frame Animation
+    .con2 {
+        background-color: #e5ffe5;
+
+        .character {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .stage {
+                height: 500px;
+                width: 450px;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+
+    // Section3
+    .con3 {
+        background-color: #e5e5ff;
+    }
+}

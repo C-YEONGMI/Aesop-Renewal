@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>gsap</title>
+        <link rel="stylesheet" href="../assets/css/reset.css" />
+
+        <style>
+            body {
+                overflow-x: hidden;
+            }
+
+            #wrap {
+                position: relative;
+            }
+
+            .con {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+
+            .con .inner {
+                width: min(1400px, 90%);
+                padding: 150px 0;
+                text-align: center;
+            }
+
+            .con h2 {
+                font-size: clamp(32px, 5vw, 60px);
+                font-weight: 700;
+                margin-bottom: 20px;
+            }
+
+            .con p {
+                font-size: clamp(16px, 2.5vw, 24px);
+                opacity: 0.8;
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+
+            .con1 {
+                background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+                color: white;
+            }
+            .con2 {
+                background: linear-gradient(135deg, #4ecdc4, #44bd87);
+                color: white;
+            }
+            .con3 {
+                background: linear-gradient(135deg, #a8e6cf, #74b9ff);
+                color: white;
+            }
+            .con4 {
+                background: linear-gradient(135deg, #ffd93d, #ff6348);
+                color: white;
+            }
+
+            /* 네비게이션 */
+            nav {
+                position: fixed;
+                top: -100px;
+                left: 0;
+                width: 100%;
+                padding: 20px 50px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                z-index: 100;
+                transition: all 0.3s ease;
+            }
+
+            nav ul {
+                list-style: none;
+                display: flex;
+                justify-content: center;
+                gap: 40px;
+            }
+
+            nav a {
+                text-decoration: none;
+                color: #333;
+                font-weight: 600;
+                font-size: 16px;
+                transition: all 0.3s ease;
+            }
+
+            nav a:hover {
+                color: #ff6b6b;
+                transform: translateY(-2px);
+            }
+
+            /* 히어로 섹션 */
+            .hero {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hero img {
+                width: 100%;
+                height: 100vh;
+                object-fit: cover;
+                transform: scale(1.1);
+            }
+
+            .hero-copy {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                z-index: 10;
+            }
+
+            .hero-copy h1 {
+                font-size: clamp(40px, 8vw, 120px);
+                font-weight: 900;
+                color: white;
+                text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+                overflow: hidden;
+            }
+
+            .hero-copy h1 span {
+                position: relative;
+                top: 200px;
+                display: inline-block;
+            }
+
+            /* 로딩 오버레이 */
+            .loading-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            /* 로딩 텍스트 */
+            .loading-text {
+                color: white;
+                text-align: center;
+            }
+
+            .counter {
+                font-size: clamp(80px, 15vw, 200px);
+                font-weight: 900;
+                margin-bottom: 40px;
+                overflow: hidden;
+            }
+
+            .counter span {
+                position: relative;
+                display: inline-block;
+                color: white;
+            }
+
+            .logo {
+                font-size: clamp(60px, 12vw, 160px);
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                overflow: hidden;
+            }
+
+            .logo span {
+                position: relative;
+                top: 200px;
+                display: inline-block;
+                color: white;
+            }
+
+            /* 로딩 바 */
+            .loading-bar {
+                position: absolute;
+                bottom: 50px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 300px;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 2px;
+                overflow: hidden;
+            }
+
+            .loading-progress {
+                height: 100%;
+                background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+                border-radius: 2px;
+                width: 0%;
+                transition: width 0.3s ease;
+            }
+
+            /* 반응형 */
+            @media (max-width: 768px) {
+                nav {
+                    padding: 15px 20px;
+                }
+
+                nav ul {
+                    gap: 20px;
+                }
+
+                .con .inner {
+                    padding: 100px 20px;
+                }
+            }
+
+            /* 스크롤 인디케이터 */
+            .scroll-indicator {
+                position: fixed;
+                right: 30px;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 50;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .scroll-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.5);
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .scroll-dot.active {
+                background: white;
+                transform: scale(1.2);
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 로딩 오버레이 -->
+        <div class="loading-overlay">
+            <div class="loading-text">
+                <div class="counter">0%</div>
+                <div class="logo">Portfolio</div>
+            </div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+
+        <!-- 네비게이션 -->
+        <nav>
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#section1">About</a></li>
+                <li><a href="#section2">Services</a></li>
+                <li><a href="#section3">Portfolio</a></li>
+                <li><a href="#section4">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- 스크롤 인디케이터 -->
+        <div class="scroll-indicator">
+            <div class="scroll-dot active" data-section="0"></div>
+            <div class="scroll-dot" data-section="1"></div>
+            <div class="scroll-dot" data-section="2"></div>
+            <div class="scroll-dot" data-section="3"></div>
+            <div class="scroll-dot" data-section="4"></div>
+        </div>
+
+        <div id="wrap">
+            <!-- 히어로 섹션 -->
+            <section id="hero" class="hero">
+                <img
+                    src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&h=1080&fit=crop"
+                    alt="Hero Background"
+                />
+                <div class="hero-copy">
+                    <h1>WELCOME</h1>
+                </div>
+            </section>
+
+            <!-- 메인 섹션들 -->
+            <section id="section1" class="con con1">
+                <div class="inner">
+                    <h2>Creative Solutions</h2>
+                    <p>
+                        우리는 창의적이고 혁신적인 솔루션을 통해 브랜드의 가치를 극대화합니다.
+                        고객의 니즈를 정확히 파악하고 최적의 결과를 제공합니다.
+                    </p>
+                </div>
+            </section>
+
+            <section id="section2" class="con con2">
+                <div class="inner">
+                    <h2>Digital Innovation</h2>
+                    <p>
+                        최신 기술과 트렌드를 바탕으로 디지털 혁신을 이끌어갑니다. 사용자 경험을
+                        최우선으로 생각하며 미래지향적인 서비스를 제공합니다.
+                    </p>
+                </div>
+            </section>
+
+            <section id="section3" class="con con3">
+                <div class="inner">
+                    <h2>Global Reach</h2>
+                    <p>
+                        전 세계를 무대로 활동하며 다양한 문화와 시장을 이해합니다. 글로벌 네트워크를
+                        통해 무한한 가능성을 탐색합니다.
+                    </p>
+                </div>
+            </section>
+
+            <section id="section4" class="con con4">
+                <div class="inner">
+                    <h2>Future Vision</h2>
+                    <p>
+                        미래에 대한 명확한 비전을 가지고 지속가능한 성장을 추구합니다. 혁신과
+                        창의성으로 새로운 가치를 창조해나갑니다.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollToPlugin.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/MotionPathPlugin.min.js"></script>
+
+        <script>
+            // GSAP 플러그인 등록
+            gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // 텍스트를 개별 span으로 분할
+                function splitTextIntoSpans(selector) {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach((element) => {
+                        if (element) {
+                            const text = element.textContent;
+                            const splitText = text
+                                .split('')
+                                .map((char) =>
+                                    char === ' ' ? '<span>&nbsp;</span>' : `<span>${char}</span>`
+                                )
+                                .join('');
+                            element.innerHTML = splitText;
+                        }
+                    });
+                }
+
+                // 텍스트 분할 실행
+                splitTextIntoSpans('.logo');
+                splitTextIntoSpans('.hero-copy h1');
+
+                // 로딩 애니메이션 시작
+                function startLoader() {
+                    const counterElement = document.querySelector('.counter');
+                    const progressBar = document.querySelector('.loading-progress');
+                    let currentValue = 0;
+
+                    // 카운터 업데이트 함수
+                    function updateCounter() {
+                        if (currentValue >= 100) {
+                            currentValue = 100;
+                            counterElement.innerHTML = '100%';
+                            progressBar.style.width = '100%';
+                            setTimeout(animateText, 500);
+                            return;
+                        }
+
+                        // 랜덤 증가값으로 자연스러운 로딩 효과
+                        const increment = Math.floor(Math.random() * 8) + 1;
+                        currentValue = Math.min(currentValue + increment, 100);
+
+                        // 카운터 텍스트와 프로그레스 바 업데이트
+                        counterElement.innerHTML = `${currentValue}%`;
+                        progressBar.style.width = `${currentValue}%`;
+
+                        // 랜덤 딜레이로 자연스러운 로딩
+                        const delay = Math.floor(Math.random() * 150) + 50;
+                        setTimeout(updateCounter, delay);
+                    }
+
+                    // 텍스트 애니메이션 함수
+                    function animateText() {
+                        const tl = gsap.timeline();
+
+                        // 카운터 사라지기
+                        tl.to('.counter', {
+                            y: -100,
+                            opacity: 0,
+                            duration: 0.8,
+                            ease: 'power3.inOut',
+                        })
+
+                            // 로고 나타나기
+                            .to(
+                                '.logo span',
+                                {
+                                    y: 0,
+                                    stagger: 0.1,
+                                    duration: 0.5,
+                                    ease: 'power3.out',
+                                },
+                                '-=0.3'
+                            )
+
+                            // 로고 사라지기
+                            .to(
+                                '.logo span',
+                                {
+                                    y: -200,
+                                    stagger: 0.05,
+                                    duration: 0.8,
+                                    ease: 'power3.in',
+                                },
+                                '+=1.5'
+                            )
+
+                            // 로딩 바 사라지기
+                            .to(
+                                '.loading-bar',
+                                {
+                                    opacity: 0,
+                                    y: 50,
+                                    duration: 0.6,
+                                    ease: 'power2.inOut',
+                                },
+                                '-=0.5'
+                            )
+
+                            // 오버레이 사라지기
+                            .to(
+                                '.loading-overlay',
+                                {
+                                    y: '-100%',
+                                    duration: 1.5,
+                                    ease: 'power3.inOut',
+                                },
+                                '-=0.3'
+                            )
+
+                            // 이미지 스케일 애니메이션
+                            .to(
+                                '.hero img',
+                                {
+                                    scale: 1.2,
+                                    duration: 2,
+                                    ease: 'power3.out',
+                                },
+                                '-=1'
+                            )
+
+                            // 히어로 텍스트 나타나기
+                            .to(
+                                '.hero-copy h1 span',
+                                {
+                                    y: 0,
+                                    stagger: 0.08,
+                                    duration: 1.5,
+                                    ease: 'power3.out',
+                                },
+                                '-=1.5'
+                            )
+
+                            // 네비게이션 나타나기
+                            .to(
+                                'nav',
+                                {
+                                    y: 100,
+                                    duration: 1,
+                                    ease: 'power3.out',
+                                },
+                                '-=1'
+                            );
+
+                        // 로딩 완료 후 스크롤 트리거 설정
+                        tl.call(setupScrollTriggers, null, '+=0.5');
+                    }
+
+                    updateCounter();
+                }
+
+                // 스크롤 트리거 설정
+                function setupScrollTriggers() {
+                    // 섹션별 스크롤 애니메이션
+                    gsap.utils.toArray('.con').forEach((section, i) => {
+                        gsap.fromTo(
+                            section.querySelector('h2'),
+                            { y: 100, opacity: 0 },
+                            {
+                                y: 0,
+                                opacity: 1,
+                                duration: 1,
+                                ease: 'power3.out',
+                                scrollTrigger: {
+                                    trigger: section,
+                                    start: 'top 80%',
+                                    end: 'bottom 20%',
+                                    toggleActions: 'play none none reverse',
+                                },
+                            }
+                        );
+
+                        gsap.fromTo(
+                            section.querySelector('p'),
+                            { y: 50, opacity: 0 },
+                            {
+                                y: 0,
+                                opacity: 1,
+                                duration: 1,
+                                delay: 0.3,
+                                ease: 'power3.out',
+                                scrollTrigger: {
+                                    trigger: section,
+                                    start: 'top 80%',
+                                    end: 'bottom 20%',
+                                    toggleActions: 'play none none reverse',
+                                },
+                            }
+                        );
+                    });
+
+                    // 스크롤 인디케이터 업데이트
+                    const sections = document.querySelectorAll('#hero, .con');
+                    const dots = document.querySelectorAll('.scroll-dot');
+
+                    sections.forEach((section, i) => {
+                        ScrollTrigger.create({
+                            trigger: section,
+                            start: 'top 50%',
+                            end: 'bottom 50%',
+                            onEnter: () => updateActiveDot(i),
+                            onEnterBack: () => updateActiveDot(i),
+                        });
+                    });
+
+                    function updateActiveDot(index) {
+                        dots.forEach((dot) => dot.classList.remove('active'));
+                        if (dots[index]) {
+                            dots[index].classList.add('active');
+                        }
+                    }
+
+                    // 스크롤 인디케이터 클릭 이벤트
+                    dots.forEach((dot, i) => {
+                        dot.addEventListener('click', () => {
+                            const targetSection = sections[i];
+                            gsap.to(window, {
+                                duration: 1.5,
+                                scrollTo: targetSection,
+                                ease: 'power3.inOut',
+                            });
+                        });
+                    });
+                }
+
+                // 네비게이션 스무스 스크롤
+                document.querySelectorAll('nav a[href^="#"]').forEach((anchor) => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            gsap.to(window, {
+                                duration: 1.5,
+                                scrollTo: target,
+                                ease: 'power3.inOut',
+                            });
+                        }
+                    });
+                });
+
+                // 로딩 시작
+                startLoader();
+            });
+        </script>
+    </body>
+</html>

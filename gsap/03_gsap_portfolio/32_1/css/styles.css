@@ -1,0 +1,165 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #dcdcdc;
+}
+
+h2 {
+    font-family: 'Circular Std';
+    font-weight: 500;
+    font-size: 80px;
+}
+
+.whitespace.w-1 {
+    width: 100vw;
+    height: 50vh;
+}
+
+.whitespace.w-2 {
+    width: 100vw;
+    height: 45vh;
+}
+
+.gallery {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20em;
+}
+
+.project {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.index {
+    flex: 1;
+    padding-left: 2em;
+    height: 0;
+}
+
+.images {
+    flex: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 100vh;
+}
+
+.img {
+    flex: 1;
+    width: 200px;
+    background-color: lightgray;
+    overflow: hidden;
+}
+
+.img img {
+    opacity: 0.9;
+}
+
+.index .mask {
+    position: absolute;
+    top: 0;
+    left: 2em;
+    height: 100px;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.index .mask h1 {
+    position: relative;
+    will-change: transform;
+}
+
+.index .mask h1 span {
+    position: relative;
+    display: inline-block;
+    will-change: transform;
+}
+
+.digit-wrapper,
+.digit-wrapper span {
+    display: inline-block;
+    position: relative;
+    will-change: transform;
+}
+
+.project-names {
+    position: fixed;
+    width: 700px;
+    top: 20vh;
+    left: 30%;
+    transform: translateX(0%);
+}
+
+.indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    will-change: transform;
+}
+
+.symbol {
+    width: 20px;
+    height: 20px;
+    background-color: hotpink;
+    clip-path: polygon(0 50%, 100% 100%, 100% 0);
+}
+
+.name {
+    /* height: 18px; */
+}
+
+.name p {
+    color: #000;
+    line-height: 2;
+    font-size: 30px;
+    /* border-bottom: 1px solid #000; */
+}
+
+.name.active p {
+    color: hotpink;
+}
+
+.preview-img {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    width: 500px;
+    height: 700px;
+    opacity: 0.9;
+    border: 1px solid #000;
+}
+.preview-img img {
+    width: 100%;
+}
+
+.progress-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100vh;
+    background-color: hotpink;
+    transform-origin: top;
+    transform: scaleY(0);
+}

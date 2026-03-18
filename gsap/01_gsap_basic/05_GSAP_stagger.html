@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>gsap</title>
+        <link rel="stylesheet" href="css/reset.css" />
+
+        <link rel="shortcut icon" href="images/favicon.ico" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/xpressengine/xeicon@2.3.3/xeicon.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+        <style>
+            .box {
+                width: 100px;
+                height: 100px;
+                background: hotpink;
+                margin: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <script>
+            gsap.to('.box', {
+                x: 200,
+                stagger: 0.2,
+                duration: 1,
+            });
+        </script>
+    </body>
+</html>

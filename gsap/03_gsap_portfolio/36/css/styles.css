@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.logo {
+    position: fixed;
+    padding: 1.5em;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #000;
+    font-family: 'PP Neue Montreal';
+    font-weight: 500;
+}
+
+.con1 {
+}
+.con1 .sidebar {
+    width: 100vh;
+    height: max-content;
+    display: flex;
+    align-items: flex-start;
+    transform: rotate(-90deg) translate(-100%, 0);
+    transform-origin: left top;
+    padding: 1.5em 3em;
+    font-family: 'PP Neue Montreal';
+}
+
+.con1 .sidebar > div:nth-child(1) {
+    flex: 2;
+}
+
+.con1 .sidebar > div:nth-child(2) {
+    flex: 2;
+    display: flex;
+    gap: 4em;
+}
+
+.con1 p#header {
+    font-family: 'Timmons NY 2.0';
+    text-transform: uppercase;
+    font-size: 7rem;
+    line-height: 85%;
+    margin-bottom: 4rem;
+}
+
+.con1 .slider {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.con1 .slider-wrapper {
+    position: absolute;
+    top: 0;
+    width: 8000px;
+    padding: 0 600px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 100px;
+}
+
+.con1 .slide {
+    width: 400px;
+    height: 500px;
+    background: #e3e3e3;
+}
+
+.con1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

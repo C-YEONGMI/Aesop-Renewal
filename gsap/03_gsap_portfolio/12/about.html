@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>gsap</title>
+        <link rel="stylesheet" href="../assets/css/reset.css" />
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="pop-menu">
+                <!-- toogle btn -->
+                <div class="btn" id="toggle-btn">
+                    <div class="btn__outline btn__outline--1"></div>
+                    <div class="btn__outline btn__outline--2"></div>
+                    <div id="hamburger">
+                        <span></span>
+                    </div>
+                </div>
+
+                <!-- svg overlay -->
+                <div class="overlay">
+                    <svg viewBox="0 0 1000 1000">
+                        <path d="M0 2S175 1 500 1s500 1 500 1V0H0Z"></path>
+                    </svg>
+                </div>
+
+                <!-- menu items -->
+                <div class="menu">
+                    <section class="menu__left">
+                        <div class="menu__container">
+                            <div class="wrapper">
+                                <div class="menu__item">
+                                    <a href="index.html"><span>I</span>Index</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                                <div class="menu__item">
+                                    <a href="#"><span>II</span>Projects</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                                <div class="menu__item">
+                                    <a href="about.html"><span>III</span>About</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="menu__right">
+                        <div class="menu__container">
+                            <div class="wrapper">
+                                <div class="menu__item">
+                                    <a href="#">My Hobbies</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                                <div class="menu__item">
+                                    <a href="#">Skills</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                                <div class="menu__item">
+                                    <a href="#">Behind ths Design</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                                <div class="menu__item">
+                                    <a href="#">Clone coding</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                            </div>
+
+                            <div class="wrapper">
+                                <div class="menu__item">
+                                    <a href="#">menu</a>
+                                    <div class="menu__item-revealer"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <main class="about">
+                <h2 class="title">홍길동 I’M HONG GIL-DONG, FRONTEND DEVELOPER</h2>
+            </main>
+        </div>
+        <!-- 메뉴 -->
+
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollToPlugin.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/MotionPathPlugin.min.js"></script>
+
+        <script src="js/script.js"></script>
+    </body>
+</html>

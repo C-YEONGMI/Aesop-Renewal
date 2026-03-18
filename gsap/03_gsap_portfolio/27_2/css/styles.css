@@ -1,0 +1,224 @@
+/* ===== Base / Reset-ish ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Druk Trial', 'PP Neue Montreal', system-ui, -apple-system, Segoe UI, Roboto, Arial,
+        'Noto Sans KR', sans-serif;
+    color: #0a0a0a;
+    background: #fff;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===== Common Sections ===== */
+.con .inner {
+    width: min(1400px, 92vw);
+    height: 1000px;
+    margin: 0 auto;
+    position: relative;
+    padding: 150px 0;
+}
+
+.con h2 {
+    font-size: clamp(28px, 2.5vw, 40px);
+    font-weight: 600;
+}
+
+/* Demo backgrounds */
+.con1 {
+    background: #ffe5e5;
+}
+.con3 {
+    background: #e5e5ff;
+}
+.con4 {
+    background: #fff0cc;
+}
+
+/* ===== CON2 Layout ===== */
+.con2 {
+    position: relative; /* pin 기준 컨테이너 */
+    min-height: 100vh; /* 최소 한 화면 */
+    background: #fff; /* 필요 시 배경 */
+}
+
+/* 왼쪽 리스트 컬럼 컨테이너 (절대 배치) */
+.con2 .items {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60vw; /* 리스트 영역 폭 */
+    padding: 2em 2em 8em; /* 하단 여백 넉넉히 */
+    display: flex;
+    gap: 0; /* 두 컬럼을 내부에서 나눔 */
+    /* 핀 동안 페이지 스크롤과 함께 진행되므로 overflow는 페이지에 위임 */
+}
+
+/* 내부 두 컬럼 */
+.con2 .items-col {
+    flex: 1 1 0;
+    min-width: 0;
+    height: max-content;
+    padding: 2em 1em;
+}
+
+.con2 .items-col:nth-child(2) {
+    position: relative;
+    top: 10em; /* 지그재그 느낌 */
+}
+
+/* 개별 카드 */
+.con2 .item {
+    padding: 1em 1em 4em;
+}
+.con2 .item-img {
+    width: 100%;
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.con2 .item-copy p {
+    font-family: 'PP Neue Montreal', ui-sans-serif, system-ui;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0.6em 0 0;
+    color: #222;
+}
+
+/* ===== 오른쪽 필터 영역 (con2 내부 오른쪽 고정) ===== */
+.con2 .filters {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40vw; /* 오른쪽 영역 폭 */
+    height: 100vh; /* 뷰포트 높이만큼 보여주기 */
+    padding: 2em 2em 8em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    /* 배경이 필요하면 활성화
+     background: #fff; 
+     backdrop-filter: saturate(1.1);
+  */
+}
+
+/* 필터 아이템 */
+.con2 .filter {
+    width: max-content;
+    height: max-content;
+    padding: 1.5em 0 0.5em 0;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+.con2 .filter:active {
+    transform: scale(0.98);
+}
+
+.con2 .filter.active {
+    padding-top: 2.5em;
+}
+
+/* 필터 카운트 */
+.con2 .filter p {
+    position: relative;
+    bottom: 10px;
+    padding: 0 0.5em;
+    font-family: 'PP Neue Montreal', ui-sans-serif, system-ui;
+    font-size: 20px;
+    font-weight: 500;
+    color: #444;
+}
+.con2 .filter.active p {
+    bottom: 24px;
+    color: #fb5eff;
+}
+
+/* 제목 문자 분할 애니메이션을 위한 span */
+.con2 .filter h1 {
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+}
+.con2 .filter h1 span {
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 75px; /* JS에서 75px ↔ 250px 애니메이션 */
+    color: #000;
+    transition: color 0.3s;
+    will-change: font-size, color;
+}
+
+/* 활성 컬러 */
+.con2 .filter.active h1 span {
+    color: #fb5eff;
+}
+
+/* ===== 반응형 보정 ===== */
+@media (max-width: 1200px) {
+    .con2 .items {
+        width: 58vw;
+    }
+    .con2 .filters {
+        width: 42vw;
+    }
+}
+
+@media (max-width: 960px) {
+    /* 모바일/태블릿에서는 상하 스택 구조로 전환 */
+    .con2 .items,
+    .con2 .filters {
+        position: relative;
+        width: 100vw;
+        left: 0;
+        right: 0;
+    }
+
+    .con2 .filters {
+        height: auto;
+        align-items: flex-start;
+        padding: 2em 1.5em 1em;
+    }
+
+    .con2 .items {
+        padding: 1em 1em 6em;
+    }
+
+    .con2 .filter h1 span {
+        font-size: 56px;
+    }
+}
+
+@media (max-width: 640px) {
+    .con2 .filter h1 span {
+        font-size: 40px;
+    }
+    .con2 .filter p {
+        font-size: 16px;
+        bottom: 6px;
+    }
+    .con2 .filter.active p {
+        bottom: 12px;
+    }
+    .con2 .item-img {
+        height: 220px;
+    }
+}

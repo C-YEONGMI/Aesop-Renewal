@@ -1,0 +1,145 @@
+.con {
+    background-color: #f0f0f0;
+}
+
+.con .inner {
+    width: 1400px;
+    height: 1000px;
+    margin: auto;
+    box-sizing: border-box;
+    position: relative;
+    padding: 150px 0;
+}
+
+.con h2 {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.con1 {
+    background-color: #ffe5e5;
+}
+.con2 {
+    background-color: #e5ffe5;
+}
+
+:root {
+    --bg: #0c0c0c;
+    --border: #303030;
+    --color: #7e7e7e;
+}
+
+.con2 {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.con2 .btn-wrap {
+    display: flex;
+    gap: 25px;
+    cursor: pointer;
+    margin-top: 50px;
+}
+
+.con2 .btn-wrap .btn-item {
+    width: 140px;
+    height: 50px;
+    cursor: pointer;
+    border: 1px solid #fff;
+    text-align: center;
+    line-height: 50px;
+    position: relative;
+}
+
+.con2 .btn-wrap .drawer::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 100%;
+}
+
+.con2 .cards {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.con2 .cards .card {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    border-radius: 10px;
+    background: #ececec;
+    box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17.5px;
+    font-weight: 500;
+    letter-spacing: 0.25px;
+}
+
+.con2 .c1 {
+    transform: translate(50px, 20px) rotate(5deg);
+}
+.con2 .c2 {
+    transform: translate(-5px, -10px) rotate(-2.5deg);
+}
+.con2 .c3 {
+    transform: translate(-25px, 20px) rotate(2deg);
+}
+.con2 .c4 {
+    transform: translate(-40px, -10px) rotate(7.5deg);
+}
+.con2 .c5 {
+    transform: translate(-70px, 30px) rotate(-7.5deg);
+}
+
+.con2 .close {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.con2 .cards .last {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: #575757;
+    font-weight: 500;
+    letter-spacing: 0.25px;
+}
+
+.con3 {
+    background-color: #e5e5ff;
+}
+.con4 {
+    background-color: #fff0cc;
+}

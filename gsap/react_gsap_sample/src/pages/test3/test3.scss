@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+
+.test3-wrapper {
+  // Reset
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  font-family: "DM Sans", sans-serif;
+  background-color: #fff;
+  color: #000;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Section1 Styles (Nav, Logo, Spacer)
+  .section1 {
+    .logo-container {
+      pointer-events: none;
+    }
+
+    .logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(3rem, 5vw, 6rem);
+      padding: 1em;
+      z-index: 1000;
+      color: #000;
+      margin: 0;
+      will-change: transform, scale;
+    }
+
+    .container {
+      width: 100%;
+      height: 100vh;
+      background: #fff;
+    }
+  }
+
+  // Section2 Styles (Content, Image)
+  .section2 {
+    width: 100%;
+    
+    .content {
+      width: 100%;
+      height: 100vh;
+      background: #fff;
+      position: relative;
+      padding: 0 4em;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin-bottom: 4em;
+      }
+    }
+  }
+}

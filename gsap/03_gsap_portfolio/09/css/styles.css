@@ -1,0 +1,85 @@
+.con {
+    background-color: #f0f0f0;
+}
+
+.con .inner {
+    width: 1400px;
+    height: 1000px;
+    margin: auto;
+    box-sizing: border-box;
+    position: relative;
+    padding: 150px 0;
+}
+
+.con h2 {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.con1 {
+    background-color: #ffe5e5;
+}
+.con2 {
+    background: #f0f0f0;
+
+    padding: 80px 0;
+}
+.con2 h2 {
+    font-size: 60px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+.con2 .text-con .item {
+    width: 100%;
+    padding: 0.125em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 70px;
+    border-bottom: 2px solid #000;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.con2 .item:nth-child(1) {
+    border-top: 2px solid #000;
+}
+
+.con2 .img {
+    width: 125px;
+    height: 80px;
+    background-color: #000;
+    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    overflow: hidden;
+    flex: 0;
+}
+
+.con2 img {
+    width: 125px;
+    height: auto;
+    object-fit: cover;
+}
+
+.item:hover {
+    gap: 20px;
+}
+
+.item:hover .img {
+    flex: 0.5;
+}
+
+.word {
+    flex: 2.5;
+}
+
+.w1 {
+    text-align: right;
+}
+
+.con3 {
+    background-color: #e5e5ff;
+}
+.con4 {
+    background-color: #fff0cc;
+}

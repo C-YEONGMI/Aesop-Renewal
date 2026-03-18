@@ -1,0 +1,87 @@
+.container {
+  padding: 100px;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #000;
+
+  h2 {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #f4f4f5;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2.5rem;
+
+    li {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(39, 39, 42, 0.5);
+
+        a {
+          color: tomato;
+        }
+
+        svg {
+          color: tomato;
+        }
+      }
+
+      span {
+        font-size: 0.875rem;
+        font-weight: bold;
+        color: #f4f4f5;
+      }
+
+      .content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        a {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #fff;
+        }
+      }
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #52525b;
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}
+
+.text-title {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.para {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  color: #6b7280;
+  margin-top: 1.25rem;
+}
+
+.link {
+  a {
+    color: #3b82f6;
+    text-decoration: underline;
+  }
+}

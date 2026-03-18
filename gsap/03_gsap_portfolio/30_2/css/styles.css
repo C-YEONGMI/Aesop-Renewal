@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: #0c0c0c;
+    font-family: 'PP Supply Mono';
+    text-transform: uppercase;
+}
+.con .inner {
+    width: 1400px;
+    height: 1000px;
+    margin: auto;
+    box-sizing: border-box;
+    position: relative;
+    padding: 150px 0;
+}
+
+.con h2 {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.con1 {
+    background-color: #ffe5e5;
+}
+.con2 {
+    background-color: #000;
+}
+
+.con2 .inner {
+    width: 100%;
+    height: 100vh;
+}
+.con2 h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    color: #fff;
+}
+.con2 .items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.con2 .item {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.con2 .item-img {
+    width: 100%;
+    height: 100%;
+}
+
+.con2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0) sepia(0) brightness(1);
+    transition: all 1.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.con2 .item-copy {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px 20px;
+}
+
+.con2 .item-copy > div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.con2 #item-1 .item-copy-2 {
+    justify-content: flex-end;
+}
+
+.con2 #item-2 .item-copy-1 {
+    justify-content: flex-end;
+}
+
+.con2 .shape {
+    width: 175px;
+    height: 175px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    color: #fff;
+    font-size: 12px;
+    padding: 10px;
+    opacity: 0;
+    transform: scale(0.75);
+    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.con2 #item-1 .shape {
+    clip-path: polygon(
+        0% 0px,
+        0px 0%,
+        calc(100% - 50px) 0px,
+        100% 50px,
+        100% 100%,
+        calc(100% - 0px) 100%,
+        50px 100%,
+        0px calc(100% - 50px)
+    );
+}
+
+.con2 #item-2 .shape {
+    clip-path: polygon(
+        50px 0px,
+        0px 50px,
+        0px 100%,
+        calc(100% - 50px) 100%,
+        100% calc(100% - 50px),
+        100% 100%,
+        100% 0%,
+        0px 0%
+    );
+}
+
+.con2 .shape {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.con2 .shape #number {
+    font-family: 'Orbitron';
+    font-size: 50px;
+    font-weight: 400;
+}
+
+.con2 .text-right {
+    text-align: right;
+}
+
+.item:hover img {
+    transform: scale(1.5);
+    filter: grayscale(0.5) sepia(0.75) brightness(0.75);
+}
+
+.con2 .item:hover .shape {
+    opacity: 1;
+    transform: scale(1);
+}
+.con3 {
+    background-color: #e5e5ff;
+}
+.con4 {
+    background-color: #fff0cc;
+}

@@ -1,0 +1,133 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100vw;
+    height: 800vh;
+    font-family: 'Apple Garamond Light';
+}
+
+.con {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+.con1 {
+    background: url(../../assets/images/pic3.jpg) no-repeat 50% 50%;
+    background-size: cover;
+}
+
+.con2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.con2 .outro p {
+    color: #ded8c8;
+    font-size: 30px;
+    letter-spacing: -0.005em;
+}
+
+/* sticky */
+.con2 {
+    position: relative;
+    background-color: #ded8c8;
+}
+
+.con2 .sticky-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 250vw;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    will-change: transform;
+}
+
+.con2 .sticky-header h1 {
+    margin: 0;
+    color: #000;
+    font-size: 30vw;
+    font-weight: lighter;
+    letter-spacing: -0.05em;
+    line-height: 100%;
+}
+
+.con2 .card {
+    position: absolute;
+    top: 10%;
+    left: 100%;
+    width: 325px;
+    height: 500px;
+    background-color: #000;
+    border-radius: 1em;
+    padding: 0.5em;
+    will-change: transform;
+    z-index: 2;
+}
+
+.con2 .card .card-img {
+    width: 100%;
+    height: 200px;
+    border-radius: 0.5em;
+    overflow: hidden;
+}
+
+.con2 .card-content {
+    width: 100%;
+    height: 275px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    color: #fff;
+    padding: 0.5em;
+    gap: 30px;
+}
+
+.con2 .card-content h2 {
+    font-size: 40px;
+    font-weight: lighter;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+}
+
+.con2 .card-content p {
+    font-size: 18px;
+    font-weight: lighter;
+    letter-spacing: -0.005em;
+    line-height: 1.5;
+}
+
+/* lenis smooth scroll */
+.con2 .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.con2 .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.con2 .lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.con2 .lenis.lenis-smooth iframe {
+    pointer-events: none;
+}
+
+.con3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+.con3 p {
+    color: #ded8c8;
+    font-size: 30px;
+    letter-spacing: -0.005em;
+}

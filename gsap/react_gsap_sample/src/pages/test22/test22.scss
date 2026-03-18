@@ -1,0 +1,102 @@
+.test22-wrapper {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  width: 100%;
+  font-family: "Gilroy", sans-serif;
+
+  // Spacer (Section1, Section3 용)
+  .spacer {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #141414;
+    color: #fff;
+    text-align: center;
+
+    h1 {
+      text-transform: uppercase;
+      font-size: clamp(2rem, 5vw, 60px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 0.9;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 500;
+    }
+  }
+
+  // Section 2 - Horizontal Scroll
+  .sticky {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding: 1.5em;
+    overflow: hidden;
+    background-color: #b4aea7;
+  }
+
+  .slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .slides {
+    position: relative;
+    // 5 slides
+    width: 500%; 
+    height: 100%;
+    display: flex;
+    will-change: transform;
+  }
+
+  .slide {
+    position: relative;
+    flex: 1;
+    height: 100%;
+  }
+
+  .img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform, scale;
+      transform: scale(1.35);
+    }
+  }
+
+  .title {
+    position: relative;
+    width: max-content;
+    height: 200px;
+    margin: 1.5em;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    z-index: 2;
+
+    h1 {
+      position: relative;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: clamp(3rem, 6vw, 85px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 0.9;
+      will-change: transform;
+    }
+  }
+}

@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+.con1 {
+}
+.con1 img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+}
+
+.con1 h2 {
+    font-size: 5rem;
+    font-weight: 500;
+    letter-spacing: -0.1rem;
+    line-height: 1.25;
+}
+
+.con1 p {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.25;
+}
+
+.con1 section {
+    position: relative;
+    width: 100vw;
+    background-color: #0f0f0f;
+    color: #fff;
+}
+
+.con1 .intro,
+.con1 .outro {
+    height: 100svh;
+    padding: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.con1 .intro h2,
+.con1 .outro h2 {
+    width: 60%;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.con1 .cards {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 25svh;
+}
+
+.con1 .card-marquee {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    overflow: hidden;
+}
+
+.con1 .card-marquee .marquee {
+    display: flex;
+}
+
+.con1 .card-marquee .marquee h2 {
+    white-space: nowrap;
+    font-size: 10vw;
+    font-weight: 600;
+    margin-right: 30px;
+}
+
+.con1 .card {
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    padding: 1.5em;
+}
+
+.con1 .card-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+}
+
+.con1 .card-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 150px;
+    overflow: hidden;
+}
+
+.con1 .card-img img {
+    transform: scale(2);
+}
+
+.con1 .card-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1;
+}
+
+.con1 .card-content .card-title {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.con1 .card-content .card-description {
+    text-align: center;
+    width: 40%;
+    margin-bottom: 3em;
+    position: relative;
+    transform: translateX(40px);
+    opacity: 0;
+}
+
+.con1 .card:nth-child(2) {
+    margin-top: 50vh;
+}
+
+.con1 .char {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.con1 .char span {
+    transform: translateX(100%);
+    display: inline-block;
+    will-change: transform;
+}

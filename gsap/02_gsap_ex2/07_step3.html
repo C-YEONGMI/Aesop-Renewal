@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>gsap</title>
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="shortcut icon" href="images/favicon.ico" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/xpressengine/xeicon@2.3.3/xeicon.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollToPlugin.min.js"></script>
+
+        <style>
+            @font-face {
+                font-family: 'helvetica';
+                src: url('../fonts/Helvetica Now Display Bold.otf');
+                font-weight: 700;
+            }
+
+            @font-face {
+                font-family: 'helvetica';
+                src: url('../fonts/Helvetica Now Display Medium.otf');
+                font-weight: 500;
+            }
+
+            @font-face {
+                font-family: 'helvetica';
+                src: url('../fonts/Helvetica Now Display Lt It.otf');
+                font-weight: 300;
+            }
+
+            :root {
+                --primary: #6067f3;
+                --secondary: #e8e2da;
+                --white: #fff;
+                --black: #000;
+            }
+            body {
+                font-size: 1vw;
+                background: var(--primary);
+                color: var(--secondary);
+                font-family: 'helvetica', sans-serif;
+            }
+            a {
+                font-size: 1vw;
+                background: var(--primary);
+                color: var(--secondary);
+                font-family: 'helvetica', sans-serif;
+            }
+            img {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                color: #fff;
+                object-fit: cover;
+            }
+
+            /*  */
+            #wrap {
+                width: 100vw;
+                height: 100vh;
+            }
+
+            .inner {
+                width: 1600px;
+                margin: auto;
+                box-sizing: border-box;
+                position: relative;
+            }
+
+            #header {
+                position: relative;
+                left: 0;
+                top: 0;
+                background-color: var(--primary);
+                z-index: 200;
+            }
+
+            #header .inner {
+                position: relative;
+                font-weight: 500;
+                text-transform: uppercase;
+                border-bottom: 1px solid #fff;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 40px 0;
+            }
+            #header h1 {
+                position: absolute;
+                left: 40%;
+                top: 50%;
+                transform: translateX(-50%);
+                border: 1px solid red;
+            }
+
+            #header .logo {
+                position: absolute;
+
+                top: 0;
+                background: transparent;
+            }
+
+            #header ul {
+                position: relative;
+                z-index: 20;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #header > div {
+                position: relative;
+                z-index: 10;
+            }
+
+            #header ul {
+                display: flex;
+                gap: 20px;
+            }
+
+            .con {
+                background-color: #f0f0f0;
+            }
+
+            .con .inner {
+                width: 1400px;
+                height: 1000px;
+                margin: auto;
+                box-sizing: border-box;
+                position: relative;
+                padding: 150px 0;
+            }
+
+            .con h2 {
+                font-size: 40px;
+                font-weight: 600;
+            }
+
+            .con1 {
+                background-color: var(--primary);
+                width: 100%;
+                margin-right: auto;
+                margin-left: auto;
+                padding: 100px 0 0;
+                text-align: center;
+                box-sizing: border-box;
+
+                .txt {
+                    font-family: 'helvetica', sans-serif;
+                    font-weight: 300;
+                }
+
+                .text-wrap {
+                    position: relative;
+                    overflow: hidden;
+                    margin-top: -1.5em;
+
+                    .text-move {
+                        padding-bottom: 2.4em;
+                    }
+                }
+            }
+            .con1 h2 {
+                margin-top: 0px;
+                margin-bottom: 0px;
+                font-size: 12.08em;
+                line-height: 0.8;
+                font-weight: 700;
+                letter-spacing: -0.04em;
+            }
+
+            .con1 .circle-wrap {
+                margin-top: 100px;
+
+                .circle {
+                    height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .circle-ele {
+                        border-radius: 35em;
+                        width: 35em;
+                        height: 35em;
+                        overflow: hidden;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        & img {
+                            position: relative;
+                            width: 100vw;
+                            height: 100vh;
+                            max-width: none;
+                            min-height: 100vh;
+                            min-width: 100vw;
+                            object-fit: cover;
+                        }
+                    }
+                }
+            }
+
+            .con2 {
+                background-color: #e5ffe5;
+            }
+            .con3 {
+                background-color: #e5e5ff;
+            }
+            .con4 {
+                background-color: #fff0cc;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <section id="visual">
+                <img src="./images/visual1.jpg" alt="" />
+            </section>
+            <header id="header">
+                <div class="inner">
+                    <ul class="m1">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">product</a></li>
+                        <li><a href="#">contact</a></li>
+                    </ul>
+
+                    <h1>
+                        <a href="#" class="logo">
+                            <div>
+                                <svg
+                                    width="405"
+                                    height="74"
+                                    viewBox="0 0 405 74"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M7.57519 14.1541L13.0168 8.16374V36.9724L10.1817 33.3599H35.4235V42.9627H10.1817L13.0168 39.3959V68.3875L7.57519 62.3971H40.4993V72H0.89891V4.55123H40.4993V14.1541H7.57519ZM62.3137 62.2142H89.5219V72H49.327V62.7172L75.9864 32.8111L76.215 33.2227H50.333V23.4369H89.0189V32.7197L62.5424 62.5343L62.3137 62.2142ZM101.618 51.6053V43.0542H135.594L134.222 45.3406C134.222 45.1577 134.222 44.9595 134.222 44.7461C134.222 44.5022 134.222 44.3041 134.222 44.1517C134.222 42.0482 133.749 40.0819 132.804 38.2528C131.859 36.3931 130.426 34.8994 128.506 33.7714C126.585 32.613 124.146 32.0337 121.189 32.0337C118.263 32.0337 115.717 32.6587 113.553 33.9086C111.419 35.128 109.757 36.8962 108.568 39.213C107.41 41.5299 106.831 44.3041 106.831 47.5355C106.831 50.8584 107.395 53.7241 108.523 56.1324C109.651 58.5102 111.297 60.3394 113.461 61.6197C115.656 62.8696 118.324 63.4946 121.464 63.4946C123.598 63.4946 125.442 63.2964 126.997 62.9001C128.551 62.5038 129.817 61.9703 130.792 61.2997C131.798 60.5985 132.545 59.8516 133.033 59.059C133.551 58.2664 133.856 57.4737 133.947 56.6811H145.928C145.745 58.7236 145.059 60.7204 143.87 62.6715C142.712 64.5921 141.081 66.345 138.977 67.9302C136.874 69.485 134.313 70.7349 131.295 71.6799C128.308 72.5945 124.893 73.0517 121.052 73.0517C115.839 73.0517 111.281 71.9848 107.379 69.8508C103.477 67.7168 100.429 64.7445 98.2338 60.9338C96.0693 57.1232 94.9871 52.7638 94.9871 47.8556C94.9871 42.8255 96.0846 38.4204 98.2795 34.6402C100.505 30.8601 103.584 27.9182 107.517 25.8147C111.449 23.6808 115.961 22.6138 121.052 22.6138C126.296 22.6138 130.823 23.6808 134.633 25.8147C138.474 27.9487 141.431 30.921 143.504 34.7317C145.577 38.5119 146.614 42.917 146.614 47.9471C146.614 48.5873 146.599 49.2732 146.568 50.0048C146.538 50.7365 146.492 51.27 146.431 51.6053H101.618ZM190.871 72V50.4621C190.871 49.2427 190.871 48.1757 190.871 47.2612C190.871 46.3161 190.871 45.4625 190.871 44.7004C190.871 42.5055 190.551 40.5392 189.91 38.8015C189.301 37.0333 188.234 35.6463 186.71 34.6402C185.216 33.6342 183.143 33.1312 180.491 33.1312C178.174 33.1312 176.116 33.6952 174.317 34.8232C172.519 35.9206 171.101 37.4449 170.065 39.3959C169.059 41.3165 168.556 43.542 168.556 46.0722L164.486 43.5572C164.486 39.5026 165.4 35.9054 167.229 32.7654C169.089 29.5949 171.574 27.1104 174.683 25.3117C177.793 23.5131 181.237 22.6138 185.018 22.6138C188.92 22.6138 192.197 23.3759 194.849 24.9002C197.532 26.4244 199.544 28.5889 200.885 31.3936C202.257 34.1982 202.943 37.4906 202.943 41.2708C202.943 42.7341 202.943 44.3803 202.943 46.2094C202.943 48.0385 202.943 49.8372 202.943 51.6053V72H190.871ZM156.529 72V23.4369H168.556V72H156.529ZM222.038 72L211.886 4.55123H224.324L232.098 68.8448L230.36 68.7533L242.798 4.55123H257.98L270.372 68.7533L268.635 68.8448L276.409 4.55123H288.892L278.649 72H260.175L249.749 13.2853H251.03L240.604 72H222.038ZM299.713 51.6053V43.0542H333.689L332.317 45.3406C332.317 45.1577 332.317 44.9595 332.317 44.7461C332.317 44.5022 332.317 44.3041 332.317 44.1517C332.317 42.0482 331.844 40.0819 330.899 38.2528C329.954 36.3931 328.521 34.8994 326.601 33.7714C324.68 32.613 322.241 32.0337 319.284 32.0337C316.358 32.0337 313.812 32.6587 311.648 33.9086C309.514 35.128 307.852 36.8962 306.663 39.213C305.505 41.5299 304.926 44.3041 304.926 47.5355C304.926 50.8584 305.49 53.7241 306.618 56.1324C307.746 58.5102 309.392 60.3394 311.556 61.6197C313.751 62.8696 316.419 63.4946 319.559 63.4946C321.693 63.4946 323.537 63.2964 325.092 62.9001C326.646 62.5038 327.912 61.9703 328.887 61.2997C329.893 60.5985 330.64 59.8516 331.128 59.059C331.646 58.2664 331.951 57.4737 332.042 56.6811H344.023C343.84 58.7236 343.154 60.7204 341.965 62.6715C340.807 64.5921 339.176 66.345 337.072 67.9302C334.969 69.485 332.408 70.7349 329.39 71.6799C326.403 72.5945 322.988 73.0517 319.147 73.0517C313.934 73.0517 309.377 71.9848 305.474 69.8508C301.572 67.7168 298.524 64.7445 296.329 60.9338C294.164 57.1232 293.082 52.7638 293.082 47.8556C293.082 42.8255 294.18 38.4204 296.375 34.6402C298.6 30.8601 301.679 27.9182 305.612 25.8147C309.544 23.6808 314.056 22.6138 319.147 22.6138C324.391 22.6138 328.918 23.6808 332.728 25.8147C336.569 27.9487 339.527 30.921 341.6 34.7317C343.673 38.5119 344.709 42.917 344.709 47.9471C344.709 48.5873 344.694 49.2732 344.663 50.0048C344.633 50.7365 344.587 51.27 344.526 51.6053H299.713ZM381.969 73.006C378.189 73.006 374.683 72.0305 371.452 70.0794C368.251 68.0979 365.66 65.3999 363.678 61.9856C361.727 58.5712 360.752 54.7301 360.752 50.4621C360.752 50.3402 360.752 50.2335 360.752 50.142C360.752 50.0201 360.752 49.9134 360.752 49.8219L366.696 49.6847C366.696 49.7457 366.696 49.8219 366.696 49.9134C366.696 50.0048 366.696 50.0811 366.696 50.142C366.696 52.5199 367.291 54.6386 368.48 56.4982C369.669 58.3273 371.208 59.7754 373.098 60.8424C375.019 61.8789 377.061 62.3971 379.226 62.3971C382.732 62.3971 385.719 61.193 388.188 58.7846C390.658 56.3763 391.892 52.6418 391.892 47.5813C391.892 42.4902 390.658 38.771 388.188 36.4236C385.75 34.0458 382.762 32.8568 379.226 32.8568C377.092 32.8568 375.065 33.3751 373.144 34.4116C371.254 35.4176 369.699 36.8199 368.48 38.6186C367.291 40.4172 366.696 42.5207 366.696 44.929L360.752 44.6547C360.752 40.3562 361.727 36.5456 363.678 33.2227C365.66 29.8998 368.251 27.3085 371.452 25.4489C374.683 23.5588 378.189 22.6138 381.969 22.6138C385.902 22.6138 389.56 23.5893 392.944 25.5404C396.359 27.4609 399.102 30.2808 401.175 34C403.279 37.6888 404.33 42.2158 404.33 47.5813C404.33 53.0991 403.309 57.7481 401.267 61.5283C399.224 65.3085 396.511 68.1741 393.127 70.1252C389.743 72.0457 386.024 73.006 381.969 73.006ZM354.624 72V0.527167H366.696V72H354.624Z"
+                                        fill="#fff"
+                                    />
+                                </svg>
+                            </div>
+                        </a>
+                    </h1>
+
+                    <ul class="m2">
+                        <li><a href="#">photo</a></li>
+                        <li><a href="#">language</a></li>
+                    </ul>
+                </div>
+            </header>
+            <!--  -->
+            <div class="con con1">
+                <div class="con-text">
+                    <div class="text-wrap">
+                        <div class="text-move">
+                            <h2>The</h2>
+                        </div>
+                    </div>
+                    <div class="text-wrap">
+                        <div class="text-move">
+                            <h2 class="txt">FRANTEND</h2>
+                        </div>
+                    </div>
+                    <div class="text-wrap">
+                        <div class="text-move">
+                            <h2>Portfolio</h2>
+                        </div>
+                    </div>
+                    <div class="text-wrap">
+                        <div class="text-move">
+                            <h2>by Ezen</h2>
+                        </div>
+                    </div>
+                </div>
+                <!--//end text  -->
+                <div class="circle-wrap">
+                    <div class="circle">
+                        <div class="circle-ele">
+                            <img src="images/visual4.jpg" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="con con2">
+                <div class="inner"><h2>Section 2</h2></div>
+            </div>
+
+            <div class="con con3">
+                <div class="inner"><h2>Section 3</h2></div>
+            </div>
+
+            <div class="con con4">
+                <div class="inner"><h2>Section 4</h2></div>
+            </div>
+        </div>
+
+        <script>
+            gsap.registerPlugin(ScrollTrigger);
+
+            ScrollTrigger.create({
+                trigger: '#header',
+                start: 'top top',
+                // endTrigger:'.footer',
+                end: 'max',
+                pin: true,
+                pinSpacing: false,
+            });
+
+            gsap.set('.logo', {
+                scale: 2, // 초기 크기 (100%)
+                y: -600, // 초기 y 위치
+                transformOrigin: 'center center', // 중심 기준으로 축소/확대
+            });
+
+            ScrollTrigger.create({
+                trigger: '#visual',
+                start: 'top top',
+                end: 'bottom 20%',
+                animation: gsap.to('.logo', {
+                    y: -40, // 아래로 이동
+                    scale: 0.8, // 크기를 20%로 축소
+                    ease: 'none',
+                }),
+                scrub: true,
+            });
+
+            //con1
+            gsap.utils.toArray('.text-wrap').forEach((text, index) => {
+                const direction = index % 2 === 0 ? -window.innerWidth : window.innerWidth;
+
+                gsap.fromTo(
+                    text.querySelector('.text-move'),
+                    { x: direction },
+                    {
+                        x: 0,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: text,
+                            start: 'top center',
+                            end: 'bottom center',
+                            scrub: true,
+                        },
+                    }
+                );
+            });
+
+            //원
+            const theme = {
+                primary: '#6067f3',
+                secondary: '#e8e2da',
+            };
+
+            const circleTween = gsap
+                .timeline()
+                .to('.circle-ele', {
+                    borderRadius: 0,
+                    width: innerWidth,
+                    height: innerHeight,
+                })
+                .add(changeTheme(), 0);
+
+            ScrollTrigger.create({
+                trigger: '.circle-wrap',
+                start: 'top top',
+                end: '+=2000',
+                animation: circleTween,
+                pin: true,
+                scrub: true,
+            });
+
+            function changeTheme(themeMode = 'light') {
+                const tween = gsap.to('body, #header', {
+                    backgroundColor: themeMode === 'light' ? theme.secondary : theme.primary,
+                    color: themeMode === 'light' ? theme.primary : theme.secondary,
+                });
+
+                return tween;
+            }
+
+            //con2
+        </script>
+    </body>
+</html>

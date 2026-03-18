@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    /* overflow: hidden; */
+    background: #0f0f0f;
+}
+.con {
+}
+
+.con .inner {
+    width: 1400px;
+    height: 1000px;
+    margin: auto;
+    box-sizing: border-box;
+    position: relative;
+    padding: 150px 0;
+}
+
+.con h2 {
+    font-size: 40px;
+    font-weight: 600;
+}
+.con1 {
+    background: #fff;
+}
+
+/* con2가 핀 되는 동안 겹침 이슈 방지용 레이어 */
+.con2 {
+    position: relative;
+    background-color: #000;
+}
+
+.con2 .gallery {
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    overflow: visible;
+}
+
+.con2 .item {
+    position: absolute;
+    width: clamp(140px, 10vw, 220px);
+    height: calc(clamp(140px, 10vw, 220px) * 1.35);
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+}
+
+.con2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    opacity: 0.85;
+}
+
+.con2 .title {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+.con2 .title h2 {
+    text-align: center;
+    font-family: 'PP Editorial New';
+    font-weight: lighter;
+    color: #fff;
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.con2 button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'SF Pro Display';
+    font-weight: 400;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
+    padding: 15px 30px;
+    outline: none;
+    box-shadow: none;
+}
+
+/* 갤러리 레이아웃 기준점 */
+.con2 .gallery {
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    overflow: visible;
+}
+
+/* 카드 */
+.con2 .item {
+    position: absolute;
+    width: clamp(140px, 10vw, 220px);
+    height: calc(clamp(140px, 10vw, 220px) * 1.35);
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    z-index: 1;
+}
+
+.con2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* 링크 버튼 */
+.con2 .link {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.7);
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+}
+.con2 .link a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.con2 i {
+    position: relative;
+    top: 1.5px;
+}
+.con3 {
+    background-color: #e5e5ff;
+}
+.con4 {
+    background-color: #fff0cc;
+}

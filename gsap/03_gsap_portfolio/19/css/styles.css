@@ -1,0 +1,236 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 1100vh;
+    font-family: 'TT Hoves Pro Trial';
+    overflow-x: hidden;
+}
+
+.con {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.con .inner {
+    width: 1400px;
+    height: 1000px;
+    margin: auto;
+    box-sizing: border-box;
+    position: relative;
+    padding: 150px 0;
+}
+
+.con h2 {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.con1 {
+    background-color: #ffe5e5;
+    display: flex;
+    justify-content: center;
+
+    text-align: center;
+
+    align-items: flex-end;
+    background: url(../../assets/images/pic1.jpg) no-repeat 50% 50%;
+    padding-bottom: 4em;
+    background-size: cover;
+    color: #fff;
+    width: 100vw;
+    height: 100vh;
+}
+.con2 {
+}
+
+/* sticky */
+.con2 {
+    display: flex;
+}
+
+.con2 .col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+}
+
+.con2 .services {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.con2 .indicator {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 55px;
+    transform: translateY(0px);
+    background-color: #000;
+    z-index: -1;
+}
+
+.con2 .service {
+    width: max-content;
+    height: 60px;
+}
+
+.con2 .service p {
+    text-transform: uppercase;
+    font-family: 'PP NeueBit';
+    font-size: 60px;
+    font-weight: 600;
+    color: #d5d5d5;
+    transition: color 0.3s;
+}
+
+.con2 .service.active p {
+    color: #fff;
+}
+
+.con2 .service-img-wrapper {
+    position: relative;
+    width: 60%;
+    height: 250px;
+    overflow: hidden;
+    clip-path: polygon(50% 0%, 100% 0, 100% 85%, 90% 100%, 50% 100%, 0 100%, 0 0);
+}
+
+.con2 .service-img {
+    width: 100%;
+    height: 2000px;
+    transform: translateY(0px);
+    will-change: transform;
+}
+
+.con2 .img {
+    width: 100%;
+    height: 250px;
+}
+
+.con2 .service-copy {
+    width: 60%;
+}
+
+.con2 .line {
+    position: relative;
+    will-change: transform;
+}
+
+.con2 .service-copy p {
+    font-family: 'TT Hoves Pro Trial';
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+.con2 .progress-bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.5px;
+    height: 60%;
+    background-color: #e0e0e0;
+}
+
+.con2 .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    transform-origin: top;
+    transform: scaleY(0);
+    will-change: transform;
+}
+
+.con2 .index {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    padding: 4px 2px 2px 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+}
+
+.con2 .index span {
+    font-family: 'PP NeueBit';
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 12px;
+    width: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.con2 .index span.separator {
+    position: relative;
+    top: -1px;
+    width: 20px;
+    height: 2px;
+    background-color: #ff00ff;
+}
+
+.con2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.con2 .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.con2 .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.con2 .lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.con2 .lenis.lenis-smooth iframe {
+    pointer-events: none;
+}
+.con3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #d5d5d5;
+}
+
+.con3 p {
+    text-transform: uppercase;
+    font-family: 'PP NeueBit';
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 18px;
+    padding: 4px 2px 0 2px;
+    background-color: #000;
+    color: #fff;
+}
+
+.con4 {
+    background-color: #fff0cc;
+}

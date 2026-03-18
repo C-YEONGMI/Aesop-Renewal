@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>홍길동 포트폴리오</title>
+        <link rel="stylesheet" href="../assets/css/reset.css" />
+        <link rel="stylesheet" href="./css/styles.css" />
+        <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.3/lottie_svg.min.js"></script>
+    </head>
+    <body>
+        <div class="music-player-container">
+            <div class="toggle-player">
+                <ion-icon name="remove-outline"></ion-icon>
+            </div>
+            <div class="avatar">
+                <img src="../assets/images/01.jpg" alt="" />
+            </div>
+
+            <div class="player">
+                <div class="sound-bars-lottie">
+                    <div class="sound-bars"></div>
+                </div>
+                <div class="track-info">
+                    <div class="track-name">Track Name</div>
+                    <div class="track-artist">Track Artist</div>
+                </div>
+                <div class="track-nav">
+                    <div class="prev-track" onclick="prevTrack()">
+                        <ion-icon name="play-back-sharp"></ion-icon>
+                    </div>
+                    <div class="playpause-track" onclick="playPauseTrack()">
+                        <ion-icon name="play-sharp"></ion-icon>
+                    </div>
+                    <div class="next-track" onclick="nextTrack()">
+                        <ion-icon name="play-forward-sharp"></ion-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="js/script.js"></script>
+    </body>
+</html>

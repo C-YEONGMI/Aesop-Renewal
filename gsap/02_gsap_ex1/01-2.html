@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>gsap</title>
+        <link rel="stylesheet" href="css/reset.css" />
+
+        <link rel="shortcut icon" href="images/favicon.ico" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/xpressengine/xeicon@2.3.3/xeicon.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+        <style>
+            .con-box {
+                width: 100vw;
+                height: 100vh;
+                background-color: #000;
+                color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .con-box h2 {
+                font-size: 50px;
+                line-height: 1.4;
+            }
+            .con-box h2 span {
+                display: block;
+            }
+
+            .con-box span:last-child {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="con-box">
+            <h2>
+                <span> web project </span>
+                <span>Portfolio</span>
+            </h2>
+        </div>
+
+        <script>
+            gsap.from('h2 span:first-child', {
+                x: 50,
+                opacity: 0,
+                duration: 1,
+            });
+            gsap.from('h2 span:last-child', {
+                x: -50,
+                opacity: 0,
+                duration: 1,
+            });
+        </script>
+    </body>
+</html>
