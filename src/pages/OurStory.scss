@@ -201,7 +201,7 @@
         align-items: start;
     }
 
-    // Figma 719-2421: 장식 선 — Origins 탭 전용, clip-path 드로우
+    // Figma 719-2421: 장식 선 — Origins 탭 전용, stroke-dashoffset 드로우
     // Figma position: left:-17px, top:55px / size: 1521×618px (79.2vw)
     &__line-wrap {
         position: absolute;
@@ -211,14 +211,38 @@
         max-width: 1521px;
         pointer-events: none;
         z-index: 0;
+        overflow: visible;
 
-        img {
+        svg {
             width: 100%;
             height: auto;
             display: block;
+            overflow: visible;
         }
     }
+}
 
+// Naming 탭 장식선 — Naming 탭 전용, stroke-dashoffset 드로우
+// Figma 719-2449: body 기준 left:290px → 15.1vw, top:28px, width:1164px → 60.6vw
+.about-naming__line-wrap {
+    position: absolute;
+    left: 15.1vw;    // 290 / 1920 ≈ 15.1%
+    top: 28px;
+    width: 60.6vw;   // 1164 / 1920 ≈ 60.6%
+    max-width: 1164px;
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible;
+
+    svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        overflow: visible;
+    }
+}
+
+.about-origins {
     &__tabs {
         position: relative;
         z-index: 1;

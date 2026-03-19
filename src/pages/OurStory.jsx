@@ -7,7 +7,8 @@ import aboutBg from '../assets/about_background.mov';
 import aboutFormulation from '../assets/about_formulation.png';
 import aboutTexture from '../assets/about_texture.png';
 import aboutSustain from '../assets/about_sustain.png';
-import originsLineSrc from '../assets/about_origins_line.svg';
+import OriginsLineSvg from '../assets/about_origins_line.svg?react';
+import NamingLineSvg from '../assets/about_naming_line.svg?react';
 import shop01 from '../assets/about_shop01.png';
 import shop02 from '../assets/about_shop02.png';
 import shop03 from '../assets/about_shop03.png';
@@ -120,6 +121,7 @@ const OurStory = () => {
     const valuesKrRef       = useRef(null);
     const originsInnerRef   = useRef(null);   // Origins 탭+컨텐츠 영역
     const originsLineRef    = useRef(null);   // 장식 선 SVG 래퍼
+    const namingLineRef     = useRef(null);   // Naming 탭 장식 선 SVG 래퍼
 
     // ── 하단 섹션 타이틀 refs (char split) ───────────────────────────────────
     const formTitleRef      = useRef(null);
@@ -145,13 +147,35 @@ const OurStory = () => {
         const lineEl = originsLineRef.current;
         if (!enEl || !krEl) return;
 
-        // 선: Origins 떠날 때 사라지고, 돌아올 때 다시 그림
+        // origins 선: 떠날 때 사라지고, 돌아올 때 다시 그림
+        const originsPath = lineEl?.querySelector('path');
         if (prevId === 'origins' && id !== 'origins' && lineEl) {
             gsap.to(lineEl, { autoAlpha: 0, duration: 0.8, ease: 'power2.in' });
         } else if (id === 'origins' && prevId !== 'origins' && lineEl) {
-            gsap.set(lineEl, { clipPath: 'inset(0 100% 0 0)' });
-            gsap.to(lineEl, { autoAlpha: 1, duration: 0.1 });
-            gsap.to(lineEl, { clipPath: 'inset(0 0% 0 0)', duration: 4, ease: 'power2.inOut' });
+            if (originsPath) {
+                const len = originsPath.getTotalLength();
+                gsap.set(originsPath, { strokeDasharray: len, strokeDashoffset: len });
+                gsap.set(lineEl, { autoAlpha: 1 });
+                gsap.to(originsPath, { strokeDashoffset: 0, duration: 4, ease: 'power2.inOut' });
+            } else {
+                gsap.set(lineEl, { autoAlpha: 1 });
+            }
+        }
+
+        // naming 선: Naming 탭 진입 시 붓으로 그리듯 stroke-dashoffset 드로우, 이탈 시 사라짐
+        const namingEl = namingLineRef.current;
+        const namingPath = namingEl?.querySelector('path');
+        if (prevId === 'naming' && id !== 'naming' && namingEl) {
+            gsap.to(namingEl, { autoAlpha: 0, duration: 0.8, ease: 'power2.in' });
+        } else if (id === 'naming' && prevId !== 'naming' && namingEl) {
+            if (namingPath) {
+                const len = namingPath.getTotalLength();
+                gsap.set(namingPath, { strokeDasharray: len, strokeDashoffset: len });
+                gsap.set(namingEl, { autoAlpha: 1 });
+                gsap.to(namingPath, { strokeDashoffset: 0, duration: 4, ease: 'power2.inOut' });
+            } else {
+                gsap.set(namingEl, { autoAlpha: 1 });
+            }
         }
 
         gsap.to([enEl, krEl], {
@@ -315,25 +339,28 @@ const OurStory = () => {
                     }
                 );
 
-                // Origins 장식선: 35% 트리거 (≈367vh / 1050vh 기준)
-                gsap.set(originsLineRef.current, { clipPath: 'inset(0 100% 0 0)', autoAlpha: 0 });
+                // Origins/Naming 장식선 초기 상태 (숨김) — 둘 다 stroke-dashoffset 방식
+                gsap.set(originsLineRef.current, { autoAlpha: 0 });
+                gsap.set(namingLineRef.current, { autoAlpha: 0 });
                 ScrollTrigger.create({
                     trigger: storyMidRef.current,
                     start: '35% top',
                     once: true,
                     onEnter: () => {
-                        gsap.set(originsLineRef.current, { autoAlpha: 1 });
-                        gsap.to(originsLineRef.current, {
-                            clipPath: 'inset(0 0% 0 0)',
-                            duration: 4,
-                            ease: 'power2.inOut',
-                        });
+                        const originsPath = originsLineRef.current?.querySelector('path');
+                        if (originsPath) {
+                            const len = originsPath.getTotalLength();
+                            gsap.set(originsPath, { strokeDasharray: len, strokeDashoffset: len });
+                            gsap.set(originsLineRef.current, { autoAlpha: 1 });
+                            gsap.to(originsPath, { strokeDashoffset: 0, duration: 4, ease: 'power2.inOut' });
+                        }
                     },
                 });
 
-                // Origins 탭 스크롤 전환 — 150vh 간격 (1050vh 기준)
-                // Naming:400vh=38.1%, Formulation:550vh=52.38%, Architecture:700vh=66.67%, Approach:850vh=80.95%
-                const STORY_TAB_PCT = [0, 38.1, 52.38, 66.67, 80.95];
+                // Origins 탭 스크롤 전환
+                // Origins 선이 35%에서 시작해 4초간 그려지므로 Naming은 50%로 충분히 이격
+                // Naming:525vh=50%, Formulation:672vh=64%, Architecture:819vh=78%, Approach:966vh=92%
+                const STORY_TAB_PCT = [0, 50, 64, 78, 92];
                 ORIGINS_TABS.forEach((tab, i) => {
                     if (i === 0) return;
                     ScrollTrigger.create({
@@ -405,7 +432,7 @@ const OurStory = () => {
                 gsap.set(originsInnerRef.current, { autoAlpha: 1 });
 
                 // Origins 즉시 전환 (reduced-motion)
-                const STORY_TAB_PCT_RM = [0, 38.1, 52.38, 66.67, 80.95];
+                const STORY_TAB_PCT_RM = [0, 50, 64, 78, 92];
                 ORIGINS_TABS.forEach((tab, i) => {
                     if (i === 0) return;
                     ScrollTrigger.create({
@@ -491,9 +518,14 @@ const OurStory = () => {
                     {/* Origins 탭+컨텐츠: 헤딩 고정 후 fade-in */}
                     <div className="about-origins__inner" ref={originsInnerRef}>
                         <div className="about-origins__body">
-                            {/* 장식 선 — Origins 탭에서 GSAP clip-path 드로우 */}
+                            {/* 장식 선 — Origins 탭에서 GSAP stroke-dashoffset 드로우 */}
                             <div className="about-origins__line-wrap" ref={originsLineRef} aria-hidden="true">
-                                <img src={originsLineSrc} alt="" />
+                                <OriginsLineSvg />
+                            </div>
+
+                            {/* 장식 선 — Naming 탭에서 GSAP stroke-dashoffset 드로우 */}
+                            <div className="about-naming__line-wrap" ref={namingLineRef} aria-hidden="true">
+                                <NamingLineSvg />
                             </div>
 
                             <nav className="about-origins__tabs">
