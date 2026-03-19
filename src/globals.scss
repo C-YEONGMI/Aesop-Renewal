@@ -144,6 +144,14 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     line-height: normal;
     letter-spacing: -2px;
 }
+.montage-128 {
+    font-family: $font-montage;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 128px;
+    line-height: normal;
+    letter-spacing: 0px;
+}
 
 .montage-80 {
     font-family: $font-montage;
@@ -289,12 +297,28 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
 // Optima Styles
 // --------------------------------------------
 
+.optima-220 {
+    font-family: $font-optima;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 220px;
+    line-height: 1.5;
+    letter-spacing: -4.4px;
+}
+
 .optima-70 {
     font-family: $font-optima;
     font-style: normal;
     font-weight: 400;
     font-size: 70px;
     line-height: 1.5;
+}
+.optima-48 {
+    font-family: $font-optima;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: normal;
 }
 
 .optima-40 {
