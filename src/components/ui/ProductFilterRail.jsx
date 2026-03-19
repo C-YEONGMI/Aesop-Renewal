@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import './ProductFilterRail.scss';
 
@@ -27,55 +26,51 @@ const FilterSection = ({ title, defaultOpen = false, children }) => {
 
 const ProductFilterRail = ({
     categories,
-    activeCategory,
-    badgeOptions,
-    activeBadge,
-    onBadgeChange,
+    activeCategories,
+    onCategoryToggle,
     priceRangeOptions,
-    activePriceRange,
-    onPriceRangeChange,
-    onClearCategory,
+    activePriceRanges,
+    onPriceRangeToggle,
+    onClearAllFilters,
 }) => {
     const selectedItems = useMemo(() => {
         const items = [];
-        const activeCategoryItem = categories.find((category) => category.slug === activeCategory);
-        const activeBadgeItem = badgeOptions.find((badge) => badge.value === activeBadge);
-        const activePriceRangeItem = priceRangeOptions.find((range) => range.value === activePriceRange);
 
-        if (activeCategoryItem && activeCategoryItem.slug !== 'all') {
+        activeCategories.forEach((slug) => {
+            const activeCategoryItem = categories.find((category) => category.slug === slug);
+
+            if (!activeCategoryItem || activeCategoryItem.slug === 'all') {
+                return;
+            }
+
             items.push({
-                key: `category-${activeCategoryItem.slug}`,
+                key: `category-${slug}`,
                 label: activeCategoryItem.label,
-                onRemove: onClearCategory,
+                onRemove: () => onCategoryToggle(slug),
             });
-        }
+        });
 
-        if (activeBadgeItem) {
-            items.push({
-                key: `badge-${activeBadgeItem.value}`,
-                label: activeBadgeItem.label,
-                onRemove: () => onBadgeChange(''),
-            });
-        }
+        activePriceRanges.forEach((rangeValue) => {
+            const activePriceRangeItem = priceRangeOptions.find((range) => range.value === rangeValue);
 
-        if (activePriceRangeItem) {
+            if (!activePriceRangeItem) {
+                return;
+            }
+
             items.push({
-                key: `price-${activePriceRangeItem.value}`,
+                key: `price-${rangeValue}`,
                 label: activePriceRangeItem.label,
-                onRemove: () => onPriceRangeChange(''),
+                onRemove: () => onPriceRangeToggle(rangeValue),
             });
-        }
+        });
 
         return items;
     }, [
-        activeBadge,
-        activeCategory,
-        activePriceRange,
-        badgeOptions,
+        activeCategories,
+        activePriceRanges,
         categories,
-        onBadgeChange,
-        onClearCategory,
-        onPriceRangeChange,
+        onCategoryToggle,
+        onPriceRangeToggle,
         priceRangeOptions,
     ]);
 
@@ -87,19 +82,29 @@ const ProductFilterRail = ({
 
                     <div className="product-filter-rail__selected">
                         {selectedItems.length > 0 ? (
-                            <div className="product-filter-rail__selected-list">
-                                {selectedItems.map((item) => (
-                                    <button
-                                        key={item.key}
-                                        type="button"
-                                        className="product-filter-rail__selected-chip suit-14-m"
-                                        onClick={item.onRemove}
-                                    >
-                                        <span>{item.label}</span>
-                                        <X size={12} strokeWidth={1.8} />
-                                    </button>
-                                ))}
-                            </div>
+                            <>
+                                <div className="product-filter-rail__selected-list">
+                                    {selectedItems.map((item) => (
+                                        <button
+                                            key={item.key}
+                                            type="button"
+                                            className="product-filter-rail__selected-chip suit-14-m"
+                                            onClick={item.onRemove}
+                                        >
+                                            <span>{item.label}</span>
+                                            <X size={12} strokeWidth={1.8} />
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <button
+                                    type="button"
+                                    className="product-filter-rail__clear-button suit-12-r"
+                                    onClick={onClearAllFilters}
+                                >
+                                    모두 제거
+                                </button>
+                            </>
                         ) : (
                             <p className="product-filter-rail__selected-empty suit-14-m">선택없음</p>
                         )}
@@ -107,38 +112,23 @@ const ProductFilterRail = ({
 
                     <FilterSection title="카테고리">
                         <ul className="product-filter-rail__category-list">
-                            {categories.map((category) => (
-                                <li key={category.slug}>
-                                    <Link
-                                        to={category.link}
-                                        className={`product-filter-rail__category-chip suit-14-m ${
-                                            activeCategory === category.slug ? 'active' : ''
-                                        }`}
-                                    >
-                                        {category.label}
-                                    </Link>
-                                </li>
-                            ))}
+                            {categories
+                                .filter((category) => category.slug !== 'all')
+                                .map((category) => (
+                                    <li key={category.slug}>
+                                        <button
+                                            type="button"
+                                            className={`product-filter-rail__category-chip suit-14-m ${
+                                                activeCategories.includes(category.slug) ? 'active' : ''
+                                            }`}
+                                            onClick={() => onCategoryToggle(category.slug)}
+                                            aria-pressed={activeCategories.includes(category.slug)}
+                                        >
+                                            {category.label}
+                                        </button>
+                                    </li>
+                                ))}
                         </ul>
-                    </FilterSection>
-
-                    <FilterSection title="BADGE">
-                        <div className="product-filter-rail__option-list">
-                            {badgeOptions.map((badge) => (
-                                <button
-                                    key={badge.value}
-                                    type="button"
-                                    className={`product-filter-rail__option-chip suit-14-m ${
-                                        activeBadge === badge.value ? 'active' : ''
-                                    }`}
-                                    onClick={() =>
-                                        onBadgeChange(activeBadge === badge.value ? '' : badge.value)
-                                    }
-                                >
-                                    {badge.label}
-                                </button>
-                            ))}
-                        </div>
                     </FilterSection>
 
                     <FilterSection title="가격대">
@@ -148,13 +138,10 @@ const ProductFilterRail = ({
                                     key={range.value}
                                     type="button"
                                     className={`product-filter-rail__option-chip suit-14-m ${
-                                        activePriceRange === range.value ? 'active' : ''
+                                        activePriceRanges.includes(range.value) ? 'active' : ''
                                     }`}
-                                    onClick={() =>
-                                        onPriceRangeChange(
-                                            activePriceRange === range.value ? '' : range.value
-                                        )
-                                    }
+                                    onClick={() => onPriceRangeToggle(range.value)}
+                                    aria-pressed={activePriceRanges.includes(range.value)}
                                 >
                                     {range.label}
                                 </button>

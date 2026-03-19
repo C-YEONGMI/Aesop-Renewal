@@ -7,7 +7,7 @@
     --space-copy: 16px;
     --space-tight: 8px;
 
-    background-color: $oatmeal;
+    background-color: $bg-primary;
 
     &__header-space {
         height: 70px;
@@ -64,15 +64,12 @@
     &__section-body {
         max-width: 1120px;
         color: inherit;
-
-        p + p {
-            margin-top: 0;
-        }
+        white-space: pre-line;
     }
 }
 
 .kr-exclusive-hero {
-    background-color: $oatmeal;
+    background-color: $bg-primary;
     overflow: hidden;
     --hero-copy-left: clamp(32px, 8.85vw, 170px);
     --hero-copy-top: clamp(88px, 8.44vw, 162px);
@@ -292,15 +289,16 @@
         text-align: center;
         color: $oatmeal;
         padding-inline: clamp(40px, 5vw, 96px);
+    }
 
-        p + p {
-            margin-top: 0;
-        }
+    &__quote-text {
+        margin: 0;
+        white-space: pre-line;
     }
 }
 
 .kr-exclusive-gift-card {
-    background-color: $oatmeal;
+    background-color: $bg-primary;
 
     &__stage {
         overflow: hidden;
@@ -339,6 +337,7 @@
     &__body {
         width: min(100%, 647px);
         color: $brown-500;
+        white-space: pre-line;
     }
 
     &__tip {
@@ -590,7 +589,7 @@
 }
 
 .kr-exclusive-outro {
-    background-color: $oatmeal;
+    background-color: $bg-primary;
 
     &__stage {
         position: relative;

@@ -1,7 +1,7 @@
 @use "../globals.scss" as *;
 
 .store-locator {
-    background-color: $oatmeal;
+    background-color: $bg-primary;
     min-height: 100vh;
 
     &__header-space { height: 70px; }
@@ -44,7 +44,7 @@
             max-width: 400px;
             padding: 12px 16px;
             border: 1px solid $brown-200;
-            background: $oatmeal;
+            background: $bg-primary;
             color: $brown-800;
             outline: none;
             font-family: $font-suit;

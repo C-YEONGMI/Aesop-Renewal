@@ -1,7 +1,7 @@
 @use "../globals.scss" as *;
 
 .auth-page {
-    background-color: $oatmeal;
+    background-color: $bg-primary;
     min-height: 100vh;
 
     &__header-space { height: 70px; }
@@ -34,7 +34,7 @@
         input {
             padding: 14px 16px;
             border: 1px solid $brown-200;
-            background-color: $oatmeal;
+            background-color: $bg-primary;
             color: $brown-800;
             outline: none;
             transition: border-color 0.2s ease;
