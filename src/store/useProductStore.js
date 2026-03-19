@@ -1,40 +1,59 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import productsData from '../data/products.json';
+import { inferProductCategoryLabel, normalizeCategoryValue } from '../data/productCategories';
 
-// 상품 스토어
+const BROKEN_IMAGE_URLS = new Map([
+    [
+        'https://kr.aesop.com/dw/image/v2/AARM_PRD/on/demandware.static/-/Sites-aesop-master-catalog/ko_KR/dw76bc2cc6/images/products/SK52/Aesop-Skin-Protective-Lip-Balm-SPF30-5-5g-large.png',
+        'https://kr.aesop.com/dw/image/v2/AARM_PRD/on/demandware.static/-/Sites-aesop-master-catalog/ko_KR/dw76bc2cc6/images/products/SK52/Aesop-Skin-Protective-Lip-Balm-SPF30-5-5g-large.jpg?bgcolor=fffef2&q=70&sfrm=jpg&sh=430&sm=cut&sw=430',
+    ],
+]);
+const normalizeImageUrl = (url = '') => BROKEN_IMAGE_URLS.get(url) || url;
+
+const normalizeProductData = (products) =>
+    products.map((product) => ({
+        ...product,
+        category: inferProductCategoryLabel(product),
+        badge: Array.isArray(product.badge) ? product.badge : [],
+        variants: Array.isArray(product.variants)
+            ? product.variants.map((variant) => ({
+                ...variant,
+                image: normalizeImageUrl(variant.image),
+            }))
+            : [],
+    }));
+
 const useProductStore = create(
     persist(
         (set, get) => ({
-            products: productsData,
-            recentlyViewed: [], // 최근 본 상품
+            products: normalizeProductData(productsData),
+            recentlyViewed: [],
 
-            // 카테고리별 필터
-            getByCategory: (category) => {
-                return get().products.filter(p =>
-                    p.category.toLowerCase().replace(/\s/g, '') === category.toLowerCase().replace(/\s/g, '')
-                );
-            },
+            getByCategory: (category) =>
+                get().products.filter(
+                    (product) =>
+                        normalizeCategoryValue(product.category) ===
+                        normalizeCategoryValue(category)
+                ),
 
-            // 배지별 필터
-            getByBadge: (badge) => {
-                return get().products.filter(p => p.badge.includes(badge));
-            },
+            getByBadge: (badge) => get().products.filter((product) => product.badge.includes(badge)),
 
-            // 상품명으로 검색
             searchProducts: (query) => {
-                const q = query.toLowerCase();
-                return get().products.filter(p =>
-                    p.name.toLowerCase().includes(q) ||
-                    p.description.toLowerCase().includes(q) ||
-                    p.category.toLowerCase().includes(q)
+                const normalizedQuery = query.toLowerCase();
+
+                return get().products.filter(
+                    (product) =>
+                        product.name.toLowerCase().includes(normalizedQuery) ||
+                        product.description.toLowerCase().includes(normalizedQuery) ||
+                        product.category.toLowerCase().includes(normalizedQuery)
                 );
             },
 
-            // 최근 본 상품 추가
             addRecentlyViewed: (productName) => {
                 const recent = get().recentlyViewed;
-                const filtered = recent.filter(n => n !== productName);
+                const filtered = recent.filter((name) => name !== productName);
+
                 set({ recentlyViewed: [productName, ...filtered].slice(0, 10) });
             },
         }),
