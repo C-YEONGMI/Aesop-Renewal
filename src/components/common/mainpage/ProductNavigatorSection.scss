@@ -3,8 +3,15 @@
 .pnav {
     position: relative;
     width: 100%;
-    min-height: 1080px;
-    overflow: hidden;
+    height: calc(1080px + var(--pnav-scroll-length, 0px));
+
+    &__stage {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        height: 1080px;
+        overflow: hidden;
+    }
 
     &__bg {
         position: absolute;
@@ -25,7 +32,7 @@
         position: relative;
         z-index: 2;
         width: min(1680px, calc(100% - 240px));
-        min-height: 1080px;
+        height: 100%;
         margin: 0 auto;
     }
 
@@ -46,55 +53,18 @@
         width: 100%;
         margin: 0;
         color: $oatmeal;
-        line-height: normal;
-        letter-spacing: -4.4px;
     }
 
     &__desc {
         width: 100%;
         margin: 0;
         color: rgba($oatmeal, 0.7);
-        line-height: 1.5;
     }
 
-    &__cats {
+    &__menu {
         position: absolute;
         top: 516px;
-        left: 0;
-        right: 0;
-        min-height: 240px;
-    }
-
-    &__center {
-        position: absolute;
-        top: 24px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    &__center-cat {
-        color: $oatmeal;
-        text-decoration: none;
-        line-height: normal;
-        letter-spacing: -2px;
-        white-space: nowrap;
-        transition: opacity 0.3s ease;
-
-        &:hover {
-            opacity: 0.8;
-        }
-    }
-
-    &__cat-list {
-        position: absolute;
-        top: 0;
-        list-style: none;
         width: 235px;
-        padding: 0;
-        margin: 0;
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -110,45 +80,89 @@
         }
     }
 
-    &__cat-item {
+    &__menu-active-row {
         display: flex;
         align-items: center;
         gap: 16px;
-        width: 100%;
+    }
 
-        button {
-            background: none;
-            border: 0;
-            padding: 0;
-            color: $oatmeal;
-            cursor: pointer;
-            text-align: inherit;
-            white-space: nowrap;
-            transition: opacity 0.3s ease;
+    &__cat-list {
+        list-style: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &--left {
+            align-items: flex-start;
+        }
+
+        &--right {
+            align-items: flex-end;
         }
     }
 
-    &__cat-list--left .pnav__cat-item {
+    &__cat-item {
+        display: flex;
+        width: 100%;
+    }
+
+    &__menu--left .pnav__cat-item {
         justify-content: flex-start;
     }
 
-    &__cat-list--right .pnav__cat-item {
+    &__menu--right .pnav__cat-item {
         justify-content: flex-end;
     }
 
-    &__cat-list--right button {
+    &__center {
+        position: absolute;
+        top: calc(50% + 41px);
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__center-cat {
+        color: $oatmeal;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    &__cat-btn {
+        background: none;
+        border: 0;
+        padding: 0;
+        color: $oatmeal;
+        cursor: pointer;
+        text-align: inherit;
+        white-space: nowrap;
+        transition: opacity 0.3s ease;
+    }
+
+    &__menu--right .pnav__cat-btn {
+        width: 100%;
         text-align: right;
     }
 
-    button.active {
+    &__cat-btn.active {
         opacity: 1;
     }
 
-    button:not(.active) {
+    &__cat-btn:not(.active) {
         opacity: 0.4;
     }
 
-    button:hover {
+    &__cat-btn:hover {
         opacity: 0.8;
     }
 
@@ -167,23 +181,31 @@
     }
 
     @media (max-width: 1279px) {
-        min-height: auto;
-        padding: 120px 0;
+        height: auto;
+
+        &__stage {
+            position: relative;
+            height: auto;
+            min-height: auto;
+            padding: 120px 0;
+        }
 
         &__inner {
             width: calc(100% - 80px);
-            min-height: auto;
+            height: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 72px;
+            gap: 64px;
         }
 
         &__header,
-        &__cats,
-        &__center,
-        &__cat-list {
-            position: static;
+        &__menu,
+        &__center {
+            position: relative;
+            top: auto;
+            left: auto;
+            right: auto;
             transform: none;
         }
 
@@ -191,40 +213,49 @@
             width: min(783px, 100%);
         }
 
-        &__cats {
-            width: 100%;
-            min-height: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 48px;
-            align-items: center;
+        &__center {
+            order: 2;
         }
 
-        &__center {
-            order: -1;
+        &__menu {
+            width: min(420px, 100%);
+            align-items: center;
+
+            &--left {
+                order: 3;
+            }
+
+            &--right {
+                order: 4;
+            }
+        }
+
+        &__menu-active-row,
+        &__cat-item,
+        &__menu--left .pnav__cat-item,
+        &__menu--right .pnav__cat-item {
+            justify-content: center;
         }
 
         &__cat-list,
         &__cat-list--left,
         &__cat-list--right {
-            width: 100%;
             align-items: center;
         }
 
-        &__cat-item,
-        &__cat-list--right .pnav__cat-item {
-            justify-content: center;
-        }
-
-        &__cat-list--right button {
+        &__menu--right .pnav__cat-btn {
             text-align: center;
         }
     }
 
     @media (max-width: 767px) {
+        &__stage {
+            padding: 88px 0;
+        }
+
         &__inner {
             width: calc(100% - 40px);
-            gap: 56px;
+            gap: 48px;
         }
 
         &__title {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
+import { getCategorySlugFromValue } from '../data/productCategories';
 import './GiftGuide.scss';
 
 const GiftGuide = ({ sub }) => {
@@ -9,7 +10,7 @@ const GiftGuide = ({ sub }) => {
     const addToCart = useCartStore(s => s.addToCart);
 
     const giftProducts = sub === 'fragrance'
-        ? products.filter(p => p.category.toLowerCase().includes('fragrance'))
+        ? products.filter((product) => getCategorySlugFromValue(product.category) === 'fragrance')
         : products.filter(p => p.badge.includes('Best') || p.badge.includes('New'));
 
     return (

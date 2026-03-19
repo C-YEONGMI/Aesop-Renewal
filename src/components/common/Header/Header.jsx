@@ -27,20 +27,46 @@ const Header = ({ transparent = false }) => {
             <div className="inner">
                 <nav className="nav">
                     <ul className="depth1">
-                        <li><Link to="/gift-guide">GIFT GUIDE</Link></li>
+                        <li>
+                            <Link to="/gift-guide">GIFT GUIDE</Link>
+                        </li>
                         <li>
                             <Link to="/products">PRODUCTS</Link>
                             <ul className="depth2">
-                                <li><Link to="/products/skincare">SKIN CARE</Link></li>
-                                <li><Link to="/products/fragrance">Perfume</Link></li>
-                                <li><Link to="/products/home">HOME & LIVING</Link></li>
-                                <li><Link to="/products/hair">HAIR & SHAVING</Link></li>
-                                <li><Link to="/products/body">HAND & BODY</Link></li>
-                                <li><Link to="/products/kits">KITS</Link></li>
+                                <li>
+                                    <Link to="/products/skincare">SKIN CARE</Link>
+                                </li>
+                                <li>
+                                    <Link to="/products/fragrance">Perfume</Link>
+                                </li>
+                                <li>
+                                    <Link to="/products/home">HOME · LIVING</Link>
+                                </li>
+                                <li>
+                                    <Link to="/products/hair">HAIR · SHAVING</Link>
+                                </li>
+                                <li>
+                                    <Link to="/products/body">HAND · BODY</Link>
+                                </li>
+                                <li>
+                                    <Link to="/products/kits">KITS</Link>
+                                </li>
                             </ul>
                         </li>
-                        <li><Link to="/benefits">BENEFITS</Link></li>
-                        <li><Link to="/our-story">OUR STORY</Link></li>
+                        <li>
+                            <Link to="/benefits">BENEFITS</Link>
+                            <ul className="depth2">
+                                <li>
+                                    <Link to="/benefits/official">Online</Link>
+                                </li>
+                                <li>
+                                    <Link to="/benefits/kr-exclusive">Korea Exclusive</Link>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <Link to="/our-story">OUR STORY</Link>
+                        </li>
                     </ul>
                 </nav>
 

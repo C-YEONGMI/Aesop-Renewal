@@ -33,13 +33,19 @@ const Header_wh = () => {
                             <ul className="depth2">
                                 <li><a href="/products/skincare">SKIN CARE</a></li>
                                 <li><a href="/products/fragrance">Perfume</a></li>
-                                <li><a href="/products/home">HOME & LIVING</a></li>
-                                <li><a href="/products/hair">HAIR & SHAVING</a></li>
-                                <li><a href="/products/body">HAND & BODY</a></li>
+                                <li><a href="/products/home">HOME · LIVING</a></li>
+                                <li><a href="/products/hair">HAIR · SHAVING</a></li>
+                                <li><a href="/products/body">HAND · BODY</a></li>
                                 <li><a href="/products/kits">KITS</a></li>
                             </ul>
                         </li>
-                        <li><a href="/benefits">BENEFITS</a></li>
+                        <li>
+                            <a href="/benefits">BENEFITS</a>
+                            <ul className="depth2">
+                                <li><a href="/benefits/official">Online</a></li>
+                                <li><a href="/benefits/kr-exclusive">Korea Exclusive</a></li>
+                            </ul>
+                        </li>
                         <li><a href="/our-story">OUR STORY</a></li>
                     </ul>
                 </nav>
