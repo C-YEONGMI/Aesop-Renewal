@@ -19,18 +19,18 @@ gsap.registerPlugin(ScrollTrigger);
 const SLIDES = [
     {
         subtitle: 'thoughtful formulations',
-        desc: '이솝은 멜버른 연구소에서 화학자들이 식물 유래 성분과 검증된 합성 성분을 결합해 포뮬러를 설계하는 하이브리드 접근을 취합니다. 피부에 실제로 필요한 효능과 안전성을 기준으로 충분한 연구·테스트를 거친 제품만을 출시합니다.',
-        overlayColor: 'rgba(50, 41, 29, 0.46)',
+        desc: '이솝은 멜버른 연구소에서 화학자들이 식물 유래 성분과 검증된 합성 성분을 결합해 포뮬러를 설계하는\n하이브리드 접근을 취합니다. 피부에 실제로 필요한 효능과 안전성을 기준으로 충분한 연구·테스트를 거친\n제품만을 출시하며, 항산화와 보호에 초점을 둔 치밀한 포뮬러로 장기적인 피부 균형을 추구합니다.',
+        overlayColor: 'rgba(192, 182, 169, 0.20)', // $brown-200 @ 20%
     },
     {
         subtitle: 'quiet sensory rituals',
-        desc: '이솝은 스킨·바디·헤어 케어를 단순한 관리가 아닌, 하루를 정돈하는 차분한 리추얼로 바라봅니다. 허브·시트러스·우디 노트의 향과 질감이 어우러져 과장되지 않은 감각 경험을 만듭니다.',
-        overlayColor: 'rgba(28, 37, 30, 0.52)',
+        desc: '이솝은 스킨·바디·헤어 케어를 단순한 관리가 아닌, 하루를 정돈하는 차분한 리추얼로 바라봅니다.\n허브·시트러스·우디 노트의 향과 질감, 사용 순서가 어우러져 과장되지 않은 감각 경험을 만들고,\n"즉각적인 기적"보다 꾸준한 루틴과 축적된 변화를 중시합니다.',
+        overlayColor: 'rgba(230, 149, 121, 0.20)', // $point-pink @ 20%
     },
     {
         subtitle: 'local character spaces',
-        desc: '이솝 매장은 어디서나 같은 인테리어를 반복하지 않습니다. 현지 건축가·디자이너와 협업해 지역적 이야기와 브랜드 세계관이 자연스럽게 섞인 공간을 만들며, 각 도시의 맥락과 건축 요소를 존중합니다.',
-        overlayColor: 'rgba(42, 28, 18, 0.50)',
+        desc: '이솝 매장은 어디서나 같은 인테리어를 반복하지 않습니다. 각 도시와 동네의 맥락과 기존 건축 요소를\n존중해 설계됩니다. 현지 건축가·디자이너와 협업해 지역적 이야기와 브랜드 세계관이 자연스럽게\n섞인 공간을 만들며, 갈색 보틀과 절제된 디테일로 이솝만의 경험을 구현합니다.',
+        overlayColor: 'rgba(163, 177, 138, 0.20)', // $point-green @ 20%
     },
 ];
 
@@ -52,6 +52,7 @@ const ORIGINS_TABS = [
         label: 'Formulation',
         en: 'Formulations are developed in-house by chemists, informed by new technologies and established science.\nPlant-derived ingredients are balanced with scientifically developed components, with a focus on protecting and restoring the skin.',
         kr: '자체 실험실에서 화학자들이 새로운 기술과 검증된 과학을 바탕으로 만듭니다.\n식물 유래 성분과 과학적 성분을 균형 있게 조합해, 피부의 보호와 회복에 초점을 둡니다.',
+        enSmall: true,
     },
     {
         id: 'architecture',
@@ -69,29 +70,45 @@ const ORIGINS_TABS = [
 
 const ARCH_IMAGES = [shop01, shop02, shop03, shop04, shop05, shop06];
 
-// Origins 탭 전환 트리거 포인트 (600vh 기준)
-// 앞 4탭 각 100vh, 마지막 Approach 200vh 확보
-// [Origins=0%, Naming=16.67%, Formulation=33.33%, Architecture=50%, Approach=66.67%]
-const ORIGINS_TRIGGER_PCT = [0, 16.67, 33.33, 50, 66.67];
+
+// ── desc 텍스트를 줄별 span 요소로 분해해 container에 주입 ──────────────────
+const setDescLines = (container, text) => {
+    container.innerHTML = '';
+    return text.split('\n').map((line) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'desc-line-wrap';
+        const span = document.createElement('span');
+        span.className = 'desc-line';
+        span.textContent = line;
+        wrap.appendChild(span);
+        container.appendChild(wrap);
+        return span;
+    });
+};
 
 const OurStory = () => {
     // ── Hero refs ────────────────────────────────────────────────────────────
     const pageRef       = useRef(null);
     const heroRef       = useRef(null);
-    const panelRef      = useRef(null);
     const overlayRef    = useRef(null);
     const subtitleRef   = useRef(null);
     const descRef       = useRef(null);
 
-    // ── Origins refs ─────────────────────────────────────────────────────────
-    const originsRef        = useRef(null);   // 500vh 스크롤 컨테이너
-    const originsPanelRef   = useRef(null);   // 100vh 핀 패널
+    // ── Story Mid (Our Values → Origins 통합) refs ──────────────────────────────
+    const storyMidRef       = useRef(null);   // 900vh 섹션 전체
+    const valuesHeadingRef  = useRef(null);
+    const valuesTextsRef    = useRef(null);
+    const valuesEnRef       = useRef(null);
+    const valuesKrRef       = useRef(null);
+    const originsInnerRef   = useRef(null);   // Origins 탭+컨텐츠 영역
+
+    // ── Origins tab refs ─────────────────────────────────────────────────────
     const tabContentEnRef   = useRef(null);
     const tabContentKrRef   = useRef(null);
     const tabButtonRefs     = useRef([]);
     const activeTabRef      = useRef('origins');
 
-    // ── 탭 전환 (클릭 · 스크롤 공용) ─────────────────────────────────────────
+    // ── Origins 탭 전환 (클릭 · 스크롤 공용) ─────────────────────────────────
     const changeTab = useCallback((id) => {
         const tab = ORIGINS_TABS.find((t) => t.id === id);
         if (!tab || activeTabRef.current === id) return;
@@ -109,7 +126,7 @@ const OurStory = () => {
             onComplete: () => {
                 enEl.textContent = tab.en;
                 krEl.textContent = tab.kr;
-                // 활성 탭 버튼 스타일 교체
+                enEl.classList.toggle('about-origins__content-en--sm', !!tab.enSmall);
                 tabButtonRefs.current.forEach((btn) => {
                     if (btn) btn.classList.toggle('is-active', btn.dataset.id === id);
                 });
@@ -123,82 +140,153 @@ const OurStory = () => {
     }, []);
 
     useEffect(() => {
+        // 첫 슬라이드 desc 줄 분해 초기화
+        const initLines = setDescLines(descRef.current, SLIDES[0].desc);
+
         const ctx = gsap.context(() => {
+            // 초기 상태: subtitle + lines invisible
+            gsap.set(subtitleRef.current, { autoAlpha: 0, y: 28 });
+            gsap.set(initLines, { autoAlpha: 0, y: 28 });
+
             const mm = gsap.matchMedia();
 
-            // ── Hero 슬라이드 전환 ────────────────────────────────────────────
-            const changeSlide = (index) => {
-                const slide = SLIDES[index];
-                const tl = gsap.timeline();
-
-                tl.to([subtitleRef.current, descRef.current], {
-                    autoAlpha: 0, y: -28, duration: 0.38, stagger: 0.06, ease: 'power2.in',
-                });
-                tl.to(overlayRef.current, {
-                    backgroundColor: slide.overlayColor, duration: 0.9, ease: 'power2.inOut',
-                }, 0);
-                tl.call(() => {
-                    subtitleRef.current.textContent = slide.subtitle;
-                    descRef.current.textContent     = slide.desc;
-                });
-                tl.fromTo(
-                    [subtitleRef.current, descRef.current],
-                    { autoAlpha: 0, y: 28 },
-                    { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' }
-                );
-            };
-
             mm.add('(prefers-reduced-motion: no-preference)', () => {
-                // ── Hero 핀 ──────────────────────────────────────────────────
-                ScrollTrigger.create({
-                    trigger: heroRef.current,
-                    start: 'top top', end: 'bottom bottom',
-                    pin: panelRef.current, pinSpacing: false,
-                    id: 'hero-panel-pin',
+                // 페이지 진입 시 초기 텍스트 fade-in
+                gsap.to(subtitleRef.current, {
+                    autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.3,
                 });
+                gsap.to(initLines, {
+                    autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.12, ease: 'power3.out', delay: 0.55,
+                });
+
+                // ── Hero 슬라이드 전환 ────────────────────────────────────────
+                const changeSlide = (index) => {
+                    const slide = SLIDES[index];
+                    // 현재 desc lines 수집 (call 시점 snapshot)
+                    const existingLines = descRef.current
+                        ? [...descRef.current.querySelectorAll('.desc-line')]
+                        : [];
+
+                    const tl = gsap.timeline();
+
+                    // Phase 1: fade-out (subtitle + lines 동시에 위로)
+                    tl.to(subtitleRef.current, {
+                        autoAlpha: 0, y: -28, duration: 0.32, ease: 'power2.in',
+                    });
+                    if (existingLines.length) {
+                        tl.to(existingLines, {
+                            autoAlpha: 0, y: -20, duration: 0.22,
+                            stagger: { each: 0.045, from: 'start' },
+                            ease: 'power2.in',
+                        }, '<');
+                    }
+                    // 오버레이 전환 (병렬)
+                    tl.to(overlayRef.current, {
+                        backgroundColor: slide.overlayColor, duration: 0.9, ease: 'power2.inOut',
+                    }, 0);
+
+                    // Phase 2: DOM 교체 + fade-in
+                    tl.call(() => {
+                        subtitleRef.current.textContent = slide.subtitle;
+                        const newLines = setDescLines(descRef.current, slide.desc);
+                        gsap.set(newLines, { autoAlpha: 0, y: 30 });
+
+                        // subtitle fade-in
+                        gsap.fromTo(subtitleRef.current,
+                            { autoAlpha: 0, y: 30 },
+                            { autoAlpha: 1, y: 0, duration: 0.65, ease: 'power3.out' }
+                        );
+                        // 한글 줄 순차 slide-up
+                        gsap.to(newLines, {
+                            autoAlpha: 1, y: 0, duration: 0.52,
+                            stagger: { each: 0.12, from: 'start' },
+                            ease: 'power3.out',
+                            delay: 0.18,
+                        });
+                    });
+                };
+
+                // Hero 슬라이드 트리거 (700vh 기준)
                 ScrollTrigger.create({
-                    trigger: heroRef.current, start: '33.33% top',
+                    trigger: heroRef.current, start: '28.57% top',
                     onEnter: () => changeSlide(1), onLeaveBack: () => changeSlide(0),
                 });
                 ScrollTrigger.create({
-                    trigger: heroRef.current, start: '66.66% top',
+                    trigger: heroRef.current, start: '57.14% top',
                     onEnter: () => changeSlide(2), onLeaveBack: () => changeSlide(1),
                 });
 
-                // ── Origins 핀 ───────────────────────────────────────────────
-                ScrollTrigger.create({
-                    trigger: originsRef.current,
-                    start: 'top top', end: 'bottom bottom',
-                    pin: originsPanelRef.current, pinSpacing: false,
-                    id: 'origins-panel-pin',
+                // ── Story Mid: Our Values → Origins (A안) ───────────────────
+                // 헤딩 초기 위치: GSAP이 xPercent/yPercent 로 중앙 정렬
+                gsap.set(valuesHeadingRef.current, { xPercent: -50, yPercent: -50 });
+
+                // 섹션 진입 reveal (immediateRender:false — scrub from 상태 오염 방지)
+                gsap.from(valuesHeadingRef.current, {
+                    autoAlpha: 0, y: 30, duration: 0.9, ease: 'power3.out',
+                    immediateRender: false,
+                    scrollTrigger: { trigger: storyMidRef.current, start: 'top 65%' },
+                });
+                gsap.from(valuesTextsRef.current, {
+                    autoAlpha: 0, y: 30, duration: 0.9, ease: 'power3.out',
+                    immediateRender: false,
+                    scrollTrigger: { trigger: storyMidRef.current, start: 'top 65%' },
                 });
 
-                // ── Origins 탭 스크롤 전환 (20% 간격 = 100vh) ────────────────
-                // 진입 시 reveal (label + tabs)
-                gsap.from('.about-origins__label', {
-                    autoAlpha: 0, y: 20, duration: 0.8, ease: 'power3.out',
-                    scrollTrigger: { trigger: originsRef.current, start: 'top 80%' },
-                });
-                gsap.from('.about-origins__tab', {
-                    autoAlpha: 0, x: -30, duration: 0.9, stagger: 0.08, ease: 'power3.out',
-                    scrollTrigger: { trigger: originsRef.current, start: 'top 80%' },
+                // EN/KR 텍스트: 11%→22% 구간 scrub fade-out (100vh→200vh)
+                gsap.to(valuesTextsRef.current, {
+                    autoAlpha: 0, y: -20, ease: 'none',
+                    scrollTrigger: {
+                        trigger: storyMidRef.current,
+                        start: '11.1% top',
+                        end: '22.2% top',
+                        scrub: true,
+                    },
                 });
 
-                // 탭 1→4 스크롤 전환
+                // 헤딩: 22%→33% 구간 scrub — 중앙에서 top:140px 로 이동 + scale 0.6
+                // y delta = (140 + h*0.3) - 50vh  (음수 = 위로)
+                gsap.to(valuesHeadingRef.current, {
+                    y: () => 140 + valuesHeadingRef.current.offsetHeight * 0.3 - window.innerHeight / 2,
+                    yPercent: 0,
+                    scale: 0.6,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: storyMidRef.current,
+                        start: '22.2% top',
+                        end: '33.3% top',
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                });
+
+                // Origins inner: 33%→40% scrub slide-up
+                // yPercent:100 → 요소를 자신의 높이(=100vh)만큼 아래로 밀어
+                // 패널의 overflow:hidden 에 의해 물리적으로 잘려 완전히 비가시.
+                // autoAlpha 의존 없이 위치로 제어 → changeTab 내 opacity 충돌 없음.
+                // 역스크롤: scrub이 yPercent:100 으로 되돌아가 자연스럽게 아래로 사라짐.
+                gsap.fromTo(originsInnerRef.current,
+                    { yPercent: 100 },
+                    {
+                        yPercent: 0, ease: 'none',
+                        scrollTrigger: {
+                            trigger: storyMidRef.current,
+                            start: '33.3% top',
+                            end: '40% top',
+                            scrub: 1,
+                        },
+                    }
+                );
+
+                // Origins 탭 스크롤 전환 (44%, 55%, 66%, 77% 트리거)
+                const STORY_TAB_PCT = [0, 44, 55, 66, 77];
                 ORIGINS_TABS.forEach((tab, i) => {
                     if (i === 0) return;
                     ScrollTrigger.create({
-                        trigger: originsRef.current,
-                        start: `${ORIGINS_TRIGGER_PCT[i]}% top`,
+                        trigger: storyMidRef.current,
+                        start: STORY_TAB_PCT[i] + '% top',
                         onEnter:     () => changeTab(tab.id),
                         onLeaveBack: () => changeTab(ORIGINS_TABS[i - 1].id),
                     });
-                });
-
-                // ── Our Values reveal ────────────────────────────────────────
-                gsap.from('.about-values__heading, .about-values__en, .about-values__kr', {
-                    autoAlpha: 0, y: 40, duration: 1, stagger: 0.15, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.about-values', start: 'top 65%' },
                 });
 
                 // ── 하단 섹션 reveals ────────────────────────────────────────
@@ -230,40 +318,37 @@ const OurStory = () => {
 
             // ── reduced-motion fallback ───────────────────────────────────────
             mm.add('(prefers-reduced-motion: reduce)', () => {
-                // Hero 즉시 전환
+                // 초기 텍스트 즉시 표시
+                gsap.set(subtitleRef.current, { autoAlpha: 1, y: 0 });
+                gsap.set(initLines, { autoAlpha: 1, y: 0 });
+
+                const updateSlide = (index) => {
+                    const slide = SLIDES[index];
+                    subtitleRef.current.textContent = slide.subtitle;
+                    const lines = setDescLines(descRef.current, slide.desc);
+                    gsap.set(lines, { autoAlpha: 1, y: 0 });
+                    gsap.set(overlayRef.current, { backgroundColor: slide.overlayColor });
+                };
+
                 ScrollTrigger.create({
-                    trigger: heroRef.current, start: '33.33% top',
-                    onEnter: () => {
-                        subtitleRef.current.textContent = SLIDES[1].subtitle;
-                        descRef.current.textContent     = SLIDES[1].desc;
-                        gsap.set(overlayRef.current, { backgroundColor: SLIDES[1].overlayColor });
-                    },
-                    onLeaveBack: () => {
-                        subtitleRef.current.textContent = SLIDES[0].subtitle;
-                        descRef.current.textContent     = SLIDES[0].desc;
-                        gsap.set(overlayRef.current, { backgroundColor: SLIDES[0].overlayColor });
-                    },
+                    trigger: heroRef.current, start: '28.57% top',
+                    onEnter: () => updateSlide(1), onLeaveBack: () => updateSlide(0),
                 });
                 ScrollTrigger.create({
-                    trigger: heroRef.current, start: '66.66% top',
-                    onEnter: () => {
-                        subtitleRef.current.textContent = SLIDES[2].subtitle;
-                        descRef.current.textContent     = SLIDES[2].desc;
-                        gsap.set(overlayRef.current, { backgroundColor: SLIDES[2].overlayColor });
-                    },
-                    onLeaveBack: () => {
-                        subtitleRef.current.textContent = SLIDES[1].subtitle;
-                        descRef.current.textContent     = SLIDES[1].desc;
-                        gsap.set(overlayRef.current, { backgroundColor: SLIDES[1].overlayColor });
-                    },
+                    trigger: heroRef.current, start: '57.14% top',
+                    onEnter: () => updateSlide(2), onLeaveBack: () => updateSlide(1),
                 });
 
-                // Origins 즉시 전환
+                // Origins inner 즉시 표시 (reduced-motion)
+                gsap.set(originsInnerRef.current, { autoAlpha: 1 });
+
+                // Origins 즉시 전환 (reduced-motion)
+                const STORY_TAB_PCT_RM = [0, 44, 55, 66, 77];
                 ORIGINS_TABS.forEach((tab, i) => {
                     if (i === 0) return;
                     ScrollTrigger.create({
-                        trigger: originsRef.current,
-                        start: `${ORIGINS_TRIGGER_PCT[i]}% top`,
+                        trigger: storyMidRef.current,
+                        start: STORY_TAB_PCT_RM[i] + '% top',
                         onEnter: () => {
                             activeTabRef.current = tab.id;
                             tabContentEnRef.current.textContent = tab.en;
@@ -294,7 +379,7 @@ const OurStory = () => {
 
             {/* ── HERO ── */}
             <section className="about-hero" ref={heroRef} data-node-id="763:1309">
-                <div className="about-hero__panel" ref={panelRef}>
+                <div className="about-hero__panel">
                     <video className="about-hero__video" autoPlay muted loop playsInline>
                         <source src={aboutBg} type="video/mp4" />
                     </video>
@@ -305,41 +390,44 @@ const OurStory = () => {
                     />
                     <div className="about-hero__content">
                         <div className="about-hero__heading">
-                            <span className="about-hero__pre">We cultivate</span>
-                            <span className="about-hero__subtitle" ref={subtitleRef}>
+                            <span className="about-hero__pre montage-128">We cultivate</span>
+                            <span className="about-hero__subtitle optima-70" ref={subtitleRef}>
                                 {SLIDES[0].subtitle}
                             </span>
                         </div>
-                        <p className="about-hero__desc" ref={descRef}>
-                            {SLIDES[0].desc}
-                        </p>
+                        {/* desc: 비어있는 채로 마운트, useEffect에서 줄별 span 주입 */}
+                        <div className="about-hero__desc suit-16-r" ref={descRef} />
                     </div>
                 </div>
             </section>
 
-            {/* ── OUR VALUES ── */}
-            <section className="about-values" data-node-id="763:1371">
-                <div className="about-values__inner">
-                    <h2 className="about-values__heading">Our Values</h2>
-                    <p className="about-values__en">
-                        Through considered formulations, sensory rituals, and an approach to space,
-                        we connect everyday life and environment as a continuous experience.
-                    </p>
-                    <p className="about-values__kr">
-                        신중한 조합과 감각적인 리추얼, 그리고 공간에 대한 태도를 통해,
-                        일상과 환경을 하나의 흐름으로 연결합니다.
-                    </p>
-                </div>
-            </section>
+            {/* ── STORY MID: Our Values → Origins (A안) ── */}
+            {/* 900vh: CSS sticky 패널 안에서 헤딩이 중앙→top:140px 로 이동하며 유지 */}
+            <section className="about-story-mid" ref={storyMidRef} data-node-id="763:1371">
+                <div className="about-story-mid__panel">
 
-            {/* ── ORIGINS : 500vh 스크롤 컨테이너 ── */}
-            <section className="about-origins" ref={originsRef} data-node-id="763:1357">
+                    {/* 헤딩: 초기 중앙 위치, GSAP scrub 으로 top:140px 이동 */}
+                    <h2
+                        className="about-values__heading montage-80"
+                        ref={valuesHeadingRef}
+                    >
+                        Our Values
+                    </h2>
 
-                {/* 100vh 핀 패널 */}
-                <div className="about-origins__panel" ref={originsPanelRef}>
-                    <div className="about-origins__inner">
-                        <p className="about-origins__label">Our Values</p>
+                    {/* EN/KR 텍스트: 헤딩 아래 중앙, scrub fade-out */}
+                    <div className="about-values__texts" ref={valuesTextsRef}>
+                        <p className="about-values__en optima-18" ref={valuesEnRef}>
+                            Through considered formulations, sensory rituals, and an approach to space,<br />
+                            we connect everyday life and environment as a continuous experience.
+                        </p>
+                        <p className="about-values__kr suit-18-r" ref={valuesKrRef}>
+                            신중한 조합과 감각적인 리추얼, 그리고 공간에 대한 태도를 통해,<br />
+                            일상과 환경을 하나의 흐름으로 연결합니다.
+                        </p>
+                    </div>
 
+                    {/* Origins 탭+컨텐츠: 헤딩 고정 후 fade-in */}
+                    <div className="about-origins__inner" ref={originsInnerRef}>
                         <div className="about-origins__body">
                             <nav className="about-origins__tabs">
                                 {ORIGINS_TABS.map((tab, i) => (
@@ -356,25 +444,20 @@ const OurStory = () => {
                             </nav>
 
                             <div className="about-origins__content">
-                                <p
-                                    className="about-origins__content-en"
-                                    ref={tabContentEnRef}
-                                >
+                                <p className="about-origins__content-en" ref={tabContentEnRef}>
                                     {ORIGINS_TABS[0].en}
                                 </p>
-                                <p
-                                    className="about-origins__content-kr"
-                                    ref={tabContentKrRef}
-                                >
+                                <p className="about-origins__content-kr" ref={tabContentKrRef}>
                                     {ORIGINS_TABS[0].kr}
                                 </p>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </section>
 
-            {/* ── FORMULATION ── */}
+                        {/* ── FORMULATION ── */}
             <section className="about-formulation" data-node-id="763:1336">
                 <h2 className="about-formulation__title">Formulation</h2>
                 <img className="about-formulation__texture" src={aboutTexture} alt="" aria-hidden="true" />

@@ -11,9 +11,10 @@
     position: relative;
     height: 600vh;
 
-    // 100vh 핀 패널
+    // 100vh sticky 패널 — CSS sticky로 스크롤 중 완전 고정
     &__panel {
-        position: relative;
+        position: sticky;
+        top: 0;
         height: 100vh;
         overflow: hidden;
     }
@@ -48,7 +49,6 @@
         flex-direction: column;
         text-align: center;
         padding: 0 24px;
-        color: $oatmeal;
     }
 
     &__heading {
@@ -56,126 +56,160 @@
         flex-direction: column;
         max-width: 710px;
         width: 100%;
-        margin-bottom: 32px;
+        margin-bottom: 16px;
     }
 
-    // "We cultivate" — 슬라이드 전환 시 고정
+    // "We cultivate" — montage-128 클래스로 폰트 적용
+    // Figma Montage/128 lineHeight: 100(=1.0) → normal(≈1.2) 오버라이드
     &__pre {
-        font-family: $font-optima;
-        font-style: italic;
-        font-size: clamp(36px, 4.17vw, 80px);
-        line-height: 1.5;
-        color: $oatmeal;
+        color: $brown-700;
+        line-height: 1;
     }
 
-    // 변하는 자막 (e.g. "thoughtful formulations")
+    // 변하는 자막 — optima-70 클래스로 폰트 적용
     &__subtitle {
-        font-family: $font-optima;
-        font-style: italic;
-        font-size: clamp(36px, 4.17vw, 80px);
-        line-height: 1.3;
-        color: $oatmeal;
+        color: $brown-700;
+        margin-top: -32px;
     }
 
-    // 변하는 설명 텍스트
+    // 변하는 설명 텍스트 컨테이너 — suit-16-r 클래스로 폰트 적용
     &__desc {
-        font-family: $font-suit;
-        font-size: clamp(13px, 0.94vw, 18px);
-        font-weight: 400;
-        line-height: 1.9;
-        color: rgba($oatmeal, 0.82);
+        color: $brown-600;
         max-width: 654px;
+        line-height: 1.9;
+        text-align: center;
+    }
+
+    // 줄별 애니메이션 래퍼 — overflow hidden으로 slide-up 클리핑
+    .desc-line-wrap {
+        overflow: hidden;
+        line-height: inherit;
+    }
+
+    .desc-line {
+        display: block;
+    }
+
+    // ── 반응형: 폰트 비율 유지, 전체 블록만 비례 축소 ────────────────────────
+    @media (max-width: 1280px) {
+        &__content {
+            transform: scale(0.82);
+            transform-origin: center center;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        &__content {
+            transform: scale(0.68);
+            transform-origin: center center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        &__content {
+            transform: scale(0.50);
+            transform-origin: center center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        &__content {
+            transform: scale(0.36);
+            transform-origin: center center;
+        }
+    }
+}
+
+// ─── Story Mid (Our Values → Origins 통합 섹션) ───────────────────────────────
+// 헤딩이 화면 중앙에서 시작해 스크롤 시 top:140px에 머물며 Origins 컨텐츠가 아래서 올라오는 A안
+.about-story-mid {
+    position: relative;
+    height: 900vh;
+    background-color: $oatmeal;
+
+    // CSS sticky 패널 — 100vh 고정
+    &__panel {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+        background-color: $oatmeal;
     }
 }
 
 // ─── Our Values ───────────────────────────────────────────────────────────────
 .about-values {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background-color: $oatmeal;
-    padding: 0 24px;
+    // 헤딩: 패널 안에서 absolute 배치, GSAP이 중앙→top:140px 로 이동
+    &__heading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        // GSAP이 xPercent:-50, yPercent:-50 으로 중앙 정렬 후 스크럽
+        color: $brown-700;
+        line-height: 1;
+        white-space: nowrap;
+        z-index: 2;
+        pointer-events: none;
+    }
 
-    &__inner {
-        max-width: 593px;
+    // EN/KR 텍스트 묶음: 헤딩 바로 아래 위치, GSAP이 fade-out
+    &__texts {
+        position: absolute;
+        left: 50%;
+        top: calc(50% + 56px); // 헤딩 높이(80px/2=40px) + gap(16px) = 56px
+        transform: translateX(-50%);
+        text-align: center;
         display: flex;
         flex-direction: column;
         gap: 16px;
+        max-width: 593px;
+        width: calc(100% - 48px);
+        z-index: 2;
     }
 
-    &__heading {
-        font-family: $font-optima;
-        font-size: clamp(40px, 3.6vw, 70px);
-        line-height: 1.15;
-        color: $brown-800;
-        margin-bottom: 8px;
-    }
-
+    // optima-18 클래스로 폰트 적용
     &__en {
-        font-family: $font-suit;
-        font-size: clamp(14px, 0.94vw, 18px);
-        font-weight: 400;
-        line-height: 1.8;
         color: $brown-600;
     }
 
+    // suit-18-r 클래스로 폰트 적용
     &__kr {
-        font-family: $font-suit;
-        font-size: clamp(13px, 0.83vw, 16px);
-        font-weight: 400;
-        line-height: 1.8;
-        color: $brown-500;
+        color: $brown-600;
     }
 }
 
 // ─── Origins ──────────────────────────────────────────────────────────────────
 .about-origins {
-    position: relative;
-    height: 600vh;   // 앞 4탭 × 100vh + 마지막 탭 200vh — GSAP이 패널을 핀
-    background-color: $oatmeal;
-
-    // 100vh 핀 패널
-    &__panel {
-        position: relative;
-        height: 100vh;
-        overflow: hidden;
-        background-color: $oatmeal;
-    }
-
+    // 탭/컨텐츠 영역: 헤딩 고정 위치 아래에 배치 (GSAP이 초기 autoAlpha:0)
+    // padding-top: 헤딩top(140) + 헤딩높이@scale0.6(48) + Figma gap(160) = 348px
     &__inner {
-        padding: 140px 8.85% 0; // 170/1920 = 8.85%
-        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 348px 8.85% 0; // Figma: top:140px label + 160px gap
     }
 
-    &__label {
-        font-family: $font-optima;
-        font-size: 16px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: $brown-400;
-        margin-bottom: 0;
-    }
-
+    // Figma: tabs(455px) gap(361px) content(764px) = 1580px 내부
     &__body {
         display: grid;
-        grid-template-columns: 28.8% auto; // 455/1580 ≈ 28.8%
-        gap: 0;
-        margin-top: 48px;
+        grid-template-columns: 28.8% 1fr; // 455/1580 ≈ 28.8%
+        column-gap: 22.8%;               // 361/1580 ≈ 22.8%
         align-items: start;
     }
 
     &__tabs {
         display: flex;
         flex-direction: column;
-        gap: 0;
+        gap: 32px; // Figma gap: 32px
         list-style: none;
         padding: 0;
         border: none;
         background: none;
     }
 
+    // Figma: Montage/80, brown-700, inactive opacity:30%
     &__tab {
         display: block;
         width: 100%;
@@ -184,47 +218,50 @@
         border: none;
         cursor: pointer;
         padding: 0;
-        font-family: $font-optima;
-        font-size: clamp(32px, 3.33vw, 64px);
-        line-height: 1.25;
-        color: $brown-200;
-        transition: color 0.3s ease;
-        padding-bottom: 12px;
+        font-family: $font-montage;
+        font-size: clamp(32px, 4.17vw, 80px);
+        font-weight: 400;
+        line-height: 1;
+        color: $brown-700;
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
 
         &.is-active {
-            color: $brown-800;
+            opacity: 1;
         }
 
         &:hover:not(.is-active) {
-            color: $brown-500;
+            opacity: 0.6;
         }
     }
 
     &__content {
-        padding-left: 8%;
         padding-top: 8px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 16px; // Figma gap: 16px
     }
 
+    // Figma: Optima/48, brown-700
     &__content-en {
-        font-family: $font-suit;
-        font-size: clamp(16px, 1.25vw, 24px);
+        font-family: $font-optima;
+        font-size: clamp(24px, 2.5vw, 48px);
         font-weight: 400;
-        line-height: 1.75;
+        line-height: normal;
         color: $brown-700;
-        max-width: 764px;
-        white-space: pre-line;
+
+        // Formulation 탭만 40px (Figma 지정)
+        &--sm {
+            font-size: clamp(20px, 2.08vw, 40px);
+        }
     }
 
     &__content-kr {
         font-family: $font-suit;
-        font-size: clamp(13px, 0.83vw, 16px);
+        font-size: clamp(13px, 0.94vw, 18px);
         font-weight: 400;
-        line-height: 1.8;
-        color: $brown-500;
-        max-width: 460px;
+        line-height: 1.5;
+        color: $brown-600;
         white-space: pre-line;
     }
 }
