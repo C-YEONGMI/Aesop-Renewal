@@ -23,7 +23,7 @@ const CATEGORY_DATA = [
     {
         id: 'body',
         label: 'Hand · Body',
-        centerLabel: 'Hand Body',
+        centerLabel: 'Hand · Body',
         link: '/products/body',
         bgImage: pnavHandBody,
     },
@@ -37,14 +37,14 @@ const CATEGORY_DATA = [
     {
         id: 'home',
         label: 'Home · Living',
-        centerLabel: 'Home Living',
+        centerLabel: 'Home · Living',
         link: '/products/home',
         bgImage: pnavHomeLiving,
     },
     {
         id: 'hair',
         label: 'Hair · Shaving',
-        centerLabel: 'Hair Shaving',
+        centerLabel: 'Hair · Shaving',
         link: '/products/hair',
         bgImage: pnavHairShaving,
     },
@@ -106,7 +106,8 @@ const ProductNavigatorSection = () => {
                 <div className="pnav__header">
                     <h2 className="pnav__title montage-220">Product</h2>
                     <p className="pnav__desc suit-20-r">
-                        피부와 손길, 향과 공간에 이르기까지, 이솝의 다양한 제품군을 천천히 살펴보세요.
+                        피부와 손길, 향과 공간에 이르기까지, 이솝의 다양한 제품군을 천천히
+                        살펴보세요.
                     </p>
                 </div>
 
