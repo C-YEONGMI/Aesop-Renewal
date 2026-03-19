@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import BenefitsPageHeader from '../components/common/benefits/BenefitsPageHeader';
 import './KrExclusiveBenefits.scss';
 import { krExclusiveBenefitsContent } from '../data/krExclusiveBenefitsContent';
 
@@ -116,21 +115,6 @@ const DESKTOP_SCRUB_RECIPES = [
         trigger: '.kr-exclusive-packaging',
         selectors: ['.kr-exclusive-packaging__detail img'],
         vars: { yPercent: -4, scale: 1.06 },
-    },
-    {
-        trigger: '.kr-exclusive-overview',
-        selectors: ['.kr-exclusive-overview__visual--top-right'],
-        vars: { yPercent: -8, xPercent: 4 },
-    },
-    {
-        trigger: '.kr-exclusive-overview',
-        selectors: ['.kr-exclusive-overview__visual--bottom-right'],
-        vars: { yPercent: -12, xPercent: -2 },
-    },
-    {
-        trigger: '.kr-exclusive-overview',
-        selectors: ['.kr-exclusive-overview__visual--bottom-left'],
-        vars: { yPercent: 8, xPercent: 3 },
     },
 ];
 
@@ -282,7 +266,6 @@ const KrExclusiveBenefits = () => {
     return (
         <div className="kr-exclusive-page" ref={pageRef}>
             <div className="kr-exclusive-page__header-space" />
-            <BenefitsPageHeader activeKey="kr-exclusive" />
 
             <section
                 className="kr-exclusive-hero"

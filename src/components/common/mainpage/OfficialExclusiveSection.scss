@@ -38,7 +38,6 @@
         align-items: flex-start;
         gap: 32px;
         z-index: 10;
-        will-change: transform;
     }
 
     &__copy {
@@ -91,20 +90,14 @@
     }
 
     &__btn-wrapper {
-        .btn-more-box {
-            width: 134px;
-            height: 34px;
-            padding: 5px 10px;
-            border-width: 0.5px;
-            justify-content: center;
-        }
+        display: flex;
     }
 
     &__img {
         position: absolute;
         overflow: hidden;
         z-index: 4;
-        will-change: transform, opacity;
+        border-radius: 0;
     }
 
     &__bg-logo {
@@ -121,8 +114,7 @@
         display: block;
         max-width: none;
         object-fit: cover;
-        will-change: transform;
-        transform-origin: center center;
+        border-radius: 0;
     }
 
     @media (max-width: 1439px) {

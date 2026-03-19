@@ -4,6 +4,7 @@ import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
 import useAuthStore from '../store/useAuthStore';
+import { getCategoryRouteFromValue } from '../data/productCategories';
 import './ProductDetail.scss';
 
 const TABS = ['상품 설명', '성분', '패키징 & 환경', '배송 & 반품', '리뷰'];
@@ -37,6 +38,7 @@ const ProductDetail = () => {
     }
 
     const variant = product.variants[selectedVariant];
+    const categoryPath = getCategoryRouteFromValue(product.category);
 
     const handleAddToCart = () => {
         addToCart(product, selectedVariant);
@@ -58,7 +60,7 @@ const ProductDetail = () => {
                 <nav className="product-detail__breadcrumb suit-14-m">
                     <Link to="/">홈</Link>
                     <span> / </span>
-                    <Link to="/products">{product.category}</Link>
+                    <Link to={categoryPath}>{product.category}</Link>
                     <span> / </span>
                     <span>{product.name}</span>
                 </nav>
