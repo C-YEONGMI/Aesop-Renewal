@@ -42,12 +42,11 @@ const ProductDetail = () => {
 
     const handleAddToCart = () => {
         addToCart(product, selectedVariant);
-        alert('장바구니에 담겼습니다.');
     };
 
     const handleBuyNow = () => {
         if (!isLoggedIn) { navigate('/login'); return; }
-        addToCart(product, selectedVariant);
+        addToCart(product, selectedVariant, { showDialog: false });
         navigate('/cart');
     };
 

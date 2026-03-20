@@ -158,7 +158,9 @@ const Products = () => {
         }
 
         skipRouteCategorySyncRef.current = true;
-        navigate(nextPath);
+        navigate(nextPath, {
+            state: { preserveScroll: true },
+        });
     };
 
     const handleCategoryToggle = (categorySlug) => {

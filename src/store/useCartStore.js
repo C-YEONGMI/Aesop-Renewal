@@ -7,39 +7,73 @@ const useCartStore = create(
     persist(
         (set, get) => ({
             cartItems: [], // { cartId, productId, name, image, category, variant, quantity, price }
+            isCartDialogOpen: false,
+            cartDialogItem: null,
 
             // 장바구니 담기
-            addToCart: (product, variantIndex = 0) => {
+            addToCart: (product, variantIndex = 0, options = {}) => {
+                const { showDialog = true, preserveDialog = false } = options;
                 const variant = product.variants[variantIndex];
                 const cartId = `${product.name}-${variantIndex}`;
                 const items = get().cartItems;
                 const existing = items.find(item => item.cartId === cartId);
+                const currentDialogState = {
+                    isCartDialogOpen: get().isCartDialogOpen,
+                    cartDialogItem: get().cartDialogItem,
+                };
+                const cartDialogItem = {
+                    cartId,
+                    productName: product.name,
+                    category: product.category,
+                    image: variant.image,
+                    variant: variant.capacity || '',
+                    price: variant.price,
+                };
+                const nextCartItems = existing
+                    ? items.map(item =>
+                        item.cartId === cartId
+                            ? { ...item, quantity: item.quantity + 1 }
+                            : item
+                    )
+                    : [
+                        ...items,
+                        {
+                            cartId,
+                            productName: product.name,
+                            category: product.category,
+                            image: variant.image,
+                            variant: variant.capacity || '',
+                            quantity: 1,
+                            price: variant.price,
+                            checked: true,
+                        },
+                    ];
 
-                if (existing) {
-                    set({
-                        cartItems: items.map(item =>
-                            item.cartId === cartId
-                                ? { ...item, quantity: item.quantity + 1 }
-                                : item
-                        ),
-                    });
-                } else {
-                    set({
-                        cartItems: [
-                            ...items,
-                            {
-                                cartId,
-                                productName: product.name,
-                                category: product.category,
-                                image: variant.image,
-                                variant: variant.capacity || '',
-                                quantity: 1,
-                                price: variant.price,
-                                checked: true,
-                            },
-                        ],
-                    });
-                }
+                set({
+                    cartItems: nextCartItems,
+                    isCartDialogOpen: preserveDialog
+                        ? currentDialogState.isCartDialogOpen
+                        : showDialog,
+                    cartDialogItem: preserveDialog
+                        ? currentDialogState.cartDialogItem
+                        : showDialog
+                            ? cartDialogItem
+                            : null,
+                });
+            },
+
+            openCartDialog: (cartDialogItem) => {
+                set({
+                    isCartDialogOpen: true,
+                    cartDialogItem,
+                });
+            },
+
+            closeCartDialog: () => {
+                set({
+                    isCartDialogOpen: false,
+                    cartDialogItem: null,
+                });
             },
 
             // 수량 변경
