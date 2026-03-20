@@ -140,20 +140,20 @@ const CartAddDialog = () => {
 
                         <div className="cart-add-dialog__copy">
                             <div className="cart-add-dialog__copy-main">
-                                <p className="cart-add-dialog__category suit-12-r">
+                                <p className="cart-add-dialog__category suit-14-m">
                                     {cartDialogItem.category}
                                 </p>
-                                <p className="cart-add-dialog__name suit-18-m">
+                                <p className="cart-add-dialog__name suit-24-r">
                                     {cartDialogItem.productName}
                                 </p>
                                 {cartDialogItem.variant ? (
-                                    <p className="cart-add-dialog__meta suit-14-m">
+                                    <p className="cart-add-dialog__meta suit-18-r">
                                         {cartDialogItem.variant}
                                     </p>
                                 ) : null}
                             </div>
                             {formattedPrice ? (
-                                <p className="cart-add-dialog__price suit-14-m">
+                                <p className="cart-add-dialog__price suit-20-m">
                                     {formattedPrice}
                                 </p>
                             ) : null}

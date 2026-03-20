@@ -78,21 +78,16 @@
 
     &__category {
         color: rgba($brown-700, 0.78);
-        font-size: 13px;
         letter-spacing: 0.08em;
     }
 
     &__meta {
         color: rgba($brown-700, 0.78);
-        font-size: 16px;
-        line-height: 1.45;
     }
 
     &__name {
         color: $brown-900;
         letter-spacing: -0.01em;
-        font-size: clamp(22px, 2vw, 28px);
-        line-height: 1.25;
     }
 
     &__price {
@@ -100,9 +95,6 @@
         align-self: end;
         text-align: right;
         white-space: nowrap;
-        font-weight: 600;
-        font-size: 18px;
-        line-height: 1.3;
     }
 
     &__recommendations {
