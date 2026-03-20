@@ -1,127 +1,245 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import useCartStore from '../store/useCartStore';
 import useAuthStore from '../store/useAuthStore';
+import useCartStore from '../store/useCartStore';
 import './Cart.scss';
 
 const SHIPPING_FEE = 3000;
 const FREE_SHIPPING = 50000;
 
+const formatPrice = (value) => `${value.toLocaleString('ko-KR')}원`;
+
+const getEstimatedArrivalLabel = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 2);
+
+    return `지금 주문하면 ${date.getMonth() + 1}/${date.getDate()} 이내 도착 예정`;
+};
+
+const CartCheckbox = ({
+    checked,
+    onClick,
+    children,
+    className = '',
+    ariaLabel,
+}) => (
+    <button
+        type="button"
+        className={`cart-page__checkbox ${checked ? 'is-checked' : ''} ${className}`.trim()}
+        onClick={onClick}
+        aria-pressed={checked}
+        aria-label={ariaLabel}
+    >
+        <span className="cart-page__checkbox-box" aria-hidden="true">
+            <svg viewBox="0 0 12 12">
+                <path
+                    d="M1.5 6L4.5 9L10.5 3"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                />
+            </svg>
+        </span>
+        {children ? <span className="cart-page__checkbox-label">{children}</span> : null}
+    </button>
+);
+
 const Cart = () => {
     const navigate = useNavigate();
-    const isLoggedIn = useAuthStore(s => s.isLoggedIn);
-    const cartItems = useCartStore(s => s.cartItems);
-    const updateQuantity = useCartStore(s => s.updateQuantity);
-    const removeItem = useCartStore(s => s.removeItem);
-    const toggleCheck = useCartStore(s => s.toggleCheck);
-    const toggleAll = useCartStore(s => s.toggleAll);
-    const removeChecked = useCartStore(s => s.removeChecked);
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const cartItems = useCartStore((state) => state.cartItems);
+    const updateQuantity = useCartStore((state) => state.updateQuantity);
+    const removeItem = useCartStore((state) => state.removeItem);
+    const toggleCheck = useCartStore((state) => state.toggleCheck);
+    const toggleAll = useCartStore((state) => state.toggleAll);
+    const removeChecked = useCartStore((state) => state.removeChecked);
 
-    const checkedItems = cartItems.filter(i => i.checked);
-    // store 메서드 호출 대신 직접 계산
+    const checkedItems = cartItems.filter((item) => item.checked);
     const subtotal = checkedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const shipping = subtotal >= FREE_SHIPPING ? 0 : (subtotal > 0 ? SHIPPING_FEE : 0);
     const total = subtotal + shipping;
-
-    const allChecked = cartItems.length > 0 && cartItems.every(i => i.checked);
+    const allChecked = cartItems.length > 0 && cartItems.every((item) => item.checked);
+    const estimatedArrivalLabel = getEstimatedArrivalLabel();
 
     const handleOrder = () => {
-        if (!isLoggedIn) { navigate('/login'); return; }
-        if (checkedItems.length === 0) { alert('주문할 상품을 선택해주세요.'); return; }
+        if (!isLoggedIn) {
+            navigate('/login');
+            return;
+        }
+
+        if (checkedItems.length === 0) {
+            alert('주문할 상품을 선택해주세요.');
+            return;
+        }
+
+        navigate('/checkout');
+    };
+
+    const handleDirectOrder = (cartId) => {
+        if (!isLoggedIn) {
+            navigate('/login');
+            return;
+        }
+
+        toggleAll(false);
+        toggleCheck(cartId);
         navigate('/checkout');
     };
 
     return (
         <div className="cart-page">
             <div className="cart-page__header-space" />
+
             <div className="cart-page__inner">
-                <h1 className="cart-page__title optima-40">장바구니</h1>
+                <h1 className="cart-page__title" id="cart-page-title">장바구니</h1>
 
                 {cartItems.length === 0 ? (
-                    <div className="cart-page__empty">
-                        <p className="suit-18-r">장바구니가 비어 있습니다.</p>
-                        <Link to="/products" className="cart-page__go-shopping optima-16">
-                            쇼핑 계속하기
+                    <section className="cart-page__empty" aria-labelledby="cart-page-title">
+                        <p className="cart-page__empty-copy">장바구니에 담긴 상품이 없습니다.</p>
+                        <Link to="/products" className="cart-page__empty-link">
+                            제품 보러가기
                         </Link>
-                    </div>
+                    </section>
                 ) : (
                     <div className="cart-page__content">
-                        {/* 상품 목록 */}
-                        <div className="cart-page__list">
-                            {/* 전체 선택 */}
-                            <div className="cart-page__select-all suit-14-m">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={allChecked}
-                                        onChange={e => toggleAll(e.target.checked)}
-                                    />
-                                    전체 선택 ({checkedItems.length}/{cartItems.length})
-                                </label>
-                                <button className="cart-page__delete-selected suit-14-m" onClick={removeChecked}>
+                        <section className="cart-page__table" aria-labelledby="cart-page-title">
+                            <div className="cart-page__toolbar">
+                                <CartCheckbox
+                                    checked={allChecked}
+                                    onClick={() => toggleAll(!allChecked)}
+                                    ariaLabel="전체 선택"
+                                >
+                                    전체 선택
+                                </CartCheckbox>
+
+                                <button
+                                    type="button"
+                                    className="cart-page__delete-selected"
+                                    onClick={removeChecked}
+                                    disabled={checkedItems.length === 0}
+                                >
                                     선택 삭제
                                 </button>
                             </div>
 
-                            {cartItems.map(item => (
-                                <div key={item.cartId} className="cart-page__item">
-                                    <label className="cart-page__item-check">
-                                        <input
-                                            type="checkbox"
-                                            checked={item.checked}
-                                            onChange={() => toggleCheck(item.cartId)}
-                                        />
-                                    </label>
-                                    <div className="cart-page__item-img">
-                                        <img src={item.image} alt={item.productName} />
-                                    </div>
-                                    <div className="cart-page__item-info">
-                                        <p className="suit-12-r cart-page__item-cat">{item.category}</p>
-                                        <p className="suit-18-m cart-page__item-name">{item.productName}</p>
-                                        {item.variant && <p className="suit-14-m cart-page__item-variant">{item.variant}</p>}
-                                        <p className="suit-16-r cart-page__item-price">{item.price?.toLocaleString()}원</p>
-                                    </div>
-                                    <div className="cart-page__item-qty">
-                                        <button onClick={() => updateQuantity(item.cartId, item.quantity - 1)}>−</button>
-                                        <span className="suit-16-r">{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item.cartId, item.quantity + 1)}>+</button>
-                                    </div>
-                                    <p className="cart-page__item-total suit-18-m">
-                                        {(item.price * item.quantity)?.toLocaleString()}원
-                                    </p>
-                                    <button className="cart-page__item-delete" onClick={() => removeItem(item.cartId)}>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
+                            <div className="cart-page__columns" aria-hidden="true">
+                                <span />
+                                <span>상품 정보</span>
+                                <span>수량</span>
+                                <span>판매 금액</span>
+                                <span />
+                            </div>
 
-                        {/* 주문 요약 */}
-                        <div className="cart-page__summary">
-                            <h2 className="optima-20 cart-page__summary-title">주문 요약</h2>
-                            <div className="cart-page__summary-row suit-16-r">
-                                <span>상품 합계</span>
-                                <span>{subtotal.toLocaleString()}원</span>
+                            <div className="cart-page__items">
+                                {cartItems.map((item) => (
+                                    <article className="cart-page__item" key={item.cartId}>
+                                        <div className="cart-page__item-check-cell">
+                                            <CartCheckbox
+                                                checked={item.checked}
+                                                onClick={() => toggleCheck(item.cartId)}
+                                                className="cart-page__checkbox--row"
+                                                ariaLabel={`${item.productName} 선택`}
+                                            />
+                                        </div>
+
+                                        <div className="cart-page__item-main">
+                                            <div className="cart-page__item-image">
+                                                <img src={item.image} alt={item.productName} loading="lazy" />
+                                            </div>
+
+                                            <div className="cart-page__item-copy">
+                                                <p className="cart-page__item-name">{item.productName}</p>
+                                                {item.variant ? (
+                                                    <p className="cart-page__item-meta">옵션 ({item.variant})</p>
+                                                ) : null}
+                                                {item.category ? (
+                                                    <p className="cart-page__item-meta">{item.category}</p>
+                                                ) : null}
+                                            </div>
+                                        </div>
+
+                                        <div className="cart-page__item-quantity-cell">
+                                            <div className="cart-page__quantity-box">
+                                                <button
+                                                    type="button"
+                                                    className="cart-page__quantity-btn"
+                                                    onClick={() => updateQuantity(item.cartId, item.quantity - 1)}
+                                                    aria-label={`${item.productName} 수량 줄이기`}
+                                                >
+                                                    −
+                                                </button>
+                                                <span className="cart-page__quantity-value">{item.quantity}</span>
+                                                <button
+                                                    type="button"
+                                                    className="cart-page__quantity-btn"
+                                                    onClick={() => updateQuantity(item.cartId, item.quantity + 1)}
+                                                    aria-label={`${item.productName} 수량 늘리기`}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <p className="cart-page__item-total">
+                                            {formatPrice(item.price * item.quantity)}
+                                        </p>
+
+                                        <div className="cart-page__item-actions">
+                                            <button
+                                                type="button"
+                                                className="cart-page__buy-now"
+                                                onClick={() => handleDirectOrder(item.cartId)}
+                                            >
+                                                바로 구매
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="cart-page__delete-item"
+                                                onClick={() => removeItem(item.cartId)}
+                                            >
+                                                삭제
+                                            </button>
+                                        </div>
+                                    </article>
+                                ))}
                             </div>
-                            <div className="cart-page__summary-row suit-16-r">
-                                <span>배송비</span>
-                                <span>{shipping === 0 ? '무료' : `${shipping.toLocaleString()}원`}</span>
+                        </section>
+
+                        <aside className="cart-page__aside">
+                            <div className="cart-page__summary">
+                                <h2 className="cart-page__summary-title">주문정보</h2>
+
+                                <div className="cart-page__summary-body">
+                                    <div className="cart-page__summary-row">
+                                        <span className="cart-page__summary-label">주문 금액</span>
+                                        <span className="cart-page__summary-value">{formatPrice(subtotal)}</span>
+                                    </div>
+
+                                    <div className="cart-page__summary-row">
+                                        <span className="cart-page__summary-label">배송비</span>
+                                        <span className="cart-page__summary-value">{formatPrice(shipping)}</span>
+                                    </div>
+
+                                    <div className="cart-page__summary-divider" />
+
+                                    <div className="cart-page__summary-total">
+                                        <span>총 결제 금액</span>
+                                        <strong>{formatPrice(total)}</strong>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    className="cart-page__checkout"
+                                    onClick={handleOrder}
+                                >
+                                    결제하기
+                                </button>
                             </div>
-                            {subtotal > 0 && subtotal < FREE_SHIPPING && (
-                                <p className="cart-page__free-msg suit-12-r">
-                                    {(FREE_SHIPPING - subtotal).toLocaleString()}원 더 구매하면 무료배송!
-                                </p>
-                            )}
-                            <div className="cart-page__summary-total suit-24-sb">
-                                <span>총 결제금액</span>
-                                <span>{total.toLocaleString()}원</span>
-                            </div>
-                            <button className="cart-page__order-btn suit-18-m" onClick={handleOrder}>
-                                주문하기 ({checkedItems.length}개)
-                            </button>
-                        </div>
+
+                            <p className="cart-page__delivery-note">{estimatedArrivalLabel}</p>
+                        </aside>
                     </div>
                 )}
             </div>

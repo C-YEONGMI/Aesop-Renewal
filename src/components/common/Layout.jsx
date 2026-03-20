@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -12,6 +12,23 @@ const Layout = () => {
     const location = useLocation();
     const isHome = location.pathname === '/';
     const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        if (!('scrollRestoration' in window.history)) {
+            return undefined;
+        }
+
+        const previousValue = window.history.scrollRestoration;
+        window.history.scrollRestoration = 'manual';
+
+        return () => {
+            window.history.scrollRestoration = previousValue;
+        };
+    }, []);
+
+    useLayoutEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, [location.key]);
 
     useEffect(() => {
         if (!isHome) {

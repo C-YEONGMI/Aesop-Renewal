@@ -179,158 +179,1165 @@ const OUTRO = {
     alt: '한국 익스클루시브 세트 이미지',
 };
 
-// Section-level animation recipes are kept together so timing and targets stay easy to tweak later.
-const SECTION_REVEAL_RECIPES = [
-    {
-        trigger: '.kr-exclusive-configuration',
-        selectors: [
-            '.kr-exclusive-configuration .kr-exclusive-page__section-title',
-            '.kr-exclusive-configuration .kr-exclusive-page__section-copy',
-        ],
-        from: { autoAlpha: 0, y: 36 },
-        to: { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out' },
-    },
-    {
-        trigger: '.kr-exclusive-configuration__products',
-        selectors: ['.kr-exclusive-configuration__product'],
-        from: { autoAlpha: 0, y: 56 },
-        to: { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out' },
-        start: 'top 78%',
-    },
-    {
-        trigger: '.kr-exclusive-heritage',
-        selectors: [
-            '.kr-exclusive-heritage .kr-exclusive-page__section-title',
-            '.kr-exclusive-heritage .kr-exclusive-page__section-body',
-        ],
-        from: { autoAlpha: 0, y: 36 },
-        to: { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out' },
-    },
-    {
-        trigger: '.kr-exclusive-heritage__gallery',
-        selectors: ['.kr-exclusive-heritage__panel--left', '.kr-exclusive-heritage__panel--right'],
-        from: { autoAlpha: 0, y: 60, scale: 0.96 },
-        to: { autoAlpha: 1, y: 0, scale: 1, duration: 1, stagger: 0.14, ease: 'power3.out' },
-        start: 'top 78%',
-    },
-    {
-        trigger: '.kr-exclusive-heritage__panel--right',
-        selectors: ['.kr-exclusive-heritage__quote'],
-        from: { autoAlpha: 0, y: 28 },
-        to: { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-        start: 'top 72%',
-    },
-    {
-        trigger: '.kr-exclusive-gift-card',
-        selectors: ['.kr-exclusive-gift-card__content > *'],
-        from: { autoAlpha: 0, x: 40 },
-        to: { autoAlpha: 1, x: 0, duration: 0.85, stagger: 0.1, ease: 'power3.out' },
-    },
-    {
-        trigger: '.kr-exclusive-packaging',
-        selectors: [
-            '.kr-exclusive-packaging .kr-exclusive-page__section-title',
-            '.kr-exclusive-packaging .kr-exclusive-page__section-copy',
-        ],
-        from: { autoAlpha: 0, y: 36 },
-        to: { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out' },
-    },
-    {
-        trigger: '.kr-exclusive-packaging__views',
-        selectors: ['.kr-exclusive-packaging__view'],
-        from: { autoAlpha: 0, y: 42 },
-        to: { autoAlpha: 1, y: 0, duration: 0.85, stagger: 0.1, ease: 'power3.out' },
-        start: 'top 80%',
-    },
-    {
-        trigger: '.kr-exclusive-packaging__gallery',
-        selectors: ['.kr-exclusive-packaging__feature', '.kr-exclusive-packaging__detail'],
-        from: { autoAlpha: 0, y: 56, scale: 0.97 },
-        to: { autoAlpha: 1, y: 0, scale: 1, duration: 0.95, stagger: 0.12, ease: 'power3.out' },
-        start: 'top 78%',
-    },
-    {
-        trigger: '.kr-exclusive-overview',
-        selectors: ['.kr-exclusive-overview__copy > *'],
-        from: { autoAlpha: 0, y: 36 },
-        to: { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1, ease: 'power3.out' },
-    },
-    {
-        trigger: '.kr-exclusive-overview__collage',
-        selectors: ['.kr-exclusive-overview__visual'],
-        from: { autoAlpha: 0, y: 64, scale: 0.94 },
-        to: { autoAlpha: 1, y: 0, scale: 1, duration: 1, stagger: 0.12, ease: 'power3.out' },
-        start: 'top 78%',
-    },
-    {
-        trigger: '.kr-exclusive-outro',
-        selectors: ['.kr-exclusive-outro__background'],
-        from: { autoAlpha: 0, scale: 1.04 },
-        to: { autoAlpha: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
-        start: 'top 85%',
-    },
-];
-
-const DESKTOP_SCRUB_RECIPES = [
-    {
-        trigger: '.kr-exclusive-hero',
-        selectors: ['.kr-exclusive-hero__background'],
-        vars: { yPercent: 6, scale: 1.04 },
-        start: 'top top',
-        end: 'bottom top',
-    },
-    {
-        trigger: '.kr-exclusive-packaging',
-        selectors: ['.kr-exclusive-packaging__feature img'],
-        vars: { yPercent: -6, scale: 1.08 },
-    },
-    {
-        trigger: '.kr-exclusive-packaging',
-        selectors: ['.kr-exclusive-packaging__detail img'],
-        vars: { yPercent: -4, scale: 1.06 },
-    },
-];
-
 const renderTextBlock = (lines) => lines.join('\n');
 
 const getScopedElements = (scope, selectors) =>
     selectors.flatMap((selector) => Array.from(scope.querySelectorAll(selector)));
 
-const createSectionReveal = (scope, recipe) => {
-    const targets = getScopedElements(scope, recipe.selectors);
-    const trigger = scope.querySelector(recipe.trigger);
-
-    if (!targets.length || !trigger) {
+const animateSectionFrame = (target, trigger, options = {}) => {
+    if (!target || !trigger) {
         return;
     }
 
-    gsap.fromTo(targets, recipe.from, {
-        ...recipe.to,
-        scrollTrigger: {
-            trigger,
-            start: recipe.start ?? 'top 72%',
-            once: recipe.once ?? true,
+    const {
+        start = 'top 78%',
+        from = {},
+        to = {},
+    } = options;
+
+    gsap.fromTo(
+        target,
+        {
+            autoAlpha: 0,
+            y: 22,
+            scale: 0.988,
+            transformOrigin: 'center top',
+            ...from,
         },
+        {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: 'power2.out',
+            ...to,
+            scrollTrigger: {
+                trigger,
+                start,
+                once: true,
+            },
+        }
+    );
+};
+
+const createSectionPresenceTransitions = (scope) => {
+    const recipes = [
+        {
+            sectionSelector: '.kr-exclusive-configuration',
+            targetSelector: '.kr-exclusive-configuration .kr-exclusive-page__inner',
+            enterStart: 'top 86%',
+            exitStart: 'bottom 26%',
+            initial: { autoAlpha: 0, y: 44 },
+            active: { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' },
+            exit: { autoAlpha: 0.44, y: -24, duration: 0.68, ease: 'power2.inOut' },
+        },
+        {
+            sectionSelector: '.kr-exclusive-heritage',
+            targetSelector: '.kr-exclusive-heritage .kr-exclusive-page__inner',
+            enterStart: 'top 84%',
+            exitStart: 'bottom 28%',
+            initial: { autoAlpha: 0, x: -34, y: 12 },
+            active: { autoAlpha: 1, x: 0, y: 0, duration: 0.94, ease: 'power2.out' },
+            exit: { autoAlpha: 0.5, x: 36, y: -8, duration: 0.7, ease: 'power2.inOut' },
+        },
+        {
+            sectionSelector: '.kr-exclusive-gift-card',
+            targetSelector: '.kr-exclusive-gift-card__stage',
+            enterStart: 'top 88%',
+            exitStart: 'bottom 24%',
+            initial: {
+                autoAlpha: 0,
+                y: 54,
+                clipPath: 'inset(12% 0% 0% 0%)',
+                filter: 'brightness(0.94)',
+            },
+            active: {
+                autoAlpha: 1,
+                y: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                filter: 'brightness(1)',
+                duration: 1.02,
+                ease: 'power3.out',
+            },
+            exit: {
+                autoAlpha: 1,
+                y: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                filter: 'brightness(1.02)',
+                duration: 0.62,
+                ease: 'power2.inOut',
+            },
+        },
+        {
+            sectionSelector: '.kr-exclusive-packaging',
+            targetSelector: '.kr-exclusive-packaging .kr-exclusive-page__inner',
+            enterStart: 'top 84%',
+            exitStart: 'bottom 28%',
+            initial: {
+                autoAlpha: 0,
+                y: 40,
+                rotateX: 7,
+                transformPerspective: 1200,
+                transformOrigin: 'center top',
+            },
+            active: {
+                autoAlpha: 1,
+                y: 0,
+                rotateX: 0,
+                duration: 0.96,
+                ease: 'power3.out',
+            },
+            exit: {
+                autoAlpha: 0.46,
+                y: -18,
+                rotateX: -4,
+                duration: 0.74,
+                ease: 'power2.inOut',
+            },
+        },
+        {
+            sectionSelector: '.kr-exclusive-overview',
+            targetSelector: '.kr-exclusive-overview__inner',
+            enterStart: 'top 86%',
+            exitStart: 'bottom 26%',
+            initial: {
+                autoAlpha: 0,
+                scale: 0.972,
+                y: 32,
+                transformOrigin: 'center center',
+            },
+            active: {
+                autoAlpha: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.96,
+                ease: 'power2.out',
+            },
+            exit: {
+                autoAlpha: 0.4,
+                scale: 1.018,
+                y: -22,
+                duration: 0.76,
+                ease: 'power2.inOut',
+            },
+        },
+        {
+            sectionSelector: '.kr-exclusive-outro',
+            targetSelector: '.kr-exclusive-outro__stage',
+            enterStart: 'top 88%',
+            exitStart: 'bottom 24%',
+            initial: { autoAlpha: 0, y: 40, clipPath: 'inset(8% 0% 0% 0%)' },
+            active: {
+                autoAlpha: 1,
+                y: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                duration: 0.9,
+                ease: 'power2.out',
+            },
+            exit: {
+                autoAlpha: 0.68,
+                y: -18,
+                clipPath: 'inset(0% 0% 6% 0%)',
+                duration: 0.68,
+                ease: 'power2.inOut',
+            },
+        },
+    ];
+
+    recipes.forEach((recipe) => {
+        const section = scope.querySelector(recipe.sectionSelector);
+        const target = scope.querySelector(recipe.targetSelector);
+
+        if (!section || !target) {
+            return;
+        }
+
+        gsap.set(target, recipe.initial);
+
+        const transitionTo = (vars) =>
+            gsap.to(target, {
+                overwrite: 'auto',
+                ...vars,
+            });
+
+        ScrollTrigger.create({
+            trigger: section,
+            start: recipe.enterStart,
+            onEnter: () => transitionTo(recipe.active),
+            onEnterBack: () => transitionTo(recipe.active),
+            onLeaveBack: () =>
+                transitionTo({
+                    ...recipe.initial,
+                    duration: 0.56,
+                    ease: 'power1.inOut',
+                }),
+        });
+
+        ScrollTrigger.create({
+            trigger: section,
+            start: recipe.exitStart,
+            onLeave: () => transitionTo(recipe.exit),
+            onEnterBack: () => transitionTo(recipe.active),
+        });
     });
 };
 
-const createScrubAnimation = (scope, recipe) => {
-    const targets = getScopedElements(scope, recipe.selectors);
-    const trigger = scope.querySelector(recipe.trigger);
+const animateConfigurationSection = (scope) => {
+    const section = scope.querySelector('.kr-exclusive-configuration');
+    const header = section?.querySelector('.kr-exclusive-page__section-header');
+    const title = section?.querySelector('.kr-exclusive-page__section-title');
+    const copy = section?.querySelector('.kr-exclusive-page__section-copy');
+    const productsStage = section?.querySelector('.kr-exclusive-configuration__products');
+    const productTargets = getScopedElements(scope, ['.kr-exclusive-configuration__product']);
+    const captionTargets = getScopedElements(scope, ['.kr-exclusive-configuration__caption']);
 
-    if (!targets.length || !trigger) {
+    animateSectionFrame(header, section, {
+        start: 'top 77%',
+        from: { y: 26 },
+    });
+
+    if (section && (title || copy)) {
+        const headerTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 74%',
+                once: true,
+            },
+        });
+
+        if (title) {
+            headerTimeline.fromTo(
+                title,
+                {
+                    autoAlpha: 0,
+                    y: 32,
+                    clipPath: 'inset(100% 0% 0% 0%)',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    clearProps: 'clipPath',
+                    duration: 0.94,
+                    ease: 'power3.out',
+                },
+                0
+            );
+        }
+
+        if (copy) {
+            headerTimeline.fromTo(
+                copy,
+                {
+                    autoAlpha: 0,
+                    y: 10,
+                    letterSpacing: '0.06em',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    letterSpacing: '0em',
+                    duration: 0.74,
+                    ease: 'power2.out',
+                },
+                0.2
+            );
+        }
+    }
+
+    if (productsStage && productTargets.length) {
+        const productOffsets = [
+            { x: -24, y: 72, rotateZ: -5 },
+            { x: -12, y: 44, rotateZ: 3 },
+            { x: 0, y: 60, rotateZ: -2 },
+            { x: 14, y: 40, rotateZ: 4 },
+            { x: 26, y: 66, rotateZ: -4 },
+        ];
+
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: productsStage,
+                start: 'top 80%',
+                once: true,
+            },
+        });
+
+        timeline.fromTo(
+            productsStage,
+            {
+                autoAlpha: 0,
+                y: 28,
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.68,
+                ease: 'power2.out',
+            },
+            0
+        );
+
+        timeline.fromTo(
+            productTargets,
+            {
+                autoAlpha: 0,
+                x: (index) => productOffsets[index]?.x ?? 0,
+                y: (index) => productOffsets[index]?.y ?? 56,
+                rotateZ: (index) => productOffsets[index]?.rotateZ ?? 0,
+                transformOrigin: 'center bottom',
+            },
+            {
+                autoAlpha: 1,
+                x: 0,
+                y: 0,
+                rotateZ: 0,
+                duration: 1.05,
+                ease: 'power3.out',
+                stagger: {
+                    each: 0.08,
+                    from: 'center',
+                },
+            },
+            0.06
+        );
+
+        if (captionTargets.length) {
+            timeline.fromTo(
+                captionTargets,
+                {
+                    autoAlpha: 0,
+                    y: 14,
+                    filter: 'blur(6px)',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 0.72,
+                    stagger: 0.06,
+                    ease: 'power2.out',
+                },
+                0.48
+            );
+        }
+    }
+};
+
+const animateHeritageSection = (scope) => {
+    const section = scope.querySelector('.kr-exclusive-heritage');
+    const header = section?.querySelector('.kr-exclusive-page__section-header');
+    const title = section?.querySelector('.kr-exclusive-page__section-title');
+    const body = section?.querySelector('.kr-exclusive-page__section-body');
+    const leftPanel = scope.querySelector('.kr-exclusive-heritage__panel--left');
+    const rightPanel = scope.querySelector('.kr-exclusive-heritage__panel--right');
+    const quote = scope.querySelector('.kr-exclusive-heritage__quote');
+    const quoteText = scope.querySelector('.kr-exclusive-heritage__quote-text');
+    const gallery = scope.querySelector('.kr-exclusive-heritage__gallery');
+
+    animateSectionFrame(header, section, {
+        start: 'top 77%',
+        from: { y: 24 },
+    });
+
+    if (section && (title || body)) {
+        const headerTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 74%',
+                once: true,
+            },
+        });
+
+        if (title) {
+            headerTimeline.fromTo(
+                title,
+                {
+                    autoAlpha: 0,
+                    y: 16,
+                    filter: 'blur(4px)',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 0.78,
+                    ease: 'power2.out',
+                },
+                0
+            );
+        }
+
+        if (body) {
+            headerTimeline.fromTo(
+                body,
+                {
+                    autoAlpha: 0,
+                    x: -24,
+                    clipPath: 'inset(0% 100% 0% 0%)',
+                },
+                {
+                    autoAlpha: 1,
+                    x: 0,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    duration: 0.96,
+                    ease: 'power2.out',
+                },
+                0.12
+            );
+        }
+    }
+
+    if (gallery && (leftPanel || rightPanel)) {
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: gallery,
+                start: 'top 76%',
+                once: true,
+            },
+        });
+
+        timeline.fromTo(
+            gallery,
+            {
+                autoAlpha: 0,
+                y: 24,
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.66,
+                ease: 'power2.out',
+            },
+            0
+        );
+
+        if (leftPanel) {
+            timeline.fromTo(
+                leftPanel,
+                {
+                    autoAlpha: 0,
+                    y: 34,
+                    clipPath: 'inset(0% 0% 100% 0%)',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    duration: 1.08,
+                    ease: 'power3.out',
+                },
+                0
+            );
+        }
+
+        if (rightPanel) {
+            timeline.fromTo(
+                rightPanel,
+                {
+                    autoAlpha: 0,
+                    x: 42,
+                    clipPath: 'inset(0% 100% 0% 0%)',
+                },
+                {
+                    autoAlpha: 1,
+                    x: 0,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    duration: 1.02,
+                    ease: 'power3.out',
+                },
+                0.12
+            );
+        }
+
+        if (quote) {
+            timeline.fromTo(
+                quote,
+                {
+                    autoAlpha: 0,
+                    y: 20,
+                    filter: 'blur(10px)',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 0.82,
+                    ease: 'power2.out',
+                },
+                0.56
+            );
+        }
+
+        if (quoteText) {
+            timeline.fromTo(
+                quoteText,
+                {
+                    autoAlpha: 0,
+                    y: 16,
+                    letterSpacing: '0.08em',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    letterSpacing: '0em',
+                    duration: 0.72,
+                    ease: 'power2.out',
+                },
+                0.62
+            );
+        }
+    }
+};
+
+const animateGiftCardSection = (scope) => {
+    const stage = scope.querySelector('.kr-exclusive-gift-card__stage');
+    const background = scope.querySelector('.kr-exclusive-gift-card__background');
+    const content = scope.querySelector('.kr-exclusive-gift-card__content');
+    const title = scope.querySelector('.kr-exclusive-gift-card__content > .kr-exclusive-page__section-title');
+    const body = scope.querySelector('.kr-exclusive-gift-card__body');
+    const tipTargets = getScopedElements(scope, ['.kr-exclusive-gift-card__tip > *']);
+
+    if (!stage) {
         return;
     }
 
-    gsap.to(targets, {
-        ...recipe.vars,
-        ease: 'none',
+    const timeline = gsap.timeline({
         scrollTrigger: {
-            trigger,
-            start: recipe.start ?? 'top bottom',
-            end: recipe.end ?? 'bottom top',
-            scrub: true,
+            trigger: stage,
+            start: 'top 74%',
+            once: true,
         },
+    });
+
+    if (content) {
+        timeline.fromTo(
+            content,
+            {
+                autoAlpha: 0,
+                x: 18,
+                y: 30,
+                scale: 0.985,
+                transformOrigin: 'right center',
+            },
+            {
+                autoAlpha: 1,
+                x: 0,
+                y: 0,
+                scale: 1,
+                duration: 0.78,
+                ease: 'power2.out',
+            },
+            0
+        );
+    }
+
+    if (background) {
+        timeline.fromTo(
+            background,
+            {
+                autoAlpha: 0,
+                scale: 1.08,
+                yPercent: -4,
+                filter: 'blur(10px)',
+            },
+            {
+                autoAlpha: 1,
+                scale: 1,
+                yPercent: 0,
+                filter: 'blur(0px)',
+                duration: 1.18,
+                ease: 'power2.out',
+            },
+            0.02
+        );
+    }
+
+    if (title) {
+        timeline.fromTo(
+            title,
+            {
+                autoAlpha: 0,
+                x: 28,
+                clipPath: 'inset(0% 0% 0% 100%)',
+            },
+            {
+                autoAlpha: 1,
+                x: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                clearProps: 'clipPath',
+                duration: 0.9,
+                ease: 'power3.out',
+            },
+            0.16
+        );
+    }
+
+    if (body) {
+        timeline.fromTo(
+            body,
+            {
+                autoAlpha: 0,
+                y: 18,
+                clipPath: 'inset(0% 0% 100% 0%)',
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                duration: 0.9,
+                ease: 'power2.out',
+            },
+            0.3
+        );
+    }
+
+    if (tipTargets.length) {
+        timeline.fromTo(
+            tipTargets,
+            {
+                autoAlpha: 0,
+                y: 12,
+                letterSpacing: '0.05em',
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                letterSpacing: '0em',
+                duration: 0.72,
+                stagger: 0.08,
+                ease: 'power2.out',
+            },
+            0.46
+        );
+    }
+};
+
+const animatePackagingSection = (scope) => {
+    const section = scope.querySelector('.kr-exclusive-packaging');
+    const header = section?.querySelector('.kr-exclusive-page__section-header');
+    const title = section?.querySelector('.kr-exclusive-page__section-title');
+    const copy = section?.querySelector('.kr-exclusive-page__section-copy');
+    const viewTargets = getScopedElements(scope, ['.kr-exclusive-packaging__view']);
+    const viewLabelTargets = getScopedElements(scope, ['.kr-exclusive-packaging__view-label']);
+    const feature = scope.querySelector('.kr-exclusive-packaging__feature');
+    const details = getScopedElements(scope, ['.kr-exclusive-packaging__detail']);
+    const gallery = scope.querySelector('.kr-exclusive-packaging__gallery');
+    const views = section?.querySelector('.kr-exclusive-packaging__views');
+
+    animateSectionFrame(header, section, {
+        start: 'top 77%',
+        from: { y: 28 },
+    });
+
+    if (section && (title || copy)) {
+        const headerTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 74%',
+                once: true,
+            },
+        });
+
+        if (title) {
+            headerTimeline.fromTo(
+                title,
+                {
+                    autoAlpha: 0,
+                    y: 26,
+                    filter: 'blur(6px)',
+                    letterSpacing: '0.02em',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    letterSpacing: '0em',
+                    clearProps: 'filter,letterSpacing',
+                    duration: 0.92,
+                    ease: 'power3.out',
+                },
+                0
+            );
+        }
+
+        if (copy) {
+            headerTimeline.fromTo(
+                copy,
+                {
+                    autoAlpha: 0,
+                    x: -26,
+                    clipPath: 'inset(0% 18% 0% 0%)',
+                },
+                {
+                    autoAlpha: 1,
+                    x: 0,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    duration: 0.88,
+                    ease: 'power2.out',
+                },
+                0.18
+            );
+        }
+    }
+
+    if (views && viewTargets.length) {
+        const tilt = [-8, 0, 8];
+
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: views,
+                start: 'top 80%',
+                once: true,
+            },
+        });
+
+        timeline.fromTo(
+            views,
+            {
+                autoAlpha: 0,
+                y: 28,
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.66,
+                ease: 'power2.out',
+            },
+            0
+        );
+
+        timeline.fromTo(
+            viewTargets,
+            {
+                autoAlpha: 0,
+                y: (index) => [56, 84, 56][index] ?? 64,
+                rotateX: -18,
+                rotateY: (index) => tilt[index] ?? 0,
+                transformOrigin: 'center bottom',
+                transformPerspective: 1200,
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                rotateX: 0,
+                rotateY: 0,
+                duration: 1,
+                stagger: 0.08,
+                ease: 'power3.out',
+            },
+            0.08
+        );
+
+        if (viewLabelTargets.length) {
+            timeline.fromTo(
+                viewLabelTargets,
+                {
+                    autoAlpha: 0,
+                    y: 14,
+                    filter: 'blur(6px)',
+                },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 0.7,
+                    stagger: 0.08,
+                    ease: 'power2.out',
+                },
+                0.44
+            );
+        }
+    }
+
+    if (gallery && (feature || details.length)) {
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: gallery,
+                start: 'top 76%',
+                once: true,
+            },
+        });
+
+        timeline.fromTo(
+            gallery,
+            {
+                autoAlpha: 0,
+                y: 24,
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.68,
+                ease: 'power2.out',
+            },
+            0
+        );
+
+        if (feature) {
+            timeline.fromTo(
+                feature,
+                {
+                    autoAlpha: 0,
+                    clipPath: 'inset(0% 18% 0% 18%)',
+                    scale: 0.96,
+                },
+                {
+                    autoAlpha: 1,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    scale: 1,
+                    duration: 1.02,
+                    ease: 'power3.out',
+                },
+                0
+            );
+        }
+
+        if (details.length) {
+            timeline.fromTo(
+                details,
+                {
+                    autoAlpha: 0,
+                    x: 42,
+                    y: 18,
+                    clipPath: 'inset(0% 0% 0% 28%)',
+                },
+                {
+                    autoAlpha: 1,
+                    x: 0,
+                    y: 0,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    duration: 0.94,
+                    stagger: 0.12,
+                    ease: 'power3.out',
+                },
+                0.14
+            );
+        }
+    }
+};
+
+const animateOverviewSection = (scope) => {
+    const section = scope.querySelector('.kr-exclusive-overview');
+    const copy = scope.querySelector('.kr-exclusive-overview__copy');
+    const collage = scope.querySelector('.kr-exclusive-overview__collage');
+    const title = scope.querySelector('.kr-exclusive-overview__title');
+    const eyebrow = scope.querySelector('.kr-exclusive-overview__copy .kr-exclusive-page__eyebrow');
+    const englishLabel = scope.querySelector('.kr-exclusive-overview__copy .kr-exclusive-page__english-label');
+    const body = scope.querySelector('.kr-exclusive-overview__body');
+    const topRight = scope.querySelector('.kr-exclusive-overview__visual--top-right');
+    const bottomRight = scope.querySelector('.kr-exclusive-overview__visual--bottom-right');
+    const bottomLeft = scope.querySelector('.kr-exclusive-overview__visual--bottom-left');
+
+    if (!section) {
+        return;
+    }
+
+    const timeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: 'top 72%',
+            once: true,
+        },
+    });
+
+    if (copy) {
+        timeline.fromTo(
+            copy,
+            {
+                autoAlpha: 0,
+                y: 28,
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.72,
+                ease: 'power2.out',
+            },
+            0
+        );
+    }
+
+    if (title) {
+        timeline.fromTo(
+            title,
+            {
+                autoAlpha: 0,
+                y: 18,
+                scale: 0.94,
+                filter: 'blur(8px)',
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                filter: 'blur(0px)',
+                duration: 0.94,
+                ease: 'power3.out',
+            },
+            0.08
+        );
+    }
+
+    if (eyebrow) {
+        timeline.fromTo(
+            eyebrow,
+            {
+                autoAlpha: 0,
+                y: 18,
+                letterSpacing: '0.1em',
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                letterSpacing: '0em',
+                duration: 0.72,
+                ease: 'power2.out',
+            },
+            0.22
+        );
+    }
+
+    if (englishLabel) {
+        timeline.fromTo(
+            englishLabel,
+            {
+                autoAlpha: 0,
+                x: -24,
+                filter: 'blur(6px)',
+            },
+            {
+                autoAlpha: 1,
+                x: 0,
+                filter: 'blur(0px)',
+                duration: 0.74,
+                ease: 'power2.out',
+            },
+            0.28
+        );
+    }
+
+    if (body) {
+        timeline.fromTo(
+            body,
+            {
+                autoAlpha: 0,
+                y: 18,
+                clipPath: 'inset(0% 0% 100% 0%)',
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                duration: 0.88,
+                ease: 'power2.out',
+            },
+            0.38
+        );
+    }
+
+    if (collage) {
+        timeline.fromTo(
+            collage,
+            {
+                autoAlpha: 0,
+                y: 28,
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.72,
+                ease: 'power2.out',
+            },
+            0.12
+        );
+    }
+
+    if (topRight) {
+        timeline.fromTo(
+            topRight,
+            {
+                autoAlpha: 0,
+                x: 48,
+                y: -54,
+                rotate: 2,
+                scale: 0.92,
+            },
+            {
+                autoAlpha: 1,
+                x: 0,
+                y: 0,
+                rotate: 0,
+                scale: 1,
+                duration: 1.02,
+                ease: 'power3.out',
+            },
+            0.18
+        );
+    }
+
+    if (bottomLeft) {
+        timeline.fromTo(
+            bottomLeft,
+            {
+                autoAlpha: 0,
+                x: -72,
+                y: 52,
+                rotate: -3,
+                scale: 0.94,
+            },
+            {
+                autoAlpha: 1,
+                x: 0,
+                y: 0,
+                rotate: 0,
+                scale: 1,
+                duration: 1.06,
+                ease: 'power3.out',
+            },
+            0.24
+        );
+    }
+
+    if (bottomRight) {
+        timeline.fromTo(
+            bottomRight,
+            {
+                autoAlpha: 0,
+                x: 64,
+                y: 46,
+                rotate: 3,
+                scale: 0.95,
+            },
+            {
+                autoAlpha: 1,
+                x: 0,
+                y: 0,
+                rotate: 0,
+                scale: 1,
+                duration: 1,
+                ease: 'power3.out',
+            },
+            0.34
+        );
+    }
+};
+
+const animateOutroSection = (scope) => {
+    const background = scope.querySelector('.kr-exclusive-outro__background');
+    const section = scope.querySelector('.kr-exclusive-outro');
+    const stage = scope.querySelector('.kr-exclusive-outro__stage');
+
+    if (!background || !section) {
+        return;
+    }
+
+    const timeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: 'top 84%',
+            once: true,
+        },
+    });
+
+    if (stage) {
+        timeline.fromTo(
+            stage,
+            {
+                autoAlpha: 0,
+                y: 28,
+                clipPath: 'inset(0% 0% 10% 0%)',
+            },
+            {
+                autoAlpha: 1,
+                y: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                duration: 0.82,
+                ease: 'power2.out',
+            },
+            0
+        );
+    }
+
+    timeline.fromTo(
+        background,
+        {
+            autoAlpha: 0,
+            scale: 1.06,
+            filter: 'blur(10px) brightness(0.92)',
+        },
+        {
+            autoAlpha: 1,
+            scale: 1,
+            filter: 'blur(0px) brightness(1)',
+            duration: 1.25,
+            ease: 'power2.out',
+        },
+        0.04
+    );
+};
+
+const createDesktopScrubAnimations = (scope) => {
+    const recipes = [
+        {
+            trigger: '.kr-exclusive-heritage',
+            selectors: ['.kr-exclusive-heritage__panel--left img'],
+            vars: { yPercent: -4, scale: 1.05 },
+        },
+        {
+            trigger: '.kr-exclusive-heritage',
+            selectors: ['.kr-exclusive-heritage__panel--right img'],
+            vars: { yPercent: 5, scale: 1.04 },
+        },
+        {
+            trigger: '.kr-exclusive-gift-card',
+            selectors: ['.kr-exclusive-gift-card__background'],
+            vars: { yPercent: -5, scale: 1.04 },
+        },
+        {
+            trigger: '.kr-exclusive-packaging',
+            selectors: ['.kr-exclusive-packaging__feature img'],
+            vars: { yPercent: -6, scale: 1.08 },
+        },
+        {
+            trigger: '.kr-exclusive-packaging',
+            selectors: ['.kr-exclusive-packaging__detail img'],
+            vars: { yPercent: -4, scale: 1.06 },
+        },
+        {
+            trigger: '.kr-exclusive-overview',
+            selectors: ['.kr-exclusive-overview__visual--top-right img'],
+            vars: { yPercent: -4, scale: 1.04 },
+        },
+        {
+            trigger: '.kr-exclusive-overview',
+            selectors: ['.kr-exclusive-overview__visual--bottom-left img'],
+            vars: { yPercent: 5, scale: 1.04 },
+        },
+        {
+            trigger: '.kr-exclusive-overview',
+            selectors: ['.kr-exclusive-overview__visual--bottom-right img'],
+            vars: { yPercent: -3, scale: 1.05 },
+        },
+    ];
+
+    recipes.forEach((recipe) => {
+        const targets = getScopedElements(scope, recipe.selectors);
+        const trigger = scope.querySelector(recipe.trigger);
+
+        if (!targets.length || !trigger) {
+            return;
+        }
+
+        gsap.to(targets, {
+            ...recipe.vars,
+            ease: 'none',
+            scrollTrigger: {
+                trigger,
+                start: recipe.start ?? 'top bottom',
+                end: recipe.end ?? 'bottom top',
+                scrub: true,
+            },
+        });
     });
 };
 
@@ -381,41 +1388,86 @@ const KrExclusiveBenefits = () => {
                     '.kr-exclusive-hero__copy .kr-exclusive-page__eyebrow',
                     '.kr-exclusive-hero__copy .kr-exclusive-page__english-label',
                 ]);
-                const heroBackground = pageElement.querySelector('.kr-exclusive-hero__background');
+                const heroTitleLines = getScopedElements(pageElement, [
+                    '.kr-exclusive-hero__copy .kr-exclusive-hero__title span',
+                ]);
+                const heroEyebrow = pageElement.querySelector('.kr-exclusive-hero__copy .kr-exclusive-page__eyebrow');
+                const heroEnglishLabel = pageElement.querySelector('.kr-exclusive-hero__copy .kr-exclusive-page__english-label');
 
-                if (heroBackground || heroCopyTargets.length) {
+                if (heroCopyTargets.length) {
                     const heroTimeline = gsap.timeline({
                         defaults: { ease: 'power3.out' },
                     });
 
-                    if (heroBackground) {
+                    if (heroTitleLines.length) {
                         heroTimeline.fromTo(
-                            heroBackground,
-                            { autoAlpha: 0, scale: 1.08 },
-                            { autoAlpha: 1, scale: 1, duration: 1.25 },
-                            0
+                            heroTitleLines,
+                            {
+                                autoAlpha: 0,
+                                y: 40,
+                                clipPath: 'inset(100% 0% 0% 0%)',
+                            },
+                            {
+                                autoAlpha: 1,
+                                y: 0,
+                                clipPath: 'inset(0% 0% 0% 0%)',
+                                duration: 0.92,
+                                stagger: 0.1,
+                            },
+                            0.18
                         );
                     }
 
-                    if (heroCopyTargets.length) {
+                    if (heroEyebrow) {
                         heroTimeline.fromTo(
-                            heroCopyTargets,
-                            { autoAlpha: 0, y: 40 },
-                            { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 },
-                            0.18
+                            heroEyebrow,
+                            {
+                                autoAlpha: 0,
+                                x: -18,
+                                letterSpacing: '0.08em',
+                            },
+                            {
+                                autoAlpha: 1,
+                                x: 0,
+                                letterSpacing: '0em',
+                                duration: 0.72,
+                                ease: 'power2.out',
+                            },
+                            0.42
+                        );
+                    }
+
+                    if (heroEnglishLabel) {
+                        heroTimeline.fromTo(
+                            heroEnglishLabel,
+                            {
+                                autoAlpha: 0,
+                                y: 16,
+                                filter: 'blur(6px)',
+                            },
+                            {
+                                autoAlpha: 1,
+                                y: 0,
+                                filter: 'blur(0px)',
+                                duration: 0.72,
+                                ease: 'power2.out',
+                            },
+                            0.5
                         );
                     }
                 }
 
-                SECTION_REVEAL_RECIPES.forEach((recipe) => {
-                    createSectionReveal(pageElement, recipe);
-                });
+                createSectionPresenceTransitions(pageElement);
+                animateConfigurationSection(pageElement);
+                animateHeritageSection(pageElement);
+                animateGiftCardSection(pageElement);
+                animatePackagingSection(pageElement);
+                animateOverviewSection(pageElement);
+                animateOutroSection(pageElement);
             });
 
             mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
-                DESKTOP_SCRUB_RECIPES.forEach((recipe) => {
-                    createScrubAnimation(pageElement, recipe);
-                });
+                createDesktopScrubAnimations(pageElement);
             });
         }, pageElement);
 

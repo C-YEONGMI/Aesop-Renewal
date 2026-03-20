@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import storeImage from '../../../assets/Main_store.png';
@@ -6,64 +6,66 @@ import './StoreVisualSection.scss';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Full-Bleed 매장 비주얼 섹션
-// 인터렉션이 추가될 수 있도록 gsap + ScrollTrigger를 미리 구성
+const INITIAL_MASK_OFFSET = 14;
+const FINAL_MASK_OFFSET = 100;
+
 const StoreVisualSection = () => {
     const sectionRef = useRef(null);
-    const imageWrapRef = useRef(null);
     const imageRef = useRef(null);
+    const maskRef = useRef(null);
 
     useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo(
-                imageWrapRef.current,
-                {
-                    clipPath: 'inset(8% 5% 8% 5%)',
-                },
-                {
-                    clipPath: 'inset(0% 0% 0% 0%)',
-                    duration: 1.25,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 78%',
-                    },
-                }
-            );
+        if (!sectionRef.current || !imageRef.current || !maskRef.current) {
+            return undefined;
+        }
 
-            // 패럴랙스 스크롤 효과 (인터렉션 영역)
-            gsap.fromTo(
-                imageRef.current,
-                {
-                    scale: 1.16,
-                    yPercent: -8,
+        const ctx = gsap.context(() => {
+            gsap.set(maskRef.current, {
+                yPercent: INITIAL_MASK_OFFSET,
+            });
+
+            gsap.set(imageRef.current, {
+                scale: 1.028,
+                yPercent: -1.2,
+            });
+
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse',
+                    invalidateOnRefresh: true,
                 },
-                {
-                    scale: 1.02,
-                    yPercent: 8,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: true,
+            })
+                .to(maskRef.current, {
+                    yPercent: FINAL_MASK_OFFSET,
+                    duration: 1.08,
+                    ease: 'power3.inOut',
+                })
+                .to(
+                    imageRef.current,
+                    {
+                        scale: 1,
+                        yPercent: 0,
+                        duration: 1,
+                        ease: 'power2.out',
                     },
-                }
-            );
-        });
+                    0.04
+                );
+        }, sectionRef);
+
         return () => ctx.revert();
     }, []);
 
     return (
         <section className="store-visual" ref={sectionRef}>
-            <div className="store-visual__image-wrap" ref={imageWrapRef}>
-                <img
-                    ref={imageRef}
-                    className="store-visual__image"
-                    src={storeImage}
-                    alt="Aesop 매장 전경"
-                />
-            </div>
+            <img
+                ref={imageRef}
+                className="store-visual__image"
+                src={storeImage}
+                alt="Aesop store interior"
+            />
+            <div className="store-visual__mask" ref={maskRef} aria-hidden="true" />
         </section>
     );
 };
