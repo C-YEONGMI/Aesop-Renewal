@@ -39,6 +39,7 @@ const CartCheckbox = ({
             <svg viewBox="0 0 12 12">
                 <path
                     d="M1.5 6L4.5 9L10.5 3"
+                    fill="none"
                     stroke="currentColor"
                     strokeWidth="1.5"
                     strokeLinecap="round"
