@@ -9,12 +9,14 @@ import FloatingButtons from './btn/FloatingButtons';
 // - 홈 Hero 이탈 이후: solid 헤더 (브라운 텍스트)
 // - 내부 페이지: 항상 solid 헤더
 const Layout = () => {
+    const HEADER_IDLE_HIDE_DELAY = 5000;
     const location = useLocation();
     const isHome = location.pathname === '/';
     const [scrolled, setScrolled] = useState(false);
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const shouldPreserveScroll = Boolean(location.state?.preserveScroll);
     const lastScrollYRef = useRef(0);
+    const idleHideTimeoutRef = useRef(null);
 
     useEffect(() => {
         if (!('scrollRestoration' in window.history)) {
@@ -38,6 +40,25 @@ const Layout = () => {
     }, [location.key, shouldPreserveScroll]);
 
     useEffect(() => {
+        const clearIdleHideTimeout = () => {
+            if (idleHideTimeoutRef.current) {
+                window.clearTimeout(idleHideTimeoutRef.current);
+                idleHideTimeoutRef.current = null;
+            }
+        };
+
+        const scheduleIdleHide = (currentScrollY) => {
+            clearIdleHideTimeout();
+
+            if (currentScrollY <= 4) {
+                return;
+            }
+
+            idleHideTimeoutRef.current = window.setTimeout(() => {
+                setIsHeaderVisible(false);
+            }, HEADER_IDLE_HIDE_DELAY);
+        };
+
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
             const scrollDelta = currentScrollY - lastScrollYRef.current;
@@ -50,10 +71,13 @@ const Layout = () => {
             }
 
             if (currentScrollY <= 4) {
+                clearIdleHideTimeout();
                 setIsHeaderVisible(true);
                 lastScrollYRef.current = currentScrollY;
                 return;
             }
+
+            scheduleIdleHide(currentScrollY);
 
             if (Math.abs(scrollDelta) < 6) {
                 return;
@@ -69,7 +93,10 @@ const Layout = () => {
         handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
 
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            clearIdleHideTimeout();
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, [isHome, location.key]);
 
     return (
