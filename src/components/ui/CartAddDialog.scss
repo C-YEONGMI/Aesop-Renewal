@@ -79,7 +79,7 @@
     &__recommendations {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
     }
 
     &__recommendations-head {
@@ -101,22 +101,21 @@
 
     &__recommendations-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 168px));
-        justify-content: space-between;
-        gap: 10px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
     }
 
     &__recommendation-card {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        padding: 10px;
+        gap: 12px;
+        padding: 14px;
         background-color: rgba($brown-100, 0.14);
         border: 1px solid rgba($brown-900, 0.08);
     }
 
     &__recommendation-image {
-        aspect-ratio: 1 / 0.88;
+        aspect-ratio: 1;
         overflow: hidden;
         background-color: rgba($brown-100, 0.22);
 
@@ -131,7 +130,7 @@
     &__recommendation-copy {
         display: flex;
         flex-direction: column;
-        gap: 1px;
+        gap: 2px;
         flex: 1;
         min-width: 0;
     }
@@ -139,14 +138,10 @@
     &__recommendation-category,
     &__recommendation-price {
         color: rgba($brown-700, 0.78);
-        font-size: 11px;
-        line-height: 1.35;
     }
 
     &__recommendation-name {
         color: $brown-900;
-        font-size: 13px;
-        line-height: 1.35;
         display: -webkit-box;
         overflow: hidden;
         -webkit-line-clamp: 2;
@@ -155,17 +150,14 @@
 
     &__recommendation-button {
         font-family: inherit;
-        min-height: 34px;
-        padding: 0 10px;
+        min-height: 40px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 6px;
         border: 1px solid rgba($brown-900, 0.22);
         color: $brown-900;
         background-color: rgba($oatmeal, 0.72);
-        font-size: 11px;
-        line-height: 1.2;
         transition:
             background-color 0.2s ease,
             border-color 0.2s ease,
