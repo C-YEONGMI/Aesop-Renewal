@@ -208,15 +208,17 @@
     &__card-copy-inner {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0;
         padding: 0 10px;
     }
 
     &__card-category {
+        margin: 0;
         color: $brown-400;
     }
 
     &__card-name {
+        margin: 8px 0 0;
         color: $brown-800;
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -226,6 +228,7 @@
     }
 
     &__card-desc {
+        margin: 2px 0 0;
         color: $brown-400;
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -235,6 +238,7 @@
     }
 
     &__card-price {
+        margin: 8px 0 0;
         color: $brown-700;
     }
 
