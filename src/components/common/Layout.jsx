@@ -63,15 +63,24 @@ const Layout = () => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
             const scrollDelta = currentScrollY - lastScrollYRef.current;
+            let heroVisibilityBoundary = 0;
 
             if (isHome) {
                 const heroHeight = document.querySelector('.hero')?.offsetHeight ?? window.innerHeight;
-                setScrolled(currentScrollY > heroHeight * 0.9);
+                heroVisibilityBoundary = heroHeight * 0.9;
+                setScrolled(currentScrollY > heroVisibilityBoundary);
             } else {
                 setScrolled(true);
             }
 
             if (currentScrollY <= 4) {
+                clearIdleHideTimeout();
+                setIsHeaderVisible(true);
+                lastScrollYRef.current = currentScrollY;
+                return;
+            }
+
+            if (isHome && currentScrollY <= heroVisibilityBoundary) {
                 clearIdleHideTimeout();
                 setIsHeaderVisible(true);
                 lastScrollYRef.current = currentScrollY;
@@ -85,7 +94,7 @@ const Layout = () => {
             }
 
             // 요청 기준: 아래로 스크롤할 때는 보이고, 위로 스크롤할 때는 숨김
-            setIsHeaderVisible(scrollDelta > 0);
+            setIsHeaderVisible(scrollDelta < 0);
             lastScrollYRef.current = currentScrollY;
         };
 
