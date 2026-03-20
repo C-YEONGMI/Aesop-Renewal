@@ -1,13 +1,14 @@
 .rolling-number {
     position: relative;
     display: inline-flex;
-    align-items: flex-end;
+    align-items: baseline;
+    line-height: 1;
     font-variant-numeric: tabular-nums;
-    vertical-align: middle;
+    vertical-align: baseline;
 
     &__visual {
         display: inline-flex;
-        align-items: flex-end;
+        align-items: baseline;
     }
 
     &__digit {

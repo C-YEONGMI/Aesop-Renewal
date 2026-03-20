@@ -29,8 +29,9 @@
 
     &__price-text {
         display: inline-flex;
-        align-items: flex-end;
+        align-items: baseline;
         gap: 2px;
+        line-height: 1;
         white-space: nowrap;
     }
 
@@ -43,6 +44,8 @@
     }
 
     &__currency {
+        display: inline-block;
+        align-self: baseline;
         flex-shrink: 0;
         line-height: 1;
     }
