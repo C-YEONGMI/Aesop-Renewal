@@ -1,6 +1,7 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import RollingNumber from '../components/ui/RollingNumber';
 import useAuthStore from '../store/useAuthStore';
 import useCartStore from '../store/useCartStore';
 import './Cart.scss';
@@ -8,18 +9,11 @@ import './Cart.scss';
 const SHIPPING_FEE = 3000;
 const FREE_SHIPPING = 50000;
 
-const formatPrice = (value) => `${value.toLocaleString('ko-KR')}원`;
-
 const getEstimatedArrivalLabel = () => {
     const date = new Date();
     date.setDate(date.getDate() + 2);
 
     return `지금 주문하시면 ${date.getMonth() + 1}/${date.getDate()} 이내 도착 예정`;
-};
-
-const textTransition = {
-    duration: 0.34,
-    ease: [0.22, 1, 0.36, 1],
 };
 
 const fadeUpTransition = {
@@ -56,23 +50,10 @@ const CartCheckbox = ({
     </button>
 );
 
-const AnimatedValue = ({ value, align = 'start', className = '' }) => (
-    <span
-        className={`cart-page__animated-value cart-page__animated-value--${align} ${className}`.trim()}
-        aria-live="polite"
-    >
-        <AnimatePresence initial={false} mode="popLayout">
-            <motion.span
-                key={value}
-                className="cart-page__animated-value-inner"
-                initial={{ y: '110%', opacity: 0, filter: 'blur(4px)' }}
-                animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
-                exit={{ y: '-65%', opacity: 0, filter: 'blur(4px)' }}
-                transition={textTransition}
-            >
-                {value}
-            </motion.span>
-        </AnimatePresence>
+const PriceValue = ({ value, className = '' }) => (
+    <span className={`cart-page__price-text ${className}`.trim()}>
+        <RollingNumber value={value} />
+        <span className="cart-page__currency" aria-hidden="true">원</span>
     </span>
 );
 
@@ -92,8 +73,6 @@ const Cart = () => {
     const total = subtotal + shipping;
     const allChecked = cartItems.length > 0 && cartItems.every((item) => item.checked);
     const estimatedArrivalLabel = getEstimatedArrivalLabel();
-    const selectedItemsLabel = `${checkedItems.length}개 상품`;
-    const estimatedTotalLabel = formatPrice(total);
 
     const handleOrder = () => {
         if (!isLoggedIn) {
@@ -144,9 +123,13 @@ const Cart = () => {
                             transition={{ ...fadeUpTransition, delay: 0.08 }}
                         >
                             선택한{' '}
-                            <AnimatedValue value={selectedItemsLabel} className="cart-page__lead-value" />
-                            의 예상 결제 금액은{' '}
-                            <AnimatedValue value={estimatedTotalLabel} className="cart-page__lead-value" />
+                            <span className="cart-page__lead-emphasis">
+                                <RollingNumber value={checkedItems.length} />
+                            </span>
+                            개 상품의 예상 결제 금액은{' '}
+                            <span className="cart-page__lead-emphasis">
+                                <PriceValue value={total} />
+                            </span>
                             입니다.
                         </motion.p>
                     ) : null}
@@ -250,9 +233,7 @@ const Cart = () => {
                                                             </p>
                                                         ) : null}
                                                         {item.category ? (
-                                                            <p className="cart-page__item-meta">
-                                                                {item.category}
-                                                            </p>
+                                                            <p className="cart-page__item-meta">{item.category}</p>
                                                         ) : null}
                                                     </div>
                                                 </div>
@@ -270,10 +251,9 @@ const Cart = () => {
                                                             -
                                                         </button>
                                                         <span className="cart-page__quantity-value">
-                                                            <AnimatedValue
+                                                            <RollingNumber
                                                                 value={item.quantity}
-                                                                align="center"
-                                                                className="cart-page__quantity-motion"
+                                                                className="cart-page__quantity-number"
                                                             />
                                                         </span>
                                                         <button
@@ -290,9 +270,9 @@ const Cart = () => {
                                                 </div>
 
                                                 <p className="cart-page__item-total">
-                                                    <AnimatedValue
-                                                        value={formatPrice(item.price * item.quantity)}
-                                                        align="center"
+                                                    <PriceValue
+                                                        value={item.price * item.quantity}
+                                                        className="cart-page__price-text--center"
                                                     />
                                                 </p>
 
@@ -337,16 +317,18 @@ const Cart = () => {
                                     <div className="cart-page__summary-body">
                                         <div className="cart-page__summary-row">
                                             <span className="cart-page__summary-label">주문 금액</span>
-                                            <span className="cart-page__summary-value">
-                                                <AnimatedValue value={formatPrice(subtotal)} align="end" />
-                                            </span>
+                                            <PriceValue
+                                                value={subtotal}
+                                                className="cart-page__price-text--end cart-page__summary-value"
+                                            />
                                         </div>
 
                                         <div className="cart-page__summary-row">
                                             <span className="cart-page__summary-label">배송비</span>
-                                            <span className="cart-page__summary-value">
-                                                <AnimatedValue value={formatPrice(shipping)} align="end" />
-                                            </span>
+                                            <PriceValue
+                                                value={shipping}
+                                                className="cart-page__price-text--end cart-page__summary-value"
+                                            />
                                         </div>
 
                                         <div className="cart-page__summary-divider" />
@@ -354,7 +336,10 @@ const Cart = () => {
                                         <div className="cart-page__summary-total">
                                             <span>총 결제 금액</span>
                                             <strong>
-                                                <AnimatedValue value={formatPrice(total)} align="end" />
+                                                <PriceValue
+                                                    value={total}
+                                                    className="cart-page__price-text--end"
+                                                />
                                             </strong>
                                         </div>
                                     </div>
