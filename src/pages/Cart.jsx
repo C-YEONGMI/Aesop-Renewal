@@ -11,7 +11,7 @@ const FREE_SHIPPING = 50000;
 
 const getEstimatedArrivalLabel = () => {
     const date = new Date();
-    date.setDate(date.getDate() + 2);
+    date.setDate(date.getDate() + 5);
 
     return `지금 주문하시면 ${date.getMonth() + 1}/${date.getDate()} 이내 도착 예정`;
 };
