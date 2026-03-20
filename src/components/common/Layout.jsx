@@ -12,6 +12,7 @@ const Layout = () => {
     const location = useLocation();
     const isHome = location.pathname === '/';
     const [scrolled, setScrolled] = useState(false);
+    const shouldPreserveScroll = Boolean(location.state?.preserveScroll);
 
     useEffect(() => {
         if (!('scrollRestoration' in window.history)) {
@@ -27,8 +28,12 @@ const Layout = () => {
     }, []);
 
     useLayoutEffect(() => {
+        if (shouldPreserveScroll) {
+            return;
+        }
+
         window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }, [location.key]);
+    }, [location.key, shouldPreserveScroll]);
 
     useEffect(() => {
         if (!isHome) {
