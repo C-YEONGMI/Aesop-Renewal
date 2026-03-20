@@ -29,8 +29,6 @@ const router = createBrowserRouter([
 
             // 선물 가이드
             { path: 'gift-guide', element: <GiftGuide /> },
-            { path: 'gift-guide/general', element: <GiftGuide sub="general" /> },
-            { path: 'gift-guide/fragrance', element: <GiftGuide sub="fragrance" /> },
 
             // 상품 목록
             { path: 'products', element: <Products /> },
