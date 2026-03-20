@@ -313,12 +313,14 @@ const Products = () => {
                                                         </div>
 
                                                         <div className="products-page__card-actions">
+                                                            <div className="products-page__card-actions-inner">
                                                             <AddToCartButton
                                                                 className="products-page__add-btn"
                                                                 text="장바구니 담기"
                                                                 width="100%"
                                                                 onClick={() => addToCart(product, 0)}
                                                             />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

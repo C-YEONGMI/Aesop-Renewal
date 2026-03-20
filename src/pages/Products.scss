@@ -242,6 +242,14 @@
         display: flex;
         align-items: center;
         margin-top: 0;
+        background-color: $oatmeal;
+    }
+
+    &__card-actions-inner {
+        width: 100%;
+        height: 32px;
+        padding: 4px;
+        box-sizing: border-box;
     }
 
     &__add-btn {
@@ -249,7 +257,7 @@
 
         &.add-to-cart-button {
             @extend .suit-14-m;
-            height: 32px;
+            height: 100%;
         }
     }
 
