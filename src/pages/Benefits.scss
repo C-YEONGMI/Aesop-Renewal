@@ -4,24 +4,324 @@
     background-color: $bg-primary;
     min-height: 100vh;
 
-    &__header-space { height: 70px; }
+    &__header-space {
+        height: 70px;
+    }
 
-    &__inner { max-width: 960px; margin: 0 auto; padding: 0 4% 100px; }
+    &__inner {
+        width: min(100%, 1580px);
+        margin: 0 auto;
+        padding: 0 32px 120px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__official {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    &__hero {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(320px, 420px);
+        gap: 40px;
+        padding: 52px;
+        background-color: $oatmeal;
+        border: 1px solid rgba($brown-200, 0.85);
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -100px;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba($brown-100, 0.65) 0%, rgba($brown-100, 0) 70%);
+            pointer-events: none;
+        }
+    }
+
+    &__hero-copy,
+    &__hero-tags {
+        position: relative;
+        z-index: 1;
+    }
+
+    &__eyebrow {
+        color: $brown-400;
+        margin-bottom: 16px;
+    }
+
+    &__hero-title {
+        color: $brown-800;
+        max-width: 9ch;
+        margin-bottom: 20px;
+    }
+
+    &__hero-desc {
+        color: $brown-600;
+        max-width: 34ch;
+    }
+
+    &__hero-tags {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        align-self: start;
+    }
+
+    &__hero-tag {
+        min-height: 124px;
+        padding: 18px;
+        background-color: rgba($bg-primary, 0.82);
+        border: 1px solid rgba($brown-100, 0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+
+        span {
+            color: $brown-700;
+        }
+
+        p {
+            color: $brown-500;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    &__card {
+        min-height: 320px;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background-color: $oatmeal;
+        border: 1px solid rgba($brown-200, 0.8);
+    }
+
+    &__card-eyebrow {
+        color: $brown-400;
+    }
+
+    &__card-title {
+        color: $brown-800;
+        max-width: 11ch;
+    }
+
+    &__card-body {
+        color: $brown-600;
+        max-width: 30ch;
+    }
+
+    &__assistance {
+        display: grid;
+        grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+        gap: 28px;
+        padding: 44px;
+        background: linear-gradient(135deg, $brown-800 0%, $brown-700 100%);
+        color: $oatmeal;
+    }
+
+    &__assistance-copy {
+        max-width: 430px;
+    }
+
+    &__assistance-title {
+        color: $oatmeal;
+        margin-bottom: 16px;
+        max-width: 10ch;
+    }
+
+    &__assistance-desc {
+        color: rgba($oatmeal, 0.84);
+    }
+
+    &__assistance-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    &__assist-card {
+        min-height: 220px;
+        padding: 22px 20px;
+        background-color: rgba($oatmeal, 0.06);
+        border: 1px solid rgba($oatmeal, 0.18);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 20px;
+        transition:
+            transform 0.25s ease,
+            background-color 0.25s ease,
+            border-color 0.25s ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            background-color: rgba($oatmeal, 0.1);
+            border-color: rgba($oatmeal, 0.34);
+        }
+    }
+
+    &__assist-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        h4 {
+            color: $oatmeal;
+        }
+
+        p {
+            color: rgba($oatmeal, 0.82);
+        }
+    }
+
+    &__assist-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: $oatmeal;
+
+        &::after {
+            content: '↗';
+            font-size: 14px;
+            line-height: 1;
+        }
+    }
+
+    &__quote {
+        padding: 20px 0 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        text-align: center;
+    }
+
+    &__quote-text {
+        color: $brown-700;
+        max-width: 24ch;
+    }
+
+    &__quote-author {
+        color: $brown-400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
 
     &__section {
         display: flex;
         flex-direction: column;
         gap: 24px;
+        padding: 24px 0;
 
-        h2 { color: $brown-800; }
+        h2 {
+            color: $brown-800;
+        }
+
+        p {
+            color: $brown-600;
+        }
     }
+}
 
-    &__list {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        color: $brown-600;
+@media (max-width: 1279px) {
+    .benefits-page {
+        &__inner {
+            padding-inline: 24px;
+        }
+
+        &__hero {
+            grid-template-columns: 1fr;
+            padding: 40px;
+        }
+
+        &__grid {
+            grid-template-columns: 1fr;
+        }
+
+        &__card {
+            min-height: 0;
+        }
+
+        &__assistance {
+            grid-template-columns: 1fr;
+        }
+
+        &__assistance-copy {
+            max-width: none;
+        }
+
+        &__assistance-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .benefits-page {
+        &__inner {
+            padding: 0 16px 88px;
+        }
+
+        &__official {
+            gap: 28px;
+        }
+
+        &__hero {
+            padding: 28px 20px;
+            gap: 24px;
+        }
+
+        &__hero-title {
+            max-width: none;
+        }
+
+        &__hero-desc {
+            max-width: none;
+        }
+
+        &__hero-tags {
+            grid-template-columns: 1fr;
+        }
+
+        &__hero-tag {
+            min-height: 0;
+        }
+
+        &__card {
+            padding: 22px 20px;
+        }
+
+        &__card-title,
+        &__card-body {
+            max-width: none;
+        }
+
+        &__assistance {
+            padding: 28px 20px;
+        }
+
+        &__assistance-grid {
+            grid-template-columns: 1fr;
+        }
+
+        &__assist-card {
+            min-height: 0;
+        }
     }
 }
