@@ -140,7 +140,6 @@ const CartAddDialog = () => {
 
                         <div className="cart-add-dialog__copy">
                             <div className="cart-add-dialog__copy-main">
-                                <p className="cart-add-dialog__item-badge suit-12-r">Just Added</p>
                                 <p className="cart-add-dialog__category suit-12-r">
                                     {cartDialogItem.category}
                                 </p>
