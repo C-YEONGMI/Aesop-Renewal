@@ -3,30 +3,58 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
 import './Auth.scss';
 
+const TEST_ACCOUNT = {
+    userId: 'testuser',
+    name: '테스트 사용자',
+    email: 'test@aesop.com',
+    password: 'test1234',
+    phone: '01012345678',
+};
+
 const Login = () => {
     const navigate = useNavigate();
-    const login = useAuthStore(s => s.login);
-    const signup = useAuthStore(s => s.signup);
-    const [form, setForm] = useState({ email: '', password: '' });
+    const login = useAuthStore((state) => state.login);
+    const ensureTestAccount = useAuthStore((state) => state.ensureTestAccount);
+    const [form, setForm] = useState({ identifier: '', password: '' });
     const [error, setError] = useState('');
 
-    const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setForm((current) => ({ ...current, [name]: value }));
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        const result = login(form.email, form.password);
-        if (result.success) {
-            navigate('/');
-        } else {
-            setError(result.message);
+        if (error) {
+            setError('');
         }
     };
 
-    // 테스트 계정으로 빠른 로그인 (훅 규칙 준수 - getState() 사용)
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setError('');
+
+        const result = login(form.identifier, form.password);
+
+        if (result.success) {
+            navigate('/');
+            return;
+        }
+
+        setError(result.message);
+    };
+
     const handleTestLogin = () => {
-        signup({ name: '테스트 사용자', email: 'test@aesop.com', password: 'test1234' });
-        const result = login('test@aesop.com', 'test1234');
-        if (result.success) navigate('/mypage');
+        setError('');
+
+        ensureTestAccount(TEST_ACCOUNT);
+        setForm({ identifier: TEST_ACCOUNT.userId, password: TEST_ACCOUNT.password });
+
+        const result = login(TEST_ACCOUNT.userId, TEST_ACCOUNT.password);
+
+        if (result.success) {
+            navigate('/mypage');
+            return;
+        }
+
+        setError(result.message || '테스트 계정 로그인에 실패했습니다.');
     };
 
     return (
@@ -37,31 +65,38 @@ const Login = () => {
 
                 <form className="auth-page__form" onSubmit={handleSubmit}>
                     <div className="auth-page__field">
-                        <label className="suit-14-m">이메일</label>
+                        <label className="suit-14-m" htmlFor="login-identifier">
+                            아이디 또는 이메일
+                        </label>
                         <input
-                            type="email"
-                            name="email"
-                            value={form.email}
+                            id="login-identifier"
+                            type="text"
+                            name="identifier"
+                            value={form.identifier}
                             onChange={handleChange}
                             className="suit-16-r"
-                            placeholder="이메일을 입력하세요"
+                            placeholder="아이디 또는 이메일을 입력해 주세요"
                             required
                         />
                     </div>
+
                     <div className="auth-page__field">
-                        <label className="suit-14-m">비밀번호</label>
+                        <label className="suit-14-m" htmlFor="login-password">
+                            비밀번호
+                        </label>
                         <input
+                            id="login-password"
                             type="password"
                             name="password"
                             value={form.password}
                             onChange={handleChange}
                             className="suit-16-r"
-                            placeholder="비밀번호를 입력하세요"
+                            placeholder="비밀번호를 입력해 주세요"
                             required
                         />
                     </div>
 
-                    {error && <p className="auth-page__error suit-14-m">{error}</p>}
+                    {error ? <p className="auth-page__error suit-14-m">{error}</p> : null}
 
                     <button type="submit" className="auth-page__submit suit-18-m">
                         로그인
@@ -74,7 +109,7 @@ const Login = () => {
                     <Link to="/signup">회원가입</Link>
                 </div>
 
-                <button className="auth-page__test-btn suit-14-m" onClick={handleTestLogin}>
+                <button type="button" className="auth-page__test-btn suit-14-m" onClick={handleTestLogin}>
                     테스트 계정으로 로그인
                 </button>
             </div>

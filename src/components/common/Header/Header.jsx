@@ -6,12 +6,46 @@ import useCartStore from '../../../store/useCartStore';
 import useAuthStore from '../../../store/useAuthStore';
 import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
 
+const AccountIcon = () => (
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+    </svg>
+);
+
+const LogoutIcon = () => (
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+        <polyline points="10 17 15 12 10 7" />
+        <line x1="15" y1="12" x2="3" y2="12" />
+    </svg>
+);
+
 const Header = ({ transparent = false }) => {
     const navigate = useNavigate();
     const totalCount = useCartStore((state) =>
         state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
     );
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const logout = useAuthStore((state) => state.logout);
 
     const handleLogoClick = (event) => {
         event.preventDefault();
@@ -20,6 +54,16 @@ const Header = ({ transparent = false }) => {
         requestAnimationFrame(() => {
             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
         });
+    };
+
+    const handleAccountAction = () => {
+        if (isLoggedIn) {
+            logout();
+            navigate('/');
+            return;
+        }
+
+        navigate('/login');
     };
 
     return (
@@ -40,13 +84,13 @@ const Header = ({ transparent = false }) => {
                                     <Link to="/products/fragrance">Perfume</Link>
                                 </li>
                                 <li>
-                                    <Link to="/products/home">HOME · LIVING</Link>
+                                    <Link to="/products/home">HOME & LIVING</Link>
                                 </li>
                                 <li>
-                                    <Link to="/products/hair">HAIR · SHAVING</Link>
+                                    <Link to="/products/hair">HAIR & SHAVING</Link>
                                 </li>
                                 <li>
-                                    <Link to="/products/body">HAND · BODY</Link>
+                                    <Link to="/products/body">HAND & BODY</Link>
                                 </li>
                                 <li>
                                     <Link to="/products/kits">KITS</Link>
@@ -89,44 +133,17 @@ const Header = ({ transparent = false }) => {
                         />
                     </li>
                     <li>
-                        <Link
-                            to={isLoggedIn ? '/mypage' : '/login'}
-                            aria-label={isLoggedIn ? '마이페이지' : '로그인'}
+                        <button
+                            type="button"
+                            className="header-account-action"
+                            onClick={handleAccountAction}
+                            aria-label={isLoggedIn ? 'Logout' : 'Login'}
                         >
-                            {isLoggedIn ? (
-                                <svg
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                            ) : (
-                                <svg
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                                    <polyline points="10 17 15 12 10 7" />
-                                    <line x1="15" y1="12" x2="3" y2="12" />
-                                </svg>
-                            )}
-                        </Link>
+                            {isLoggedIn ? <LogoutIcon /> : <AccountIcon />}
+                        </button>
                     </li>
                     <li>
-                        <Link to="/cart" aria-label="장바구니">
+                        <Link to="/cart" aria-label="Cart">
                             <svg
                                 width="20"
                                 height="20"

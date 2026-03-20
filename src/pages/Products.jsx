@@ -19,12 +19,6 @@ const SORT_OPTIONS = [
     { value: 'price-desc', label: '높은 가격순' },
 ];
 
-const BADGE_OPTIONS = [
-    { value: 'Best', label: 'Best' },
-    { value: 'New', label: 'New' },
-    { value: 'Exclusive', label: 'Exclusive' },
-];
-
 const PRICE_RANGE_OPTIONS = [
     { value: 'under-50000', label: '5만원 이하', min: 0, max: 50000 },
     { value: '50000-100000', label: '5~10만원', min: 50000, max: 100000 },
@@ -59,7 +53,6 @@ const Products = () => {
     const addToCart = useCartStore((state) => state.addToCart);
 
     const [sort, setSort] = useState('default');
-    const [activeBadge, setActiveBadge] = useState('');
     const [activeCategories, setActiveCategories] = useState(() => (category ? [category] : []));
     const [activePriceRanges, setActivePriceRanges] = useState([]);
     const skipRouteCategorySyncRef = useRef(false);
@@ -104,17 +97,6 @@ const Products = () => {
         [products]
     );
 
-    const badgeOptions = useMemo(
-        () =>
-            BADGE_OPTIONS.map((badge) => ({
-                ...badge,
-                count: categoryFilteredProducts.filter((product) =>
-                    product.badge.includes(badge.value)
-                ).length,
-            })),
-        [categoryFilteredProducts]
-    );
-
     const activeCategoryLabels = useMemo(
         () =>
             activeCategories
@@ -124,14 +106,10 @@ const Products = () => {
     );
 
     const pageTitle = activeCategoryLabels.length === 1 ? activeCategoryLabels[0] : 'Products';
-    const breadcrumbLabel = activeCategoryLabels.length === 1 ? activeCategoryLabels[0] : '전체 상품';
+    const breadcrumbLabel = activeCategoryLabels.length === 1 ? activeCategoryLabels[0] : '전체 제품';
 
     const filtered = useMemo(() => {
         let list = [...categoryFilteredProducts];
-
-        if (activeBadge) {
-            list = list.filter((product) => product.badge.includes(activeBadge));
-        }
 
         if (activePriceRanges.length > 0) {
             list = list.filter((product) => {
@@ -169,7 +147,7 @@ const Products = () => {
             default:
                 return list;
         }
-    }, [activeBadge, activePriceRanges, categoryFilteredProducts, sort]);
+    }, [activePriceRanges, categoryFilteredProducts, sort]);
 
     const syncRouteForCategories = (nextCategories) => {
         const nextPath =
@@ -201,7 +179,6 @@ const Products = () => {
     };
 
     const handleClearAllFilters = () => {
-        setActiveBadge('');
         setActiveCategories([]);
         setActivePriceRanges([]);
         syncRouteForCategories([]);
@@ -212,129 +189,143 @@ const Products = () => {
             <div className="products-page__header-space" />
 
             <div className="products-page__shell">
-                <div className="products-page__rail">
-                    <ProductFilterRail
-                        categories={categoryOptions}
-                        activeCategories={activeCategories}
-                        onCategoryToggle={handleCategoryToggle}
-                        badgeOptions={badgeOptions}
-                        activeBadge={activeBadge}
-                        onBadgeChange={setActiveBadge}
-                        priceRangeOptions={PRICE_RANGE_OPTIONS}
-                        activePriceRanges={activePriceRanges}
-                        onPriceRangeToggle={handlePriceRangeToggle}
-                        onClearAllFilters={handleClearAllFilters}
-                    />
-                </div>
+                <div className="products-page__inner">
+                    <div className="products-page__title-area">
+                        <nav className="products-page__breadcrumb suit-14-m">
+                            <Link to="/">홈</Link>
+                            <span> / </span>
+                            <span>{breadcrumbLabel}</span>
+                        </nav>
+                        <h1 className="montage-80">{pageTitle}</h1>
+                    </div>
 
-                <div className="products-page__content">
-                    <div className="products-page__inner">
-                        <div className="products-page__title-area">
-                            <nav className="products-page__breadcrumb suit-14-m">
-                                <Link to="/">홈</Link>
-                                <span> / </span>
-                                <span>{breadcrumbLabel}</span>
-                            </nav>
-                            <h1 className="montage-80">{pageTitle}</h1>
+                    <div className="products-page__body">
+                        <div className="products-page__rail">
+                            <ProductFilterRail
+                                categories={categoryOptions}
+                                activeCategories={activeCategories}
+                                onCategoryToggle={handleCategoryToggle}
+                                priceRangeOptions={PRICE_RANGE_OPTIONS}
+                                activePriceRanges={activePriceRanges}
+                                onPriceRangeToggle={handlePriceRangeToggle}
+                                onClearAllFilters={handleClearAllFilters}
+                            />
                         </div>
 
-                        <div className="products-page__toolbar">
-                            <div className="products-page__toolbar-copy">
-                                <p className="suit-16-r products-page__count">총 {filtered.length}개</p>
+                        <div className="products-page__content">
+                            <div className="products-page__toolbar">
+                                <div className="products-page__toolbar-copy">
+                                    <p className="suit-16-r products-page__count">
+                                        총 {filtered.length}개
+                                    </p>
+                                </div>
+
+                                <select
+                                    className="products-page__sort suit-14-m"
+                                    value={sort}
+                                    onChange={(event) => setSort(event.target.value)}
+                                >
+                                    {SORT_OPTIONS.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
 
-                            <select
-                                className="products-page__sort suit-14-m"
-                                value={sort}
-                                onChange={(event) => setSort(event.target.value)}
-                            >
-                                {SORT_OPTIONS.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                            {filtered.length === 0 ? (
+                                <div className="products-page__empty suit-18-r">
+                                    해당하는 상품이 없습니다.
+                                </div>
+                            ) : (
+                                <div className="products-page__grid-stage">
+                                    <div className="products-page__grid">
+                                        {filtered.map((product) => {
+                                            const isWishlisted = wishlist.includes(product.name);
 
-                        {filtered.length === 0 ? (
-                            <div className="products-page__empty suit-18-r">
-                                해당하는 제품이 없습니다.
-                            </div>
-                        ) : (
-                            <div className="products-page__grid">
-                                {filtered.map((product) => {
-                                    const isWishlisted = wishlist.includes(product.name);
+                                            return (
+                                                <div key={product.name} className="products-page__card">
+                                                    <div className="products-page__card-img-wrap">
+                                                        <div className="products-page__card-overlay">
+                                                            <div className="products-page__card-badges">
+                                                                {product.badge.map((badge) =>
+                                                                    renderBadge(badge)
+                                                                )}
+                                                            </div>
 
-                                    return (
-                                        <div key={product.name} className="products-page__card">
-                                            <div className="products-page__card-img-wrap">
-                                                <div className="products-page__card-overlay">
-                                                    <div className="products-page__card-badges">
-                                                        {product.badge.map((badge) =>
-                                                            renderBadge(badge)
-                                                        )}
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        className={`products-page__wish-btn ${
-                                                            isWishlisted ? 'active' : ''
-                                                        }`}
-                                                        onClick={() => toggleWishlist(product.name)}
-                                                        aria-label="위시리스트 추가"
-                                                    >
-                                                        <svg
-                                                            width="18"
-                                                            height="18"
-                                                            viewBox="0 0 24 24"
-                                                            fill={isWishlisted ? 'currentColor' : 'none'}
-                                                            stroke="currentColor"
-                                                            strokeWidth="1.5"
+                                                            <button
+                                                                type="button"
+                                                                className={`products-page__wish-btn ${
+                                                                    isWishlisted ? 'active' : ''
+                                                                }`}
+                                                                onClick={() =>
+                                                                    toggleWishlist(product.name)
+                                                                }
+                                                                aria-label="위시리스트 추가"
+                                                            >
+                                                                <svg
+                                                                    width="18"
+                                                                    height="18"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill={
+                                                                        isWishlisted
+                                                                            ? 'currentColor'
+                                                                            : 'none'
+                                                                    }
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.5"
+                                                                >
+                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+
+                                                        <Link
+                                                            to={`/product/${encodeURIComponent(product.name)}`}
+                                                            className="products-page__card-img-link"
                                                         >
-                                                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                                                        </svg>
-                                                    </button>
+                                                            <img
+                                                                src={product.variants[0]?.image}
+                                                                alt={product.name}
+                                                                className="products-page__card-img"
+                                                            />
+                                                        </Link>
+                                                    </div>
+
+                                                    <div className="products-page__card-info">
+                                                        <div className="products-page__card-copy">
+                                                            <div className="products-page__card-copy-inner">
+                                                                <p className="products-page__card-category suit-12-r">
+                                                                    {product.category}
+                                                                </p>
+                                                                <p className="products-page__card-name suit-18-m">
+                                                                    {product.name}
+                                                                </p>
+                                                                <p className="products-page__card-desc suit-14-m">
+                                                                    {product.description}
+                                                                </p>
+                                                                <p className="products-page__card-price suit-16-r">
+                                                                    {product.variants[0]?.price?.toLocaleString()}원
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="products-page__card-actions">
+                                                            <AddToCartButton
+                                                                className="products-page__add-btn"
+                                                                text="장바구니 담기"
+                                                                width="100%"
+                                                                onClick={() => addToCart(product, 0)}
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
-
-                                                <Link
-                                                    to={`/product/${encodeURIComponent(product.name)}`}
-                                                    className="products-page__card-img-link"
-                                                >
-                                                    <img
-                                                        src={product.variants[0]?.image}
-                                                        alt={product.name}
-                                                        className="products-page__card-img"
-                                                    />
-                                                </Link>
-                                            </div>
-
-                                            <div className="products-page__card-info">
-                                                <p className="products-page__card-category suit-12-r">
-                                                    {product.category}
-                                                </p>
-                                                <p className="products-page__card-name suit-18-m">
-                                                    {product.name}
-                                                </p>
-                                                <p className="products-page__card-desc suit-14-m">
-                                                    {product.description}
-                                                </p>
-                                                <p className="products-page__card-price suit-16-r">
-                                                    {product.variants[0]?.price?.toLocaleString()}원
-                                                </p>
-
-                                                <div className="products-page__card-actions">
-                                                    <AddToCartButton
-                                                        className="products-page__add-btn"
-                                                        text="장바구니 담기"
-                                                        width="100%"
-                                                        onClick={() => addToCart(product, 0)}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

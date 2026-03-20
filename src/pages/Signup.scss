@@ -1,0 +1,271 @@
+@use "sass:color";
+@use "../globals.scss" as *;
+
+.signup-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, rgba($point-green, 0.12) 0%, rgba($point-green, 0) 28%),
+        linear-gradient(180deg, rgba($oatmeal, 0.98) 0%, rgba($bg-primary, 0.52) 100%);
+
+    &__header-space {
+        height: 70px;
+    }
+
+    &__shell {
+        width: min(1460px, calc(100% - 48px));
+        margin: 0 auto;
+        padding: 72px 0 120px;
+    }
+
+    &__panel {
+        width: min(520px, 100%);
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    &__logo {
+        width: 172px;
+        margin: 0 auto 28px;
+        display: block;
+        color: $brown-800;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $brown-900;
+        }
+    }
+
+    &__logo-mark {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    &__intro {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    &__intro-rule {
+        width: 42px;
+        height: 1px;
+        background: $point-green;
+    }
+
+    &__title {
+        color: $brown-800;
+    }
+
+    &__copy {
+        color: $brown-500;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__label-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    &__label,
+    &__optional,
+    &__hint {
+        letter-spacing: 0.08em;
+    }
+
+    &__label {
+        color: $brown-600;
+        text-transform: uppercase;
+        padding-top: 6px;
+    }
+
+    &__optional,
+    &__hint {
+        color: rgba($brown-400, 0.88);
+    }
+
+    &__control {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    &__control--date {
+        align-items: stretch;
+    }
+
+    &__control-surface {
+        width: 100%;
+        min-height: 48px;
+        border: 0;
+        border-bottom: 1px solid rgba($brown-200, 0.92);
+        background: transparent;
+        color: $brown-800;
+        outline: none;
+        padding: 0 0 10px;
+        transition:
+            border-color 0.2s ease,
+            color 0.2s ease,
+            background-color 0.2s ease;
+
+        &::placeholder {
+            color: rgba($brown-300, 0.92);
+        }
+
+        &:disabled {
+            color: rgba($brown-300, 0.96);
+            cursor: not-allowed;
+        }
+    }
+
+    &__control-surface--active {
+        border-bottom-color: $brown-500;
+    }
+
+    &__control-surface--error {
+        border-bottom-color: $point-pink;
+    }
+
+    &__date-input {
+        padding-right: 4px;
+        color-scheme: light;
+
+        &::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        &::-webkit-datetime-edit {
+            color: $brown-800;
+        }
+    }
+
+    &__icon-button,
+    &__select-icon {
+        color: rgba($brown-400, 0.94);
+    }
+
+    &__icon-button {
+        position: absolute;
+        right: 0;
+        bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $brown-700;
+        }
+    }
+
+    &__select {
+        appearance: none;
+        cursor: pointer;
+        padding-right: 28px;
+    }
+
+    &__select-icon {
+        position: absolute;
+        right: 0;
+        bottom: 12px;
+        pointer-events: none;
+    }
+
+    &__message {
+        color: $brown-400;
+    }
+
+    &__message--error {
+        color: color.mix($point-pink, $brown-700, 72%);
+    }
+
+    &__message--success {
+        color: color.mix($point-green, $brown-700, 68%);
+    }
+
+    &__divider {
+        height: 1px;
+        margin: 12px 0 2px;
+        background: linear-gradient(
+            90deg,
+            rgba($brown-200, 0) 0%,
+            rgba($brown-200, 0.96) 50%,
+            rgba($brown-200, 0) 100%
+        );
+    }
+
+    &__submit {
+        width: 100%;
+        height: 52px;
+        background: $brown-500;
+        color: $oatmeal;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background: $brown-800;
+        }
+    }
+
+    &__footer {
+        margin-top: 18px;
+        text-align: center;
+        color: $brown-400;
+    }
+
+    &__footer-link {
+        color: $brown-600;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $brown-800;
+        }
+    }
+
+    @media (max-width: 767px) {
+        &__shell {
+            width: calc(100% - 32px);
+            padding: 40px 0 88px;
+        }
+
+        &__panel {
+            padding: 0;
+        }
+
+        &__intro {
+            margin-bottom: 32px;
+        }
+
+        &__title {
+            font-size: 34px;
+        }
+
+        &__label-row {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 4px;
+        }
+    }
+}

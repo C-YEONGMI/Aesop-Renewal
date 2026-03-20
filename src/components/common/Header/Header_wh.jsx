@@ -6,9 +6,43 @@ import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
 import useAuthStore from '../../../store/useAuthStore';
 import useCartStore from '../../../store/useCartStore';
 
+const AccountIcon = () => (
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+    </svg>
+);
+
+const LogoutIcon = () => (
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+        <polyline points="10 17 15 12 10 7" />
+        <line x1="15" y1="12" x2="3" y2="12" />
+    </svg>
+);
+
 const Header_wh = () => {
     const navigate = useNavigate();
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const logout = useAuthStore((state) => state.logout);
     const totalCount = useCartStore((state) =>
         state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
     );
@@ -22,6 +56,16 @@ const Header_wh = () => {
         });
     };
 
+    const handleAccountAction = () => {
+        if (isLoggedIn) {
+            logout();
+            navigate('/');
+            return;
+        }
+
+        navigate('/login');
+    };
+
     return (
         <header id="header-wh">
             <div className="inner">
@@ -33,9 +77,9 @@ const Header_wh = () => {
                             <ul className="depth2">
                                 <li><a href="/products/skincare">SKIN CARE</a></li>
                                 <li><a href="/products/fragrance">Perfume</a></li>
-                                <li><a href="/products/home">HOME · LIVING</a></li>
-                                <li><a href="/products/hair">HAIR · SHAVING</a></li>
-                                <li><a href="/products/body">HAND · BODY</a></li>
+                                <li><a href="/products/home">HOME & LIVING</a></li>
+                                <li><a href="/products/hair">HAIR & SHAVING</a></li>
+                                <li><a href="/products/body">HAND & BODY</a></li>
                                 <li><a href="/products/kits">KITS</a></li>
                             </ul>
                         </li>
@@ -69,24 +113,27 @@ const Header_wh = () => {
                         />
                     </li>
                     <li>
-                        <a href={isLoggedIn ? '/mypage' : '/login'} aria-label={isLoggedIn ? 'Mypage' : 'Login'}>
-                            {isLoggedIn ? (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                            ) : (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                                    <polyline points="10 17 15 12 10 7" />
-                                    <line x1="15" y1="12" x2="3" y2="12" />
-                                </svg>
-                            )}
-                        </a>
+                        <button
+                            type="button"
+                            className="header-account-action"
+                            onClick={handleAccountAction}
+                            aria-label={isLoggedIn ? 'Logout' : 'Login'}
+                        >
+                            {isLoggedIn ? <LogoutIcon /> : <AccountIcon />}
+                        </button>
                     </li>
                     <li>
                         <a href="/cart" aria-label="Cart">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
                                 <circle cx="8" cy="21" r="1" />
                                 <circle cx="19" cy="21" r="1" />
                                 <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />

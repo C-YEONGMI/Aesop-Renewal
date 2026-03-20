@@ -22,6 +22,7 @@
 
         .depth1 > li > a,
         .utl li a,
+        .utl li button,
         .utl li.search-li,
         .search-toggle-btn,
         .search-submit-btn {
@@ -204,6 +205,7 @@
 }
 
 #header .utl li a,
+#header .utl li button,
 #header .utl li.search-li {
     text-decoration: none;
     color: $brown-900;
@@ -213,7 +215,16 @@
     transition: opacity 0.3s ease;
 }
 
+#header .utl li button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
 #header .utl li a:hover,
+#header .utl li button:hover,
 #header .utl li.search-li:hover {
     opacity: 0.6;
 }

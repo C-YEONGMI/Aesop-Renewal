@@ -28,9 +28,6 @@ const ProductFilterRail = ({
     categories,
     activeCategories,
     onCategoryToggle,
-    badgeOptions,
-    activeBadge,
-    onBadgeChange,
     priceRangeOptions,
     activePriceRanges,
     onPriceRangeToggle,
@@ -53,18 +50,6 @@ const ProductFilterRail = ({
             });
         });
 
-        if (activeBadge) {
-            const activeBadgeItem = badgeOptions.find((badge) => badge.value === activeBadge);
-
-            if (activeBadgeItem) {
-                items.push({
-                    key: `badge-${activeBadgeItem.value}`,
-                    label: activeBadgeItem.label,
-                    onRemove: () => onBadgeChange(''),
-                });
-            }
-        }
-
         activePriceRanges.forEach((rangeValue) => {
             const activePriceRangeItem = priceRangeOptions.find((range) => range.value === rangeValue);
 
@@ -81,12 +66,9 @@ const ProductFilterRail = ({
 
         return items;
     }, [
-        activeBadge,
         activeCategories,
         activePriceRanges,
-        badgeOptions,
         categories,
-        onBadgeChange,
         onCategoryToggle,
         onPriceRangeToggle,
         priceRangeOptions,
@@ -147,26 +129,6 @@ const ProductFilterRail = ({
                                     </li>
                                 ))}
                         </ul>
-                    </FilterSection>
-
-                    <FilterSection title="Badge">
-                        <div className="product-filter-rail__option-list">
-                            {badgeOptions.map((badge) => (
-                                <button
-                                    key={badge.value}
-                                    type="button"
-                                    className={`product-filter-rail__option-chip suit-14-m ${
-                                        activeBadge === badge.value ? 'active' : ''
-                                    }`}
-                                    onClick={() =>
-                                        onBadgeChange(activeBadge === badge.value ? '' : badge.value)
-                                    }
-                                    aria-pressed={activeBadge === badge.value}
-                                >
-                                    {badge.label}
-                                </button>
-                            ))}
-                        </div>
                     </FilterSection>
 
                     <FilterSection title="가격대">
