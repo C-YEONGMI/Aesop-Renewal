@@ -1,16 +1,16 @@
 @use '../../globals.scss' as *;
 
 .cart-add-dialog {
-    padding: 36px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 22px;
     color: $brown-900;
     background-color: $oatmeal;
     font-family: $font-suit;
 
     &__header {
-        gap: 10px;
+        gap: 8px;
     }
 
     &__eyebrow {
@@ -35,9 +35,9 @@
 
     &__item {
         display: grid;
-        grid-template-columns: 132px minmax(0, 1fr);
-        gap: 22px;
-        padding: 20px;
+        grid-template-columns: 118px minmax(0, 1fr);
+        gap: 18px;
+        padding: 16px;
         background: linear-gradient(180deg, rgba($brown-100, 0.2) 0%, rgba($oatmeal, 0.92) 100%);
         border: 1px solid rgba($brown-900, 0.16);
         box-shadow: 0 10px 24px rgba($brown-900, 0.06);
@@ -48,7 +48,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 8px;
+        padding: 6px;
         overflow: hidden;
         background-color: rgba($brown-100, 0.28);
 
@@ -64,7 +64,7 @@
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
         align-items: start;
-        gap: 12px;
+        gap: 10px;
         min-width: 0;
     }
 
@@ -74,7 +74,7 @@
         flex-direction: column;
         justify-content: flex-start;
         align-self: start;
-        gap: 6px;
+        gap: 4px;
     }
 
     &__category {
@@ -101,7 +101,7 @@
     &__recommendations {
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 12px;
     }
 
     &__recommendations-head {
@@ -124,14 +124,14 @@
     &__recommendations-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
+        gap: 10px;
     }
 
     &__recommendation-card {
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        padding: 14px;
+        gap: 10px;
+        padding: 12px;
         background-color: rgba($brown-100, 0.14);
         border: 1px solid rgba($brown-900, 0.08);
     }
@@ -152,7 +152,7 @@
     &__recommendation-copy {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 1px;
         flex: 1;
         min-width: 0;
     }
@@ -177,7 +177,7 @@
 
     &__recommendation-button {
         font-family: inherit;
-        min-height: 40px;
+        min-height: 36px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -208,7 +208,7 @@
 
     &__button {
         font-family: inherit;
-        min-height: 48px;
+        min-height: 46px;
         padding: 0 18px;
         display: inline-flex;
         align-items: center;
