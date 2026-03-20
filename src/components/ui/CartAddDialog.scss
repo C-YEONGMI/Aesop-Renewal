@@ -63,7 +63,7 @@
     &__copy {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
-        align-items: end;
+        align-items: start;
         gap: 12px;
         min-width: 0;
     }
@@ -72,7 +72,8 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
+        align-self: start;
         gap: 6px;
     }
 
