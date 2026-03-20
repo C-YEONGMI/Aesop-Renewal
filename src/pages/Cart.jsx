@@ -115,24 +115,6 @@ const Cart = () => {
                         장바구니
                     </motion.h1>
 
-                    {cartItems.length > 0 ? (
-                        <motion.p
-                            className="cart-page__lead"
-                            initial={{ opacity: 0, y: 14 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ ...fadeUpTransition, delay: 0.08 }}
-                        >
-                            선택한{' '}
-                            <span className="cart-page__lead-emphasis">
-                                <RollingNumber value={checkedItems.length} />
-                            </span>
-                            개 상품의 예상 결제 금액은{' '}
-                            <span className="cart-page__lead-emphasis">
-                                <PriceValue value={total} />
-                            </span>
-                            입니다.
-                        </motion.p>
-                    ) : null}
                 </div>
 
                 <AnimatePresence mode="wait">

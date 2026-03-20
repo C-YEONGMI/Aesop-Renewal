@@ -27,24 +27,6 @@
         margin-bottom: 0;
     }
 
-    &__lead {
-        margin-top: 8px;
-        font-family: $font-suit;
-        font-weight: 400;
-        font-size: 15px;
-        line-height: 1.6;
-        color: rgba($brown-900, 0.72);
-        word-break: keep-all;
-    }
-
-    &__lead-emphasis {
-        display: inline-flex;
-        align-items: flex-end;
-        color: $brown-500;
-        font-weight: 600;
-        margin-inline: 2px;
-    }
-
     &__price-text {
         display: inline-flex;
         align-items: flex-end;
@@ -568,10 +550,6 @@
 
         &__title {
             font-size: 28px;
-        }
-
-        &__lead {
-            font-size: 14px;
         }
 
         &__toolbar {
