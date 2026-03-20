@@ -116,10 +116,6 @@ const CartAddDialog = () => {
                 className="cart-add-dialog"
                 aria-describedby="cart-add-dialog-description"
             >
-                <div className="cart-add-dialog__status" aria-hidden="true">
-                    <Check size={20} strokeWidth={2.2} />
-                </div>
-
                 <DialogHeader className="cart-add-dialog__header">
                     <p className="cart-add-dialog__eyebrow suit-12-r">Shopping Bag</p>
                     <DialogTitle className="cart-add-dialog__title optima-40">
