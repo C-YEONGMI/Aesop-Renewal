@@ -107,14 +107,14 @@ const ARC_R     = 1700; // 원 반지름(px): 클수록 곡률 완만
 // 카드 간 각도 간격: 호 길이(카드폭+gap=380px)를 반지름으로 나눈 라디안 → 도
 // Figma 기준 카드 rotation: -33.5°/-14.7°/-5°/+4.9°/+15.2°/+33.4° → step ≈ 12.8°
 const DEG_STEP  = (380 / ARC_R) * (180 / Math.PI); // ≈ 12.8°
-// Figma 좌측 끝 카드 rotation=-33.53° → cardAngle=-123.53° → BASE_ANGLE=-124
-const BASE_ANGLE = -124;
-// scroll 전 구간(MAX_SCROLL)에서 호가 회전하는 총 각도
-const SCROLL_ROTATE_DEG = 86;
-// arc 꼭짓점(중앙 카드 중심)의 section 상단 기준 Y — 카드 위치 상향
-const APEX_Y    = 500;
-// GSAP scrub 거리(px): end: `+=${MAX_SCROLL}` 에 사용
-const MAX_SCROLL = 2500;
+// card 0이 scroll=0 시 화면 왼쪽 안쪽에 완전히 보이는 기준 각도
+const BASE_ANGLE = -108;
+// scroll 전 구간에서 호가 회전하는 총 각도 — 13장 카드 전체를 커버
+const SCROLL_ROTATE_DEG = 120;
+// arc 꼭짓점(중앙 카드 중심)의 section 상단 기준 Y
+const APEX_Y    = 540;
+// GSAP scrub 거리(px): end: `+=${MAX_SCROLL}` — 스크롤 속도 유지 (≈29px/°)
+const MAX_SCROLL = 3500;
 
 // 산개 위치 — section 중앙 근방에 분산 (opacity:0이라 보이지 않음)
 const SCATTER_POSITIONS = ARCH_CARDS.map(() => ({
@@ -255,6 +255,7 @@ const OurStory = () => {
     const archStageRef = useRef(null);  // section element (GSAP pin target)
     const [archPhase, setArchPhase]         = useState('scatter');
     const [archScrollValue, setArchScrollValue] = useState(0);
+    const archDragRef = useRef({ active: false, startX: 0 }); // 드래그 상태
 
     // ── Origins tab text state ─────────────────────────────────────────────
     const [tabText, setTabText] = useState({ en: ORIGINS_TABS[0].en, kr: ORIGINS_TABS[0].kr, enSmall: false });
@@ -264,6 +265,21 @@ const OurStory = () => {
 
     const tabButtonRefs     = useRef([]);
     const activeTabRef      = useRef('origins');
+
+    // ── Architecture 드래그 핸들러 (수평 드래그 → 수직 스크롤 변환) ─────
+    const handleArchPointerDown = useCallback((e) => {
+        archDragRef.current = { active: true, startX: e.clientX };
+        e.currentTarget.setPointerCapture(e.pointerId);
+    }, []);
+    const handleArchPointerMove = useCallback((e) => {
+        if (!archDragRef.current.active) return;
+        const dx = archDragRef.current.startX - e.clientX; // 왼쪽 드래그 = 양수 = 스크롤 전진
+        archDragRef.current.startX = e.clientX;
+        window.scrollBy(0, dx * 1.2); // 수평 드래그를 수직 스크롤로 변환 (1.2배 감도)
+    }, []);
+    const handleArchPointerUp = useCallback(() => {
+        archDragRef.current.active = false;
+    }, []);
 
     // ── 탭 전환 (클릭 · 스크롤 공용) ──────────────────────────────────────
     const changeTab = useCallback((id) => {
@@ -499,10 +515,37 @@ const OurStory = () => {
                         },
                     });
                 }
-                gsap.from('.about-sustainability__image, .about-sustainability__desc', {
-                    autoAlpha: 0, y: 50, duration: 1, stagger: 0.15, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.about-sustainability__image', start: 'top 75%' },
-                });
+                // ── Sustainability: 이미지 클리핑 reveal + 줌인 ──────────
+                const sustainImg = document.querySelector('.about-sustainability__image');
+                if (sustainImg) {
+                    gsap.set(sustainImg, { clipPath: 'inset(100% 0 0 0)' });
+                    gsap.set(sustainImg.querySelector('img'), { scale: 1.15 });
+                    const sustainImgTl = gsap.timeline({
+                        scrollTrigger: { trigger: sustainImg, start: 'top 75%' },
+                    });
+                    sustainImgTl.to(sustainImg, {
+                        clipPath: 'inset(0% 0 0 0)', duration: 1.2, ease: 'power3.inOut',
+                    });
+                    sustainImgTl.to(sustainImg.querySelector('img'), {
+                        scale: 1, duration: 1.4, ease: 'power2.out',
+                    }, '<0.15');
+                }
+
+                // ── Sustainability: desc 줄별 stagger reveal ─────────
+                const sustainDesc = document.querySelector('.about-sustainability__desc');
+                if (sustainDesc) {
+                    const descLines = setDescLines(sustainDesc,
+                        '불필요한 패키징을 줄이고, 재사용과 재활용이 가능한 소재를 우선합니다.\n'
+                        + '제품 전반에 걸쳐 지속 가능한 설계와 재료 선택을 고려합니다.\n'
+                        + '과도한 장식을 지양하며, 필요한 만큼만 사용하는 태도를 유지합니다.'
+                    );
+                    gsap.set(descLines, { autoAlpha: 0, y: 24 });
+                    gsap.to(descLines, {
+                        autoAlpha: 1, y: 0, duration: 0.65,
+                        stagger: 0.15, ease: 'power3.out',
+                        scrollTrigger: { trigger: sustainDesc, start: 'top 85%' },
+                    });
+                }
             });
 
             // ── reduced-motion fallback ────────────────────────────────────
@@ -566,6 +609,21 @@ const OurStory = () => {
                         },
                     });
                 });
+
+                // Sustainability (reduced-motion: 즉시 표시)
+                const sustainImgRM = document.querySelector('.about-sustainability__image');
+                if (sustainImgRM) {
+                    gsap.set(sustainImgRM, { clipPath: 'inset(0% 0 0 0)' });
+                }
+                const sustainDescRM = document.querySelector('.about-sustainability__desc');
+                if (sustainDescRM) {
+                    const rmLines = setDescLines(sustainDescRM,
+                        '불필요한 패키징을 줄이고, 재사용과 재활용이 가능한 소재를 우선합니다.\n'
+                        + '제품 전반에 걸쳐 지속 가능한 설계와 재료 선택을 고려합니다.\n'
+                        + '과도한 장식을 지양하며, 필요한 만큼만 사용하는 태도를 유지합니다.'
+                    );
+                    gsap.set(rmLines, { autoAlpha: 1, y: 0 });
+                }
 
                 // Architecture (reduced-motion: arc 즉시 표시 + 스크롤 지원)
                 const archSectionRM = archStageRef.current;
@@ -747,7 +805,14 @@ const OurStory = () => {
             {/* ── ARCHITECTURE ── */}
             <section className="about-architecture" ref={archStageRef} data-node-id="763:1348">
                 <h2 className="about-architecture__title optima-220" ref={archTitleRef}>Architecture</h2>
-                <div className="about-architecture__stage">
+                <div
+                    className="about-architecture__stage"
+                    onPointerDown={handleArchPointerDown}
+                    onPointerMove={handleArchPointerMove}
+                    onPointerUp={handleArchPointerUp}
+                    onPointerCancel={handleArchPointerUp}
+                    style={{ cursor: 'grab', touchAction: 'pan-y' }}
+                >
                     {ARCH_CARDS.map((card, i) => (
                         <ArchCard
                             key={i}
@@ -767,14 +832,12 @@ const OurStory = () => {
             {/* ── SUSTAINABILITY ── */}
             <section className="about-sustainability" data-node-id="763:1341">
                 <h2 className="about-sustainability__title optima-220" ref={sustainTitleRef}>Sustainability</h2>
-                <div className="about-sustainability__image">
-                    <img src={aboutSustain} alt="Aesop sustainable products" />
+                <div className="about-sustainability__body">
+                    <div className="about-sustainability__image">
+                        <img src={aboutSustain} alt="Aesop sustainable products" />
+                    </div>
+                    <p className="about-sustainability__desc" />
                 </div>
-                <p className="about-sustainability__desc">
-                    불필요한 패키징을 줄이고, 재사용과 재활용이 가능한 소재를 우선합니다.
-                    제품 전반에 걸쳐 지속 가능한 설계와 재료 선택을 고려합니다.
-                    과도한 장식을 지양하며, 필요한 만큼만 사용하는 태도를 유지합니다.
-                </p>
             </section>
 
         </div>
