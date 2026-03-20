@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.scss';
 import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
@@ -39,13 +40,29 @@ const LogoutIcon = () => (
     </svg>
 );
 
-const Header = ({ transparent = false }) => {
+const Header = ({ transparent = false, isVisible = true }) => {
     const navigate = useNavigate();
+    const headerRef = useRef(null);
     const totalCount = useCartStore((state) =>
         state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
     );
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const logout = useAuthStore((state) => state.logout);
+
+    useLayoutEffect(() => {
+        if (!headerRef.current) {
+            return undefined;
+        }
+
+        const tween = gsap.to(headerRef.current, {
+            yPercent: isVisible ? 0 : -110,
+            duration: 0.48,
+            ease: 'power3.out',
+            overwrite: 'auto',
+        });
+
+        return () => tween.kill();
+    }, [isVisible]);
 
     const handleLogoClick = (event) => {
         event.preventDefault();
@@ -67,7 +84,11 @@ const Header = ({ transparent = false }) => {
     };
 
     return (
-        <header id="header" className={transparent ? 'transparent' : ''}>
+        <header
+            ref={headerRef}
+            id="header"
+            className={transparent ? 'transparent' : ''}
+        >
             <div className="inner">
                 <nav className="nav">
                     <ul className="depth1">

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -12,7 +12,9 @@ const Layout = () => {
     const location = useLocation();
     const isHome = location.pathname === '/';
     const [scrolled, setScrolled] = useState(false);
+    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const shouldPreserveScroll = Boolean(location.state?.preserveScroll);
+    const lastScrollYRef = useRef(0);
 
     useEffect(() => {
         if (!('scrollRestoration' in window.history)) {
@@ -36,25 +38,44 @@ const Layout = () => {
     }, [location.key, shouldPreserveScroll]);
 
     useEffect(() => {
-        if (!isHome) {
-            setScrolled(true);
-            return;
-        }
-        // 홈에서만 스크롤 감지
         const handleScroll = () => {
-            const heroHeight = document.querySelector('.hero')?.offsetHeight ?? window.innerHeight;
-            setScrolled(window.scrollY > heroHeight * 0.9);
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollYRef.current;
+
+            if (isHome) {
+                const heroHeight = document.querySelector('.hero')?.offsetHeight ?? window.innerHeight;
+                setScrolled(currentScrollY > heroHeight * 0.9);
+            } else {
+                setScrolled(true);
+            }
+
+            if (currentScrollY <= 4) {
+                setIsHeaderVisible(true);
+                lastScrollYRef.current = currentScrollY;
+                return;
+            }
+
+            if (Math.abs(scrollDelta) < 6) {
+                return;
+            }
+
+            // 요청 기준: 아래로 스크롤할 때는 보이고, 위로 스크롤할 때는 숨김
+            setIsHeaderVisible(scrollDelta > 0);
+            lastScrollYRef.current = currentScrollY;
         };
-        setScrolled(false);
+
+        lastScrollYRef.current = window.scrollY;
+        setIsHeaderVisible(true);
         handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
+
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isHome]);
+    }, [isHome, location.key]);
 
     return (
         <>
             {/* transparent 여부를 헤더에 전달 */}
-            <Header transparent={isHome && !scrolled} />
+            <Header transparent={isHome && !scrolled} isVisible={isHeaderVisible} />
             <main className="main">
                 <Outlet />
             </main>
