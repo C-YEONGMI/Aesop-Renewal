@@ -137,9 +137,9 @@ const Products = () => {
 
         switch (sort) {
             case 'best':
-                return list.filter((product) => product.badge.includes('Best'));
+                return [...list].sort((a, b) => a.popularId - b.popularId);
             case 'new':
-                return list.filter((product) => product.badge.includes('New'));
+                return [...list].sort((a, b) => a.newestId - b.newestId);
             case 'price-asc':
                 return [...list].sort((a, b) => a.variants[0]?.price - b.variants[0]?.price);
             case 'price-desc':

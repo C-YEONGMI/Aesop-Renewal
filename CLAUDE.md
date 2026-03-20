@@ -21,20 +21,30 @@ npm run preview   # 빌드 결과물 미리보기
 
 **라우팅**: `react-router-dom` v6 `createBrowserRouter`. 모든 라우트는 `Layout` 컴포넌트를 공통 쉘로 사용 (`<Outlet />`).
 
-**페이지 컴포넌트 위치 (두 군데)**:
-- `src/components/pages/` — 메인 페이지 (`Main.jsx`) 전용
-- `src/pages/` — 나머지 모든 페이지 (Products, ProductDetail, Cart, Checkout, Login, Signup, FindAccount, MyPage, GiftGuide, Benefits, KrExclusiveBenefits, OurStory, Search, Support, StoreLocator)
+**페이지 컴포넌트** (`src/pages/`):
+- 모든 페이지가 단일 디렉터리에 위치 (Main, Products, ProductDetail, Cart, Checkout, Login, Signup, FindAccount, MyPage, GiftGuide, Benefits, KrExclusiveBenefits, OurStory, Search, Support, StoreLocator)
 
 **공통 컴포넌트** (`src/components/common/`):
 - `Layout.jsx` — 헤더/푸터 래퍼. 홈(`/`)의 Hero 구간에서는 transparent 헤더, 스크롤 후 또는 내부 페이지에서는 solid 헤더로 자동 전환
-- `Header/Header.jsx` — 단일 헤더 컴포넌트 (`transparent` prop으로 스타일 분기)
+- `Header/Header.jsx` — 기본 헤더 (`transparent` prop으로 스타일 분기)
+- `Header/Header_wh.jsx` — 화이트 헤더 변형
 - `Footer/Footer.jsx`
 - `btn/FloatingButtons.jsx` — 모든 페이지에 고정 표시
 - `btn/AddToCartButton.jsx` — 장바구니 담기 버튼
+- `btn/CartButton.jsx`, `btn/MoreBox.jsx`, `btn/MoreWhBox.jsx`, `btn/more.jsx` — 기타 버튼 컴포넌트
 - `benefits/BenefitsPageHeader.jsx` — Benefits 하위 페이지 공통 헤더/탭 네비게이션
 - `badge/` — Best.jsx, New.jsx, Exclusive.jsx
-- `mainpage/` — 메인 페이지 전용 섹션 컴포넌트들 (Hero, BestProductsSection, BestboxSm, BestpdLg, KoreaExclusiveSection, AboutTeaserSection, BestGiftSection, NewArrivalSection, OfficialExclusiveSection, StoreVisualSection, IntroCopy, ProductNavigatorSection)
-- `ui/` — ExpandableSearchBar.jsx, ExpandableChat.jsx
+- `mainpage/` — 메인 페이지 전용 섹션 컴포넌트들 (Hero, BestProductsSection, BestboxSm, BestpdLg, KoreaExclusiveSection, AboutTeaserSection, BestGiftSection, NewArrivalSection, OfficialExclusiveSection, StoreVisualSection, IntroCopy, ProductNavigatorSection, RitualNotesSection)
+
+**UI 컴포넌트** (`src/components/ui/`):
+- ExpandableSearchBar.jsx, ExpandableChat.jsx — 확장형 검색/채팅
+- Dialog.jsx, CartAddDialog.jsx — 모달/다이얼로그
+- ProductFilterRail.jsx — 상품 필터 사이드바
+- RollingNumber.jsx, TextEffect.jsx — 애니메이션 효과
+
+**기타 컴포넌트** (`src/components/`):
+- `ProductCard.jsx` — 재사용 가능한 상품 카드
+- `ProductList.jsx` — 상품 목록
 
 **상태 관리** (`src/store/`, 모두 Zustand + `persist` 미들웨어로 localStorage 영속화):
 - `useCartStore.js` — 장바구니 (key: `aesop-cart`). `cartId = productName-variantIndex`
@@ -48,7 +58,10 @@ npm run preview   # 빌드 결과물 미리보기
 - `products.json` — 제품 정적 데이터 (category, name, description, badge, variants[]{capacity, price, image})
 - `stores.json` — 매장 정보
 - `mainPageContent.js` — 메인 페이지 카피·큐레이션 데이터. `BEST_PRODUCT_NAMES`로 베스트 3개 상품 고정 지정 (랜덤 금지)
-- `krExclusiveBenefitsContent.js` — KrExclusiveBenefits 페이지 전용 콘텐츠·이미지 데이터
+- `productCategories.js` — 상품 카테고리 정의
+
+**유틸리티** (`src/lib/`):
+- `utils.js` — 공통 유틸리티 함수
 
 ## GSAP 애니메이션 패턴
 
