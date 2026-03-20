@@ -12,11 +12,15 @@ const useCartStore = create(
 
             // 장바구니 담기
             addToCart: (product, variantIndex = 0, options = {}) => {
-                const { showDialog = true } = options;
+                const { showDialog = true, preserveDialog = false } = options;
                 const variant = product.variants[variantIndex];
                 const cartId = `${product.name}-${variantIndex}`;
                 const items = get().cartItems;
                 const existing = items.find(item => item.cartId === cartId);
+                const currentDialogState = {
+                    isCartDialogOpen: get().isCartDialogOpen,
+                    cartDialogItem: get().cartDialogItem,
+                };
                 const cartDialogItem = {
                     cartId,
                     productName: product.name,
@@ -47,8 +51,14 @@ const useCartStore = create(
 
                 set({
                     cartItems: nextCartItems,
-                    isCartDialogOpen: showDialog,
-                    cartDialogItem: showDialog ? cartDialogItem : null,
+                    isCartDialogOpen: preserveDialog
+                        ? currentDialogState.isCartDialogOpen
+                        : showDialog,
+                    cartDialogItem: preserveDialog
+                        ? currentDialogState.cartDialogItem
+                        : showDialog
+                            ? cartDialogItem
+                            : null,
                 });
             },
 
