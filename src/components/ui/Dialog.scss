@@ -22,7 +22,7 @@
         top: 50%;
         left: 50%;
         z-index: 1601;
-        width: min(92vw, 560px);
+        width: min(94vw, 680px);
         max-height: calc(100vh - 48px);
         overflow-y: auto;
         transform: translate(-50%, -50%);
@@ -133,7 +133,7 @@
 @media (max-width: 640px) {
     .ui-dialog {
         &__content {
-            width: min(100vw - 24px, 560px);
+            width: min(100vw - 24px, 680px);
         }
 
         &__footer {
