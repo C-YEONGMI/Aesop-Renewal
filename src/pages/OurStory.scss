@@ -1,54 +1,566 @@
 @use "../globals.scss" as *;
 
-.our-story-page {
-    background-color: $oatmeal;
-    min-height: 100vh;
+// ─── Shared ───────────────────────────────────────────────────────────────────
+.our-story {
+    background-color: $bg-primary;
+}
 
-    &__header-space { height: 70px; }
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+// 300vh 스크롤 컨테이너 — 내부 패널이 GSAP으로 핀됨
+.about-hero {
+    position: relative;
+    height: 600vh;
 
-    &__hero {
-        position: relative;
-        height: 60vh;
-        min-height: 400px;
-        display: flex;
-        align-items: flex-end;
+    // 100vh sticky 패널 — CSS sticky로 스크롤 중 완전 고정
+    &__panel {
+        position: sticky;
+        top: 0;
+        height: 100vh;
         overflow: hidden;
     }
 
-    &__hero-bg {
+    // 비디오 배경
+    &__video {
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, $brown-800 0%, $bg-overlay 100%);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
     }
 
-    &__hero-content {
-        position: relative;
+    // 색상 오버레이 — GSAP이 backgroundColor를 슬라이드마다 전환
+    &__overlay {
+        position: absolute;
+        inset: 0;
         z-index: 1;
-        padding: 0 4% 60px;
-        color: $oatmeal;
+        // background-color은 inline style로 초기값 설정, GSAP이 이후 제어
+        transition: none; // GSAP이 직접 처리하므로 CSS transition 불필요
+    }
+
+    // 텍스트 컨테이너 — 화면 중앙 고정
+    &__content {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 0 24px;
+    }
+
+    &__heading {
+        display: flex;
+        flex-direction: column;
+        max-width: 710px;
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    // "We cultivate" — montage-128 클래스로 폰트 적용
+    // Figma Montage/128 lineHeight: 100(=1.0) → normal(≈1.2) 오버라이드
+    &__pre {
+        color: $brown-700;
+        line-height: 1;
+    }
+
+    // 변하는 자막 — optima-70 클래스로 폰트 적용
+    &__subtitle {
+        color: $brown-700;
+        margin-top: -32px;
+    }
+
+    // 변하는 설명 텍스트 컨테이너 — suit-16-r 클래스로 폰트 적용
+    &__desc {
+        color: $brown-600;
+        max-width: 654px;
+        line-height: 1.9;
+        text-align: center;
+    }
+
+    // 줄별 애니메이션 래퍼 — overflow hidden으로 slide-up 클리핑
+    .desc-line-wrap {
+        overflow: hidden;
+        line-height: inherit;
+    }
+
+    .desc-line {
+        display: block;
+    }
+
+    // ── 반응형: 폰트 비율 유지, 전체 블록만 비례 축소 ────────────────────────
+    @media (max-width: 1280px) {
+        &__content {
+            transform: scale(0.82);
+            transform-origin: center center;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        &__content {
+            transform: scale(0.68);
+            transform-origin: center center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        &__content {
+            transform: scale(0.50);
+            transform-origin: center center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        &__content {
+            transform: scale(0.36);
+            transform-origin: center center;
+        }
+    }
+}
+
+// ─── Story Mid (Our Values → Origins 통합 섹션) ───────────────────────────────
+// 헤딩이 화면 중앙에서 시작해 스크롤 시 top:100px에 머물며 Origins 컨텐츠가 아래서 올라오는 A안
+// Figma 719-2436: background $bg-primary (#eee5da)
+.about-story-mid {
+    position: relative;
+    height: 1050vh;
+    background-color: $bg-primary;
+
+    // CSS sticky 패널 — 100vh 고정
+    &__panel {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+        background-color: $bg-primary;
+    }
+}
+
+// ─── Our Values ───────────────────────────────────────────────────────────────
+.about-values {
+    // 헤딩: 패널 안에서 absolute 배치, GSAP이 중앙→top:140px 로 이동
+    &__heading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        // GSAP이 xPercent:-50, yPercent:-50 으로 중앙 정렬 후 스크럽
+        color: $brown-700;
+        line-height: 1;
+        white-space: nowrap;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    // EN/KR 텍스트 묶음: 헤딩 바로 아래 위치, GSAP이 fade-out
+    &__texts {
+        position: absolute;
+        left: 50%;
+        top: calc(50% + 56px); // 헤딩 높이(80px/2=40px) + gap(16px) = 56px
+        transform: translateX(-50%);
+        text-align: center;
         display: flex;
         flex-direction: column;
         gap: 16px;
-
-        h1 { margin: 0; }
+        max-width: 593px;
+        width: calc(100% - 48px);
+        z-index: 2;
     }
 
+    // optima-18 클래스로 폰트 적용
+    &__en {
+        color: $brown-600;
+    }
+
+    // suit-18-r 클래스로 폰트 적용
+    &__kr {
+        color: $brown-600;
+    }
+}
+
+// ─── Origins ──────────────────────────────────────────────────────────────────
+.about-origins {
+    // 탭/컨텐츠 영역: 헤딩 고정 위치 아래에 배치 (GSAP이 초기 yPercent:100)
+    // Figma 719-2436: 컨테이너 top:70px + 헤딩높이(48px) + gap(100px) = 218px
     &__inner {
-        max-width: 960px;
-        margin: 0 auto;
-        padding: 80px 4% 100px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 218px 8.85% 0;
     }
 
-    &__section {
-        padding: 60px 0;
-        border-bottom: 1px solid $brown-100;
+    // Figma: tabs(455px) gap(361px) content(764px) = 1580px 내부
+    &__body {
+        position: relative;
+        display: grid;
+        grid-template-columns: 28.8% 1fr; // 455/1580 ≈ 28.8%
+        column-gap: 22.8%;               // 361/1580 ≈ 22.8%
+        align-items: start;
+    }
+
+    // Figma 719-2421: 장식 선 — Origins 탭 전용, stroke-dashoffset 드로우
+    // Figma position: left:-17px, top:55px / size: 1521×618px (79.2vw)
+    &__line-wrap {
+        position: absolute;
+        left: -17px;
+        top: 55px;
+        width: 79.2vw;
+        max-width: 1521px;
+        pointer-events: none;
+        z-index: 0;
+        overflow: visible;
+
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible;
+        }
+    }
+}
+
+// Naming 탭 장식선 — Naming 탭 전용, stroke-dashoffset 드로우
+// Figma 719-2449: body 기준 left:290px → 15.1vw, top:28px, width:1164px → 60.6vw
+.about-naming__line-wrap {
+    position: absolute;
+    left: 15.1vw;    // 290 / 1920 ≈ 15.1%
+    top: 28px;
+    width: 60.6vw;   // 1164 / 1920 ≈ 60.6%
+    max-width: 1164px;
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible;
+
+    svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        overflow: visible;
+    }
+}
+
+.about-origins {
+    &__tabs {
+        position: relative;
+        z-index: 1;
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 32px; // Figma gap: 32px
+        list-style: none;
+        padding: 0;
+        border: none;
+        background: none;
+    }
 
-        h2 { color: $brown-800; }
-        p { color: $brown-500; line-height: 1.9; }
+    // Figma: Montage/80, brown-700, inactive opacity:30%
+    &__tab {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        font-family: $font-montage;
+        font-size: clamp(32px, 4.17vw, 80px);
+        font-weight: 400;
+        line-height: 1;
+        color: $brown-700;
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
 
-        &:last-child { border-bottom: none; }
+        &.is-active {
+            opacity: 1;
+        }
+
+        &:hover:not(.is-active) {
+            opacity: 0.6;
+        }
+    }
+
+    &__content {
+        position: relative;
+        z-index: 1;
+        padding-top: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px; // Figma gap: 16px
+    }
+
+    // Figma: Optima/48, brown-700
+    &__content-en {
+        font-family: $font-optima;
+        font-size: clamp(24px, 2.5vw, 48px);
+        font-weight: 400;
+        line-height: normal;
+        color: $brown-700;
+
+        // Formulation 탭만 40px (Figma 지정)
+        &--sm {
+            font-size: clamp(20px, 2.08vw, 40px);
+        }
+    }
+
+    &__content-kr {
+        font-family: $font-suit;
+        font-size: clamp(13px, 0.94vw, 18px);
+        font-weight: 400;
+        line-height: 1.5;
+        color: $brown-600;
+        white-space: pre-line;
+    }
+}
+
+// ─── Char Split 공통 ──────────────────────────────────────────────────────────
+// 타이틀 글자별 슬라이드업 애니메이션용
+.char-wrap {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.char {
+    display: inline-block;
+}
+
+// ─── Large Section Title (Formulation / Architecture / Sustainability) ─────────
+// 폰트는 optima-220 클래스로 적용 — 여기선 레이아웃·색상만
+%about-section-title {
+    color: $brown-800;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+%about-section-desc {
+    font-family: $font-suit;
+    font-size: clamp(13px, 0.83vw, 16px);
+    font-weight: 400;
+    line-height: 1.9;
+    color: $brown-600;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+// ─── Formulation ─────────────────────────────────────────────────────────────
+.about-formulation {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: $bg-primary;
+
+    // Figma 802:1331: 타이틀+이너를 하나의 flex-col 컬럼으로
+    // left=right=calc(8.33%+247px)로 중앙 배치, top:9.07%(98/1080)
+    &__col {
+        position: absolute;
+        left: calc(8.33% + 247px);
+        right: calc(8.33% + 247px);
+        top: 9.07%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 70px;
+    }
+
+    // optima-220 클래스로 폰트 적용 — 레이아웃·색상만 여기서
+    &__title {
+        width: 100%;
+        color: $brown-800;
+        white-space: nowrap;
+        pointer-events: none;
+        line-height: 1;
+    }
+
+    // Figma 802:1326: 740px, gap:32px, 하단 -70px margin으로 texture 오버랩
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        width: 38.54vw;   // 740/1920
+        max-width: 740px;
+        margin-bottom: -70px;
+        position: relative;
+        z-index: 2;
+    }
+
+    // 사진 래퍼: 740×400 비율 유지
+    &__main {
+        width: 100%;
+        aspect-ratio: 740 / 400;
+        overflow: hidden;
+        position: relative;
+        flex-shrink: 0;
+
+        img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    // 설명 텍스트: SUIT Light 20px, 3줄
+    &__desc {
+        font-family: $font-suit;
+        font-size: clamp(13px, 1.04vw, 20px);
+        font-weight: 300;
+        line-height: 1.9;
+        color: $brown-600;
+        text-align: center;
+    }
+
+    // 텍스처: 독립 absolute 레이어, z-index:4 (사진 위)
+    // Figma: left:calc(58.33%+24px), top:19.35%(209/1080), 450×380px
+    &__texture {
+        position: absolute;
+        left: calc(58.33% + 24px);
+        top: 19.35%;                   // 209/1080
+        width: 23.49%;                 // 450.985/1920
+        aspect-ratio: 450.985 / 379.826;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 4;
+        pointer-events: none;
+    }
+
+    &__texture-rotated {
+        flex-shrink: 0;
+        transform: rotate(64.74deg);
+    }
+
+    &__texture-crop {
+        width: 52.68%;   // 237.577/450.985
+        height: 101.77%; // 386.566/379.826
+        position: relative;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: -81.19%;
+            width: 185.25%;
+            height: 100%;
+            max-width: none;
+        }
+    }
+}
+
+// ─── Architecture ─────────────────────────────────────────────────────────────
+.about-architecture {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: $bg-primary;
+
+    &__title {
+        @extend %about-section-title;
+        top: 12.13%; // 131/1080
+    }
+
+    &__images {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+    }
+
+    // Positions derived from Figma (x/1920 vw, y/1080 vh)
+    .arch-img {
+        position: absolute;
+        object-fit: cover;
+
+        &--1 {
+            left: -6.98vw;   // -134/1920
+            top:  81.2vh;    // 877/1080
+            width: 18.75vw;  // 360/1920
+            height: auto;
+        }
+
+        &--2 {
+            left: 11.93vw;   // 229/1920
+            top:  61.11vh;   // 660/1080
+            width: 17.71vw;  // 340/1920
+            height: auto;
+        }
+
+        &--3 {
+            left: 31.67vw;   // 608/1920
+            top:  52.41vh;   // 566/1080
+            width: 16.46vw;  // 316/1920
+            height: auto;
+        }
+
+        &--4 {
+            left: 51.82vw;   // 995/1920
+            top:  50vh;      // 540/1080
+            width: 16.46vw;
+            height: auto;
+        }
+
+        &--5 {
+            left: 72.92vw;   // 1400/1920
+            top:  53.98vh;   // 583/1080
+            width: 17.81vw;  // 342/1920
+            height: auto;
+        }
+
+        &--6 {
+            left: 93.85vw;   // 1802/1920
+            top:  66.11vh;   // 714/1080
+            width: 18.75vw;  // 360/1920
+            height: auto;
+        }
+    }
+
+    &__desc {
+        @extend %about-section-desc;
+        top: 77.5%; // 837/1080
+        padding: 0 33.85%; // ≈ 650/1920 on each side
+        z-index: 3;
+    }
+}
+
+// ─── Sustainability ───────────────────────────────────────────────────────────
+.about-sustainability {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: $bg-primary;
+
+    &__title {
+        @extend %about-section-title;
+        top: 9.07%; // 98/1080
+    }
+
+    &__image {
+        position: absolute;
+        left: 33.13%; // 636/1920
+        top:  34.72%; // 375/1080
+        width: 33.07%; // 635/1920
+        z-index: 2;
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+
+    &__desc {
+        @extend %about-section-desc;
+        top: 74.07%; // 800/1080
+        padding: 0 35.26%; // ≈ 677/1920 on each side
+        z-index: 3;
     }
 }

@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import AddToCartButton from '../components/common/btn/AddToCartButton';
 import Best from '../components/common/badge/Best';
 import New from '../components/common/badge/New';
@@ -51,6 +51,7 @@ const renderBadge = (badge) => {
 
 const Products = () => {
     const { category } = useParams();
+    const location = useLocation();
     const navigate = useNavigate();
     const products = useProductStore((state) => state.products);
     const wishlist = useWishlistStore((state) => state.wishlist);
@@ -59,37 +60,42 @@ const Products = () => {
 
     const [sort, setSort] = useState('default');
     const [activeBadge, setActiveBadge] = useState('');
-    const [activePriceRange, setActivePriceRange] = useState('');
+    const [activeCategories, setActiveCategories] = useState(() => (category ? [category] : []));
+    const [activePriceRanges, setActivePriceRanges] = useState([]);
+    const skipRouteCategorySyncRef = useRef(false);
 
     const categoryConfig = category ? PRODUCT_CATEGORY_CONFIG[category] : null;
-    const categoryLabel = categoryConfig?.label || '';
+    const routeCategorySlug = categoryConfig?.slug || '';
 
-    const categoryScopedProducts = useMemo(() => {
-        if (!category) {
+    useEffect(() => {
+        if (skipRouteCategorySyncRef.current) {
+            skipRouteCategorySyncRef.current = false;
+            return;
+        }
+
+        setActiveCategories(routeCategorySlug ? [routeCategorySlug] : []);
+    }, [routeCategorySlug]);
+
+    const categoryFilteredProducts = useMemo(() => {
+        if (activeCategories.length === 0) {
             return [...products];
         }
 
-        if (!categoryConfig) {
-            return [];
-        }
-
-        return products.filter(
-            (product) => getCategorySlugFromValue(product.category) === categoryConfig.slug
+        return products.filter((product) =>
+            activeCategories.includes(getCategorySlugFromValue(product.category))
         );
-    }, [products, category, categoryConfig]);
+    }, [activeCategories, products]);
 
     const categoryOptions = useMemo(
         () => [
             {
                 slug: 'all',
                 label: 'ALL PRODUCTS',
-                link: '/products',
                 count: products.length,
             },
             ...Object.values(PRODUCT_CATEGORY_CONFIG).map((item) => ({
                 slug: item.slug,
                 label: item.label,
-                link: `/products/${item.slug}`,
                 count: products.filter(
                     (product) => getCategorySlugFromValue(product.category) === item.slug
                 ).length,
@@ -102,28 +108,44 @@ const Products = () => {
         () =>
             BADGE_OPTIONS.map((badge) => ({
                 ...badge,
-                count: categoryScopedProducts.filter((product) =>
+                count: categoryFilteredProducts.filter((product) =>
                     product.badge.includes(badge.value)
                 ).length,
             })),
-        [categoryScopedProducts]
+        [categoryFilteredProducts]
     );
 
+    const activeCategoryLabels = useMemo(
+        () =>
+            activeCategories
+                .map((slug) => PRODUCT_CATEGORY_CONFIG[slug]?.label)
+                .filter(Boolean),
+        [activeCategories]
+    );
+
+    const pageTitle = activeCategoryLabels.length === 1 ? activeCategoryLabels[0] : 'Products';
+    const breadcrumbLabel = activeCategoryLabels.length === 1 ? activeCategoryLabels[0] : '전체 상품';
+
     const filtered = useMemo(() => {
-        let list = [...categoryScopedProducts];
+        let list = [...categoryFilteredProducts];
 
         if (activeBadge) {
             list = list.filter((product) => product.badge.includes(activeBadge));
         }
 
-        if (activePriceRange) {
-            const selectedRange = PRICE_RANGE_OPTIONS.find(
-                (range) => range.value === activePriceRange
-            );
+        if (activePriceRanges.length > 0) {
+            list = list.filter((product) => {
+                const price = product.variants[0]?.price || 0;
 
-            if (selectedRange) {
-                list = list.filter((product) => {
-                    const price = product.variants[0]?.price || 0;
+                return activePriceRanges.some((rangeValue) => {
+                    const selectedRange = PRICE_RANGE_OPTIONS.find(
+                        (range) => range.value === rangeValue
+                    );
+
+                    if (!selectedRange) {
+                        return false;
+                    }
+
                     const isAboveMin = price >= selectedRange.min;
                     const isBelowMax =
                         selectedRange.max === Number.POSITIVE_INFINITY
@@ -132,7 +154,7 @@ const Products = () => {
 
                     return isAboveMin && isBelowMax;
                 });
-            }
+            });
         }
 
         switch (sort) {
@@ -147,14 +169,42 @@ const Products = () => {
             default:
                 return list;
         }
-    }, [activeBadge, activePriceRange, categoryScopedProducts, sort]);
+    }, [activeBadge, activePriceRanges, categoryFilteredProducts, sort]);
 
-    const handlePriceRangeChange = (nextRange) => {
-        setActivePriceRange(nextRange);
+    const syncRouteForCategories = (nextCategories) => {
+        const nextPath =
+            nextCategories.length === 1 ? `/products/${nextCategories[0]}` : '/products';
+
+        if (location.pathname === nextPath) {
+            return;
+        }
+
+        skipRouteCategorySyncRef.current = true;
+        navigate(nextPath);
     };
 
-    const handleClearCategory = () => {
-        navigate('/products');
+    const handleCategoryToggle = (categorySlug) => {
+        const nextCategories = activeCategories.includes(categorySlug)
+            ? activeCategories.filter((slug) => slug !== categorySlug)
+            : [...activeCategories, categorySlug];
+
+        setActiveCategories(nextCategories);
+        syncRouteForCategories(nextCategories);
+    };
+
+    const handlePriceRangeToggle = (rangeValue) => {
+        setActivePriceRanges((current) =>
+            current.includes(rangeValue)
+                ? current.filter((value) => value !== rangeValue)
+                : [...current, rangeValue]
+        );
+    };
+
+    const handleClearAllFilters = () => {
+        setActiveBadge('');
+        setActiveCategories([]);
+        setActivePriceRanges([]);
+        syncRouteForCategories([]);
     };
 
     return (
@@ -165,14 +215,15 @@ const Products = () => {
                 <div className="products-page__rail">
                     <ProductFilterRail
                         categories={categoryOptions}
-                        activeCategory={category || 'all'}
+                        activeCategories={activeCategories}
+                        onCategoryToggle={handleCategoryToggle}
                         badgeOptions={badgeOptions}
                         activeBadge={activeBadge}
                         onBadgeChange={setActiveBadge}
                         priceRangeOptions={PRICE_RANGE_OPTIONS}
-                        activePriceRange={activePriceRange}
-                        onPriceRangeChange={handlePriceRangeChange}
-                        onClearCategory={handleClearCategory}
+                        activePriceRanges={activePriceRanges}
+                        onPriceRangeToggle={handlePriceRangeToggle}
+                        onClearAllFilters={handleClearAllFilters}
                     />
                 </div>
 
@@ -182,9 +233,9 @@ const Products = () => {
                             <nav className="products-page__breadcrumb suit-14-m">
                                 <Link to="/">홈</Link>
                                 <span> / </span>
-                                <span>{categoryLabel || '전체 제품'}</span>
+                                <span>{breadcrumbLabel}</span>
                             </nav>
-                            <h1 className="montage-80">{categoryLabel || 'Products'}</h1>
+                            <h1 className="montage-80">{pageTitle}</h1>
                         </div>
 
                         <div className="products-page__toolbar">

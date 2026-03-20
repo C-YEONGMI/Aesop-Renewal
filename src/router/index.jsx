@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/common/Layout';
-import Main from '../components/pages/Main';
+import Main from '../pages/Main';
 import Products from '../pages/Products';
 import ProductDetail from '../pages/ProductDetail';
 import Cart from '../pages/Cart';

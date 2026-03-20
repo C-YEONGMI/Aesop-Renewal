@@ -45,9 +45,11 @@ const Hero = () => {
     }, [isHandoffComplete]);
 
     useLayoutEffect(() => {
+        const headerElement = document.querySelector('#header');
         const headerLogo = document.querySelector('[data-header-logo]');
 
         if (
+            !headerElement ||
             !headerLogo ||
             !sectionRef.current ||
             !stageRef.current ||
@@ -61,6 +63,8 @@ const Hero = () => {
         ) {
             return undefined;
         }
+
+        headerElement.removeAttribute('data-hero-logo-visible');
 
         let metrics = {
             top: 0,
@@ -160,6 +164,7 @@ const Hero = () => {
                 heroFlightTimeline?.scrollTrigger?.kill();
                 heroFlightTimeline?.kill();
 
+                headerElement.setAttribute('data-hero-logo-visible', 'true');
                 gsap.set(headerLogo, { clearProps: 'opacity' });
                 gsap.set(aesopRef.current, { autoAlpha: 0 });
                 gsap.set(ritualRef.current, { autoAlpha: 0 });
@@ -239,17 +244,17 @@ const Hero = () => {
                     },
                     9.04
                 )
-                .set(flightLogoRef.current, { autoAlpha: 1 }, 9.08)
+                .set(flightLogoRef.current, { autoAlpha: 1 }, 9.58)
                 .to(
                     flightLogoRef.current,
                     {
                         clipPath: 'inset(0% 0% 0% 0% round 999px)',
                         scale: 1,
                         xPercent: 0,
-                        duration: 0.46,
+                        duration: 0.16,
                         ease: 'power2.inOut',
                     },
-                    9.08
+                    9.58
                 )
                 .set(headerLogo, { opacity: 1 }, 9.74)
                 .set(flightRef.current, { opacity: 0 }, 9.74)
@@ -257,6 +262,7 @@ const Hero = () => {
         }, sectionRef);
 
         return () => {
+            headerElement.removeAttribute('data-hero-logo-visible');
             gsap.set(headerLogo, { clearProps: 'opacity' });
             ctx.revert();
         };

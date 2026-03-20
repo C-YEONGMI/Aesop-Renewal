@@ -4,7 +4,7 @@
 /* 기본 컬러와 배경 (구현 기준서 참고) */
 #header {
     width: 100%;
-    background-color: $oatmeal;
+    background-color: $bg-primary;
     position: fixed;
     top: 0;
     left: 0;
@@ -178,6 +178,14 @@
 #header .logo-svg {
     width: 120px;
     height: auto;
+    opacity: 1;
+    transition:
+        opacity 0.24s ease,
+        filter 0.4s ease;
+}
+
+#header.transparent:not([data-hero-logo-visible='true']) .logo-svg {
+    opacity: 0;
 }
 
 /* ==================
