@@ -177,17 +177,12 @@
 
     &__actions {
         width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 188px));
-        justify-content: end;
-        gap: 12px;
     }
 
     &__button {
         font-family: inherit;
-        width: 100%;
-        min-height: 54px;
-        padding: 0 24px;
+        min-height: 48px;
+        padding: 0 18px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -239,10 +234,6 @@
 
         &__button {
             width: 100%;
-        }
-
-        &__actions {
-            grid-template-columns: 1fr;
         }
     }
 }
