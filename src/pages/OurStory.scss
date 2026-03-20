@@ -377,7 +377,7 @@
 .about-formulation {
     position: relative;
     height: 100vh;
-    overflow: hidden;
+    overflow: visible;
     background-color: $bg-primary;
 
     // Figma 802:1331: 타이틀+이너를 하나의 flex-col 컬럼으로
@@ -386,7 +386,7 @@
         position: absolute;
         left: calc(8.33% + 247px);
         right: calc(8.33% + 247px);
-        top: 9.07%;
+        top: 98px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -394,12 +394,17 @@
     }
 
     // optima-220 클래스로 폰트 적용 — 레이아웃·색상만 여기서
+    // &.optima-220으로 specificity를 높여 main.jsx의 globals import 순서 문제 방지
+    // line-height: 1 고정 — 1.5로 두면 half-leading 55px이 A-B 사이에 추가돼 Figma와 어긋남
     &__title {
         width: 100%;
         color: $brown-800;
         white-space: nowrap;
         pointer-events: none;
-        line-height: 1;
+
+        &.optima-220 {
+            line-height: 1;
+        }
     }
 
     // Figma 802:1326: 740px, gap:32px, 하단 -70px margin으로 texture 오버랩
@@ -437,44 +442,26 @@
         font-family: $font-suit;
         font-size: clamp(13px, 1.04vw, 20px);
         font-weight: 300;
-        line-height: 1.9;
+        line-height: 1.5;
         color: $brown-600;
         text-align: center;
     }
 
-    // 텍스처: 독립 absolute 레이어, z-index:4 (사진 위)
-    // Figma: left:calc(58.33%+24px), top:19.35%(209/1080), 450×380px
+    // 텍스처: 독립 absolute 레이어, 회전 없이 이미지 원본 방향 그대로 표시
+    // Figma: left:calc(58.33%+24px), top:209px, w:450.985px(≈23.49vw)
     &__texture {
         position: absolute;
         left: calc(58.33% + 24px);
-        top: 19.35%;                   // 209/1080
-        width: 23.49%;                 // 450.985/1920
-        aspect-ratio: 450.985 / 379.826;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        top: 209px;
+        width: 23.49vw;
+        max-width: 451px;
         z-index: 4;
         pointer-events: none;
-    }
-
-    &__texture-rotated {
-        flex-shrink: 0;
-        transform: rotate(64.74deg);
-    }
-
-    &__texture-crop {
-        width: 52.68%;   // 237.577/450.985
-        height: 101.77%; // 386.566/379.826
-        position: relative;
-        overflow: hidden;
 
         img {
-            position: absolute;
-            top: 0;
-            left: -81.19%;
-            width: 185.25%;
-            height: 100%;
-            max-width: none;
+            width: 100%;
+            height: auto;
+            display: block;
         }
     }
 }
@@ -483,73 +470,108 @@
 .about-architecture {
     position: relative;
     height: 100vh;
-    overflow: hidden;
+    overflow: visible;
     background-color: $bg-primary;
 
+    // 타이틀: 카드 위에 항상 노출
     &__title {
         @extend %about-section-title;
-        top: 12.13%; // 131/1080
+        top: 40px;
+        z-index: 15;
     }
 
-    &__images {
+    // 카드 스테이지 — framer-motion 카드의 absolute 좌표 기준 컨테이너
+    &__stage {
         position: absolute;
         inset: 0;
-        z-index: 2;
-    }
-
-    // Positions derived from Figma (x/1920 vw, y/1080 vh)
-    .arch-img {
-        position: absolute;
-        object-fit: cover;
-
-        &--1 {
-            left: -6.98vw;   // -134/1920
-            top:  81.2vh;    // 877/1080
-            width: 18.75vw;  // 360/1920
-            height: auto;
-        }
-
-        &--2 {
-            left: 11.93vw;   // 229/1920
-            top:  61.11vh;   // 660/1080
-            width: 17.71vw;  // 340/1920
-            height: auto;
-        }
-
-        &--3 {
-            left: 31.67vw;   // 608/1920
-            top:  52.41vh;   // 566/1080
-            width: 16.46vw;  // 316/1920
-            height: auto;
-        }
-
-        &--4 {
-            left: 51.82vw;   // 995/1920
-            top:  50vh;      // 540/1080
-            width: 16.46vw;
-            height: auto;
-        }
-
-        &--5 {
-            left: 72.92vw;   // 1400/1920
-            top:  53.98vh;   // 583/1080
-            width: 17.81vw;  // 342/1920
-            height: auto;
-        }
-
-        &--6 {
-            left: 93.85vw;   // 1802/1920
-            top:  66.11vh;   // 714/1080
-            width: 18.75vw;  // 360/1920
-            height: auto;
-        }
+        overflow: visible;
     }
 
     &__desc {
         @extend %about-section-desc;
-        top: 77.5%; // 837/1080
-        padding: 0 33.85%; // ≈ 650/1920 on each side
-        z-index: 3;
+        top: auto;
+        bottom: 40px;
+        padding: 0 33.85%;
+        z-index: 15;
+    }
+}
+
+// ─── Architecture Cards ────────────────────────────────────────────────────────
+// width/height/position은 framer-motion style prop으로 인라인 설정
+.arch-card {
+    cursor: pointer;
+    will-change: transform;
+    user-select: none;
+
+    &__inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+    }
+
+    &__front,
+    &__back {
+        position: absolute;
+        inset: 0;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    &__front {
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+    }
+
+    &__back {
+        background: rgba(30, 30, 30, 0.95);
+        transform: rotateY(180deg);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px 16px;
+    }
+
+    &__location {
+        font-family: $font-suit;
+        font-size: 10px;
+        font-weight: 300;
+        letter-spacing: 0.15em;
+        color: $bg-product;
+        text-transform: uppercase;
+    }
+
+    &__name {
+        font-family: $font-optima;
+        font-size: 18px;
+        font-weight: 400;
+        color: #ffffff;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    &__desc {
+        font-family: $font-suit;
+        font-size: 12px;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        width: 140px;
+        height: 210px;
+
+        &__name { font-size: 14px; }
+        &__desc { font-size: 11px; }
     }
 }
 

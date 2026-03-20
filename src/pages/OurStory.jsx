@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
+import { motion } from 'framer-motion';
 import { TextEffect } from '../components/ui/TextEffect';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -19,6 +20,13 @@ import shop03 from '../assets/about_shop03.png';
 import shop04 from '../assets/about_shop04.png';
 import shop05 from '../assets/about_shop05.png';
 import shop06 from '../assets/about_shop06.png';
+import shop07 from '../assets/about_shop07.png';
+import shop08 from '../assets/about_shop08.png';
+import shop09 from '../assets/about_shop09.png';
+import shop10 from '../assets/about_shop10.png';
+import shop11 from '../assets/about_shop11.png';
+import shop12 from '../assets/about_shop12.png';
+import shop13 from '../assets/about_shop13.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -74,7 +82,97 @@ const ORIGINS_TABS = [
     },
 ];
 
-const ARCH_IMAGES = [shop01, shop02, shop03, shop04, shop05, shop06];
+const ARCH_CARDS = [
+    { img: shop01, title: 'Aesop Samcheong',        location: 'Seoul, Korea',           desc: '한국의 미를 살린 삼청동 매장' },
+    { img: shop02, title: 'Aesop Garosu-gil',        location: 'Seoul, Korea',           desc: '가로수길의 도시적 감각을 담은 공간' },
+    { img: shop03, title: 'Aesop Insadong',          location: 'Seoul, Korea',           desc: '전통과 현대가 교차하는 인사동 매장' },
+    { img: shop04, title: 'Aesop Tokyo Aoyama',      location: 'Tokyo, Japan',           desc: '일본 현대 건축의 정수를 담은 공간' },
+    { img: shop05, title: 'Aesop Paris Marais',      location: 'Paris, France',          desc: '파리의 역사와 현대가 교차하는 매장' },
+    { img: shop06, title: 'Aesop Melbourne CBD',     location: 'Melbourne, Australia',   desc: '이솝 발상지의 독창적 공간' },
+    { img: shop07, title: 'Aesop New York SoHo',     location: 'New York, USA',          desc: '뉴욕의 예술적 감성을 반영한 매장' },
+    { img: shop08, title: 'Aesop London Mayfair',    location: 'London, UK',             desc: '런던의 전통과 현대가 어우러진 공간' },
+    { img: shop09, title: 'Aesop Amsterdam Jordaan', location: 'Amsterdam, Netherlands', desc: '운하 도시의 우아한 감성을 담다' },
+    { img: shop10, title: 'Aesop Berlin Mitte',      location: 'Berlin, Germany',        desc: '베를린의 산업적 미학을 재해석한 공간' },
+    { img: shop11, title: 'Aesop Singapore ION',     location: 'Singapore',              desc: '열대 도시의 정원 속 이솝' },
+    { img: shop12, title: 'Aesop Hong Kong Central', location: 'Hong Kong',              desc: '홍콩의 역동적 에너지를 담은 매장' },
+    { img: shop13, title: 'Aesop Sydney CBD',        location: 'Sydney, Australia',      desc: '시드니 항구의 자연을 담은 공간' },
+];
+
+// ── Architecture 원형 호 상수 ────────────────────────────────────────────────
+// 레퍼런스 컴포넌트 방식: x, y, rotation 세 값 모두 원의 각도(cardAngle)에서 삼각함수로 계산
+// → 카드들이 진짜 큰 원의 호 위에 놓이고, 스크롤 시 호 전체가 회전하며 지나가는 효과
+const CARD_W    = 300;
+const CARD_H    = 200;
+const ARC_R     = 1700; // 원 반지름(px): 클수록 곡률 완만
+// 카드 간 각도 간격: 호 길이(카드폭+gap=380px)를 반지름으로 나눈 라디안 → 도
+// Figma 기준 카드 rotation: -33.5°/-14.7°/-5°/+4.9°/+15.2°/+33.4° → step ≈ 12.8°
+const DEG_STEP  = (380 / ARC_R) * (180 / Math.PI); // ≈ 12.8°
+// Figma 좌측 끝 카드 rotation=-33.53° → cardAngle=-123.53° → BASE_ANGLE=-124
+const BASE_ANGLE = -124;
+// scroll 전 구간(MAX_SCROLL)에서 호가 회전하는 총 각도
+const SCROLL_ROTATE_DEG = 86;
+// arc 꼭짓점(중앙 카드 중심)의 section 상단 기준 Y — 카드 위치 상향
+const APEX_Y    = 500;
+// GSAP scrub 거리(px): end: `+=${MAX_SCROLL}` 에 사용
+const MAX_SCROLL = 2500;
+
+// 산개 위치 — section 중앙 근방에 분산 (opacity:0이라 보이지 않음)
+const SCATTER_POSITIONS = ARCH_CARDS.map(() => ({
+    x: (Math.random() - 0.5) * 1000 + (typeof window !== 'undefined' ? window.innerWidth / 2 : 720) - CARD_W / 2,
+    y: (Math.random() - 0.5) * 300 + APEX_Y - CARD_H / 2,
+    rotate: (Math.random() - 0.5) * 60,
+}));
+
+// ── ArchCard 컴포넌트 (framer-motion 기반 — 진짜 원형 호) ───────────────────
+const SPRING_DEFAULT = { type: 'spring', stiffness: 40, damping: 15 };
+
+function ArchCard({ card, index, phase, scrollValue }) {
+    const sp = SCATTER_POSITIONS[index];
+
+    // 현재 스크롤에 따른 이 카드의 원 위 각도(도)
+    const cardAngle = BASE_ANGLE + index * DEG_STEP - (scrollValue / MAX_SCROLL) * SCROLL_ROTATE_DEG;
+    const rad = cardAngle * Math.PI / 180;
+
+    // 원의 중심: 수평은 뷰포트 중앙, 수직은 arc 꼭짓점 아래로 반지름만큼
+    const arcCenterX = (typeof window !== 'undefined' ? window.innerWidth : 1440) / 2;
+    const arcCenterY = APEX_Y + ARC_R;
+
+    // 카드 좌상단 좌표 (section top-left 기준)
+    const arcX   = arcCenterX + Math.cos(rad) * ARC_R - CARD_W / 2;
+    const arcY   = arcCenterY + Math.sin(rad) * ARC_R - CARD_H / 2;
+    // 접선 방향 = 각도 + 90° (원 위에서 카드가 세워지는 방향)
+    const arcRot = cardAngle + 90;
+
+    const target = phase === 'scatter'
+        ? { x: sp.x,  y: sp.y,  rotate: sp.rotate, opacity: 0, scale: 0.8 }
+        : { x: arcX,  y: arcY,  rotate: arcRot,     opacity: 1, scale: 1   };
+
+    return (
+        <motion.div
+            className="arch-card"
+            initial={false}
+            animate={target}
+            transition={{ default: SPRING_DEFAULT }}
+            style={{ position: 'absolute', width: CARD_W, height: CARD_H, top: 0, left: 0, perspective: '1000px' }}
+        >
+            <motion.div
+                className="arch-card__inner"
+                whileHover={{ rotateY: 180 }}
+                transition={{ duration: 0.6, type: 'spring', stiffness: 260, damping: 20 }}
+                style={{ transformStyle: 'preserve-3d', width: '100%', height: '100%', position: 'relative' }}
+            >
+                <div className="arch-card__front" style={{ backfaceVisibility: 'hidden' }}>
+                    <img src={card.img} alt={card.title} />
+                </div>
+                <div className="arch-card__back" style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
+                    <span className="arch-card__location">{card.location}</span>
+                    <h3 className="arch-card__name">{card.title}</h3>
+                    <p className="arch-card__desc">{card.desc}</p>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+}
 
 // ── 탭 ID → SVG ref 인덱스 매핑 (changeTab에서 공용 사용) ──────────────────
 const TAB_IDS = ['origins', 'naming', 'formulation', 'architecture', 'approach'];
@@ -153,6 +251,11 @@ const OurStory = () => {
     const archTitleRef      = useRef(null);
     const sustainTitleRef   = useRef(null);
 
+    // ── Architecture refs & state ──────────────────────────────────────────
+    const archStageRef = useRef(null);  // section element (GSAP pin target)
+    const [archPhase, setArchPhase]         = useState('scatter');
+    const [archScrollValue, setArchScrollValue] = useState(0);
+
     // ── Origins tab text state ─────────────────────────────────────────────
     const [tabText, setTabText] = useState({ en: ORIGINS_TABS[0].en, kr: ORIGINS_TABS[0].kr, enSmall: false });
     const [enTrigger, setEnTrigger] = useState(true);
@@ -209,6 +312,7 @@ const OurStory = () => {
         }, 900);
         tabChangeTimerRef.current = timers;
     }, []);
+
 
     useEffect(() => {
         const initLines = setDescLines(descRef.current, SLIDES[0].desc);
@@ -371,10 +475,30 @@ const OurStory = () => {
                     autoAlpha: 0, y: 50, duration: 1, stagger: 0.15, ease: 'power3.out',
                     scrollTrigger: { trigger: '.about-formulation__content', start: 'top 75%' },
                 });
-                gsap.from('.arch-img', {
-                    autoAlpha: 0, y: 80, duration: 1, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.about-architecture__images', start: 'top 80%' },
-                });
+                // ── Architecture: framer-motion 카드 + GSAP pin/scroll ────
+                const archSection = archStageRef.current;
+                if (archSection) {
+                    // 섹션이 뷰에 들어오면 scatter → arc 전환
+                    ScrollTrigger.create({
+                        trigger: archSection,
+                        start: 'top 80%',
+                        once: true,
+                        onEnter: () => setArchPhase('arc'),
+                    });
+
+                    // 섹션 핀 + 스크롤 progress → framer-motion scrollValue 동기화
+                    gsap.to({}, {
+                        scrollTrigger: {
+                            trigger: archSection,
+                            pin: true,
+                            scrub: 1,
+                            start: 'top top',
+                            end: `+=${MAX_SCROLL}`,
+                            onUpdate: (self) => setArchScrollValue(self.progress * MAX_SCROLL),
+                            invalidateOnRefresh: true,
+                        },
+                    });
+                }
                 gsap.from('.about-sustainability__image, .about-sustainability__desc', {
                     autoAlpha: 0, y: 50, duration: 1, stagger: 0.15, ease: 'power3.out',
                     scrollTrigger: { trigger: '.about-sustainability__image', start: 'top 75%' },
@@ -442,6 +566,23 @@ const OurStory = () => {
                         },
                     });
                 });
+
+                // Architecture (reduced-motion: arc 즉시 표시 + 스크롤 지원)
+                const archSectionRM = archStageRef.current;
+                if (archSectionRM) {
+                    setArchPhase('arc'); // scatter 애니메이션 스킵
+                    gsap.to({}, {
+                        scrollTrigger: {
+                            trigger: archSectionRM,
+                            pin: true,
+                            scrub: 1,
+                            start: 'top top',
+                            end: `+=${MAX_SCROLL}`,
+                            onUpdate: (self) => setArchScrollValue(self.progress * MAX_SCROLL),
+                            invalidateOnRefresh: true,
+                        },
+                    });
+                }
             });
         }, pageRef);
 
@@ -599,24 +740,21 @@ const OurStory = () => {
                     </div>
                 </div>
                 <div className="about-formulation__texture" aria-hidden="true">
-                    <div className="about-formulation__texture-rotated">
-                        <div className="about-formulation__texture-crop">
-                            <img src={aboutTexture} alt="" />
-                        </div>
-                    </div>
+                    <img src={aboutTexture} alt="" />
                 </div>
             </section>
 
             {/* ── ARCHITECTURE ── */}
-            <section className="about-architecture" data-node-id="763:1348">
+            <section className="about-architecture" ref={archStageRef} data-node-id="763:1348">
                 <h2 className="about-architecture__title optima-220" ref={archTitleRef}>Architecture</h2>
-                <div className="about-architecture__images">
-                    {ARCH_IMAGES.map((img, i) => (
-                        <img
+                <div className="about-architecture__stage">
+                    {ARCH_CARDS.map((card, i) => (
+                        <ArchCard
                             key={i}
-                            className={`arch-img arch-img--${i + 1}`}
-                            src={img}
-                            alt={`Aesop store ${i + 1}`}
+                            card={card}
+                            index={i}
+                            phase={archPhase}
+                            scrollValue={archScrollValue}
                         />
                     ))}
                 </div>
