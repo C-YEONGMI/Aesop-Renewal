@@ -38,14 +38,15 @@
         grid-template-columns: 108px minmax(0, 1fr);
         gap: 18px;
         padding: 18px;
-        background-color: rgba($brown-100, 0.16);
-        border: 1px solid rgba($brown-900, 0.08);
+        background: linear-gradient(180deg, rgba($brown-100, 0.2) 0%, rgba($oatmeal, 0.92) 100%);
+        border: 1px solid rgba($brown-900, 0.16);
+        box-shadow: 0 10px 24px rgba($brown-900, 0.06);
     }
 
     &__thumb {
         aspect-ratio: 1;
         overflow: hidden;
-        background-color: rgba($brown-100, 0.22);
+        background-color: rgba($brown-100, 0.28);
 
         img {
             display: block;
@@ -56,11 +57,30 @@
     }
 
     &__copy {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    &__copy-main {
+        min-width: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
         gap: 4px;
-        min-width: 0;
+    }
+
+    &__item-badge {
+        width: fit-content;
+        padding: 4px 8px;
+        font-family: $font-optima;
+        color: $oatmeal;
+        background-color: $brown-700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        line-height: 1.1;
     }
 
     &__category,
@@ -70,10 +90,15 @@
 
     &__name {
         color: $brown-900;
+        letter-spacing: -0.01em;
     }
 
     &__price {
         color: $brown-900;
+        align-self: end;
+        text-align: right;
+        white-space: nowrap;
+        font-weight: 600;
     }
 
     &__recommendations {
@@ -142,10 +167,17 @@
 
     &__recommendation-name {
         color: $brown-900;
-        display: -webkit-box;
+        display: block;
         overflow: hidden;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__recommendation-price {
+        margin-top: auto;
+        width: 100%;
+        text-align: right;
+        white-space: nowrap;
     }
 
     &__recommendation-button {
