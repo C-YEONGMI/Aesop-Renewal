@@ -9,7 +9,7 @@
 // 300vh 스크롤 컨테이너 — 내부 패널이 GSAP으로 핀됨
 .about-hero {
     position: relative;
-    height: 600vh;
+    height: 500vh;
 
     // 100vh sticky 패널 — CSS sticky로 스크롤 중 완전 고정
     &__panel {
@@ -125,7 +125,7 @@
 // Figma 719-2436: background $bg-primary (#eee5da)
 .about-story-mid {
     position: relative;
-    height: 1050vh;
+    height: 900vh;
     background-color: $bg-primary;
 
     // CSS sticky 패널 — 100vh 고정
@@ -182,7 +182,6 @@
 // ─── Origins ──────────────────────────────────────────────────────────────────
 .about-origins {
     // 탭/컨텐츠 영역: 헤딩 고정 위치 아래에 배치 (GSAP이 초기 yPercent:100)
-    // Figma 719-2436: 컨테이너 top:70px + 헤딩높이(48px) + gap(100px) = 218px
     &__inner {
         position: absolute;
         top: 0;
@@ -195,41 +194,18 @@
     // Figma: tabs(455px) gap(361px) content(764px) = 1580px 내부
     &__body {
         position: relative;
+        z-index: 1;
         display: grid;
         grid-template-columns: 28.8% 1fr; // 455/1580 ≈ 28.8%
         column-gap: 22.8%;               // 361/1580 ≈ 22.8%
         align-items: start;
     }
-
-    // Figma 719-2421: 장식 선 — Origins 탭 전용, stroke-dashoffset 드로우
-    // Figma position: left:-17px, top:55px / size: 1521×618px (79.2vw)
-    &__line-wrap {
-        position: absolute;
-        left: -17px;
-        top: 55px;
-        width: 79.2vw;
-        max-width: 1521px;
-        pointer-events: none;
-        z-index: 0;
-        overflow: visible;
-
-        svg {
-            width: 100%;
-            height: auto;
-            display: block;
-            overflow: visible;
-        }
-    }
 }
 
-// Naming 탭 장식선 — Naming 탭 전용, stroke-dashoffset 드로우
-// Figma 719-2449: body 기준 left:290px → 15.1vw, top:28px, width:1164px → 60.6vw
-.about-naming__line-wrap {
+// ─── 5개 탭 장식선 공통 베이스 ───────────────────────────────────────────────
+// inner(position:absolute, 전체 패널 커버) 기준 absolute — Figma 1920px 좌표 직접 사용
+.about-line-wrap {
     position: absolute;
-    left: 15.1vw;    // 290 / 1920 ≈ 15.1%
-    top: 28px;
-    width: 60.6vw;   // 1164 / 1920 ≈ 60.6%
-    max-width: 1164px;
     pointer-events: none;
     z-index: 0;
     overflow: visible;
@@ -240,6 +216,52 @@
         display: block;
         overflow: visible;
     }
+}
+
+// Figma 778:1642 — Origins: left=153px, top=321px, w=1521px
+// top 보정: Figma Origins inner gap=160px → content y=278px
+//           CSS body padding-top=218px(Naming 기준) → 차이 60px 차감
+.about-origins__line-wrap {
+    left: 7.97vw;    // 153/1920
+    top: 261px;      // 321 - 60
+    width: 79.22vw;  // 1521/1920
+    max-width: 1521px;
+}
+
+// Figma 860:206 — Naming: left=calc(16.67%+141.5px), top=314.5px, w=1127.5px
+// Naming inner gap=100px → content y=218px → CSS padding-top=218px 동일 → 보정 없음
+.about-naming__line-wrap {
+    left: calc(16.67% + 141.5px);
+    top: 314.5px;    // 보정 없음
+    width: 58.72vw;  // 1127.5/1920
+    max-width: 1127.5px;
+}
+
+// Figma 719:2465 — Formulation: left=calc(25%+139px), top=231px, w=1003.5px
+// top 보정: Figma gap=160px → content y=278px → -60px
+.about-formulation__line-wrap {
+    left: calc(25% + 139px);
+    top: 171px;      // 231 - 60
+    width: 52.27vw;  // 1003.5/1920
+    max-width: 1003.5px;
+}
+
+// Figma 719:2480 — Architecture: left=calc(25%+145px), top=317px, w=1043.4px
+// top 보정: Figma gap=160px → content y=278px → -60px
+.about-architecture__line-wrap {
+    left: calc(25% + 145px);
+    top: 257px;      // 317 - 60
+    width: 54.35vw;  // 1043.4/1920
+    max-width: 1043.4px;
+}
+
+// Figma 719:2510 — Approach: left=calc(25%+73px), top=491px, w=442.8px
+// top 보정: Figma gap=160px → content y=278px → -60px
+.about-approach__line-wrap {
+    left: calc(25% + 73px);
+    top: 431px;      // 491 - 60
+    width: 23.06vw;  // 442.8/1920
+    max-width: 442.8px;
 }
 
 .about-origins {

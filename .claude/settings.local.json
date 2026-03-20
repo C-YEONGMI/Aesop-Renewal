@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(xargs grep:*)",
+      "mcp__figma__get_design_context",
+      "Bash(find /c/Users/EZEN/AppData/Roaming/Figma/DesktopProfile/ -name *.ldb -o -name CURRENT)",
+      "Bash(curl -sv \"http://localhost:3845/figma-exports\")",
+      "Bash(head -5 curl -sv \"http://localhost:3845/api/v1/figma/images/vK1SAF6kqdya0FHuOgG68g?ids=719:2421&format=png\")",
+      "Bash(curl -sv \"http://localhost:3845/api\")",
+      "Bash(curl -s \"http://localhost:3845/api/v1/files/vK1SAF6kqdya0FHuOgG68g\")",
+      "Bash(node:*)",
+      "Bash(npx asar:*)"
     ]
   }
 }
