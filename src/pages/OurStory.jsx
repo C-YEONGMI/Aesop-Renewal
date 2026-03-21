@@ -756,7 +756,7 @@ const OurStory = () => {
                                     {tabText.en}
                                 </TextEffect>
                                 <TextEffect
-                                    per="word"
+                                    per="line"
                                     as="p"
                                     className="about-origins__content-kr"
                                     trigger={krTrigger}
