@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -68,11 +68,31 @@ const getCategoryButtonClassName = (isActive) =>
 
 const ProductNavigatorSection = () => {
     const sectionRef = useRef(null);
-    const bgRef = useRef(null);
+    const bgCurrentRef = useRef(null);
+    const bgPrevRef = useRef(null);
+    const centerRef = useRef(null);
+    const menuRefs = useRef([]);
+    const activeIndexRef = useRef(0);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [prevBgImage, setPrevBgImage] = useState(null);
     const activeData = CATEGORY_DATA[activeIndex];
-    const inactiveCategories = CATEGORY_DATA.filter((_, index) => index !== activeIndex);
     const scrollLength = (CATEGORY_DATA.length - 1) * SCROLL_STEP;
+
+    const setMenuRef = (index) => (element) => {
+        menuRefs.current[index] = element;
+    };
+
+    const updateActiveIndex = (nextIndex) => {
+        const currentIndex = activeIndexRef.current;
+
+        if (currentIndex === nextIndex) {
+            return;
+        }
+
+        setPrevBgImage(CATEGORY_DATA[currentIndex].bgImage);
+        activeIndexRef.current = nextIndex;
+        setActiveIndex(nextIndex);
+    };
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -110,13 +130,10 @@ const ProductNavigatorSection = () => {
                 invalidateOnRefresh: true,
                 onUpdate: (self) => {
                     const nextIndex = Math.round(self.progress * maxIndex);
-
-                    setActiveIndex((currentIndex) =>
-                        currentIndex === nextIndex ? currentIndex : nextIndex
-                    );
+                    updateActiveIndex(nextIndex);
                 },
                 onLeaveBack: () => {
-                    setActiveIndex(0);
+                    updateActiveIndex(0);
                 },
             });
 
@@ -124,22 +141,100 @@ const ProductNavigatorSection = () => {
         });
 
         mm.add(`(max-width: ${DESKTOP_BREAKPOINT - 1}px)`, () => {
-            setActiveIndex(0);
+            updateActiveIndex(0);
         });
 
         return () => mm.revert();
     }, []);
 
     useEffect(() => {
-        gsap.fromTo(
-            bgRef.current,
-            { opacity: 0.6 },
-            { opacity: 1, duration: 0.8, ease: 'power2.out' }
-        );
+        activeIndexRef.current = activeIndex;
+    }, [activeIndex]);
+
+    useLayoutEffect(() => {
+        if (!sectionRef.current) {
+            return undefined;
+        }
+
+        const ctx = gsap.context(() => {
+            const activeItem = menuRefs.current[activeIndex];
+            const centerLabel = centerRef.current;
+            const timeline = gsap.timeline({
+                defaults: {
+                    duration: 0.72,
+                    ease: 'power3.out',
+                },
+                onComplete: () => {
+                    setPrevBgImage(null);
+                },
+            });
+
+            if (bgCurrentRef.current) {
+                timeline.fromTo(
+                    bgCurrentRef.current,
+                    {
+                        autoAlpha: prevBgImage ? 0.68 : 1,
+                        scale: prevBgImage ? 1.02 : 1,
+                    },
+                    {
+                        autoAlpha: 1,
+                        scale: 1,
+                    },
+                    0
+                );
+            }
+
+            if (bgPrevRef.current && prevBgImage) {
+                timeline.to(
+                    bgPrevRef.current,
+                    {
+                        autoAlpha: 0,
+                        scale: 1.03,
+                    },
+                    0
+                );
+            }
+
+            if (centerLabel) {
+                timeline.fromTo(
+                    centerLabel,
+                    {
+                        autoAlpha: 0,
+                        yPercent: 18,
+                    },
+                    {
+                        autoAlpha: 1,
+                        yPercent: 0,
+                    },
+                    0.08
+                );
+            }
+
+            if (activeItem) {
+                timeline.fromTo(
+                    activeItem,
+                    {
+                        autoAlpha: 0.55,
+                        x: -18,
+                    },
+                    {
+                        autoAlpha: 1,
+                        x: 0,
+                    },
+                    0.12
+                );
+            }
+        }, sectionRef);
+
+        return () => ctx.revert();
     }, [activeIndex]);
 
     const handleCategorySelect = (nextIndex) => {
-        setActiveIndex(nextIndex);
+        if (nextIndex === activeIndex) {
+            return;
+        }
+
+        updateActiveIndex(nextIndex);
 
         if (window.innerWidth < DESKTOP_BREAKPOINT || !sectionRef.current) {
             return;
@@ -161,9 +256,16 @@ const ProductNavigatorSection = () => {
             style={{ '--pnav-scroll-length': `${scrollLength}px` }}
         >
             <div className="pnav__stage">
+                {prevBgImage ? (
+                    <div
+                        ref={bgPrevRef}
+                        className="pnav__bg pnav__bg--previous"
+                        style={{ backgroundImage: `url(${prevBgImage})` }}
+                    />
+                ) : null}
                 <div
-                    ref={bgRef}
-                    className="pnav__bg"
+                    ref={bgCurrentRef}
+                    className="pnav__bg pnav__bg--current"
                     style={{ backgroundImage: `url(${activeData.bgImage})` }}
                 />
                 <div className="pnav__overlay" />
@@ -175,25 +277,22 @@ const ProductNavigatorSection = () => {
                     </div>
 
                     <div className="pnav__menu pnav__menu--left">
-                        <div className="pnav__menu-active-row">
-                            <span className="pnav__diamond" />
-                            <button type="button" className={getCategoryButtonClassName(true)}>
-                                {activeData.label}
-                            </button>
-                        </div>
-
                         <ul className="pnav__cat-list pnav__cat-list--left">
-                            {inactiveCategories.map((category) => {
-                                const categoryIndex = CATEGORY_DATA.findIndex(
-                                    ({ id }) => id === category.id
-                                );
+                            {CATEGORY_DATA.map((category, categoryIndex) => {
+                                const isActive = categoryIndex === activeIndex;
 
                                 return (
-                                    <li key={`left-${category.id}`} className="pnav__cat-item">
+                                    <li
+                                        key={`left-${category.id}`}
+                                        ref={setMenuRef(categoryIndex)}
+                                        className={`pnav__cat-item ${isActive ? 'is-active' : ''}`}
+                                    >
+                                        <span className="pnav__diamond" aria-hidden="true" />
                                         <button
                                             type="button"
-                                            className={getCategoryButtonClassName(false)}
+                                            className={getCategoryButtonClassName(isActive)}
                                             onClick={() => handleCategorySelect(categoryIndex)}
+                                            aria-pressed={isActive}
                                         >
                                             {category.label}
                                         </button>
@@ -204,34 +303,35 @@ const ProductNavigatorSection = () => {
                     </div>
 
                     <div className="pnav__center">
-                        <Link to={activeData.link} className="pnav__center-cat optima-70">
+                        <Link
+                            key={activeData.id}
+                            ref={centerRef}
+                            to={activeData.link}
+                            className="pnav__center-cat optima-70"
+                        >
                             {activeData.centerLabel}
                         </Link>
                     </div>
 
                     <div className="pnav__menu pnav__menu--right">
-                        <div className="pnav__menu-active-row">
-                            <button type="button" className={getCategoryButtonClassName(true)}>
-                                {activeData.label}
-                            </button>
-                            <span className="pnav__diamond" />
-                        </div>
-
                         <ul className="pnav__cat-list pnav__cat-list--right">
-                            {inactiveCategories.map((category) => {
-                                const categoryIndex = CATEGORY_DATA.findIndex(
-                                    ({ id }) => id === category.id
-                                );
+                            {CATEGORY_DATA.map((category, categoryIndex) => {
+                                const isActive = categoryIndex === activeIndex;
 
                                 return (
-                                    <li key={`right-${category.id}`} className="pnav__cat-item">
+                                    <li
+                                        key={`right-${category.id}`}
+                                        className={`pnav__cat-item ${isActive ? 'is-active' : ''}`}
+                                    >
                                         <button
                                             type="button"
-                                            className={getCategoryButtonClassName(false)}
+                                            className={getCategoryButtonClassName(isActive)}
                                             onClick={() => handleCategorySelect(categoryIndex)}
+                                            aria-pressed={isActive}
                                         >
                                             {category.label}
                                         </button>
+                                        <span className="pnav__diamond" aria-hidden="true" />
                                     </li>
                                 );
                             })}

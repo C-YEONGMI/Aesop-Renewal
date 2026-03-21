@@ -19,6 +19,15 @@
         background-size: cover;
         background-position: center;
         z-index: 0;
+        will-change: opacity, transform;
+    }
+
+    &__bg--previous {
+        z-index: 0;
+    }
+
+    &__bg--current {
+        z-index: 0;
     }
 
     &__overlay {
@@ -76,14 +85,10 @@
 
         &--right {
             right: 0;
+            width: max-content;
+            max-width: 320px;
             align-items: flex-end;
         }
-    }
-
-    &__menu-active-row {
-        display: flex;
-        align-items: center;
-        gap: 16px;
     }
 
     &__cat-list {
@@ -100,6 +105,8 @@
         }
 
         &--right {
+            width: max-content;
+            max-width: 100%;
             align-items: flex-end;
         }
     }
@@ -107,6 +114,8 @@
     &__cat-item {
         display: flex;
         width: 100%;
+        align-items: center;
+        gap: 16px;
     }
 
     &__menu--left .pnav__cat-item {
@@ -114,6 +123,8 @@
     }
 
     &__menu--right .pnav__cat-item {
+        width: auto;
+        max-width: 100%;
         justify-content: flex-end;
     }
 
@@ -131,6 +142,7 @@
         color: $oatmeal;
         text-decoration: none;
         white-space: nowrap;
+        will-change: transform, opacity;
         transition: opacity 0.3s ease;
 
         &:hover {
@@ -146,16 +158,21 @@
         cursor: pointer;
         text-align: inherit;
         white-space: nowrap;
-        transition: opacity 0.3s ease;
+        transition:
+            opacity 0.35s ease,
+            transform 0.45s ease;
     }
 
     &__menu--right .pnav__cat-btn {
-        width: 100%;
+        width: auto;
+        max-width: 100%;
+        flex: 0 1 auto;
         text-align: right;
     }
 
     &__cat-btn.active {
         opacity: 1;
+        transform: translateX(0);
     }
 
     &__cat-btn:not(.active) {
@@ -172,6 +189,23 @@
         flex: 0 0 8px;
         background-color: $bg-primary;
         transform: rotate(45deg);
+        opacity: 0;
+        transition:
+            opacity 0.35s ease,
+            transform 0.45s ease;
+    }
+
+    &__menu--left .pnav__diamond {
+        transform: translateX(-10px) rotate(45deg);
+    }
+
+    &__menu--right .pnav__diamond {
+        transform: translateX(10px) rotate(45deg);
+    }
+
+    &__cat-item.is-active .pnav__diamond {
+        opacity: 1;
+        transform: translateX(0) rotate(45deg);
     }
 
     @media (max-width: 1919px) {
@@ -230,7 +264,6 @@
             }
         }
 
-        &__menu-active-row,
         &__cat-item,
         &__menu--left .pnav__cat-item,
         &__menu--right .pnav__cat-item {
