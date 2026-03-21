@@ -21,7 +21,6 @@
         background-color: transparent;
         color: $oatmeal;
 
-        .depth1 > li > a,
         .utl li a,
         .utl li button,
         .utl li.search-li,
@@ -48,13 +47,6 @@
             filter: brightness(0) invert(1);
         }
 
-        .depth2 {
-            background-color: $brown-900;
-            > li > a {
-                color: $brown-100;
-            }
-        }
-
         .cart-count {
             background-color: $point-pink;
             color: $oatmeal;
@@ -76,87 +68,7 @@
     /* 데스크탑 기준 헤더 높이 */
 }
 
-/* ==================
-   GNB (Global Navigation)
-================== */
-#header .nav {
-    flex: 1;
-    /* 왼쪽 정렬 영역 확보 */
-}
-
-#header .depth1 {
-    display: flex;
-    gap: 16px;
-    list-style: none;
-    margin: 0;
-    padding: 10px 12px;
-}
-
-#header .depth1 > li {
-    position: relative;
-    /* 자식 depth2의 기준점 */
-}
-
-#header .depth1 > li > a {
-    text-decoration: none;
-    color: $brown-900;
-    @extend .optima-16;
-    transition: opacity 0.3s ease;
-    display: inline-block;
-    padding: 12px 10px;
-}
-
-#header .depth1 > li > a:hover {
-    opacity: 0.6;
-}
-
-/* ==================
-   Dropdown Menu (depth2)
-================== */
-#header .depth2 {
-    position: absolute;
-    top: 70px;
-    /* 헤더의 높이만큼 띄움 */
-    left: -20px;
-    background-color: $brown-50;
-    min-width: 220px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    padding: 16px 20px 24px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
-    /* 깊이감 */
-    border-radius: 0 0 4px 4px;
-    list-style: none;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    /* 서브메뉴 간 간격 */
-}
-
-/* 1depth 메뉴 호버 시 2depth 표시 */
-#header .depth1 > li:hover .depth2 {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-#header .depth2 > li > a {
-    @extend .optima-16;
-    font-size: 14px;
-    /* optima-16 기본값 외에 커스텀으로 크기를 줄일 경우 보존 */
-    color: $brown-700;
-    text-decoration: none;
-    padding: 0;
-}
-
-#header .depth2 > li > a:hover {
-    color: $brown-900;
-    /* hover시 진하게 */
-    opacity: 1;
-}
+/* GNB 스타일은 src/components/gnb/ 에서 관리 */
 
 /* ==================
    Logo
@@ -254,22 +166,11 @@
 @media (max-width: 1023px) {
     #header .inner {
         height: 68px;
-        /* 태블릿 데스크탑 기준 높이 */
-    }
-
-    #header .depth1 {
-        gap: 20px;
     }
 }
 
 @media (max-width: 767px) {
     #header .inner {
         height: 60px;
-        /* 모바일 기준 높이 */
-    }
-
-    #header .depth1 {
-        display: none;
-        /* 모바일에서는 햄버거 메뉴 대체 */
     }
 }

@@ -9,6 +9,7 @@ import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
 import { PRODUCT_CATEGORY_CONFIG, getCategorySlugFromValue } from '../data/productCategories';
+import { getClassification } from '../components/gnb/menuData';
 import './Products.scss';
 
 const SORT_OPTIONS = [
@@ -44,7 +45,7 @@ const renderBadge = (badge) => {
 };
 
 const Products = () => {
-    const { category } = useParams();
+    const { category, subcategory } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
     const products = useProductStore((state) => state.products);
@@ -69,7 +70,27 @@ const Products = () => {
         setActiveCategories(routeCategorySlug ? [routeCategorySlug] : []);
     }, [routeCategorySlug]);
 
+    // subcategory(3depth) 필터링: classifications 필드 사용
+    const classificationMatch = subcategory && category
+        ? getClassification(category, subcategory)
+        : null;
+
+    const subcategoryFilteredProducts = useMemo(() => {
+        if (!classificationMatch) return null;
+
+        return products.filter((product) =>
+            product.classifications?.some(
+                (c) =>
+                    c.category === classificationMatch.category &&
+                    c.subcategory === classificationMatch.subcategory
+            )
+        );
+    }, [classificationMatch, products]);
+
     const categoryFilteredProducts = useMemo(() => {
+        // 3depth subcategory가 있으면 그 결과를 사용
+        if (subcategoryFilteredProducts) return subcategoryFilteredProducts;
+
         if (activeCategories.length === 0) {
             return [...products];
         }
@@ -77,7 +98,7 @@ const Products = () => {
         return products.filter((product) =>
             activeCategories.includes(getCategorySlugFromValue(product.category))
         );
-    }, [activeCategories, products]);
+    }, [activeCategories, products, subcategoryFilteredProducts]);
 
     const categoryOptions = useMemo(
         () => [
@@ -105,8 +126,17 @@ const Products = () => {
         [activeCategories]
     );
 
-    const pageTitle = activeCategoryLabels.length === 1 ? activeCategoryLabels[0] : 'Products';
-    const breadcrumbLabel = activeCategoryLabels.length === 1 ? activeCategoryLabels[0] : '전체 제품';
+    const pageTitle = classificationMatch
+        ? classificationMatch.subcategory
+        : activeCategoryLabels.length === 1
+            ? activeCategoryLabels[0]
+            : 'Products';
+
+    const breadcrumbLabel = classificationMatch
+        ? classificationMatch.subcategory
+        : activeCategoryLabels.length === 1
+            ? activeCategoryLabels[0]
+            : '전체 제품';
 
     const filtered = useMemo(() => {
         let list = [...categoryFilteredProducts];
@@ -196,7 +226,17 @@ const Products = () => {
                         <nav className="products-page__breadcrumb suit-14-m">
                             <Link to="/">홈</Link>
                             <span> / </span>
-                            <span>{breadcrumbLabel}</span>
+                            {classificationMatch && category ? (
+                                <>
+                                    <Link to={`/products/${category}`}>
+                                        {PRODUCT_CATEGORY_CONFIG[category]?.label || category}
+                                    </Link>
+                                    <span> / </span>
+                                    <span>{breadcrumbLabel}</span>
+                                </>
+                            ) : (
+                                <span>{breadcrumbLabel}</span>
+                            )}
                         </nav>
                         <h1 className="montage-80">{pageTitle}</h1>
                     </div>

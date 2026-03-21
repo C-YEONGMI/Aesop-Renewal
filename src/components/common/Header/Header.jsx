@@ -6,6 +6,7 @@ import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
 import useCartStore from '../../../store/useCartStore';
 import useAuthStore from '../../../store/useAuthStore';
 import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
+import GNB from '../../gnb/GNB';
 
 const AccountIcon = () => (
     <svg
@@ -90,50 +91,7 @@ const Header = ({ transparent = false, isVisible = true }) => {
             className={transparent ? 'transparent' : ''}
         >
             <div className="inner">
-                <nav className="nav">
-                    <ul className="depth1">
-                        <li>
-                            <Link to="/gift-guide">GIFT GUIDE</Link>
-                        </li>
-                        <li>
-                            <Link to="/products">PRODUCTS</Link>
-                            <ul className="depth2">
-                                <li>
-                                    <Link to="/products/skincare">SKIN CARE</Link>
-                                </li>
-                                <li>
-                                    <Link to="/products/fragrance">Perfume</Link>
-                                </li>
-                                <li>
-                                    <Link to="/products/home">HOME & LIVING</Link>
-                                </li>
-                                <li>
-                                    <Link to="/products/hair">HAIR & SHAVING</Link>
-                                </li>
-                                <li>
-                                    <Link to="/products/body">HAND & BODY</Link>
-                                </li>
-                                <li>
-                                    <Link to="/products/kits">KITS</Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <Link to="/benefits">BENEFITS</Link>
-                            <ul className="depth2">
-                                <li>
-                                    <Link to="/benefits/official">Online</Link>
-                                </li>
-                                <li>
-                                    <Link to="/benefits/kr-exclusive">Korea Exclusive</Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <Link to="/our-story">OUR STORY</Link>
-                        </li>
-                    </ul>
-                </nav>
+                <GNB transparent={transparent} />
 
                 <h1>
                     <Link to="/" aria-label="Aesop Home" onClick={handleLogoClick}>

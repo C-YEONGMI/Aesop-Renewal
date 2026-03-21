@@ -13,7 +13,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 57
+        "popularId": 57,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 72,
@@ -29,7 +35,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 88
+        "popularId": 88,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 107,
@@ -45,7 +57,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 54
+        "popularId": 54,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 100,
@@ -61,7 +79,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 103
+        "popularId": 103,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 1,
@@ -82,7 +106,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 56
+        "popularId": 56,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 98,
@@ -98,7 +128,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 52
+        "popularId": 52,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 22,
@@ -119,7 +155,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 65
+        "popularId": 65,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shaving"
+            }
+        ]
     },
     {
         "newestId": 73,
@@ -135,7 +177,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 89
+        "popularId": 89,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 8,
@@ -151,7 +199,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 36
+        "popularId": 36,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 17,
@@ -167,7 +221,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 38
+        "popularId": 38,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Sun care"
+            }
+        ]
     },
     {
         "newestId": 43,
@@ -188,7 +248,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 73
+        "popularId": 73,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 42,
@@ -209,7 +275,13 @@
         ],
         "badge": ["Best"],
         "status": false,
-        "popularId": 15
+        "popularId": 15,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 74,
@@ -225,7 +297,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 90
+        "popularId": 90,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 65,
@@ -241,7 +319,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 83
+        "popularId": 83,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shaving"
+            }
+        ]
     },
     {
         "newestId": 56,
@@ -257,7 +341,17 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 5
+        "popularId": 5,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Lip & eye care"
+            },
+            {
+                "category": "Skin care",
+                "subcategory": "Sun care"
+            }
+        ]
     },
     {
         "newestId": 104,
@@ -273,7 +367,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 105
+        "popularId": 105,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 40,
@@ -294,7 +394,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 71
+        "popularId": 71,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 59,
@@ -310,7 +416,17 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 80
+        "popularId": 80,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Sun care"
+            },
+            {
+                "category": "Hand & body",
+                "subcategory": "Body balms & oils"
+            }
+        ]
     },
     {
         "newestId": 96,
@@ -326,7 +442,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 101
+        "popularId": 101,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 105,
@@ -342,7 +464,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 106
+        "popularId": 106,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 15,
@@ -358,7 +486,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 37
+        "popularId": 37,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Toners & mists"
+            }
+        ]
     },
     {
         "newestId": 102,
@@ -379,7 +513,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 34
+        "popularId": 34,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 92,
@@ -395,7 +535,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 97
+        "popularId": 97,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 21,
@@ -411,7 +557,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 64
+        "popularId": 64,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Lip & eye care"
+            }
+        ]
     },
     {
         "newestId": 83,
@@ -427,7 +579,17 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 92
+        "popularId": 92,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Sun care"
+            },
+            {
+                "category": "Hand & body",
+                "subcategory": "Body balms & oils"
+            }
+        ]
     },
     {
         "newestId": 95,
@@ -443,7 +605,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 100
+        "popularId": 100,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Lip & eye care"
+            }
+        ]
     },
     {
         "newestId": 28,
@@ -459,7 +627,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 67
+        "popularId": 67,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Skin care kits"
+            }
+        ]
     },
     {
         "newestId": 89,
@@ -475,7 +649,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 50
+        "popularId": 50,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 101,
@@ -491,7 +671,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 53
+        "popularId": 53,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 91,
@@ -507,7 +693,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 33
+        "popularId": 33,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 57,
@@ -523,7 +715,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 78
+        "popularId": 78,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Lip & eye care"
+            }
+        ]
     },
     {
         "newestId": 58,
@@ -539,7 +737,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 79
+        "popularId": 79,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Sun care"
+            }
+        ]
     },
     {
         "newestId": 90,
@@ -555,7 +759,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 96
+        "popularId": 96,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 26,
@@ -571,7 +781,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 40
+        "popularId": 40,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Skin care kits"
+            }
+        ]
     },
     {
         "newestId": 32,
@@ -592,7 +808,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 69
+        "popularId": 69,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Toners & mists"
+            }
+        ]
     },
     {
         "newestId": 97,
@@ -608,7 +830,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 51
+        "popularId": 51,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 44,
@@ -629,7 +857,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 27
+        "popularId": 27,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 33,
@@ -650,7 +884,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 42
+        "popularId": 42,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Toners & mists"
+            }
+        ]
     },
     {
         "newestId": 41,
@@ -671,7 +911,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 72
+        "popularId": 72,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 10,
@@ -692,7 +938,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 60
+        "popularId": 60,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 99,
@@ -708,7 +960,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 102
+        "popularId": 102,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 34,
@@ -729,7 +987,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 55
+        "popularId": 55,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Toners & mists"
+            }
+        ]
     },
     {
         "category": "SKIN CARE",
@@ -750,7 +1014,13 @@
         "badge": [],
         "newestId": 117,
         "status": true,
-        "popularId": 108
+        "popularId": 108,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Toners & mists"
+            }
+        ]
     },
     {
         "newestId": 55,
@@ -766,7 +1036,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 77
+        "popularId": 77,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Sun care"
+            }
+        ]
     },
     {
         "newestId": 27,
@@ -782,7 +1058,17 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 66
+        "popularId": 66,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shaving"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Skin care kits"
+            }
+        ]
     },
     {
         "newestId": 66,
@@ -798,7 +1084,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 84
+        "popularId": 84,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shaving"
+            }
+        ]
     },
     {
         "newestId": 93,
@@ -814,7 +1106,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 98
+        "popularId": 98,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 29,
@@ -830,7 +1128,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 41
+        "popularId": 41,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Skin care kits"
+            }
+        ]
     },
     {
         "newestId": 68,
@@ -846,7 +1150,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 86
+        "popularId": 86,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shaving"
+            }
+        ]
     },
     {
         "newestId": 103,
@@ -862,7 +1172,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 104
+        "popularId": 104,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Serums & masks"
+            }
+        ]
     },
     {
         "newestId": 94,
@@ -878,7 +1194,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 99
+        "popularId": 99,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Toners & mists"
+            }
+        ]
     },
     {
         "newestId": 71,
@@ -894,7 +1216,17 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 87
+        "popularId": 87,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Lip & eye care"
+            },
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "newestId": 106,
@@ -910,7 +1242,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 107
+        "popularId": 107,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 88,
@@ -926,7 +1264,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 95
+        "popularId": 95,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Cleansers"
+            }
+        ]
     },
     {
         "category": "SKIN CARE",
@@ -942,7 +1286,13 @@
         "badge": [],
         "newestId": 118,
         "status": true,
-        "popularId": 109
+        "popularId": 109,
+        "classifications": [
+            {
+                "category": "Skin care",
+                "subcategory": "Moisturisers"
+            }
+        ]
     },
     {
         "newestId": 67,
@@ -958,7 +1308,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 85
+        "popularId": 85,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shaving"
+            }
+        ]
     },
     {
         "newestId": 78,
@@ -974,7 +1330,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 91
+        "popularId": 91,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shampoos & conditioners"
+            }
+        ]
     },
     {
         "newestId": 81,
@@ -995,7 +1357,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 2
+        "popularId": 2,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Hand wash & balms"
+            }
+        ]
     },
     {
         "newestId": 30,
@@ -1021,7 +1389,13 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 11
+        "popularId": 11,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shampoos & conditioners"
+            }
+        ]
     },
     {
         "newestId": 77,
@@ -1037,7 +1411,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 48
+        "popularId": 48,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair styling"
+            }
+        ]
     },
     {
         "newestId": 76,
@@ -1053,7 +1433,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 47
+        "popularId": 47,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair treatments"
+            }
+        ]
     },
     {
         "newestId": 35,
@@ -1069,7 +1455,17 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 43
+        "popularId": 43,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair treatments"
+            },
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair styling"
+            }
+        ]
     },
     {
         "newestId": 69,
@@ -1085,7 +1481,17 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 24
+        "popularId": 24,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair styling"
+            },
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair treatments"
+            }
+        ]
     },
     {
         "newestId": 36,
@@ -1111,7 +1517,17 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 14
+        "popularId": 14,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Shampoos & conditioners"
+            },
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair treatments"
+            }
+        ]
     },
     {
         "newestId": 20,
@@ -1132,7 +1548,17 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 49
+        "popularId": 49,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair styling"
+            },
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair treatments"
+            }
+        ]
     },
     {
         "newestId": 75,
@@ -1148,7 +1574,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 46
+        "popularId": 46,
+        "classifications": [
+            {
+                "category": "Hair & shaving",
+                "subcategory": "Hair styling"
+            }
+        ]
     },
     {
         "category": "Perfume",
@@ -1169,7 +1601,13 @@
         "badge": [],
         "newestId": 108,
         "status": true,
-        "popularId": 110
+        "popularId": 110,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Woody"
+            }
+        ]
     },
     {
         "newestId": 84,
@@ -1190,7 +1628,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 93
+        "popularId": 93,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Woody"
+            }
+        ]
     },
     {
         "newestId": 85,
@@ -1211,7 +1655,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 12
+        "popularId": 12,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Fresh"
+            }
+        ]
     },
     {
         "newestId": 7,
@@ -1227,7 +1677,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 35
+        "popularId": 35,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Woody"
+            }
+        ]
     },
     {
         "newestId": 12,
@@ -1243,7 +1699,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 61
+        "popularId": 61,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Fresh"
+            }
+        ]
     },
     {
         "newestId": 87,
@@ -1259,7 +1721,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 26
+        "popularId": 26,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Floral"
+            }
+        ]
     },
     {
         "newestId": 11,
@@ -1275,7 +1743,29 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 16
+        "popularId": 16,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Floral"
+            },
+            {
+                "category": "Fragrance",
+                "subcategory": "Fresh"
+            },
+            {
+                "category": "Fragrance",
+                "subcategory": "Woody"
+            },
+            {
+                "category": "Fragrance",
+                "subcategory": "Opulent"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Fragrance kits"
+            }
+        ]
     },
     {
         "newestId": 54,
@@ -1291,7 +1781,17 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 44
+        "popularId": 44,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Opulent"
+            },
+            {
+                "category": "Fragrance",
+                "subcategory": "Woody"
+            }
+        ]
     },
     {
         "newestId": 9,
@@ -1307,7 +1807,13 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 8
+        "popularId": 8,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Floral"
+            }
+        ]
     },
     {
         "newestId": 39,
@@ -1323,7 +1829,17 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 70
+        "popularId": 70,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Opulent"
+            },
+            {
+                "category": "Fragrance",
+                "subcategory": "Woody"
+            }
+        ]
     },
     {
         "category": "Perfume",
@@ -1339,7 +1855,13 @@
         "badge": [],
         "newestId": 109,
         "status": true,
-        "popularId": 111
+        "popularId": 111,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Fresh"
+            }
+        ]
     },
     {
         "newestId": 86,
@@ -1355,7 +1877,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 94
+        "popularId": 94,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Fresh"
+            }
+        ]
     },
     {
         "category": "Perfume",
@@ -1371,7 +1899,13 @@
         "badge": [],
         "newestId": 110,
         "status": true,
-        "popularId": 112
+        "popularId": 112,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Opulent"
+            }
+        ]
     },
     {
         "newestId": 18,
@@ -1387,7 +1921,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 62
+        "popularId": 62,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Woody"
+            }
+        ]
     },
     {
         "category": "Perfume",
@@ -1403,7 +1943,13 @@
         "badge": [],
         "newestId": 111,
         "status": true,
-        "popularId": 113
+        "popularId": 113,
+        "classifications": [
+            {
+                "category": "Fragrance",
+                "subcategory": "Floral"
+            }
+        ]
     },
     {
         "newestId": 53,
@@ -1424,7 +1970,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 1
+        "popularId": 1,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Hand wash & balms"
+            }
+        ]
     },
     {
         "newestId": 25,
@@ -1440,7 +1992,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 39
+        "popularId": 39,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "newestId": 14,
@@ -1461,7 +2019,13 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 6
+        "popularId": 6,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Hand wash & balms"
+            }
+        ]
     },
     {
         "newestId": 46,
@@ -1482,7 +2046,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 4
+        "popularId": 4,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Hand wash & balms"
+            }
+        ]
     },
     {
         "newestId": 5,
@@ -1498,7 +2068,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 58
+        "popularId": 58,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Fragrance kits"
+            }
+        ]
     },
     {
         "newestId": 3,
@@ -1514,7 +2090,17 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 28
+        "popularId": 28,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Fragrance kits"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "newestId": 4,
@@ -1530,7 +2116,13 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 21
+        "popularId": 21,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "newestId": 6,
@@ -1546,7 +2138,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 59
+        "popularId": 59,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "category": "KITS",
@@ -1562,7 +2160,13 @@
         "badge": [],
         "newestId": 112,
         "status": true,
-        "popularId": 114
+        "popularId": 114,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Fragrance kits"
+            }
+        ]
     },
     {
         "category": "KITS",
@@ -1578,7 +2182,21 @@
         "badge": [],
         "newestId": 113,
         "status": true,
-        "popularId": 115
+        "popularId": 115,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Skin care kits"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Fragrance kits"
+            }
+        ]
     },
     {
         "newestId": 24,
@@ -1594,7 +2212,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 31
+        "popularId": 31,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "newestId": 37,
@@ -1610,7 +2234,17 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 17
+        "popularId": 17,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Travel kits"
+            }
+        ]
     },
     {
         "newestId": 70,
@@ -1626,7 +2260,17 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 19
+        "popularId": 19,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Body balms & oils"
+            },
+            {
+                "category": "Home & living",
+                "subcategory": "Oils & burners"
+            }
+        ]
     },
     {
         "newestId": 51,
@@ -1642,7 +2286,13 @@
         ],
         "badge": ["Best"],
         "status": false,
-        "popularId": 9
+        "popularId": 9,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Room sprays"
+            }
+        ]
     },
     {
         "newestId": 19,
@@ -1658,7 +2308,13 @@
         ],
         "badge": ["New"],
         "status": true,
-        "popularId": 63
+        "popularId": 63,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Incense & holders"
+            }
+        ]
     },
     {
         "newestId": 47,
@@ -1674,7 +2330,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 74
+        "popularId": 74,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Fragrance kits"
+            }
+        ]
     },
     {
         "newestId": 64,
@@ -1690,7 +2352,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 23
+        "popularId": 23,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Oils & burners"
+            }
+        ]
     },
     {
         "newestId": 13,
@@ -1706,7 +2374,13 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 29
+        "popularId": 29,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Oils & burners"
+            }
+        ]
     },
     {
         "newestId": 49,
@@ -1722,7 +2396,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 10
+        "popularId": 10,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Incense & holders"
+            }
+        ]
     },
     {
         "newestId": 82,
@@ -1743,7 +2423,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 7
+        "popularId": 7,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Hand wash & balms"
+            }
+        ]
     },
     {
         "newestId": 61,
@@ -1759,7 +2445,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 45
+        "popularId": 45,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Candles"
+            }
+        ]
     },
     {
         "newestId": 63,
@@ -1775,7 +2467,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 82
+        "popularId": 82,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Candles"
+            }
+        ]
     },
     {
         "newestId": 52,
@@ -1791,7 +2489,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 76
+        "popularId": 76,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Room sprays"
+            }
+        ]
     },
     {
         "newestId": 60,
@@ -1807,7 +2511,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 22
+        "popularId": 22,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Room sprays"
+            }
+        ]
     },
     {
         "category": "KITS",
@@ -1823,7 +2533,13 @@
         "badge": [],
         "newestId": 114,
         "status": true,
-        "popularId": 116
+        "popularId": 116,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "category": "KITS",
@@ -1839,7 +2555,13 @@
         "badge": [],
         "newestId": 115,
         "status": true,
-        "popularId": 117
+        "popularId": 117,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "category": "KITS",
@@ -1855,7 +2577,13 @@
         "badge": [],
         "newestId": 116,
         "status": true,
-        "popularId": 118
+        "popularId": 118,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "newestId": 23,
@@ -1871,7 +2599,13 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 30
+        "popularId": 30,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            }
+        ]
     },
     {
         "newestId": 62,
@@ -1887,7 +2621,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 81
+        "popularId": 81,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Candles"
+            }
+        ]
     },
     {
         "newestId": 48,
@@ -1903,7 +2643,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 18
+        "popularId": 18,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Incense & holders"
+            }
+        ]
     },
     {
         "newestId": 50,
@@ -1919,7 +2665,13 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 75
+        "popularId": 75,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Incense & holders"
+            }
+        ]
     },
     {
         "newestId": 45,
@@ -1935,7 +2687,13 @@
         ],
         "badge": [],
         "status": true,
-        "popularId": 32
+        "popularId": 32,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Bathroom"
+            }
+        ]
     },
     {
         "newestId": 31,
@@ -1951,7 +2709,21 @@
         ],
         "badge": [],
         "status": false,
-        "popularId": 68
+        "popularId": 68,
+        "classifications": [
+            {
+                "category": "Kits",
+                "subcategory": "Skin care kits"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Hand & body kits"
+            },
+            {
+                "category": "Kits",
+                "subcategory": "Travel kits"
+            }
+        ]
     },
     {
         "newestId": 16,
@@ -1967,7 +2739,13 @@
         ],
         "badge": ["New", "Best"],
         "status": true,
-        "popularId": 13
+        "popularId": 13,
+        "classifications": [
+            {
+                "category": "Home & living",
+                "subcategory": "Oils & burners"
+            }
+        ]
     },
     {
         "newestId": 38,
@@ -1993,7 +2771,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 3
+        "popularId": 3,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Body cleansers"
+            }
+        ]
     },
     {
         "newestId": 80,
@@ -2009,7 +2793,13 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 25
+        "popularId": 25,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Deodorants"
+            }
+        ]
     },
     {
         "newestId": 79,
@@ -2025,6 +2815,12 @@
         ],
         "badge": ["Best"],
         "status": true,
-        "popularId": 20
+        "popularId": 20,
+        "classifications": [
+            {
+                "category": "Hand & body",
+                "subcategory": "Deodorants"
+            }
+        ]
     }
 ]
