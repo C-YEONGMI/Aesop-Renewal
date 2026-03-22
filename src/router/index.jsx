@@ -9,6 +9,7 @@ import Checkout from '../pages/Checkout';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import FindAccount from '../pages/FindAccount';
+import SocialAuthCallback from '../pages/SocialAuthCallback';
 import MyPage from '../pages/MyPage';
 import GiftGuide from '../pages/GiftGuide';
 import Benefits from '../pages/Benefits';
@@ -20,6 +21,10 @@ import StoreLocator from '../pages/StoreLocator';
 
 // 전체 라우팅 맵
 const router = createBrowserRouter([
+    {
+        path: '/auth/callback/:provider',
+        element: <SocialAuthCallback />,
+    },
     {
         path: '/',
         element: <Layout />,
