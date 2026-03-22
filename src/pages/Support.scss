@@ -16,19 +16,26 @@
 
     &__tabs {
         display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
         gap: 0;
         border-bottom: 1px solid $brown-100;
         margin-bottom: 48px;
-        overflow-x: auto;
+        overflow: visible;
     }
 
     &__tab {
-        padding: 14px 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 24px;
         color: $brown-400;
         text-decoration: none;
         border-bottom: 2px solid transparent;
         margin-bottom: -1px;
         white-space: nowrap;
+        line-height: 1;
         transition: all 0.2s;
 
         &.active, &:hover {
