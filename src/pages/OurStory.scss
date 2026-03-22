@@ -74,9 +74,9 @@
 
     // 변하는 설명 텍스트 컨테이너 — suit-16-r 클래스로 폰트 적용
     &__desc {
-        color: $brown-600;
+        color: $brown-500;
         max-width: 654px;
-        line-height: 1.9;
+        line-height: 1.5;
         text-align: center;
     }
 
@@ -362,10 +362,10 @@
 
 %about-section-desc {
     font-family: $font-suit;
-    font-size: clamp(13px, 0.83vw, 16px);
-    font-weight: 400;
-    line-height: 1.9;
-    color: $brown-600;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: $brown-500;
     text-align: center;
     position: absolute;
     left: 0;
@@ -413,8 +413,8 @@
         flex-direction: column;
         align-items: center;
         gap: 32px;
-        width: 38.54vw;   // 740/1920
-        max-width: 740px;
+        width: 46.88vw;   // 900/1920
+        max-width: 900px;
         margin-bottom: -70px;
         position: relative;
         z-index: 2;
@@ -440,10 +440,10 @@
     // 설명 텍스트: SUIT Light 20px, 3줄
     &__desc {
         font-family: $font-suit;
-        font-size: clamp(13px, 1.04vw, 20px);
+        font-size: 20px;
         font-weight: 300;
         line-height: 1.5;
-        color: $brown-600;
+        color: $brown-500;
         text-align: center;
     }
 
@@ -452,7 +452,7 @@
     &__texture {
         position: absolute;
         left: calc(58.33% + 24px);
-        top: 209px;
+        top: 140px;
         width: 23.49vw;
         max-width: 451px;
         z-index: 4;
@@ -490,8 +490,8 @@
     &__desc {
         @extend %about-section-desc;
         top: auto;
-        bottom: 100px;
-        padding: 0 33.85%;
+        bottom: 70px;
+        padding: 0 28%;
         z-index: 15;
     }
 }
@@ -617,10 +617,10 @@
         left: auto;
         width: auto;
         font-family: $font-suit;
-        font-size: clamp(13px, 0.83vw, 16px);
-        font-weight: 400;
-        line-height: 1.9;
-        color: $brown-600;
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 1.5;
+        color: $brown-500;
         text-align: center;
         margin-top: 32px;
     }

@@ -487,10 +487,22 @@ const OurStory = () => {
                 );
 
                 // ── 하단 섹션 콘텐츠 reveals ────────────────────────────────
-                gsap.from('.about-formulation__texture, .about-formulation__content', {
-                    autoAlpha: 0, y: 50, duration: 1, stagger: 0.15, ease: 'power3.out',
+                gsap.from('.about-formulation__content', {
+                    autoAlpha: 0, y: 50, duration: 1, ease: 'power3.out',
                     scrollTrigger: { trigger: '.about-formulation__content', start: 'top 75%' },
                 });
+
+                // Texture: 크림이 왼쪽→오른쪽으로 발리듯 clip-path reveal
+                const texEl = document.querySelector('.about-formulation__texture');
+                if (texEl) {
+                    gsap.set(texEl, { clipPath: 'inset(0 100% 0 0)' });
+                    gsap.to(texEl, {
+                        clipPath: 'inset(0 0% 0 0)',
+                        duration: 1.6,
+                        ease: 'power2.inOut',
+                        scrollTrigger: { trigger: '.about-formulation__content', start: 'top 70%' },
+                    });
+                }
                 // ── Architecture: framer-motion 카드 + GSAP pin/scroll ────
                 const archSection = archStageRef.current;
                 if (archSection) {
@@ -824,8 +836,9 @@ const OurStory = () => {
                     ))}
                 </div>
                 <p className="about-architecture__desc">
-                    잘 설계된 디자인은 삶의 질을 향상시킵니다. 우리는 절제된 톤과 실용성, 지속가능성을 바탕으로 공간을 설계합니다.
-                    각 도시의 환경을 존중하며, 이미 존재하는 건축 요소와 함께 공간을 완성합니다.
+                    잘 설계된 디자인은 삶의 질을 향상시킵니다.<br />
+                    우리는 절제된 톤과 실용성, 지속가능성을 바탕으로 공간을 설계합니다.<br />
+                    {' '}각 도시의 환경을 존중하며, 이미 존재하는 건축 요소와 함께 공간을 완성합니다.
                 </p>
             </section>
 
@@ -836,7 +849,11 @@ const OurStory = () => {
                     <div className="about-sustainability__image">
                         <img src={aboutSustain} alt="Aesop sustainable products" />
                     </div>
-                    <p className="about-sustainability__desc" />
+                    <p className="about-sustainability__desc">
+                        불필요한 패키징을 줄이고, 재사용과 재활용이 가능한 소재를 우선합니다.<br />
+                        제품 전반에 걸쳐 지속 가능한 설계와 재료 선택을 고려합니다.<br />
+                        과도한 장식을 지양하며, 필요한 만큼만 사용하는 태도를 유지합니다.
+                    </p>
                 </div>
             </section>
 
