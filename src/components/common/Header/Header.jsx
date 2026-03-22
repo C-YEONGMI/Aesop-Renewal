@@ -92,7 +92,7 @@ const Header = ({ transparent = false, isVisible = true }) => {
                             }}
                         />
                     </li>
-                    <li>
+                    <li className="account-li">
                         <button
                             type="button"
                             className="header-account-action"

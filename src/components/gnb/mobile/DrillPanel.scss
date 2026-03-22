@@ -94,3 +94,22 @@
 .drill-panel__link {
     justify-content: flex-start;
 }
+
+.drill-panel__account-btn {
+    display: block;
+    width: 100%;
+    margin-top: 32px;
+    padding: 16px 0;
+    border: 1px solid $brown-300;
+    background: transparent;
+    font-family: $font-optima;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    color: $brown-700;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.6;
+    }
+}

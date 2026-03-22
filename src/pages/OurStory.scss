@@ -69,7 +69,7 @@
     // 변하는 자막 — optima-70 클래스로 폰트 적용
     &__subtitle {
         color: $brown-700;
-        margin-top: -32px;
+        margin-top: clamp(-32px, -1.67vw, -8px);
     }
 
     // 변하는 설명 텍스트 컨테이너 — suit-16-r 클래스로 폰트 적용
@@ -90,32 +90,39 @@
         display: block;
     }
 
-    // ── 반응형: 폰트 비율 유지, 전체 블록만 비례 축소 ────────────────────────
-    @media (max-width: 1280px) {
-        &__content {
-            transform: scale(0.82);
-            transform-origin: center center;
-        }
+    // ── 반응형: clamp 기반 유동 폰트 ────────────────────────
+    .montage-128 {
+        font-size: clamp(3rem, 1.786rem + 5.18vw, 128px);
     }
-
-    @media (max-width: 1024px) {
-        &__content {
-            transform: scale(0.68);
-            transform-origin: center center;
-        }
+    .optima-70 {
+        font-size: clamp(1.25rem, 0.491rem + 3.24vw, 70px);
+    }
+    .suit-16-r {
+        font-size: clamp(0.75rem, 0.689rem + 0.26vw, 1rem);
     }
 
     @media (max-width: 768px) {
-        &__content {
-            transform: scale(0.50);
-            transform-origin: center center;
+        &__heading {
+            max-width: none;
+            margin-bottom: 8px;
         }
-    }
-
-    @media (max-width: 480px) {
+        &__desc {
+            // 모바일: \n 줄바꿈 대신 자연 줄바꿈, 피그마 기준 205px
+            max-width: 205px;
+            white-space: normal;
+        }
+        // desc-line 개별 요소 — 모바일에서 inline으로 전환해 자연 줄바꿈
+        .desc-line-wrap {
+            display: inline;
+            overflow: visible;
+        }
+        .desc-line {
+            display: inline;
+            white-space: normal;
+        }
         &__content {
-            transform: scale(0.36);
-            transform-origin: center center;
+            gap: 32px;
+            padding-bottom: 60px;
         }
     }
 }
@@ -176,6 +183,11 @@
     // suit-18-r 클래스로 폰트 적용
     &__kr {
         color: $brown-600;
+
+        // 데스크톱에서 모바일 전용 br 숨김
+        .mobile-br {
+            display: none;
+        }
     }
 }
 
@@ -287,7 +299,7 @@
         cursor: pointer;
         padding: 0;
         font-family: $font-montage;
-        font-size: clamp(32px, 4.17vw, 80px);
+        font-size: clamp(1.25rem, 0.34rem + 3.88vw, 5rem);
         font-weight: 400;
         line-height: 1;
         color: $brown-700;
@@ -315,20 +327,20 @@
     // Figma: Optima/48, brown-700
     &__content-en {
         font-family: $font-optima;
-        font-size: clamp(24px, 2.5vw, 48px);
+        font-size: clamp(0.875rem, 0.36rem + 2.2vw, 3rem);
         font-weight: 400;
         line-height: normal;
         color: $brown-700;
 
         // Formulation 탭만 40px (Figma 지정)
         &--sm {
-            font-size: clamp(20px, 2.08vw, 40px);
+            font-size: clamp(0.875rem, 0.36rem + 2.2vw, 2.5rem);
         }
     }
 
     &__content-kr {
         font-family: $font-suit;
-        font-size: clamp(13px, 0.94vw, 18px);
+        font-size: clamp(0.75rem, 0.659rem + 0.39vw, 1.125rem);
         font-weight: 400;
         line-height: 1.5;
         color: $brown-600;
@@ -566,13 +578,6 @@
         margin: 0;
     }
 
-    @media (max-width: 768px) {
-        width: 140px;
-        height: 210px;
-
-        &__name { font-size: 14px; }
-        &__desc { font-size: 11px; }
-    }
 }
 
 // ─── Sustainability ───────────────────────────────────────────────────────────
@@ -623,5 +628,243 @@
         color: $brown-500;
         text-align: center;
         margin-top: 32px;
+    }
+}
+
+// ─── 섹션 타이틀 유동 폰트 (Desktop → Mobile) ──────────────────────────────
+// Optima 220px(1920) → 48px(375)
+.about-formulation__title.optima-220,
+.about-architecture__title.optima-220,
+.about-sustainability__title.optima-220 {
+    font-size: clamp(3rem, 0.39rem + 11.13vw, 13.75rem);
+}
+
+// Values heading: Montage 80px(1920) → 30px(375)
+.about-values__heading.montage-80 {
+    font-size: clamp(1.875rem, 1.116rem + 3.24vw, 5rem);
+}
+
+// ─── Responsive (≤ 768px) ───────────────────────────────────────────────────
+@media (max-width: 768px) {
+
+    // ── Values ──────────────────────────────────────────────────────────────
+    .about-values__texts {
+        max-width: none;
+        width: calc(100% - 32px);
+
+        // 모바일: 데스크톱 br 숨기고, mobile-br만 표시
+        br {
+            display: none;
+        }
+        br.mobile-br {
+            display: inline;
+        }
+    }
+
+    // ── Origins ─────────────────────────────────────────────────────────────
+    .about-origins__inner {
+        padding: 120px 16px 0;
+    }
+
+    .about-origins__body {
+        display: flex;
+        justify-content: space-between;
+        max-width: 338px;
+        margin: 0 auto;
+    }
+
+    .about-origins__tabs {
+        width: 136px;
+        flex-shrink: 0;
+    }
+
+    .about-origins__content {
+        width: 150px;
+        flex-shrink: 0;
+        padding-top: 0;
+    }
+
+    // EN: line-height 1.5 (피그마 Optima/14)
+    .about-origins__content-en {
+        line-height: 1.5;
+    }
+
+    // KR: \n 강제 줄바꿈 제거 → 150px 안에서 자연 줄바꿈
+    .about-origins__content-kr {
+        white-space: normal !important;
+
+        // TextEffect per="line"이 만드는 display:block span → inline 전환
+        > span {
+            display: inline !important;
+        }
+    }
+
+    // ── 장식선: opacity 50% + 모바일 좌표 재배치 (피그마 기준) ────────────
+    // body(338px)가 inner 중앙 정렬이므로 calc(50% - 169px + figma_left)로 환산
+    .about-line-wrap {
+        opacity: 0.5;
+    }
+
+    .about-origins__line-wrap {
+        left: calc(50% - 168.5px);  // 50% - 169 + 0.5
+        top: calc(120px + 15.5px);  // inner padding-top + figma top
+        width: 338px;
+        max-width: 338px;
+    }
+
+    .about-naming__line-wrap {
+        left: calc(50% - 121.5px);  // 50% - 169 + 47.5
+        top: calc(120px + 32px);
+        width: 282px;
+        max-width: 282px;
+    }
+
+    .about-formulation__line-wrap {
+        left: calc(50% - 81.5px);   // 50% - 169 + 87.5
+        top: calc(120px + 36px);
+        width: 251px;
+        max-width: 251px;
+    }
+
+    .about-architecture__line-wrap {
+        left: calc(50% - 91.5px);   // 50% - 169 + 77.5
+        top: calc(120px + 61px);
+        width: 261px;
+        max-width: 261px;
+    }
+
+    .about-approach__line-wrap {
+        left: calc(50% - 100.5px);  // 50% - 169 + 68.5
+        top: calc(120px + 153px);
+        width: 111px;
+        max-width: 111px;
+    }
+
+    // ── Formulation (피그마: flex-col, gap:16px, 중앙 정렬) ────────────────
+    .about-formulation {
+        height: auto;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+        gap: 16px;
+
+        .optima-220 {
+            letter-spacing: -0.96px;
+            white-space: normal;
+        }
+    }
+
+    .about-formulation__col {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+        width: 245px;
+        padding: 0;
+        padding-bottom: 0;
+    }
+
+    .about-formulation__title.optima-220 {
+        line-height: normal;
+    }
+
+    .about-formulation__content {
+        width: 100%;
+        max-width: none;
+        margin-bottom: 0;
+        gap: 16px;
+    }
+
+    .about-formulation__main {
+        width: 100%;
+    }
+
+    .about-formulation__desc {
+        font-size: 0.75rem;
+        width: 285px;
+        max-width: 285px;
+        color: $brown-500;
+    }
+
+    .about-formulation__texture {
+        width: 80px;
+        left: auto;
+        right: -20px;
+        top: 0;
+        z-index: 5;
+    }
+
+    // ── Architecture (100vh 유지, 카드 arc + pin) ─────────────────────────
+    .about-architecture {
+        .optima-220 {
+            letter-spacing: -0.96px;
+        }
+    }
+
+    .about-architecture__title {
+        top: 20px;
+    }
+
+    .about-architecture__desc {
+        font-size: 0.75rem;
+        padding: 0 16px;
+        max-width: 285px;
+        bottom: 40px;
+        // 기존 absolute 유지, 중앙 정렬
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        transform: none;
+        color: $brown-500;
+    }
+
+    .arch-card__back {
+        padding: 6px 8px;
+    }
+    .arch-card__name {
+        font-size: 10px;
+    }
+    .arch-card__desc {
+        font-size: 8px;
+    }
+    .arch-card__location {
+        font-size: 7px;
+    }
+
+    // ── Sustainability (피그마: flex-col, gap:32px, 중앙 정렬) ─────────────
+    .about-sustainability {
+        .optima-220 {
+            letter-spacing: -0.96px;
+        }
+    }
+
+    .about-sustainability__title {
+        top: 5%;
+    }
+
+    .about-sustainability__body {
+        width: 263px;
+        max-width: 263px;
+        top: 35%;
+    }
+
+    .about-sustainability__image {
+        max-width: 180px;
+        margin: 0 auto;
+    }
+
+    .about-sustainability__desc {
+        font-size: 0.75rem;
+        margin-top: 16px;
+        color: $brown-500;
+    }
+
+    // ── Section desc 공통 ───────────────────────────────────────────────────
+    .about-formulation__desc,
+    .about-architecture__desc,
+    .about-sustainability__desc {
+        font-weight: 400;
     }
 }

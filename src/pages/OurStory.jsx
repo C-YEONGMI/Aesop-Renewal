@@ -98,23 +98,34 @@ const ARCH_CARDS = [
     { img: shop13, title: 'Aesop Sydney CBD',        location: 'Sydney, Australia',      desc: '시드니 항구의 자연을 담은 공간' },
 ];
 
-// ── Architecture 원형 호 상수 ────────────────────────────────────────────────
+// ── Architecture 원형 호 상수 (반응형) ──────────────────────────────────────
 // 레퍼런스 컴포넌트 방식: x, y, rotation 세 값 모두 원의 각도(cardAngle)에서 삼각함수로 계산
 // → 카드들이 진짜 큰 원의 호 위에 놓이고, 스크롤 시 호 전체가 회전하며 지나가는 효과
-const CARD_W    = 300;
-const CARD_H    = 200;
-const ARC_R     = 1700; // 원 반지름(px): 클수록 곡률 완만
-// 카드 간 각도 간격: 호 길이(카드폭+gap=380px)를 반지름으로 나눈 라디안 → 도
-// Figma 기준 카드 rotation: -33.5°/-14.7°/-5°/+4.9°/+15.2°/+33.4° → step ≈ 12.8°
-const DEG_STEP  = (380 / ARC_R) * (180 / Math.PI); // ≈ 12.8°
+const getArchConstants = () => {
+    const vw = typeof window !== 'undefined' ? window.innerWidth : 1920;
+    if (vw <= 768) {
+        return { cardW: 102, cardH: 68, arcR: 570, apexY: 400, maxScroll: 2500 };
+    }
+    if (vw <= 1024) {
+        return { cardW: 180, cardH: 120, arcR: 1000, apexY: 480, maxScroll: 3000 };
+    }
+    return { cardW: 300, cardH: 200, arcR: 1700, apexY: 540, maxScroll: 3500 };
+};
+
+const ARCH_DEFAULTS = getArchConstants();
+const CARD_W    = ARCH_DEFAULTS.cardW;
+const CARD_H    = ARCH_DEFAULTS.cardH;
+const ARC_R     = ARCH_DEFAULTS.arcR;
+// 카드 간 각도 간격: 호 길이(카드폭+gap)를 반지름으로 나눈 라디안 → 도
+const DEG_STEP  = ((CARD_W + 80) / ARC_R) * (180 / Math.PI);
 // card 0이 scroll=0 시 화면 왼쪽 안쪽에 완전히 보이는 기준 각도
 const BASE_ANGLE = -108;
 // scroll 전 구간에서 호가 회전하는 총 각도 — 13장 카드 전체를 커버
 const SCROLL_ROTATE_DEG = 120;
 // arc 꼭짓점(중앙 카드 중심)의 section 상단 기준 Y
-const APEX_Y    = 540;
-// GSAP scrub 거리(px): end: `+=${MAX_SCROLL}` — 스크롤 속도 유지 (≈29px/°)
-const MAX_SCROLL = 3500;
+const APEX_Y    = ARCH_DEFAULTS.apexY;
+// GSAP scrub 거리(px): end: `+=${MAX_SCROLL}` — 스크롤 속도 유지
+const MAX_SCROLL = ARCH_DEFAULTS.maxScroll;
 
 // 산개 위치 — section 중앙 근방에 분산 (opacity:0이라 보이지 않음)
 const SCATTER_POSITIONS = ARCH_CARDS.map(() => ({
@@ -126,20 +137,22 @@ const SCATTER_POSITIONS = ARCH_CARDS.map(() => ({
 // ── ArchCard 컴포넌트 (framer-motion 기반 — 진짜 원형 호) ───────────────────
 const SPRING_DEFAULT = { type: 'spring', stiffness: 40, damping: 15 };
 
-function ArchCard({ card, index, phase, scrollValue }) {
+function ArchCard({ card, index, phase, scrollValue, archConst }) {
     const sp = SCATTER_POSITIONS[index];
+    const { cardW, cardH, arcR, apexY: ay } = archConst;
+    const degStep = ((cardW + 80) / arcR) * (180 / Math.PI);
 
     // 현재 스크롤에 따른 이 카드의 원 위 각도(도)
-    const cardAngle = BASE_ANGLE + index * DEG_STEP - (scrollValue / MAX_SCROLL) * SCROLL_ROTATE_DEG;
+    const cardAngle = BASE_ANGLE + index * degStep - (scrollValue / archConst.maxScroll) * SCROLL_ROTATE_DEG;
     const rad = cardAngle * Math.PI / 180;
 
     // 원의 중심: 수평은 뷰포트 중앙, 수직은 arc 꼭짓점 아래로 반지름만큼
     const arcCenterX = (typeof window !== 'undefined' ? window.innerWidth : 1440) / 2;
-    const arcCenterY = APEX_Y + ARC_R;
+    const arcCenterY = ay + arcR;
 
     // 카드 좌상단 좌표 (section top-left 기준)
-    const arcX   = arcCenterX + Math.cos(rad) * ARC_R - CARD_W / 2;
-    const arcY   = arcCenterY + Math.sin(rad) * ARC_R - CARD_H / 2;
+    const arcX   = arcCenterX + Math.cos(rad) * arcR - cardW / 2;
+    const arcY   = arcCenterY + Math.sin(rad) * arcR - cardH / 2;
     // 접선 방향 = 각도 + 90° (원 위에서 카드가 세워지는 방향)
     const arcRot = cardAngle + 90;
 
@@ -153,7 +166,7 @@ function ArchCard({ card, index, phase, scrollValue }) {
             initial={false}
             animate={target}
             transition={{ default: SPRING_DEFAULT }}
-            style={{ position: 'absolute', width: CARD_W, height: CARD_H, top: 0, left: 0, perspective: '1000px' }}
+            style={{ position: 'absolute', width: cardW, height: cardH, top: 0, left: 0, perspective: '1000px' }}
         >
             <motion.div
                 className="arch-card__inner"
@@ -256,6 +269,14 @@ const OurStory = () => {
     const [archPhase, setArchPhase]         = useState('scatter');
     const [archScrollValue, setArchScrollValue] = useState(0);
     const archDragRef = useRef({ active: false, startX: 0 }); // 드래그 상태
+    const [archConst, setArchConst] = useState(getArchConstants);
+
+    // ── 리사이즈 시 Architecture 상수 업데이트 ─────────────────────────────
+    useEffect(() => {
+        const handleResize = () => setArchConst(getArchConstants());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // ── Origins tab text state ─────────────────────────────────────────────
     const [tabText, setTabText] = useState({ en: ORIGINS_TABS[0].en, kr: ORIGINS_TABS[0].kr, enSmall: false });
@@ -515,14 +536,15 @@ const OurStory = () => {
                     });
 
                     // 섹션 핀 + 스크롤 progress → framer-motion scrollValue 동기화
+                    const curMaxScroll = getArchConstants().maxScroll;
                     gsap.to({}, {
                         scrollTrigger: {
                             trigger: archSection,
                             pin: true,
                             scrub: 1,
                             start: 'top top',
-                            end: `+=${MAX_SCROLL}`,
-                            onUpdate: (self) => setArchScrollValue(self.progress * MAX_SCROLL),
+                            end: `+=${curMaxScroll}`,
+                            onUpdate: (self) => setArchScrollValue(self.progress * curMaxScroll),
                             invalidateOnRefresh: true,
                         },
                     });
@@ -640,6 +662,7 @@ const OurStory = () => {
                 // Architecture (reduced-motion: arc 즉시 표시 + 스크롤 지원)
                 const archSectionRM = archStageRef.current;
                 if (archSectionRM) {
+                    const rmMaxScroll = getArchConstants().maxScroll;
                     setArchPhase('arc'); // scatter 애니메이션 스킵
                     gsap.to({}, {
                         scrollTrigger: {
@@ -647,8 +670,8 @@ const OurStory = () => {
                             pin: true,
                             scrub: 1,
                             start: 'top top',
-                            end: `+=${MAX_SCROLL}`,
-                            onUpdate: (self) => setArchScrollValue(self.progress * MAX_SCROLL),
+                            end: `+=${rmMaxScroll}`,
+                            onUpdate: (self) => setArchScrollValue(self.progress * rmMaxScroll),
                             invalidateOnRefresh: true,
                         },
                     });
@@ -702,7 +725,7 @@ const OurStory = () => {
                             we connect everyday life and environment as a continuous experience.
                         </p>
                         <p className="about-values__kr suit-18-r" ref={valuesKrRef}>
-                            신중한 조합과 감각적인 리추얼, 그리고 공간에 대한 태도를 통해,<br />
+                            신중한 조합과 감각적인 리추얼,<br className="mobile-br" />{' '}그리고 공간에 대한 태도를 통해,<br />
                             일상과 환경을 하나의 흐름으로 연결합니다.
                         </p>
                     </div>
@@ -832,6 +855,7 @@ const OurStory = () => {
                             index={i}
                             phase={archPhase}
                             scrollValue={archScrollValue}
+                            archConst={archConst}
                         />
                     ))}
                 </div>

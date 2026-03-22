@@ -169,6 +169,13 @@
     }
 }
 
+@media (max-width: 1023px) {
+    /* 모바일/태블릿: login 버튼 숨김 — 햄버거 메뉴 안으로 이동 */
+    #header .utl .account-li {
+        display: none;
+    }
+}
+
 @media (max-width: 767px) {
     #header .inner {
         height: 60px;
