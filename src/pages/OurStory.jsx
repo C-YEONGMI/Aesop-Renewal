@@ -104,12 +104,12 @@ const ARCH_CARDS = [
 const getArchConstants = () => {
     const vw = typeof window !== 'undefined' ? window.innerWidth : 1920;
     if (vw <= 768) {
-        return { cardW: 102, cardH: 68, arcR: 570, apexY: 400, maxScroll: 2500 };
+        return { cardW: 102, cardH: 68, arcR: 570, apexY: 155, maxScroll: 2500, arcGap: 20 };
     }
     if (vw <= 1024) {
-        return { cardW: 180, cardH: 120, arcR: 1000, apexY: 480, maxScroll: 3000 };
+        return { cardW: 180, cardH: 120, arcR: 1000, apexY: 480, maxScroll: 3000, arcGap: 40 };
     }
-    return { cardW: 300, cardH: 200, arcR: 1700, apexY: 540, maxScroll: 3500 };
+    return { cardW: 300, cardH: 200, arcR: 1700, apexY: 540, maxScroll: 3500, arcGap: 80 };
 };
 
 const ARCH_DEFAULTS = getArchConstants();
@@ -117,7 +117,7 @@ const CARD_W    = ARCH_DEFAULTS.cardW;
 const CARD_H    = ARCH_DEFAULTS.cardH;
 const ARC_R     = ARCH_DEFAULTS.arcR;
 // 카드 간 각도 간격: 호 길이(카드폭+gap)를 반지름으로 나눈 라디안 → 도
-const DEG_STEP  = ((CARD_W + 80) / ARC_R) * (180 / Math.PI);
+const DEG_STEP  = ((CARD_W + ARCH_DEFAULTS.arcGap) / ARC_R) * (180 / Math.PI);
 // card 0이 scroll=0 시 화면 왼쪽 안쪽에 완전히 보이는 기준 각도
 const BASE_ANGLE = -108;
 // scroll 전 구간에서 호가 회전하는 총 각도 — 13장 카드 전체를 커버
@@ -138,9 +138,10 @@ const SCATTER_POSITIONS = ARCH_CARDS.map(() => ({
 const SPRING_DEFAULT = { type: 'spring', stiffness: 40, damping: 15 };
 
 function ArchCard({ card, index, phase, scrollValue, archConst }) {
+    const [isFlipped, setIsFlipped] = useState(false);
     const sp = SCATTER_POSITIONS[index];
-    const { cardW, cardH, arcR, apexY: ay } = archConst;
-    const degStep = ((cardW + 80) / arcR) * (180 / Math.PI);
+    const { cardW, cardH, arcR, apexY: ay, arcGap } = archConst;
+    const degStep = ((cardW + arcGap) / arcR) * (180 / Math.PI);
 
     // 현재 스크롤에 따른 이 카드의 원 위 각도(도)
     const cardAngle = BASE_ANGLE + index * degStep - (scrollValue / archConst.maxScroll) * SCROLL_ROTATE_DEG;
@@ -166,10 +167,12 @@ function ArchCard({ card, index, phase, scrollValue, archConst }) {
             initial={false}
             animate={target}
             transition={{ default: SPRING_DEFAULT }}
+            onClick={() => setIsFlipped((prev) => !prev)}
             style={{ position: 'absolute', width: cardW, height: cardH, top: 0, left: 0, perspective: '1000px' }}
         >
             <motion.div
                 className="arch-card__inner"
+                animate={{ rotateY: isFlipped ? 180 : 0 }}
                 whileHover={{ rotateY: 180 }}
                 transition={{ duration: 0.6, type: 'spring', stiffness: 260, damping: 20 }}
                 style={{ transformStyle: 'preserve-3d', width: '100%', height: '100%', position: 'relative' }}
@@ -861,7 +864,7 @@ const OurStory = () => {
                 </div>
                 <p className="about-architecture__desc">
                     잘 설계된 디자인은 삶의 질을 향상시킵니다.<br />
-                    우리는 절제된 톤과 실용성, 지속가능성을 바탕으로 공간을 설계합니다.<br />
+                    우리는 절제된 톤과 실용성, 지속가능성을 바탕으로 공간을 설계합니다.
                     {' '}각 도시의 환경을 존중하며, 이미 존재하는 건축 요소와 함께 공간을 완성합니다.
                 </p>
             </section>

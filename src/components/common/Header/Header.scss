@@ -166,6 +166,15 @@
 @media (max-width: 1023px) {
     #header .inner {
         height: 68px;
+        padding: 0 24px;
+    }
+
+    #header .logo-svg {
+        width: 100px;
+    }
+
+    #header .utl {
+        gap: 20px;
     }
 }
 
@@ -179,5 +188,54 @@
 @media (max-width: 767px) {
     #header .inner {
         height: 60px;
+        padding: 0 16px;
+    }
+
+    /* 로고: 피그마 93×40px */
+    #header .logo-svg {
+        width: 93px;
+    }
+
+    /* UTL: 아이콘 간 gap 0 (40px 터치영역이 붙음) */
+    #header .utl {
+        gap: 0;
+    }
+
+    /* 검색/카트 아이콘 공통: 40×40 터치영역, 8px 패딩 */
+    #header .utl li.search-li,
+    #header .utl li.cart-li {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 카트 링크: relative로 뱃지 기준점 */
+    #header .cart-link {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 카트 아이콘: 24px */
+    #header .cart-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* 장바구니 뱃지: 16×16px, 우측 상단 오버레이 */
+    #header .cart-count {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+        font-family: $font-suit;
+        margin-left: 0;
     }
 }

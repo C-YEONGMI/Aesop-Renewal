@@ -102,11 +102,12 @@ const Header = ({ transparent = false, isVisible = true }) => {
                             <AccountIcon />
                         </button>
                     </li>
-                    <li>
-                        <Link to="/cart" aria-label="Cart">
+                    <li className="cart-li">
+                        <Link to="/cart" aria-label="Cart" className="cart-link">
                             <svg
-                                width="20"
-                                height="20"
+                                className="cart-icon"
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
