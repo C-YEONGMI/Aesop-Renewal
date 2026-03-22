@@ -1,8 +1,9 @@
 @use "../globals.scss" as *;
 
 .benefits-page {
-    background-color: $bg-primary;
     min-height: 100vh;
+    background-color: $bg-primary;
+    overflow-x: clip;
 
     &__header-space {
         height: 70px;
@@ -22,73 +23,242 @@
     &__official {
         display: flex;
         flex-direction: column;
-        gap: 40px;
+        gap: 32px;
+    }
+
+    &__eyebrow,
+    &__card-eyebrow {
+        color: $brown-400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
 
     &__hero {
         position: relative;
         display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(320px, 420px);
-        gap: 40px;
+        grid-template-columns: minmax(0, 1fr) minmax(430px, 0.95fr);
+        gap: 32px;
+        min-height: 640px;
         padding: 52px;
-        background-color: $oatmeal;
-        border: 1px solid rgba($brown-200, 0.85);
         overflow: hidden;
+        background:
+            radial-gradient(circle at 15% 18%, rgba($point-pink, 0.18) 0%, transparent 26%),
+            linear-gradient(135deg, rgba($oatmeal, 0.95) 0%, rgba($brown-50, 0.86) 100%);
+        border: 1px solid rgba($brown-200, 0.92);
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 18px;
+            border: 1px solid rgba($brown-100, 0.72);
+            pointer-events: none;
+        }
 
         &::after {
             content: '';
             position: absolute;
-            top: -120px;
-            right: -100px;
-            width: 360px;
-            height: 360px;
+            right: -180px;
+            bottom: -220px;
+            width: 520px;
+            height: 520px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba($brown-100, 0.65) 0%, rgba($brown-100, 0) 70%);
+            background: radial-gradient(circle, rgba($brown-100, 0.72) 0%, transparent 66%);
             pointer-events: none;
         }
     }
 
     &__hero-copy,
-    &__hero-tags {
+    &__hero-collage {
         position: relative;
         z-index: 1;
     }
 
-    &__eyebrow {
-        color: $brown-400;
-        margin-bottom: 16px;
+    &__hero-copy {
+        max-width: 560px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     &__hero-title {
-        color: $brown-800;
-        max-width: 9ch;
-        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin: 0;
+
+        span {
+            color: $brown-800;
+            line-height: 0.94;
+        }
+    }
+
+    &__hero-script {
+        margin: 12px 0 0;
+        color: rgba($brown-500, 0.92);
+        line-height: 0.9;
     }
 
     &__hero-desc {
+        max-width: 30ch;
+        margin: 24px 0 0;
         color: $brown-600;
-        max-width: 34ch;
     }
 
-    &__hero-tags {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
-        align-self: start;
+    &__hero-actions {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
     }
 
-    &__hero-tag {
-        min-height: 124px;
-        padding: 18px;
-        background-color: rgba($bg-primary, 0.82);
-        border: 1px solid rgba($brown-100, 0.9);
+    &__hero-button {
+        min-height: 44px;
+        padding: 0 18px;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition:
+            background-color 0.25s ease,
+            border-color 0.25s ease,
+            color 0.25s ease,
+            transform 0.25s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+        }
+
+        &--dark {
+            color: $oatmeal;
+            background-color: $brown-800;
+
+            &:hover {
+                background-color: $brown-900;
+            }
+        }
+
+        &--light {
+            color: $brown-800;
+            border-color: rgba($brown-300, 0.9);
+            background-color: rgba($oatmeal, 0.72);
+
+            &:hover {
+                border-color: rgba($brown-500, 0.92);
+                background-color: rgba($oatmeal, 0.92);
+            }
+        }
+    }
+
+    &__hero-word {
+        position: absolute;
+        left: 40px;
+        bottom: 18px;
+        margin: 0;
+        color: rgba($brown-100, 0.55);
+        letter-spacing: -0.04em;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    &__hero-collage {
+        min-height: 100%;
+    }
+
+    &__hero-frame {
+        position: absolute;
+        margin: 0;
+        padding: 10px 10px 18px;
+        background-color: $oatmeal;
+        border: 1px solid rgba($brown-200, 0.42);
+        box-shadow: 0 18px 36px rgba($brown-900, 0.12);
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        gap: 12px;
+        gap: 10px;
 
-        span {
-            color: $brown-700;
+        img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 0.82;
+            object-fit: cover;
+        }
+
+        figcaption {
+            color: $brown-500;
+        }
+
+        &--1 {
+            top: 18px;
+            left: 14px;
+            width: 180px;
+            transform: rotate(-7deg);
+        }
+
+        &--2 {
+            top: -4px;
+            right: 54px;
+            width: 186px;
+            transform: rotate(6deg);
+        }
+
+        &--3 {
+            bottom: 72px;
+            left: 92px;
+            width: 238px;
+            transform: rotate(4deg);
+        }
+
+        &--4 {
+            right: 10px;
+            bottom: 132px;
+            width: 168px;
+            transform: rotate(-8deg);
+
+            img {
+                object-fit: contain;
+                background: rgba($brown-50, 0.72);
+            }
+        }
+    }
+
+    &__hero-swatch {
+        position: absolute;
+        right: 32px;
+        bottom: 24px;
+        width: 250px;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background-color: rgba($brown-800, 0.92);
+        color: rgba($oatmeal, 0.86);
+        box-shadow: 0 18px 36px rgba($brown-900, 0.16);
+    }
+
+    &__hero-swatch-line {
+        width: 78px;
+        height: 1px;
+        background: rgba($point-pink, 0.72);
+    }
+
+    &__benefit-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    &__benefit-card {
+        min-height: 174px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        background-color: rgba($oatmeal, 0.84);
+        border: 1px solid rgba($brown-100, 0.94);
+        box-shadow: 0 16px 28px rgba($brown-900, 0.05);
+
+        h3 {
+            color: $brown-800;
         }
 
         p {
@@ -96,115 +266,287 @@
         }
     }
 
-    &__grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 20px;
+    &__benefit-index {
+        color: $point-pink;
     }
 
-    &__card {
-        min-height: 320px;
-        padding: 28px;
+    &__storyline {
+        display: grid;
+        grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+        gap: 22px;
+    }
+
+    &__story-feature,
+    &__story-card {
+        background-color: rgba($oatmeal, 0.88);
+        border: 1px solid rgba($brown-100, 0.92);
+        box-shadow: 0 18px 30px rgba($brown-900, 0.05);
+    }
+
+    &__story-feature {
+        display: grid;
+        grid-template-columns: minmax(300px, 0.95fr) minmax(0, 1.05fr);
+        gap: 0;
+        overflow: hidden;
+    }
+
+    &__story-feature-media,
+    &__story-card-media {
+        position: relative;
+        overflow: hidden;
+        background:
+            linear-gradient(180deg, rgba($brown-100, 0.18) 0%, rgba($oatmeal, 0.12) 100%),
+            $bg-product;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__story-feature-media {
+        min-height: 100%;
+    }
+
+    &__story-note {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
+        padding: 8px 12px;
+        color: $oatmeal;
+        background-color: rgba($brown-800, 0.9);
+    }
+
+    &__story-feature-copy {
+        padding: 38px 34px;
         display: flex;
         flex-direction: column;
         gap: 20px;
-        background-color: $oatmeal;
-        border: 1px solid rgba($brown-200, 0.8);
     }
 
-    &__card-eyebrow {
-        color: $brown-400;
-    }
-
-    &__card-title {
+    &__story-title,
+    &__story-card-title {
         color: $brown-800;
-        max-width: 11ch;
     }
 
-    &__card-body {
+    &__story-body,
+    &__story-card-body {
         color: $brown-600;
-        max-width: 30ch;
+    }
+
+    &__story-points {
+        margin: 0;
+        padding: 20px 0 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-top: 1px solid rgba($brown-100, 0.92);
+
+        li {
+            position: relative;
+            padding-left: 16px;
+            color: $brown-500;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 10px;
+                left: 0;
+                width: 6px;
+                height: 6px;
+                background-color: $point-pink;
+            }
+        }
+    }
+
+    &__story-stack {
+        display: grid;
+        gap: 22px;
+    }
+
+    &__story-card {
+        display: grid;
+        grid-template-columns: 178px minmax(0, 1fr);
+        overflow: hidden;
+    }
+
+    &__story-card-media {
+        min-height: 100%;
+
+        img {
+            object-fit: contain;
+            padding: 20px;
+            background: rgba($brown-50, 0.8);
+        }
+    }
+
+    &__story-card-copy {
+        padding: 26px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__story-card-note {
+        margin-top: auto;
+        color: $brown-400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
 
     &__assistance {
+        position: relative;
         display: grid;
-        grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+        grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
         gap: 28px;
-        padding: 44px;
-        background: linear-gradient(135deg, $brown-800 0%, $brown-700 100%);
+        padding: 42px;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 84% 16%, rgba($point-pink, 0.16) 0%, transparent 24%),
+            linear-gradient(135deg, $brown-900 0%, $brown-800 100%);
         color: $oatmeal;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 42px;
+            right: 42px;
+            bottom: 22px;
+            height: 1px;
+            background: rgba($oatmeal, 0.12);
+        }
+    }
+
+    &__assistance-copy,
+    &__assistance-grid {
+        position: relative;
+        z-index: 1;
     }
 
     &__assistance-copy {
-        max-width: 430px;
+        max-width: 460px;
+        display: flex;
+        flex-direction: column;
     }
 
     &__assistance-title {
+        margin: 0;
         color: $oatmeal;
-        margin-bottom: 16px;
         max-width: 10ch;
     }
 
     &__assistance-desc {
-        color: rgba($oatmeal, 0.84);
+        margin-top: 18px;
+        color: rgba($oatmeal, 0.82);
+    }
+
+    &__curated-row {
+        margin-top: 34px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    &__curated-card {
+        min-height: 154px;
+        padding: 14px 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 8px;
+        border: 1px solid rgba($oatmeal, 0.16);
+        background-color: rgba($oatmeal, 0.05);
+
+        img {
+            width: 100%;
+            height: 92px;
+            object-fit: contain;
+        }
+
+        span {
+            color: rgba($oatmeal, 0.72);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
     }
 
     &__assistance-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 16px;
+        align-content: start;
     }
 
     &__assist-card {
-        min-height: 220px;
-        padding: 22px 20px;
+        padding: 16px;
+        display: grid;
+        grid-template-columns: 132px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 16px;
+        text-decoration: none;
+        border: 1px solid rgba($oatmeal, 0.14);
         background-color: rgba($oatmeal, 0.06);
-        border: 1px solid rgba($oatmeal, 0.18);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 20px;
         transition:
-            transform 0.25s ease,
-            background-color 0.25s ease,
-            border-color 0.25s ease;
+            transform 0.24s ease,
+            background-color 0.24s ease,
+            border-color 0.24s ease;
 
         &:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             background-color: rgba($oatmeal, 0.1);
-            border-color: rgba($oatmeal, 0.34);
+            border-color: rgba($oatmeal, 0.26);
+        }
+    }
+
+    &__assist-media {
+        height: 132px;
+        overflow: hidden;
+        background: rgba($oatmeal, 0.08);
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     }
 
     &__assist-copy {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
 
         h4 {
             color: $oatmeal;
         }
 
         p {
-            color: rgba($oatmeal, 0.82);
+            color: rgba($oatmeal, 0.8);
         }
     }
 
     &__assist-link {
+        min-height: 40px;
+        padding: 0 16px;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        color: $oatmeal;
+        justify-content: center;
+        color: $brown-900;
+        background-color: $oatmeal;
+        white-space: nowrap;
 
         &::after {
             content: '↗';
-            font-size: 14px;
+            margin-left: 8px;
+            font-size: 13px;
             line-height: 1;
         }
     }
 
     &__quote {
-        padding: 20px 0 0;
+        padding-top: 6px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -229,10 +571,6 @@
         gap: 24px;
         padding: 24px 0;
 
-        h2 {
-            color: $brown-800;
-        }
-
         p {
             color: $brown-600;
         }
@@ -247,17 +585,23 @@
 
         &__hero {
             grid-template-columns: 1fr;
+            min-height: 0;
             padding: 40px;
         }
 
-        &__grid {
-            grid-template-columns: 1fr;
+        &__hero-copy {
+            max-width: none;
         }
 
-        &__card {
-            min-height: 0;
+        &__hero-collage {
+            min-height: 560px;
         }
 
+        &__benefit-strip {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        &__storyline,
         &__assistance {
             grid-template-columns: 1fr;
         }
@@ -265,9 +609,59 @@
         &__assistance-copy {
             max-width: none;
         }
+    }
+}
 
-        &__assistance-grid {
+@media (max-width: 1023px) {
+    .benefits-page {
+        &__hero-collage {
+            min-height: 0;
+            display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        &__hero-frame {
+            position: relative;
+            inset: auto;
+            width: auto;
+            transform: none;
+        }
+
+        &__hero-swatch {
+            position: relative;
+            right: auto;
+            bottom: auto;
+            width: auto;
+            grid-column: 1 / -1;
+        }
+
+        &__story-feature {
+            grid-template-columns: 1fr;
+        }
+
+        &__story-feature-media {
+            min-height: 360px;
+        }
+
+        &__story-card {
+            grid-template-columns: 1fr;
+        }
+
+        &__story-card-media {
+            min-height: 240px;
+        }
+
+        &__curated-row {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        &__assist-card {
+            grid-template-columns: 120px minmax(0, 1fr);
+        }
+
+        &__assist-link {
+            justify-self: start;
         }
     }
 }
@@ -279,49 +673,71 @@
         }
 
         &__official {
-            gap: 28px;
+            gap: 24px;
         }
 
         &__hero {
             padding: 28px 20px;
-            gap: 24px;
         }
 
-        &__hero-title {
-            max-width: none;
+        &__hero-title span {
+            font-size: 38px;
+        }
+
+        &__hero-script {
+            font-size: 34px;
         }
 
         &__hero-desc {
             max-width: none;
+            font-size: 18px;
         }
 
-        &__hero-tags {
+        &__hero-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        &__hero-word {
+            left: 20px;
+            bottom: 12px;
+            font-size: 74px;
+        }
+
+        &__hero-collage,
+        &__benefit-strip,
+        &__curated-row {
             grid-template-columns: 1fr;
         }
 
-        &__hero-tag {
+        &__benefit-card {
             min-height: 0;
         }
 
-        &__card {
-            padding: 22px 20px;
-        }
-
-        &__card-title,
-        &__card-body {
-            max-width: none;
-        }
-
+        &__story-feature-copy,
+        &__story-card-copy,
         &__assistance {
-            padding: 28px 20px;
+            padding: 24px 20px;
         }
 
-        &__assistance-grid {
-            grid-template-columns: 1fr;
+        &__story-feature-media {
+            min-height: 260px;
+        }
+
+        &__story-card-media {
+            min-height: 200px;
         }
 
         &__assist-card {
-            min-height: 0;
+            grid-template-columns: 1fr;
+        }
+
+        &__assist-media {
+            height: 200px;
+        }
+
+        &__assist-link {
+            width: 100%;
         }
     }
 }
