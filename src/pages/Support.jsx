@@ -18,12 +18,15 @@ const Support = ({ tab: propTab }) => {
 
     const notices = useSupportStore(s => s.notices);
     const faqs = useSupportStore(s => s.faqs);
+    const getInquiriesByUser = useSupportStore(s => s.getInquiriesByUser);
     const createInquiry = useSupportStore(s => s.createInquiry);
     const user = useAuthStore(s => s.user);
     const isLoggedIn = useAuthStore(s => s.isLoggedIn);
 
     const [form, setForm] = useState({ subject: '', content: '' });
     const [openFaq, setOpenFaq] = useState(null);
+    const [showInquiryForm, setShowInquiryForm] = useState(false);
+    const inquiries = user ? getInquiriesByUser(user.id) : [];
 
     const handleInquiry = e => {
         e.preventDefault();
@@ -31,6 +34,7 @@ const Support = ({ tab: propTab }) => {
         createInquiry({ ...form, userId: user.id, userName: user.name });
         alert('문의가 접수되었습니다.');
         setForm({ subject: '', content: '' });
+        setShowInquiryForm(false);
     };
 
     return (
@@ -97,33 +101,89 @@ const Support = ({ tab: propTab }) => {
                 {/* 문의하기 */}
                 {activeTab === 'contact' && (
                     <div className="support-page__content">
-                        <form className="support-page__form" onSubmit={handleInquiry}>
-                            <div className="support-page__field">
-                                <label className="suit-14-m">제목</label>
-                                <input
-                                    type="text"
-                                    value={form.subject}
-                                    onChange={e => setForm({ ...form, subject: e.target.value })}
-                                    className="suit-16-r"
-                                    placeholder="문의 제목을 입력하세요"
-                                    required
-                                />
+                        {isLoggedIn ? (
+                            <>
+                                <div className="support-page__inquiry-head">
+                                    <div>
+                                        <p className="optima-20 support-page__inquiry-title">내가 남긴 문의</p>
+                                        <p className="suit-16-r support-page__inquiry-desc">
+                                            접수한 문의의 상태와 남겨주신 내용을 확인하실 수 있습니다.
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="support-page__toggle suit-14-m"
+                                        onClick={() => setShowInquiryForm(current => !current)}
+                                    >
+                                        {showInquiryForm ? '작성 닫기' : '새 문의 남기기'}
+                                    </button>
+                                </div>
+
+                                {inquiries.length > 0 ? (
+                                    <div className="support-page__inquiries">
+                                        {inquiries.map(inquiry => (
+                                            <article key={inquiry.id} className="support-page__inquiry">
+                                                <div className="support-page__inquiry-meta">
+                                                    <div>
+                                                        <p className="suit-18-m support-page__inquiry-subject">{inquiry.subject}</p>
+                                                        <p className="suit-12-r support-page__inquiry-date">
+                                                            {new Date(inquiry.createdAt).toLocaleDateString('ko-KR')} · {inquiry.id}
+                                                        </p>
+                                                    </div>
+                                                    <span className="support-page__inquiry-status suit-14-m">{inquiry.status}</span>
+                                                </div>
+                                                <p className="suit-16-r support-page__inquiry-content">{inquiry.content}</p>
+                                            </article>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="support-page__inquiry-empty">
+                                        <p className="suit-18-r">아직 남긴 문의가 없습니다.</p>
+                                        <p className="suit-16-r">
+                                            주문이나 서비스 관련 도움이 필요하시면 새 문의를 남겨주세요.
+                                        </p>
+                                    </div>
+                                )}
+
+                                {showInquiryForm && (
+                                    <form className="support-page__form" onSubmit={handleInquiry}>
+                                        <div className="support-page__field">
+                                            <label className="suit-14-m">제목</label>
+                                            <input
+                                                type="text"
+                                                value={form.subject}
+                                                onChange={e => setForm({ ...form, subject: e.target.value })}
+                                                className="suit-16-r"
+                                                placeholder="문의 제목을 입력하세요"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="support-page__field">
+                                            <label className="suit-14-m">내용</label>
+                                            <textarea
+                                                value={form.content}
+                                                onChange={e => setForm({ ...form, content: e.target.value })}
+                                                className="suit-16-r"
+                                                placeholder="문의 내용을 입력하세요"
+                                                rows={8}
+                                                required
+                                            />
+                                        </div>
+                                        <button type="submit" className="support-page__submit suit-18-m">
+                                            문의 접수하기
+                                        </button>
+                                    </form>
+                                )}
+                            </>
+                        ) : (
+                            <div className="support-page__inquiry-empty">
+                                <p className="suit-18-r">문의 내역은 로그인 후 확인하실 수 있습니다.</p>
+                                <p className="suit-16-r">로그인하시면 이전에 남긴 문의와 답변 상태를 이어서 볼 수 있습니다.</p>
+                                <Link to="/login" className="support-page__login-link optima-16">
+                                    로그인하기
+                                </Link>
                             </div>
-                            <div className="support-page__field">
-                                <label className="suit-14-m">내용</label>
-                                <textarea
-                                    value={form.content}
-                                    onChange={e => setForm({ ...form, content: e.target.value })}
-                                    className="suit-16-r"
-                                    placeholder="문의 내용을 입력하세요"
-                                    rows={8}
-                                    required
-                                />
-                            </div>
-                            <button type="submit" className="support-page__submit suit-18-m">
-                                문의 접수하기
-                            </button>
-                        </form>
+                        )}
                     </div>
                 )}
 

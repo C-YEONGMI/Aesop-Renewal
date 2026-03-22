@@ -141,6 +141,55 @@ const useAuthStore = create(
                 });
             },
 
+            updateProfile: (profileData) => {
+                const currentUser = get().user;
+                const users = get().users;
+
+                if (!currentUser) {
+                    return { success: false, message: '로그인이 필요합니다.' };
+                }
+
+                const currentUserRecord = users.find((entry) => entry.id === currentUser.id);
+                if (!currentUserRecord) {
+                    return { success: false, message: '회원 정보를 찾을 수 없습니다.' };
+                }
+
+                const nextEmail = normalize(profileData.email ?? currentUserRecord.email);
+                const nextName = profileData.name?.trim();
+                const nextPhone = profileData.phone?.trim();
+
+                const duplicatedEmail =
+                    nextEmail &&
+                    users.some(
+                        (entry) =>
+                            entry.id !== currentUser.id &&
+                            normalize(entry.email) === nextEmail
+                    );
+
+                if (duplicatedEmail) {
+                    return { success: false, message: '이미 사용 중인 이메일입니다.' };
+                }
+
+                const updatedUser = {
+                    ...currentUserRecord,
+                    name: nextName ?? currentUserRecord.name,
+                    email: nextEmail || currentUserRecord.email,
+                    verificationEmail: nextEmail || currentUserRecord.verificationEmail,
+                    phone: nextPhone ?? currentUserRecord.phone,
+                };
+
+                const nextUsers = users.map((entry) =>
+                    entry.id === currentUser.id ? updatedUser : entry
+                );
+
+                set({
+                    users: nextUsers,
+                    user: toSafeUser(updatedUser),
+                });
+
+                return { success: true, user: toSafeUser(updatedUser) };
+            },
+
             findAccount: (identifier) => {
                 const normalizedIdentifier = normalize(identifier);
                 const users = get().users;

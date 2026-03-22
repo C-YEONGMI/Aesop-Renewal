@@ -363,15 +363,17 @@ const ExpandableChat = ({ isOpen, onClose }) => {
                     : '안녕하세요. 이솝 컨설턴트가 제품 선택과 주문 관련 도움을 드리겠습니다. 오늘 어떤 도움이 필요하신가요?',
                 HOME_OPTIONS.map((label) =>
                     makeOption(label, {
-                        kind: 'start',
-                        flowKey:
-                            label === '나를 위한 제품 추천'
-                                ? 'self_routine'
-                                : label === '선물 추천'
-                                  ? 'gift_recommendation'
-                                  : label === '주문/배송 문의'
-                                    ? 'order_support'
-                                    : 'store_followup',
+                        ...(label === '선물 추천'
+                            ? { kind: 'navigate', to: '/gift-guide' }
+                            : {
+                                  kind: 'start',
+                                  flowKey:
+                                      label === '나를 위한 제품 추천'
+                                          ? 'self_routine'
+                                          : label === '주문/배송 문의'
+                                            ? 'order_support'
+                                            : 'store_followup',
+                              }),
                     })
                 ),
                 {
@@ -392,7 +394,7 @@ const ExpandableChat = ({ isOpen, onClose }) => {
         setMessages([
             createTextMessage(nextIdRef.current++, 'bot', '이솝에 오신 것을 환영합니다.'),
             createChoiceMessage(nextIdRef.current++, '상담을 시작하기 전, 개인정보 및 민감정보 수집, 이용 및 국외이전에 대한 고객님의 동의가 필요합니다.\n자세한 내용은 개인정보처리방침에서 확인하실 수 있습니다.', [
-                makeOption('감사합니다', { kind: 'entry' }),
+                makeOption('확인했습니다.', { kind: 'entry' }),
             ], { hasPrivacyLink: true }),
         ]);
         setIsLoading(false);

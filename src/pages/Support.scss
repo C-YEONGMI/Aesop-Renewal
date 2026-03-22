@@ -46,6 +46,92 @@
 
     &__content { display: flex; flex-direction: column; gap: 0; }
 
+    &__inquiry-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid $brown-100;
+        margin-bottom: 24px;
+    }
+
+    &__inquiry-title { color: $brown-800; }
+    &__inquiry-desc,
+    &__inquiry-content,
+    &__inquiry-empty p:last-child { color: $brown-500; }
+
+    &__toggle,
+    &__login-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: flex-start;
+        min-height: 42px;
+        padding: 0 18px;
+        border-radius: 999px;
+        text-decoration: none;
+        color: $brown-700;
+        background: rgba($brown-100, 0.5);
+        transition: background-color 0.2s ease, color 0.2s ease;
+
+        &:hover {
+            color: $brown-900;
+            background: rgba($brown-200, 0.72);
+        }
+    }
+
+    &__toggle {
+        border: none;
+        cursor: pointer;
+        font-family: $font-suit;
+    }
+
+    &__inquiries {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__inquiry,
+    &__inquiry-empty {
+        padding: 24px;
+        border: 1px solid rgba($brown-100, 0.92);
+        background: rgba($oatmeal, 0.78);
+        box-shadow: 0 16px 28px rgba($brown-900, 0.04);
+    }
+
+    &__inquiry {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    &__inquiry-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    &__inquiry-meta {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    &__inquiry-subject { color: $brown-800; }
+    &__inquiry-date { color: $brown-300; margin-top: 6px; }
+
+    &__inquiry-status {
+        flex-shrink: 0;
+        padding: 8px 12px;
+        border-radius: 999px;
+        color: $brown-800;
+        background: rgba($point-pink, 0.18);
+    }
+
     /* 공지사항 */
     &__notice {
         padding: 24px 0;
@@ -148,5 +234,12 @@
         border-bottom: 1px solid $brown-300;
         align-self: flex-start;
         margin-top: 8px;
+    }
+
+    @media (max-width: 767px) {
+        &__inquiry-head,
+        &__inquiry-meta {
+            flex-direction: column;
+        }
     }
 }
