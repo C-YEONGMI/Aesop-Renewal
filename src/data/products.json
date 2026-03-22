@@ -568,7 +568,7 @@
     {
         "newestId": 83,
         "category": "HAND & BODY",
-        "name": "페티그레인 리바이빙 바디 젤",
+        "name": "페티그레인 리바이빙 바디 애프터 선젤",
         "description": "신속하게 흡수되며 끈적이지 않는 마무리",
         "variants": [
             {
@@ -2335,6 +2335,10 @@
             {
                 "category": "Kits",
                 "subcategory": "Fragrance kits"
+            },
+            {
+                "category": "Home & living",
+                "subcategory": "Room sprays"
             }
         ]
     },
