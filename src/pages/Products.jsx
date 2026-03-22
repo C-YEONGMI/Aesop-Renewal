@@ -338,7 +338,7 @@ const Products = () => {
                                                         <div className="products-page__card-copy">
                                                             <div className="products-page__card-copy-inner">
                                                                 <p className="products-page__card-category suit-12-r">
-                                                                    {product.category}
+                                                                    {categoryConfig?.label || product.category}
                                                                 </p>
                                                                 <p className="products-page__card-name suit-18-m">
                                                                     {product.name}

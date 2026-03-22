@@ -35,8 +35,7 @@
 }
 
 .simple-dropdown__link {
-    font-family: $font-optima;
-    font-size: 14px;
+    @extend .optima-16;
     color: $brown-700;
     text-decoration: none;
     display: block;

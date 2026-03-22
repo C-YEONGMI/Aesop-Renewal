@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
 import './MegaMenu.scss';
 
 const MegaMenu = ({ item, onClose, onMouseEnter }) => {
     if (!item.children) return null;
 
-    // 상단 4개 + 하단 2개 분리
-    const topCategories = item.children.slice(0, 4);
-    const bottomCategories = item.children.slice(4);
+    // 상단 3개 + 하단 3개 분리
+    const topCategories = item.children.slice(0, 3);
+    const bottomCategories = item.children.slice(3);
 
     const renderColumn = (category) => (
         <div className="mega-menu__column" key={category.label}>
@@ -56,6 +57,7 @@ const MegaMenu = ({ item, onClose, onMouseEnter }) => {
                     </>
                 )}
             </div>
+            <GNB_Logo className="mega-menu__logo" aria-hidden="true" />
         </div>
     );
 };

@@ -18,6 +18,7 @@
         visibility 0.3s ease,
         transform 0.3s ease;
     z-index: 100;
+    overflow: hidden;
 
     /* 부모 li가 active 일 때 표시 — DesktopNav에서 직접 렌더링하므로 항상 보이게 */
     opacity: 1;
@@ -25,10 +26,23 @@
     transform: translateY(0);
 }
 
+.mega-menu__logo {
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    height: auto;
+    opacity: 0.15;
+    fill: $brown-500;
+    color: $brown-500;
+    pointer-events: none;
+}
+
 .mega-menu__inner {
-    max-width: 1280px;
-    margin: 0 auto;
+    max-width: 960px;
     padding: 36px 4% 40px;
+    margin-left: 140px;
 }
 
 .mega-menu__top-row,
@@ -38,11 +52,11 @@
 }
 
 .mega-menu__top-row {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .mega-menu__bottom-row {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .mega-menu__divider {
@@ -59,7 +73,6 @@
 
 .mega-menu__category-title {
     @extend .optima-16;
-    font-size: 13px;
     font-weight: 600;
     color: $brown-900;
     text-decoration: none;
@@ -86,13 +99,27 @@
     font-size: 14px;
     color: $brown-700;
     text-decoration: none;
-    transition:
-        color 0.2s ease,
-        opacity 0.2s ease;
+    transition: color 0.2s ease;
     line-height: 1.5;
+    display: inline-block;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        border-bottom: 1px solid $brown-900;
+        transition: width 0.3s ease;
+    }
 
     &:hover {
         color: $brown-900;
+
+        &::after {
+            width: 100%;
+        }
     }
 }
 
@@ -108,9 +135,19 @@
 #header.transparent .mega-menu__sub-link {
     color: $brown-200;
 
+    &::after {
+        border-bottom-color: $oatmeal;
+    }
+
     &:hover {
         color: $oatmeal;
     }
+}
+
+#header.transparent .mega-menu__logo {
+    fill: $oatmeal;
+    color: $oatmeal;
+    opacity: 0.5;
 }
 
 #header.transparent .mega-menu__divider {
