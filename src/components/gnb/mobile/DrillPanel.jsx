@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuthStore from '../../../store/useAuthStore';
 import DrillSubPanel from './DrillSubPanel';
 import './DrillPanel.scss';
 
@@ -17,6 +18,19 @@ const ChevronLeft = () => (
 
 const DrillPanel = ({ items, drillStack, drillDown, drillBack, closeMobile }) => {
     const currentDepth = drillStack.length;
+    const navigate = useNavigate();
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const logout = useAuthStore((state) => state.logout);
+
+    const handleAccountAction = () => {
+        closeMobile();
+        if (isLoggedIn) {
+            logout();
+            navigate('/');
+        } else {
+            navigate('/login');
+        }
+    };
 
     return (
         <div className="drill-panel">
@@ -51,6 +65,15 @@ const DrillPanel = ({ items, drillStack, drillDown, drillBack, closeMobile }) =>
                         </li>
                     ))}
                 </ul>
+
+                {/* 로그인/로그아웃 — 모바일 전용 */}
+                <button
+                    type="button"
+                    className="drill-panel__account-btn"
+                    onClick={handleAccountAction}
+                >
+                    {isLoggedIn ? 'LOG OUT' : 'LOG IN'}
+                </button>
             </div>
 
             {/* 하위 depth 패널들 */}

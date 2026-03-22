@@ -8,6 +8,19 @@
   z-index: 50;
 }
 
+/* 모바일: 40×40 터치영역, 아이콘 24px */
+@media (max-width: 767px) {
+  .expandable-search {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .search-toggle-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
 /* 닫혀있을 때 / 열려있을 때의 기본 토글 버튼 */
 .search-toggle-btn {
   position: absolute;
