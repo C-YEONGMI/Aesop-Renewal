@@ -118,7 +118,7 @@ const GiftGuideFlow = () => {
                     <div className="gift-guide-flow__panel">
                         <div className="gift-guide-flow__question-box">
                             <p className="montage-16 text-brown-500">Step 1</p>
-                            <h3 className="suit-24-sb text-brown-900">
+                            <h3 className="suit-24-r text-brown-900">
                                 어떤 상황을 위한 선물인가요?
                             </h3>
                         </div>
@@ -143,7 +143,7 @@ const GiftGuideFlow = () => {
                         <div className="gift-guide-flow__panel">
                             <div className="gift-guide-flow__question-box">
                                 <p className="montage-16 text-brown-500">Step 2</p>
-                                <h3 className="suit-24-sb text-brown-900">
+                                <h3 className="suit-24-r text-brown-900">
                                     {currentStep1.question2}
                                 </h3>
                             </div>
@@ -169,7 +169,7 @@ const GiftGuideFlow = () => {
                         <div className="gift-guide-flow__panel">
                             <div className="gift-guide-flow__question-box">
                                 <p className="montage-16 text-brown-500">Step 3</p>
-                                <h3 className="suit-24-sb text-brown-900">
+                                <h3 className="suit-24-r text-brown-900">
                                     {currentStep2.question3}
                                 </h3>
                             </div>
