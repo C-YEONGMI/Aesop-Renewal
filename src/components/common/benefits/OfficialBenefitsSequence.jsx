@@ -97,17 +97,41 @@ const OfficialBenefitsSequence = () => {
                 gsap.set(summaryCards, { autoAlpha: 0, y: 24, scale: 1.03 });
                 gsap.set(summaryCopyRef.current, { autoAlpha: 0, y: 36 });
 
-                gsap.timeline({
+                const slideMotionStart = 0.05;
+                const slideMotionDuration = 2.15;
+                const reelExitStart = 2.32;
+                const summaryStart = 2.38;
+                const summaryCardsStart = 2.42;
+                const summaryCopyStart = 2.48;
+
+                const reelTimeline = gsap.timeline({
                     scrollTrigger: {
                         trigger: reelSection,
                         start: 'top top',
                         end: () => `+=${getTravelDistance() + window.innerWidth * 1.15}`,
                         pin: true,
                         scrub: 1,
+                        snap: {
+                            snapTo: 'labelsDirectional',
+                            duration: { min: 0.24, max: 0.52 },
+                            delay: 0.04,
+                            ease: 'power3.out',
+                        },
                         anticipatePin: 1,
                         invalidateOnRefresh: true,
                     },
-                })
+                });
+
+                reelTimeline.addLabel('reel-start', 0);
+                slides.forEach((_, index) => {
+                    const stopTime =
+                        slideMotionStart +
+                        (slideMotionDuration * index) / Math.max(slides.length - 1, 1);
+                    reelTimeline.addLabel(`card-${index + 1}`, stopTime);
+                });
+                reelTimeline.addLabel('reel-summary', summaryStart);
+
+                reelTimeline
                     .fromTo(
                         slides,
                         { autoAlpha: 0.4, y: 26 },
@@ -138,7 +162,7 @@ const OfficialBenefitsSequence = () => {
                             duration: 0.32,
                             ease: 'power2.inOut',
                         },
-                        1.98
+                        reelExitStart
                     )
                     .to(
                         summary,
@@ -148,7 +172,7 @@ const OfficialBenefitsSequence = () => {
                             duration: 0.28,
                             ease: 'power2.out',
                         },
-                        2.04
+                        summaryStart
                     )
                     .to(
                         summaryCards,
@@ -160,7 +184,7 @@ const OfficialBenefitsSequence = () => {
                             duration: 0.22,
                             ease: 'power2.out',
                         },
-                        2.08
+                        summaryCardsStart
                     )
                     .to(
                         summaryCopyRef.current,
@@ -170,7 +194,7 @@ const OfficialBenefitsSequence = () => {
                             duration: 0.24,
                             ease: 'power2.out',
                         },
-                        2.14
+                        summaryCopyStart
                     );
             });
 
@@ -249,17 +273,12 @@ const OfficialBenefitsSequence = () => {
                                     </div>
 
                                     <div className="official-benefits-sequence__slide-copy">
-                                        <div className="official-benefits-sequence__slide-top">
+                                        <div className="official-benefits-sequence__slide-heading">
+                                            <h3 className="official-benefits-sequence__slide-title optima-48">
+                                                {card.title}
+                                            </h3>
                                             <span className="official-benefits-sequence__slide-rule" />
-                                            <span
-                                                className="official-benefits-sequence__slide-disc"
-                                                aria-hidden="true"
-                                            />
                                         </div>
-
-                                        <h3 className="official-benefits-sequence__slide-title optima-48">
-                                            {card.title}
-                                        </h3>
 
                                         <p className="official-benefits-sequence__slide-index optima-16">
                                             {card.id} — 05
