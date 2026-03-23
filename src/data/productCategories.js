@@ -11,18 +11,18 @@ export const PRODUCT_CATEGORY_GROUPS = [
     },
     {
         slug: 'home',
-        label: 'HOME · LIVING',
-        aliases: ['Home', 'Home & Living', 'HOME & LIVING', 'HOME · LIVING'],
+        label: 'HOME & LIVING',
+        aliases: ['Home', 'Home & Living', 'HOME & LIVING'],
     },
     {
         slug: 'hair',
-        label: 'HAIR · SHAVING',
-        aliases: ['Hair', 'Hair & Shaving', 'HAIR & SHAVING', 'HAIR · SHAVING'],
+        label: 'HAIR & SHAVING',
+        aliases: ['Hair', 'Hair & Shaving', 'HAIR & SHAVING'],
     },
     {
         slug: 'body',
-        label: 'HAND · BODY',
-        aliases: ['Body', 'Body & Hand', 'Hand & Body', 'HAND & BODY', 'HAND · BODY'],
+        label: 'HAND & BODY',
+        aliases: ['Body', 'Body & Hand', 'Hand & Body', 'HAND & BODY'],
     },
     {
         slug: 'kits',
@@ -70,9 +70,9 @@ export const extractProductCodeFromImage = (imageUrl = '') => {
 const hasCategoryKeyword = (name = '', keywords = []) =>
     keywords.some((keyword) => name.includes(keyword));
 
-const HOME_FRAGRANCE_KEYWORDS = ['룸 스프레이', 'Room Spray', '포스트-푸 드롭스', 'Post-Poo'];
+const HOME_FRAGRANCE_KEYWORDS = ['룸 스프레이', 'Room Spray', '포스트-푸', 'Post-Poo'];
 const HAIR_SKIN_KEYWORDS = [
-    '쉐이빙',
+    '셰이빙',
     'Shaving',
     '브러시',
     'Brush',

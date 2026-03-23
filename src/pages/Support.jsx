@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import useSupportStore from '../store/useSupportStore';
 import useAuthStore from '../store/useAuthStore';
 import './Support.scss';
@@ -9,12 +9,17 @@ const TABS = [
     { key: 'faq', label: 'FAQ' },
     { key: 'contact', label: '문의하기' },
     { key: 'live-chat', label: '실시간 상담' },
-    { key: 'store-locator', label: '매장 찾기', link: '/store-locator' },
+    { key: 'store-locator', label: '매장 찾기', link: '/support/store-locator' },
 ];
 
 const Support = ({ tab: propTab }) => {
     const { tab: paramTab } = useParams();
+    const location = useLocation();
     const activeTab = propTab || paramTab || 'notices';
+    const loginReturnTo = useMemo(
+        () => `${location.pathname}${location.search}${location.hash}`,
+        [location.hash, location.pathname, location.search]
+    );
 
     const notices = useSupportStore(s => s.notices);
     const faqs = useSupportStore(s => s.faqs);
@@ -179,7 +184,11 @@ const Support = ({ tab: propTab }) => {
                             <div className="support-page__inquiry-empty">
                                 <p className="suit-18-r">문의 내역은 로그인 후 확인하실 수 있습니다.</p>
                                 <p className="suit-16-r">로그인하시면 이전에 남긴 문의와 답변 상태를 이어서 볼 수 있습니다.</p>
-                                <Link to="/login" className="support-page__login-link optima-16">
+                                <Link
+                                    to="/login"
+                                    state={{ returnTo: loginReturnTo }}
+                                    className="support-page__login-link optima-16"
+                                >
                                     로그인하기
                                 </Link>
                             </div>

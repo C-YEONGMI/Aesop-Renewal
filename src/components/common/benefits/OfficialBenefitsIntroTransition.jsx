@@ -39,13 +39,17 @@ const OfficialBenefitsIntroTransition = ({
                     autoAlpha: 1,
                     clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
                 });
-                gsap.set([topLineRef.current, bottomLineRef.current], {
+                gsap.set(topLineRef.current, {
                     autoAlpha: 0,
-                    filter: 'blur(10px)',
+                    transformOrigin: 'center center',
                 });
-                gsap.set(topLineRef.current, { y: 84 });
-                gsap.set(bottomLineRef.current, { y: 116 });
-                gsap.set(productWrapRef.current, { scale: 0.92, yPercent: 0 });
+                gsap.set(bottomLineRef.current, {
+                    autoAlpha: 0,
+                    transformOrigin: 'center center',
+                });
+                gsap.set(topLineRef.current, { y: 292, scale: 1.035 });
+                gsap.set(bottomLineRef.current, { y: 344, scale: 1.02 });
+                gsap.set(productWrapRef.current, { scale: 0.88, yPercent: 6 });
                 gsap.set(productGlowRef.current, { autoAlpha: 0.08, scale: 0.84 });
                 gsap.set(productImageRef.current, {
                     filter: 'brightness(0.42) saturate(0.74) contrast(1.04) drop-shadow(0 56px 80px rgba(0, 0, 0, 0.36))',
@@ -83,10 +87,11 @@ const OfficialBenefitsIntroTransition = ({
                     .to(
                         heroTitleRef.current,
                         {
-                            y: -132,
+                            y: -188,
+                            scale: 0.92,
                             autoAlpha: 0,
-                            filter: 'blur(10px)',
-                            duration: 0.42,
+                            filter: 'blur(12px)',
+                            duration: 0.48,
                             ease: 'power2.inOut',
                         },
                         0
@@ -103,12 +108,12 @@ const OfficialBenefitsIntroTransition = ({
                     .to(
                         productWrapRef.current,
                         {
-                            scale: 1.02,
-                            yPercent: -3,
-                            duration: 0.7,
-                            ease: 'power2.out',
+                            scale: 1.06,
+                            yPercent: -4,
+                            duration: 0.78,
+                            ease: 'power3.out',
                         },
-                        0.2
+                        0.18
                     )
                     .to(
                         productGlowRef.current,
@@ -134,22 +139,22 @@ const OfficialBenefitsIntroTransition = ({
                         {
                             autoAlpha: 1,
                             y: 0,
-                            filter: 'blur(0px)',
-                            duration: 0.38,
-                            ease: 'power2.out',
+                            scale: 1,
+                            duration: 0.34,
+                            ease: 'power3.out',
                         },
-                        0.5
+                        0.4
                     )
                     .to(
                         bottomLineRef.current,
                         {
                             autoAlpha: 1,
                             y: 0,
-                            filter: 'blur(0px)',
-                            duration: 0.42,
+                            scale: 1,
+                            duration: 0.52,
                             ease: 'power2.out',
                         },
-                        0.58
+                        0.56
                     );
             });
 
@@ -157,12 +162,17 @@ const OfficialBenefitsIntroTransition = ({
                 gsap.set(lightLayerRef.current, {
                     clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
                 });
-                gsap.set([topLineRef.current, bottomLineRef.current], {
+                gsap.set(topLineRef.current, {
                     autoAlpha: 0,
-                    filter: 'blur(6px)',
+                    transformOrigin: 'center center',
                 });
-                gsap.set(topLineRef.current, { y: 44 });
-                gsap.set(bottomLineRef.current, { y: 56 });
+                gsap.set(bottomLineRef.current, {
+                    autoAlpha: 0,
+                    transformOrigin: 'center center',
+                });
+                gsap.set(topLineRef.current, { y: 172, scale: 1.03 });
+                gsap.set(bottomLineRef.current, { y: 218, scale: 1.02 });
+                gsap.set(productWrapRef.current, { scale: 0.92, yPercent: 4 });
                 gsap.set(productImageRef.current, {
                     filter: 'brightness(0.6) saturate(0.82) contrast(1.03)',
                 });
@@ -194,12 +204,22 @@ const OfficialBenefitsIntroTransition = ({
                     .to(
                         heroTitleRef.current,
                         {
-                            y: -56,
+                            y: -88,
+                            scale: 0.94,
                             autoAlpha: 0,
-                            filter: 'blur(8px)',
+                            filter: 'blur(10px)',
                             ease: 'power2.inOut',
                         },
                         0
+                    )
+                    .to(
+                        productWrapRef.current,
+                        {
+                            scale: 1.04,
+                            yPercent: -2,
+                            ease: 'power2.out',
+                        },
+                        0.16
                     )
                     .to(
                         lightLayerRef.current,
@@ -218,15 +238,24 @@ const OfficialBenefitsIntroTransition = ({
                         0.2
                     )
                     .to(
-                        [topLineRef.current, bottomLineRef.current],
+                        topLineRef.current,
                         {
                             autoAlpha: 1,
                             y: 0,
-                            filter: 'blur(0px)',
-                            stagger: 0.08,
+                            scale: 1,
+                            ease: 'power3.out',
+                        },
+                        0.28
+                    )
+                    .to(
+                        bottomLineRef.current,
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            scale: 1,
                             ease: 'power2.out',
                         },
-                        0.34
+                        0.42
                     );
             });
         }, introRef);
@@ -256,18 +285,15 @@ const OfficialBenefitsIntroTransition = ({
                         </h2>
                     </div>
 
-                    <div className="official-benefits-intro__secondary-copy" data-node-id="1056:684">
+                    <div
+                        className="official-benefits-intro__secondary-copy official-benefits-intro__secondary-copy--top"
+                        data-node-id="1056:684"
+                    >
                         <p
                             className="official-benefits-intro__secondary-line official-benefits-intro__secondary-line--top"
                             ref={topLineRef}
                         >
                             {secondaryTitleLines[0]}
-                        </p>
-                        <p
-                            className="official-benefits-intro__secondary-line official-benefits-intro__secondary-line--bottom"
-                            ref={bottomLineRef}
-                        >
-                            {secondaryTitleLines[1]}
                         </p>
                     </div>
 
@@ -283,6 +309,18 @@ const OfficialBenefitsIntroTransition = ({
                             src={productImage}
                             alt={productAlt}
                         />
+                    </div>
+
+                    <div
+                        className="official-benefits-intro__secondary-copy official-benefits-intro__secondary-copy--bottom"
+                        data-node-id="1056:684"
+                    >
+                        <p
+                            className="official-benefits-intro__secondary-line official-benefits-intro__secondary-line--bottom"
+                            ref={bottomLineRef}
+                        >
+                            {secondaryTitleLines[1]}
+                        </p>
                     </div>
                 </div>
             </div>

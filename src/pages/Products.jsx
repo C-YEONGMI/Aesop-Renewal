@@ -15,7 +15,7 @@ import './Products.scss';
 const SORT_OPTIONS = [
     { value: 'default', label: '추천순' },
     { value: 'best', label: '베스트순' },
-    { value: 'new', label: '신상품순' },
+    { value: 'new', label: '최신순' },
     { value: 'price-asc', label: '낮은 가격순' },
     { value: 'price-desc', label: '높은 가격순' },
 ];
@@ -70,7 +70,7 @@ const Products = () => {
         setActiveCategories(routeCategorySlug ? [routeCategorySlug] : []);
     }, [routeCategorySlug]);
 
-    // subcategory(3depth) 필터링: classifications 필드 사용
+    // subcategory(3depth) 필터링은 classifications 필드를 사용
     const classificationMatch = subcategory && category
         ? getClassification(category, subcategory)
         : null;
@@ -224,7 +224,7 @@ const Products = () => {
                 <div className="products-page__inner">
                     <div className="products-page__title-area">
                         <nav className="products-page__breadcrumb suit-14-m">
-                            <Link to="/">홈</Link>
+                            <Link to="/">Home</Link>
                             <span> / </span>
                             {classificationMatch && category ? (
                                 <>
@@ -354,12 +354,12 @@ const Products = () => {
 
                                                         <div className="products-page__card-actions">
                                                             <div className="products-page__card-actions-inner">
-                                                            <AddToCartButton
-                                                                className="products-page__add-btn"
-                                                                text="장바구니 담기"
-                                                                width="100%"
-                                                                onClick={() => addToCart(product, 0)}
-                                                            />
+                                                                <AddToCartButton
+                                                                    className="products-page__add-btn"
+                                                                    text="장바구니 담기"
+                                                                    width="100%"
+                                                                    onClick={() => addToCart(product, 0)}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>

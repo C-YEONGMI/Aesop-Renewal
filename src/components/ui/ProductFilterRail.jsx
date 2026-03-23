@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import './ProductFilterRail.scss';
 
@@ -6,7 +7,7 @@ const FilterSection = ({ title, defaultOpen = false, children }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <section className="product-filter-rail__section">
+        <motion.section layout className="product-filter-rail__section">
             <button
                 type="button"
                 className="product-filter-rail__section-toggle"
@@ -19,10 +20,58 @@ const FilterSection = ({ title, defaultOpen = false, children }) => {
                     <ChevronDown size={16} strokeWidth={1.8} />
                 )}
             </button>
-            {isOpen ? <div className="product-filter-rail__section-body">{children}</div> : null}
-        </section>
+
+            <AnimatePresence initial={false}>
+                {isOpen ? (
+                    <motion.div
+                        key="section-body"
+                        layout
+                        className="product-filter-rail__section-body"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        {children}
+                    </motion.div>
+                ) : null}
+            </AnimatePresence>
+        </motion.section>
     );
 };
+
+const FilterChip = ({ item, selected = false, onClick }) => (
+    <motion.button
+        type="button"
+        layout
+        layoutId={`filter-chip-${item.key}`}
+        className={`product-filter-rail__chip ${
+            selected
+                ? 'product-filter-rail__selected-chip suit-14-m'
+                : 'product-filter-rail__option-chip suit-14-m'
+        }`}
+        onClick={onClick}
+        aria-pressed={selected}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: 'spring', stiffness: 420, damping: 34, mass: 0.68 }}
+    >
+        <motion.span layoutId={`filter-chip-label-${item.key}`}>{item.label}</motion.span>
+        <AnimatePresence initial={false}>
+            {selected ? (
+                <motion.span
+                    key="remove-icon"
+                    className="product-filter-rail__chip-icon"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                >
+                    <X size={12} strokeWidth={1.8} />
+                </motion.span>
+            ) : null}
+        </AnimatePresence>
+    </motion.button>
+);
 
 const ProductFilterRail = ({
     categories,
@@ -33,32 +82,58 @@ const ProductFilterRail = ({
     onPriceRangeToggle,
     onClearAllFilters,
 }) => {
+    const categoryItems = useMemo(
+        () =>
+            categories
+                .filter((category) => category.slug !== 'all')
+                .map((category) => ({
+                    key: `category-${category.slug}`,
+                    value: category.slug,
+                    label: category.label,
+                })),
+        [categories]
+    );
+
+    const priceRangeItems = useMemo(
+        () =>
+            priceRangeOptions.map((range) => ({
+                key: `price-${range.value}`,
+                value: range.value,
+                label: range.label,
+            })),
+        [priceRangeOptions]
+    );
+
     const selectedItems = useMemo(() => {
         const items = [];
 
         activeCategories.forEach((slug) => {
-            const activeCategoryItem = categories.find((category) => category.slug === slug);
+            const activeCategoryItem = categoryItems.find(
+                (category) => category.value === slug
+            );
 
-            if (!activeCategoryItem || activeCategoryItem.slug === 'all') {
+            if (!activeCategoryItem) {
                 return;
             }
 
             items.push({
-                key: `category-${slug}`,
+                key: activeCategoryItem.key,
                 label: activeCategoryItem.label,
                 onRemove: () => onCategoryToggle(slug),
             });
         });
 
         activePriceRanges.forEach((rangeValue) => {
-            const activePriceRangeItem = priceRangeOptions.find((range) => range.value === rangeValue);
+            const activePriceRangeItem = priceRangeItems.find(
+                (range) => range.value === rangeValue
+            );
 
             if (!activePriceRangeItem) {
                 return;
             }
 
             items.push({
-                key: `price-${rangeValue}`,
+                key: activePriceRangeItem.key,
                 label: activePriceRangeItem.label,
                 onRemove: () => onPriceRangeToggle(rangeValue),
             });
@@ -68,89 +143,115 @@ const ProductFilterRail = ({
     }, [
         activeCategories,
         activePriceRanges,
-        categories,
+        categoryItems,
         onCategoryToggle,
         onPriceRangeToggle,
-        priceRangeOptions,
+        priceRangeItems,
     ]);
 
+    const availableCategoryItems = useMemo(
+        () =>
+            categoryItems.filter(
+                (category) => !activeCategories.includes(category.value)
+            ),
+        [activeCategories, categoryItems]
+    );
+
+    const availablePriceRangeItems = useMemo(
+        () =>
+            priceRangeItems.filter(
+                (range) => !activePriceRanges.includes(range.value)
+            ),
+        [activePriceRanges, priceRangeItems]
+    );
+
     return (
-        <aside className="product-filter-rail">
-            <div className="product-filter-rail__sticky">
-                <div className="product-filter-rail__panel">
-                    <p className="product-filter-rail__eyebrow optima-16">Product Filter</p>
+        <LayoutGroup id="product-filter-rail">
+            <motion.aside layout className="product-filter-rail">
+                <div className="product-filter-rail__sticky">
+                    <motion.div layout className="product-filter-rail__panel">
+                        <p className="product-filter-rail__eyebrow optima-16">Product Filter</p>
 
-                    <div className="product-filter-rail__selected">
-                        {selectedItems.length > 0 ? (
-                            <>
-                                <div className="product-filter-rail__selected-list">
-                                    {selectedItems.map((item) => (
-                                        <button
-                                            key={item.key}
-                                            type="button"
-                                            className="product-filter-rail__selected-chip suit-14-m"
-                                            onClick={item.onRemove}
+                        <motion.div layout className="product-filter-rail__selected">
+                            <AnimatePresence mode="popLayout" initial={false}>
+                                {selectedItems.length > 0 ? (
+                                    <motion.div
+                                        key="selected-items"
+                                        layout
+                                        className="product-filter-rail__selected-active"
+                                    >
+                                        <motion.div
+                                            layout
+                                            className="product-filter-rail__selected-list"
                                         >
-                                            <span>{item.label}</span>
-                                            <X size={12} strokeWidth={1.8} />
-                                        </button>
+                                            {selectedItems.map((item) => (
+                                                <FilterChip
+                                                    key={item.key}
+                                                    item={item}
+                                                    selected
+                                                    onClick={item.onRemove}
+                                                />
+                                            ))}
+                                        </motion.div>
+
+                                        <motion.button
+                                            layout
+                                            type="button"
+                                            className="product-filter-rail__clear-button suit-12-r"
+                                            onClick={onClearAllFilters}
+                                        >
+                                            전체 해제
+                                        </motion.button>
+                                    </motion.div>
+                                ) : (
+                                    <motion.p
+                                        key="selected-empty"
+                                        layout
+                                        className="product-filter-rail__selected-empty suit-14-m"
+                                    >
+                                        선택한 필터가 없습니다
+                                    </motion.p>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+
+                        <FilterSection title="카테고리">
+                            <motion.ul layout className="product-filter-rail__category-list">
+                                <AnimatePresence mode="popLayout" initial={false}>
+                                    {availableCategoryItems.map((category) => (
+                                        <motion.li layout key={category.key}>
+                                            <FilterChip
+                                                item={category}
+                                                onClick={() =>
+                                                    onCategoryToggle(category.value)
+                                                }
+                                            />
+                                        </motion.li>
                                     ))}
-                                </div>
+                                </AnimatePresence>
+                            </motion.ul>
+                        </FilterSection>
 
-                                <button
-                                    type="button"
-                                    className="product-filter-rail__clear-button suit-12-r"
-                                    onClick={onClearAllFilters}
-                                >
-                                    모두 제거
-                                </button>
-                            </>
-                        ) : (
-                            <p className="product-filter-rail__selected-empty suit-14-m">선택없음</p>
-                        )}
-                    </div>
-
-                    <FilterSection title="카테고리">
-                        <ul className="product-filter-rail__category-list">
-                            {categories
-                                .filter((category) => category.slug !== 'all')
-                                .map((category) => (
-                                    <li key={category.slug}>
-                                        <button
-                                            type="button"
-                                            className={`product-filter-rail__category-chip suit-14-m ${
-                                                activeCategories.includes(category.slug) ? 'active' : ''
-                                            }`}
-                                            onClick={() => onCategoryToggle(category.slug)}
-                                            aria-pressed={activeCategories.includes(category.slug)}
-                                        >
-                                            {category.label}
-                                        </button>
-                                    </li>
-                                ))}
-                        </ul>
-                    </FilterSection>
-
-                    <FilterSection title="가격대">
-                        <div className="product-filter-rail__option-list">
-                            {priceRangeOptions.map((range) => (
-                                <button
-                                    key={range.value}
-                                    type="button"
-                                    className={`product-filter-rail__option-chip suit-14-m ${
-                                        activePriceRanges.includes(range.value) ? 'active' : ''
-                                    }`}
-                                    onClick={() => onPriceRangeToggle(range.value)}
-                                    aria-pressed={activePriceRanges.includes(range.value)}
-                                >
-                                    {range.label}
-                                </button>
-                            ))}
-                        </div>
-                    </FilterSection>
+                        <FilterSection title="가격대">
+                            <motion.div layout className="product-filter-rail__option-list">
+                                <AnimatePresence mode="popLayout" initial={false}>
+                                    {availablePriceRangeItems.map((range) => (
+                                        <motion.div layout key={range.key}>
+                                            <FilterChip
+                                                item={range}
+                                                onClick={() =>
+                                                    onPriceRangeToggle(range.value)
+                                                }
+                                            />
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+                            </motion.div>
+                        </FilterSection>
+                    </motion.div>
                 </div>
-            </div>
-        </aside>
+            </motion.aside>
+        </LayoutGroup>
     );
 };
 

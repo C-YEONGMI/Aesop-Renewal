@@ -9,15 +9,14 @@ import './OfficialExclusiveSection.scss';
 gsap.registerPlugin(ScrollTrigger, Draggable);
 
 const IMAGE_MOTION_PRESETS = [
-    { floatX: 18, floatY: -30, rotate: -2.8, scale: 1.03, duration: 6.4, delay: 0.1, depth: 0.58, tilt: 0.08 },
-    { floatX: -15, floatY: -22, rotate: 2.2, scale: 1.024, duration: 7.1, delay: 0.35, depth: 0.43, tilt: 0.06 },
-    { floatX: 22, floatY: -26, rotate: -2.4, scale: 1.028, duration: 7.6, delay: 0.2, depth: 0.65, tilt: 0.09 },
-    { floatX: -12, floatY: -20, rotate: 1.8, scale: 1.022, duration: 6.1, delay: 0.55, depth: 0.46, tilt: 0.05 },
-    { floatX: 24, floatY: -34, rotate: -3.2, scale: 1.034, duration: 8.2, delay: 0.3, depth: 0.72, tilt: 0.1 },
-    { floatX: -16, floatY: -24, rotate: 2.4, scale: 1.026, duration: 6.8, delay: 0.48, depth: 0.52, tilt: 0.07 },
+    { floatY: -30, duration: 6.4, delay: 0.1, depth: 0.58 },
+    { floatY: -22, duration: 7.1, delay: 0.35, depth: 0.43 },
+    { floatY: -26, duration: 7.6, delay: 0.2, depth: 0.65 },
+    { floatY: -20, duration: 6.1, delay: 0.55, depth: 0.46 },
+    { floatY: -34, duration: 8.2, delay: 0.3, depth: 0.72 },
+    { floatY: -24, duration: 6.8, delay: 0.48, depth: 0.52 },
 ];
 
-const MAX_DRIFT_X = 120;
 const MAX_DRIFT_Y = 88;
 
 const DECOR_FRAMES = [
@@ -223,20 +222,15 @@ const OfficialExclusiveSection = () => {
 
                 scrubNodes.forEach((node, index) => {
                     const preset = IMAGE_MOTION_PRESETS[index % IMAGE_MOTION_PRESETS.length];
-                    const direction = index % 2 === 0 ? 1 : -1;
-                    const startX = direction * (4 + (1 - preset.depth) * 5);
-                    const endX = direction * (-7 - preset.depth * 8);
                     const startY = 18 + (1 - preset.depth) * 16;
                     const endY = -24 - preset.depth * 20;
 
                     scrubTimeline.fromTo(
                         node,
                         {
-                            xPercent: startX,
                             yPercent: startY,
                         },
                         {
-                            xPercent: endX,
                             yPercent: endY,
                             ease: 'none',
                         },
@@ -256,79 +250,52 @@ const OfficialExclusiveSection = () => {
                             },
                         })
                         .to(node, {
-                            x: preset.floatX,
                             y: preset.floatY,
-                            rotation: preset.rotate,
-                            scale: preset.scale,
                             duration: preset.duration * 0.42,
                         })
                         .to(node, {
-                            x: preset.floatX * -0.42,
-                            y: preset.floatY * -0.18,
-                            rotation: preset.rotate * -0.38,
-                            scale: 1.008,
+                            y: preset.floatY * -0.2,
                             duration: preset.duration * 0.28,
                         })
                         .to(node, {
-                            x: 0,
                             y: 0,
-                            rotation: 0,
-                            scale: 1,
                             duration: preset.duration * 0.3,
                         });
                 });
 
-                const clampX = gsap.utils.clamp(-MAX_DRIFT_X, MAX_DRIFT_X);
                 const clampY = gsap.utils.clamp(-MAX_DRIFT_Y, MAX_DRIFT_Y);
-                const clampSkew = gsap.utils.clamp(-12, 12);
                 const controllers = dragNodes.map((node, index) => {
                     const preset = IMAGE_MOTION_PRESETS[index % IMAGE_MOTION_PRESETS.length];
                     const followDuration = 0.34 + (1 - preset.depth) * 0.62;
 
                     return {
-                        node,
                         depth: preset.depth,
-                        tilt: preset.tilt,
-                        xTo: gsap.quickTo(node, 'x', { duration: followDuration, ease: 'power3.out' }),
                         yTo: gsap.quickTo(node, 'y', { duration: followDuration * 1.08, ease: 'power3.out' }),
-                        rotateTo: gsap.quickTo(node, 'rotation', { duration: followDuration * 1.14, ease: 'power3.out' }),
-                        scaleTo: gsap.quickTo(node, 'scale', { duration: 0.24 + (1 - preset.depth) * 0.22, ease: 'power2.out' }),
-                        skewTo: gsap.quickTo(node, 'skewX', { duration: followDuration * 0.9, ease: 'power2.out' }),
                     };
                 });
 
                 const resetImageDrift = () => {
-                    controllers.forEach(({ xTo, yTo, rotateTo, scaleTo, skewTo }) => {
-                        xTo(0);
+                    controllers.forEach(({ yTo }) => {
                         yTo(0);
-                        rotateTo(0);
-                        scaleTo(1);
-                        skewTo(0);
                     });
                 };
 
-                const updateImageDrift = (offsetX, offsetY, velocityX = 0, velocityY = 0) => {
-                    const dragX = clampX(offsetX);
+                const updateImageDrift = (offsetY, velocityY = 0) => {
                     const dragY = clampY(offsetY);
-                    const directionalSpeed = Math.min(Math.hypot(velocityX, velocityY), 56);
-                    const dragStrength = Math.min(Math.hypot(dragX, dragY) + directionalSpeed * 1.8, 190);
+                    const directionalSpeed = Math.min(Math.abs(velocityY), 56);
 
-                    controllers.forEach(({ depth, tilt, xTo, yTo, rotateTo, scaleTo, skewTo }) => {
-                        const moveX = dragX * (0.62 + depth * 1.48) + velocityX * (7 + depth * 10);
-                        const moveY = dragY * (0.48 + depth * 1.1) + velocityY * (4 + depth * 6);
-                        const leadRotation = ((dragX * tilt) + (dragY * tilt * 0.35) + velocityX * tilt * 18) * 1.55;
-                        const skew = clampSkew(velocityX * (0.55 + depth * 0.45));
+                    controllers.forEach(({ depth, yTo }) => {
+                        const moveY =
+                            dragY * (0.58 + depth * 1.16) +
+                            velocityY * (4 + depth * 6) +
+                            directionalSpeed * Math.sign(velocityY || 1) * (0.12 + depth * 0.08);
 
-                        xTo(moveX);
                         yTo(moveY);
-                        rotateTo(leadRotation);
-                        scaleTo(1 + dragStrength * 0.0018 * (0.9 + depth * 0.4));
-                        skewTo(skew);
                     });
                 };
 
                 const dragger = Draggable.create(proxy, {
-                    type: 'x,y',
+                    type: 'y',
                     trigger: section,
                     minimumMovement: 1,
                     dragClickables: false,
@@ -336,8 +303,6 @@ const OfficialExclusiveSection = () => {
                     edgeResistance: 0.72,
                     zIndexBoost: false,
                     bounds: {
-                        minX: -MAX_DRIFT_X,
-                        maxX: MAX_DRIFT_X,
                         minY: -MAX_DRIFT_Y,
                         maxY: MAX_DRIFT_Y,
                     },
@@ -349,9 +314,7 @@ const OfficialExclusiveSection = () => {
                     },
                     onDrag() {
                         updateImageDrift(
-                            this.x * 1.7,
                             this.y * 1.55,
-                            this.deltaX,
                             this.deltaY
                         );
                     },

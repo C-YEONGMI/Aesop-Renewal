@@ -103,6 +103,18 @@ export const menuData = [
         type: 'link',
         path: '/our-story',
     },
+    {
+        label: 'SUPPORT',
+        type: 'simple',
+        path: '/support',
+        children: [
+            { label: 'Notices', path: '/support/notices' },
+            { label: 'FAQ', path: '/support/faq' },
+            { label: 'Contact us', path: '/support/contact' },
+            { label: 'Live chat', path: '/support/live-chat' },
+            { label: 'Store locator', path: '/support/store-locator' },
+        ],
+    },
 ];
 
 /**

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, User } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
 import { beginSocialLogin, consumeSocialReturnTo } from '../lib/socialAuth';
@@ -72,6 +72,7 @@ const SOCIAL_LOGO_MAP = {
 };
 
 const Login = () => {
+    const location = useLocation();
     const navigate = useNavigate();
     const login = useAuthStore((state) => state.login);
     const completeSocialLogin = useAuthStore((state) => state.completeSocialLogin);
@@ -80,6 +81,11 @@ const Login = () => {
     const [error, setError] = useState('');
     const [rememberIdentifier, setRememberIdentifier] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const postLoginPath =
+        typeof location.state?.returnTo === 'string' &&
+        location.state.returnTo.startsWith('/')
+            ? location.state.returnTo
+            : '/';
 
     useEffect(() => {
         const rememberedIdentifier = window.localStorage.getItem(REMEMBER_IDENTIFIER_KEY);
@@ -116,7 +122,7 @@ const Login = () => {
 
         if (result.success) {
             syncRememberedIdentifier(form.identifier);
-            navigate('/');
+            navigate(postLoginPath, { replace: true });
             return;
         }
 
@@ -127,7 +133,7 @@ const Login = () => {
         setError('');
 
         try {
-            const result = await beginSocialLogin(provider, { returnTo: '/mypage' });
+            const result = await beginSocialLogin(provider, { returnTo: postLoginPath });
 
             if (!result?.profile) {
                 return;
@@ -140,7 +146,7 @@ const Login = () => {
                 return;
             }
 
-            navigate(consumeSocialReturnTo());
+            navigate(consumeSocialReturnTo(), { replace: true });
         } catch (nextError) {
             setError(nextError.message || '간편로그인 처리 중 문제가 발생했습니다.');
         }
@@ -158,7 +164,7 @@ const Login = () => {
             if (rememberIdentifier) {
                 window.localStorage.setItem(REMEMBER_IDENTIFIER_KEY, TEST_ACCOUNT.userId);
             }
-            navigate('/mypage');
+            navigate(postLoginPath, { replace: true });
             return;
         }
 
