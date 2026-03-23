@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Hero intro source bundles
+public/hero-intro/*.zip
+public/hero-intro/Extras/
+public/hero-intro/model/Extras/
