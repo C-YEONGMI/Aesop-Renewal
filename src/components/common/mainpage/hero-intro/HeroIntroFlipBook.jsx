@@ -1,440 +1,344 @@
 import React, {
     forwardRef,
-    useCallback,
     useImperativeHandle,
+    useMemo,
     useRef,
 } from 'react';
-import HTMLFlipBook from 'react-pageflip';
-import { HERO_INTRO_ASSETS } from './heroIntroConfig';
+import {
+    HERO_INTRO_PAGES,
+    HERO_INTRO_PORTAL,
+    HERO_INTRO_RIFFLE_LAYER_COUNT,
+    HERO_INTRO_SEGMENTS,
+    clamp01,
+    easeInOutCubic,
+    easeOutCubic,
+    progressBetween,
+} from './heroIntroConfig';
 
-const FlipPage = forwardRef(function FlipPage(
-    { className = '', density = 'soft', children },
-    ref
-) {
-    return (
-        <div
-            ref={ref}
-            data-density={density}
-            className={`hero__intro-book-page ${className}`.trim()}
-        >
-            <div className="hero__intro-book-page-inner">{children}</div>
-        </div>
-    );
-});
+const PAGE_ASSIGNMENTS = [0, 1, 0, 2, 1, 2];
 
-const FolioPlatePage = ({
-    side,
-    src,
-    meta,
-    folio,
-    pageNumber,
-    imagePosition = 'center center',
-    className = '',
-}) => (
-    <FlipPage
-        className={`hero__intro-book-page--plate hero__intro-book-page--${side} ${className}`.trim()}
-    >
-        <span className="hero__intro-book-meta">{meta}</span>
-        <div className="hero__intro-book-plate">
-            <img
-                src={src}
-                alt=""
-                draggable="false"
-                className="hero__intro-book-plate-image"
-                style={{ objectPosition: imagePosition }}
-            />
-        </div>
-        <div className="hero__intro-book-folio-footer">
-            <span>{folio}</span>
-            <span>{pageNumber}</span>
-        </div>
-    </FlipPage>
-);
+const RIFFLE_POSITIONS = [
+    '52% 24%',
+    'center 18%',
+    '46% center',
+    '42% 20%',
+    '56% center',
+    '48% 26%',
+];
 
-const FolioLedgerPage = ({
-    side,
-    src,
-    meta,
-    heading,
-    latin,
-    paragraphs,
-    register,
-    pageNumber,
-    imagePosition = 'center center',
-}) => (
-    <FlipPage className={`hero__intro-book-page--ledger hero__intro-book-page--${side}`}>
-        <span className="hero__intro-book-meta">{meta}</span>
-        <div className="hero__intro-book-watermark">
-            <img
-                src={src}
-                alt=""
-                draggable="false"
-                className="hero__intro-book-watermark-image"
-                style={{ objectPosition: imagePosition }}
-            />
-        </div>
-        <h3 className="hero__intro-book-note-heading hero__intro-book-note-heading--folio">
-            {heading}
-            <span>{latin}</span>
-        </h3>
-        <div className="hero__intro-book-ledger-columns">
-            {paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-            ))}
-        </div>
-        <ul className="hero__intro-book-register">
-            {register.map((entry) => (
-                <li key={entry}>{entry}</li>
-            ))}
-        </ul>
-        <div className="hero__intro-book-folio-footer hero__intro-book-folio-footer--ledger">
-            <span>Compendium Botanicum</span>
-            <span>{pageNumber}</span>
-        </div>
-    </FlipPage>
-);
-
-const FolioStudyPage = ({
-    side,
-    src,
-    meta,
-    heading,
-    copy,
-    pageNumber,
-    imagePosition = 'center center',
-}) => (
-    <FlipPage className={`hero__intro-book-page--study hero__intro-book-page--${side}`}>
-        <span className="hero__intro-book-meta">{meta}</span>
-        <div className="hero__intro-book-study">
-            <img
-                src={src}
-                alt=""
-                draggable="false"
-                className="hero__intro-book-study-image"
-                style={{ objectPosition: imagePosition }}
-            />
-        </div>
-        <h4 className="hero__intro-book-study-heading">{heading}</h4>
-        <p className="hero__intro-book-study-copy">{copy}</p>
-        <div className="hero__intro-book-folio-footer">
-            <span>Archive Study</span>
-            <span>{pageNumber}</span>
-        </div>
-    </FlipPage>
-);
-
-const getTargetPage = (progress) => {
-    if (progress < 0.18) {
-        return 0;
-    }
-
-    if (progress < 0.22) {
-        return 2;
-    }
-
-    if (progress < 0.26) {
-        return 4;
-    }
-
-    if (progress < 0.3) {
-        return 6;
-    }
-
-    if (progress < 0.34) {
-        return 8;
-    }
-
-    return 10;
+const safeImageStyle = (event) => {
+    event.currentTarget.style.opacity = '0';
 };
+
+const createLayerConfig = (pages) =>
+    new Array(HERO_INTRO_RIFFLE_LAYER_COUNT).fill(null).map((_, index) => ({
+        key: `riffle-layer-${index + 1}`,
+        src: pages[PAGE_ASSIGNMENTS[index] % pages.length] ?? null,
+        isBackface: index % 2 === 1,
+        objectPosition: RIFFLE_POSITIONS[index % RIFFLE_POSITIONS.length],
+        folio: `Folio ${String(index + 1).padStart(2, '0')}`,
+        pageNumber: String(18 + index * 2).padStart(3, '0'),
+    }));
 
 const HeroIntroFlipBook = forwardRef(function HeroIntroFlipBook(
     { heroVideoSrc },
     ref
 ) {
-    const bookRef = useRef(null);
-    const pendingPageRef = useRef(0);
-    const isFlippingRef = useRef(false);
-
-    const flushPendingPage = useCallback(() => {
-        const pageFlipApi = bookRef.current?.pageFlip?.();
-
-        if (!pageFlipApi || isFlippingRef.current) {
-            return;
-        }
-
-        const currentPage = pageFlipApi.getCurrentPageIndex();
-        const targetPage = pendingPageRef.current;
-
-        if (targetPage === currentPage) {
-            return;
-        }
-
-        isFlippingRef.current = true;
-
-        if (targetPage > currentPage) {
-            pageFlipApi.flipNext('bottom');
-            return;
-        }
-
-        pageFlipApi.flipPrev('top');
-    }, []);
-
-    useImperativeHandle(
-        ref,
-        () => ({
-            syncToProgress(progress) {
-                pendingPageRef.current = getTargetPage(progress);
-                flushPendingPage();
-            },
-        }),
-        [flushPendingPage]
+    const rootRef = useRef(null);
+    const stackRef = useRef(null);
+    const finalSpreadRef = useRef(null);
+    const portalPlateRef = useRef(null);
+    const layerRefs = useRef([]);
+    const pageSources = useMemo(
+        () => HERO_INTRO_PAGES.filter(Boolean),
+        []
     );
+    const layerConfig = useMemo(
+        () => createLayerConfig(pageSources.length ? pageSources : [null]),
+        [pageSources]
+    );
+    const finalLeftPage = pageSources[0] ?? null;
+    const finalRightPage = pageSources[1] ?? pageSources[0] ?? null;
 
-    const handleInit = useCallback(
-        (event) => {
-            const page = event?.data?.page ?? 0;
+    useImperativeHandle(ref, () => ({
+        syncToProgress(progress) {
+            const root = rootRef.current;
 
-            isFlippingRef.current = false;
-
-            if (pendingPageRef.current !== page) {
-                flushPendingPage();
+            if (!root) {
                 return;
             }
 
-            pendingPageRef.current = page;
-        },
-        [flushPendingPage]
-    );
+            const clampedProgress = clamp01(progress);
+            const coverProgress = easeOutCubic(
+                progressBetween(clampedProgress, ...HERO_INTRO_SEGMENTS.cover)
+            );
+            const hingeProgress = easeInOutCubic(
+                progressBetween(clampedProgress, ...HERO_INTRO_SEGMENTS.hinge)
+            );
+            const riffleProgress = easeInOutCubic(
+                progressBetween(clampedProgress, ...HERO_INTRO_SEGMENTS.pageRiffle)
+            );
+            const settleProgress = easeOutCubic(
+                progressBetween(clampedProgress, ...HERO_INTRO_SEGMENTS.spreadSettle)
+            );
+            const portalProgress = easeInOutCubic(
+                progressBetween(clampedProgress, ...HERO_INTRO_SEGMENTS.portal)
+            );
+            const spreadRevealProgress = easeOutCubic(
+                progressBetween(clampedProgress, 0.5, 0.84)
+            );
+            const portalTranslateX = -HERO_INTRO_PORTAL.left * 380 * portalProgress;
+            const portalTranslateY = -HERO_INTRO_PORTAL.top * 220 * portalProgress;
 
-    const handleFlip = useCallback(
-        (event) => {
-            const page =
-                event?.data ??
-                bookRef.current?.pageFlip?.().getCurrentPageIndex() ??
-                0;
+            root.style.setProperty('--hero-intro-cover-progress', coverProgress.toFixed(4));
+            root.style.setProperty('--hero-intro-hinge-progress', hingeProgress.toFixed(4));
+            root.style.setProperty('--hero-intro-riffle-progress', riffleProgress.toFixed(4));
+            root.style.setProperty('--hero-intro-settle-progress', settleProgress.toFixed(4));
+            root.style.setProperty('--hero-intro-portal-progress', portalProgress.toFixed(4));
 
-            isFlippingRef.current = false;
+            layerRefs.current.forEach((layer, index) => {
+                if (!layer) {
+                    return;
+                }
 
-            if (pendingPageRef.current !== page) {
-                flushPendingPage();
-                return;
+                const staggerStart = index * 0.055;
+                const localProgress = easeOutCubic(
+                    clamp01((riffleProgress - staggerStart) / 0.46)
+                );
+                const settleLift = easeOutCubic(
+                    clamp01((spreadRevealProgress - index * 0.025) / 0.78)
+                );
+                const liftProgress = easeOutCubic(clamp01(localProgress / 0.22));
+                const fanProgress = easeOutCubic(
+                    clamp01((localProgress - 0.12) / 0.34)
+                );
+                const sweepProgress = easeInOutCubic(
+                    clamp01((localProgress - 0.32) / 0.38)
+                );
+                const releaseProgress = easeOutCubic(
+                    clamp01((localProgress - 0.72) / 0.22)
+                );
+                const curlProgress = Math.max(
+                    liftProgress * 0.36 +
+                        fanProgress * 0.84 +
+                        sweepProgress * 0.92 -
+                        releaseProgress * 0.42,
+                    0
+                );
+                const paperBaseRotateX = 1.4 * liftProgress - 2.8 * fanProgress + 1.2 * releaseProgress;
+                const paperBaseRotateY = -4 * fanProgress - 8 * sweepProgress + 3.6 * releaseProgress;
+                const paperBaseSkew = -1.8 * fanProgress - 2.8 * sweepProgress + 1.6 * releaseProgress;
+                const paperScaleX = 1 - fanProgress * 0.02 - sweepProgress * 0.012 + releaseProgress * 0.008;
+                const paperScaleY = 1 + liftProgress * 0.014 - sweepProgress * 0.018;
+                const wingRotateY = -18 * fanProgress - 36 * sweepProgress + 18 * releaseProgress;
+                const wingRotateX = 2.6 * liftProgress - 7.4 * fanProgress + 3.4 * releaseProgress;
+                const wingRotateZ = 1.2 * fanProgress + 2.6 * sweepProgress - 1.1 * releaseProgress;
+                const wingShiftX = curlProgress * 10;
+                const wingShiftY = -curlProgress * 6 + releaseProgress * 2;
+                const rotateY =
+                    -12 * liftProgress -
+                    (60 + index * 4) * fanProgress -
+                    (54 + index * 3) * sweepProgress +
+                    18 * releaseProgress;
+                const rotateX = 1.8 * liftProgress - 3.2 * fanProgress + 1.2 * releaseProgress;
+                const translateX =
+                    -1 +
+                    liftProgress * 1.2 -
+                    fanProgress * (5 + index * 0.9) -
+                    sweepProgress * (18 + index * 2.1) +
+                    releaseProgress * (7 + index * 0.7) +
+                    settleLift * 1.8;
+                const translateZ =
+                    8 +
+                    liftProgress * 10 +
+                    fanProgress * (34 - index * 2) -
+                    sweepProgress * (14 + index * 2.2) -
+                    releaseProgress * 14;
+                const translateY =
+                    (1 - liftProgress) * 10 +
+                    fanProgress * (index * 0.6) -
+                    releaseProgress * 3;
+                const skewY = -1.6 * liftProgress - 4.6 * fanProgress + 2.8 * releaseProgress;
+                const scaleX = 0.986 + fanProgress * 0.012 - releaseProgress * 0.006;
+                const opacity = Math.max(0, 1 - releaseProgress * 1.02);
+                const shadow = 0.07 + fanProgress * 0.08 + sweepProgress * 0.06;
+                const blur = sweepProgress > 0.56 ? (sweepProgress - 0.56) * 6.5 : 0;
+
+                layer.style.transform =
+                    `translate3d(${translateX.toFixed(2)}px, ${translateY.toFixed(2)}px, ${translateZ.toFixed(2)}px) ` +
+                    `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) skewY(${skewY.toFixed(2)}deg) scaleX(${scaleX.toFixed(4)})`;
+                layer.style.opacity = opacity.toFixed(4);
+                layer.style.filter = `blur(${blur.toFixed(2)}px)`;
+                layer.style.boxShadow = `0 18px 36px rgba(70, 43, 21, ${shadow.toFixed(3)})`;
+                layer.style.zIndex = String(40 - index);
+                layer.style.setProperty('--hero-intro-paper-curl', curlProgress.toFixed(4));
+                layer.style.setProperty('--hero-intro-paper-base-skew', `${paperBaseSkew.toFixed(2)}deg`);
+                layer.style.setProperty('--hero-intro-paper-base-rotate-x', `${paperBaseRotateX.toFixed(2)}deg`);
+                layer.style.setProperty('--hero-intro-paper-base-rotate-y', `${paperBaseRotateY.toFixed(2)}deg`);
+                layer.style.setProperty('--hero-intro-paper-scale-x', paperScaleX.toFixed(4));
+                layer.style.setProperty('--hero-intro-paper-scale-y', paperScaleY.toFixed(4));
+                layer.style.setProperty('--hero-intro-paper-wing-rotate-x', `${wingRotateX.toFixed(2)}deg`);
+                layer.style.setProperty('--hero-intro-paper-wing-rotate-y', `${wingRotateY.toFixed(2)}deg`);
+                layer.style.setProperty('--hero-intro-paper-wing-rotate-z', `${wingRotateZ.toFixed(2)}deg`);
+                layer.style.setProperty('--hero-intro-paper-wing-shift-x', `${wingShiftX.toFixed(2)}px`);
+                layer.style.setProperty('--hero-intro-paper-wing-shift-y', `${wingShiftY.toFixed(2)}px`);
+            });
+
+            if (stackRef.current) {
+                stackRef.current.style.opacity = Math.max(
+                    0,
+                    1 - portalProgress * 0.12
+                ).toFixed(4);
+                stackRef.current.style.transform =
+                    `translate3d(${(settleProgress * 28).toFixed(2)}px, ${(
+                        (1 - hingeProgress) * 12 - settleProgress * 2
+                    ).toFixed(2)}px, ${(22 - settleProgress * 12).toFixed(2)}px) ` +
+                    `scale(${(0.988 + spreadRevealProgress * 0.01 + settleProgress * 0.006).toFixed(4)})`;
             }
 
-            pendingPageRef.current = page;
-        },
-        [flushPendingPage]
-    );
-
-    const handleChangeState = useCallback(
-        (event) => {
-            const nextState = event?.data;
-
-            if (
-                nextState === 'flipping' ||
-                nextState === 'user_fold' ||
-                nextState === 'fold_corner'
-            ) {
-                isFlippingRef.current = true;
-                return;
+            if (finalSpreadRef.current) {
+                finalSpreadRef.current.style.opacity = '1';
+                finalSpreadRef.current.style.transform =
+                    `translate3d(${portalTranslateX.toFixed(2)}px, ${(
+                        1 - settleProgress + portalTranslateY
+                    ).toFixed(2)}px, ${(
+                        12 + settleProgress * 12
+                    ).toFixed(2)}px) ` +
+                    `scale(${(0.988 + settleProgress * 0.022 + portalProgress * 0.05).toFixed(4)})`;
             }
 
-            isFlippingRef.current = false;
-            flushPendingPage();
+            if (portalPlateRef.current) {
+                portalPlateRef.current.style.opacity = (portalProgress * 0.94).toFixed(4);
+            }
         },
-        [flushPendingPage]
-    );
+    }));
 
     return (
-        <div className="hero__intro-flipbook-shell" aria-hidden="true">
-            <HTMLFlipBook
-                ref={bookRef}
-                className="hero__intro-flipbook"
-                width={540}
-                height={610}
-                size="stretch"
-                minWidth={260}
-                maxWidth={620}
-                minHeight={320}
-                maxHeight={700}
-                drawShadow
-                flippingTime={140}
-                usePortrait={false}
-                startZIndex={8}
-                autoSize
-                maxShadowOpacity={0.36}
-                showCover={false}
-                mobileScrollSupport={false}
-                clickEventForward={false}
-                useMouseEvents={false}
-                onInit={handleInit}
-                onFlip={handleFlip}
-                onChangeState={handleChangeState}
-            >
-                <FolioPlatePage
-                    side="left"
-                    src={HERO_INTRO_ASSETS.page1}
-                    meta="Archive Plate I"
-                    folio="Rosmarinus officinalis"
-                    pageNumber="012"
-                />
+        <div className="hero__intro-book-shell" ref={rootRef} aria-hidden="true">
+            <div className="hero__intro-spread-underlay">
+                <div className="hero__intro-spread-underlay-page hero__intro-spread-underlay-page--left">
+                    {finalLeftPage ? (
+                        <img
+                            src={finalLeftPage}
+                            alt=""
+                            draggable="false"
+                            className="hero__intro-spread-underlay-image"
+                            onError={safeImageStyle}
+                        />
+                    ) : null}
+                </div>
+                <div className="hero__intro-spread-underlay-page hero__intro-spread-underlay-page--right">
+                    {finalRightPage ? (
+                        <img
+                            src={finalRightPage}
+                            alt=""
+                            draggable="false"
+                            className="hero__intro-spread-underlay-image"
+                            style={{ objectPosition: 'center 18%' }}
+                            onError={safeImageStyle}
+                        />
+                    ) : null}
+                </div>
+            </div>
 
-                <FolioLedgerPage
-                    side="right"
-                    src={HERO_INTRO_ASSETS.page1}
-                    meta="Field Annotation"
-                    heading="Rosemary Ledger"
-                    latin="Rosmarinus officinalis"
-                    paragraphs={[
-                        'The book opens as a true folio: the specimen remains intact on one side while the facing page holds field notes, archive marks, and measured observations.',
-                        'Keeping both pages on the same parchment and typographic system makes the spread read as one bound volume rather than separate inserts.',
-                    ]}
-                    register={[
-                        'Root pressings and stem measurements logged before dawn.',
-                        'Herbarium paper toned with amber residue and soft smoke.',
-                        'Marginal notes reserved for ritual preparation references.',
-                    ]}
-                    pageNumber="013"
-                    imagePosition="58% 18%"
-                />
-
-                <FolioPlatePage
-                    side="left"
-                    src={HERO_INTRO_ASSETS.page2}
-                    meta="Archive Plate II"
-                    folio="Citrus sinensis"
-                    pageNumber="024"
-                />
-
-                <FolioLedgerPage
-                    side="right"
-                    src={HERO_INTRO_ASSETS.page2}
-                    meta="Citrus Registry"
-                    heading="Orange Register"
-                    latin="Citrus sinensis"
-                    paragraphs={[
-                        'The citrus section keeps the same folio proportions and quiet margins, so the page riffle feels like one continuous encyclopedia instead of a visual collage.',
-                        'At speed, these pages should read as researched leaves from the same binding, each with slightly different density but the same archival hand.',
-                    ]}
-                    register={[
-                        'Rind oil studies noted beside blossom and branch forms.',
-                        'Pigment drift preserved to match the warm Aesop palette.',
-                        'Print density reduced to keep the page breathable in motion.',
-                    ]}
-                    pageNumber="025"
-                    imagePosition="center 24%"
-                />
-
-                <FolioPlatePage
-                    side="left"
-                    src={HERO_INTRO_ASSETS.page3}
-                    meta="Archive Plate III"
-                    folio="Citrus bergamia"
-                    pageNumber="036"
-                />
-
-                <FolioLedgerPage
-                    side="right"
-                    src={HERO_INTRO_ASSETS.page3}
-                    meta="Archive Annotation"
-                    heading="Bergamot Ledger"
-                    latin="Citrus bergamia"
-                    paragraphs={[
-                        'Bergamot carries the richest paper tone in the set, which helps the flipbook warm naturally as it approaches the final illustrated entrance.',
-                        'The botanical plate remains visible beneath the notes so even the text pages still feel printed, not layered like interface cards.',
-                    ]}
-                    register={[
-                        'Pressed leaf veins kept visible under low-contrast note blocks.',
-                        'Fruit studies balanced with paper foxing and edge wear.',
-                        'Binding sequence prepared for the moving final plate.',
-                    ]}
-                    pageNumber="037"
-                    imagePosition="52% 24%"
-                />
-
-                <FolioStudyPage
-                    side="left"
-                    src={HERO_INTRO_ASSETS.page1}
-                    meta="Magnified Study"
-                    heading="Rosmarinus Detail"
-                    copy="A tighter crop gives the page-turn burst more rhythm while keeping the specimen grounded in the same printed encyclopedia language."
-                    pageNumber="048"
-                    imagePosition="38% center"
-                />
-
-                <FolioStudyPage
-                    side="right"
-                    src={HERO_INTRO_ASSETS.page2}
-                    meta="Comparative Study"
-                    heading="Orange Detail"
-                    copy="Fruit, leaf, and blossom stay visible within the same paper field, so the right page still reads like an original plate instead of a pasted graphic."
-                    pageNumber="049"
-                    imagePosition="44% center"
-                />
-
-                <FolioStudyPage
-                    side="left"
-                    src={HERO_INTRO_ASSETS.page3}
-                    meta="Closing Study"
-                    heading="Bergamot Detail"
-                    copy="The last study page deepens the golden tone and prepares the right-hand illustration to feel like the next chapter of the same bound object."
-                    pageNumber="060"
-                    imagePosition="42% center"
-                />
-
-                <FolioLedgerPage
-                    side="right"
-                    src={HERO_INTRO_ASSETS.page1}
-                    meta="Frontispiece Note"
-                    heading="Compendium Botanicum"
-                    latin="Preparatio Folii"
-                    paragraphs={[
-                        'The final turn holds a quieter register so the next reveal can breathe. The spread should feel settled, weighted, and fully bound before the live illustration appears.',
-                        'That pause is what makes the handoff feel like stepping into a page, not leaving the book behind.',
-                    ]}
-                    register={[
-                        'Spine tension eased before the final right-hand reveal.',
-                        'Paper grain kept visible through the full folio width.',
-                        'Illustrated entrance aligned with the Hero beneath.',
-                    ]}
-                    pageNumber="061"
-                    imagePosition="48% top"
-                />
-
-                <FolioPlatePage
-                    side="left"
-                    src={HERO_INTRO_ASSETS.page1}
-                    meta="Final Left Leaf"
-                    folio="Compendium Botanicum"
-                    pageNumber="072"
-                    className="hero__intro-book-page--final-left"
-                />
-
-                <FlipPage className="hero__intro-book-page--hero hero__intro-book-page--right">
-                    <span className="hero__intro-book-meta">Illustrated Entrance</span>
-                    <div className="hero__intro-book-hero-plate">
-                        <video
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            preload="metadata"
-                            className="hero__intro-book-hero-video"
+            <div className="hero__intro-riffle-stack" ref={stackRef}>
+                {layerConfig.map((layer, index) => (
+                    <div
+                        className="hero__intro-riffle-layer"
+                        key={layer.key}
+                        ref={(node) => {
+                            layerRefs.current[index] = node;
+                        }}
+                    >
+                        <div
+                            className={`hero__intro-riffle-paper${layer.isBackface ? ' hero__intro-riffle-paper--backface' : ''}`}
                         >
-                            <source src={heroVideoSrc} type="video/mp4" />
-                        </video>
-                        <div className="hero__intro-book-hero-overlay" />
+                            <div className="hero__intro-riffle-sheet">
+                                <div className="hero__intro-riffle-segment hero__intro-riffle-segment--base">
+                                    {layer.src ? (
+                                        <img
+                                            src={layer.src}
+                                            alt=""
+                                            draggable="false"
+                                            className="hero__intro-riffle-image hero__intro-riffle-image--base"
+                                            style={{ objectPosition: layer.objectPosition }}
+                                            onError={safeImageStyle}
+                                        />
+                                    ) : null}
+                                </div>
+
+                                <div className="hero__intro-riffle-segment hero__intro-riffle-segment--wing">
+                                    {layer.src ? (
+                                        <img
+                                            src={layer.src}
+                                            alt=""
+                                            draggable="false"
+                                            className="hero__intro-riffle-image hero__intro-riffle-image--wing"
+                                            style={{ objectPosition: layer.objectPosition }}
+                                            onError={safeImageStyle}
+                                        />
+                                    ) : null}
+                                </div>
+                            </div>
+                            <span className="hero__intro-riffle-folio">{layer.folio}</span>
+                            <span className="hero__intro-riffle-page">{layer.pageNumber}</span>
+                        </div>
                     </div>
-                    <p className="hero__intro-book-hero-caption">
-                        The right-hand plate behaves like a living illustration,
-                        as though the next page of the site has already begun to
-                        move inside the folio.
-                    </p>
-                    <div className="hero__intro-book-folio-footer hero__intro-book-folio-footer--hero">
-                        <span>Illustrated Entry Plate</span>
-                        <span>073</span>
+                ))}
+            </div>
+
+            <div className="hero__intro-final-spread" ref={finalSpreadRef}>
+                <div className="hero__intro-final-page hero__intro-final-page--left">
+                    <div className="hero__intro-final-print">
+                        {finalLeftPage ? (
+                            <img
+                                src={finalLeftPage}
+                                alt=""
+                                draggable="false"
+                                className="hero__intro-final-image"
+                                onError={safeImageStyle}
+                            />
+                        ) : null}
+                        <span className="hero__intro-final-folio">Compendium Botanicum</span>
+                        <span className="hero__intro-final-page-no">072</span>
                     </div>
-                </FlipPage>
-            </HTMLFlipBook>
+                </div>
+
+                <div className="hero__intro-final-page hero__intro-final-page--right">
+                    <div className="hero__intro-final-print">
+                        {finalRightPage ? (
+                            <img
+                                src={finalRightPage}
+                                alt=""
+                                draggable="false"
+                                className="hero__intro-final-image"
+                                style={{ objectPosition: 'center 18%' }}
+                                onError={safeImageStyle}
+                            />
+                        ) : null}
+                        <span className="hero__intro-final-folio hero__intro-final-folio--right">
+                            Herbarium Plate
+                        </span>
+                        <span className="hero__intro-final-page-no">073</span>
+                        <div className="hero__intro-final-stamp">Aesop</div>
+                        <div className="hero__intro-final-portal-plate" ref={portalPlateRef}>
+                            {heroVideoSrc ? (
+                                <video
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    preload="metadata"
+                                    className="hero__intro-final-portal-video"
+                                >
+                                    <source src={heroVideoSrc} type="video/mp4" />
+                                </video>
+                            ) : null}
+                            <div className="hero__intro-final-portal-overlay" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 });

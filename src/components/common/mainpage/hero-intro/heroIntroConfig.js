@@ -1,5 +1,8 @@
 export const HERO_INTRO_SESSION_KEY = 'aesop-hero-intro-complete-v1';
 
+export const HERO_INTRO_DURATION_SECONDS = 8.1;
+export const HERO_INTRO_RIFFLE_LAYER_COUNT = 6;
+
 export const HERO_INTRO_ASSETS = {
     cover: '/hero-intro/book-cover.png',
     fallbackVideo: '/hero-intro/hero-book-intro.mp4',
@@ -11,19 +14,25 @@ export const HERO_INTRO_ASSETS = {
     modelMtl: 'Classic_Book_01_Standing_Open.mtl',
 };
 
+export const HERO_INTRO_PAGES = [
+    HERO_INTRO_ASSETS.page1,
+    HERO_INTRO_ASSETS.page2,
+    HERO_INTRO_ASSETS.page3,
+];
+
 export const HERO_INTRO_SEGMENTS = {
-    cover: [0, 0.15],
-    opening: [0.15, 0.35],
-    botanical: [0.35, 0.75],
-    hold: [0.75, 0.9],
-    exit: [0.9, 1],
+    cover: [0, 0.18],
+    hinge: [0.18, 0.36],
+    pageRiffle: [0.36, 0.72],
+    spreadSettle: [0.72, 0.88],
+    portal: [0.88, 1],
 };
 
 export const HERO_INTRO_PORTAL = {
-    left: 0.532,
-    top: 0.158,
-    width: 0.384,
-    height: 0.604,
+    left: 0.566,
+    top: 0.168,
+    width: 0.324,
+    height: 0.548,
 };
 
 export const clamp01 = (value) => Math.min(Math.max(value, 0), 1);

@@ -9,6 +9,7 @@ import './Hero.scss';
 import HeroIntroFlipBook from './hero-intro/HeroIntroFlipBook';
 import {
     HERO_INTRO_ASSETS,
+    HERO_INTRO_DURATION_SECONDS,
     HERO_INTRO_PORTAL,
     HERO_INTRO_SEGMENTS,
     HERO_INTRO_SESSION_KEY,
@@ -67,7 +68,6 @@ const Hero = () => {
     const flightShellRef = useRef(null);
     const flightAesopRef = useRef(null);
     const flightLogoRef = useRef(null);
-    const introOverlayRef = useRef(null);
     const introCanvasRef = useRef(null);
     const introSpreadRef = useRef(null);
     const introSceneRef = useRef(null);
@@ -75,19 +75,10 @@ const Hero = () => {
     const hasCompletedLogoHandoffRef = useRef(false);
     const collapseDistanceRef = useRef(0);
     const introCompletionRef = useRef(initialIntroStateRef.current.introComplete);
-    const dragStateRef = useRef({
-        active: false,
-        pointerId: null,
-        x: 0,
-        y: 0,
-    });
     const progressRef = useRef(
         initialIntroStateRef.current.introComplete ? 1 : 0
     );
-    const targetProgressRef = useRef(
-        initialIntroStateRef.current.introComplete ? 1 : 0
-    );
-    const skipTweenRef = useRef(null);
+    const introTweenRef = useRef(null);
     const [isHandoffComplete, setIsHandoffComplete] = useState(false);
     const [isIntroComplete, setIsIntroComplete] = useState(
         initialIntroStateRef.current.introComplete
@@ -111,28 +102,28 @@ const Hero = () => {
         const coverProgress = easeOutCubic(
             progressBetween(progress, ...HERO_INTRO_SEGMENTS.cover)
         );
-        const openingProgress = easeInOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.opening)
+        const hingeProgress = easeInOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.hinge)
         );
-        const botanicalProgress = easeInOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.botanical)
+        const riffleProgress = easeInOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.pageRiffle)
         );
-        const holdProgress = easeOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.hold)
+        const settleProgress = easeOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.spreadSettle)
         );
-        const exitProgress = easeInOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.exit)
+        const portalProgress = easeInOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.portal)
         );
-        const coverLiftProgress = easeInOutCubic(progressBetween(progress, 0.06, 0.38));
-        const pageFanProgress = easeOutCubic(progressBetween(progress, 0.24, 0.76));
+        const coverLiftProgress = easeInOutCubic(progressBetween(progress, 0.06, 0.42));
+        const pageFanProgress = easeOutCubic(progressBetween(progress, 0.28, 0.74));
         const primaryPageTurnProgress = easeInOutCubic(
-            progressBetween(progress, 0.3, 0.58)
+            progressBetween(progress, 0.32, 0.6)
         );
         const secondaryPageTurnProgress = easeInOutCubic(
-            progressBetween(progress, 0.46, 0.8)
+            progressBetween(progress, 0.42, 0.72)
         );
         const spreadSettleProgress = easeOutCubic(
-            progressBetween(progress, 0.34, 0.9)
+            progressBetween(progress, 0.56, 0.9)
         );
         const spreadWidth = introSpreadRef.current?.offsetWidth ?? 0;
         const spreadHeight = introSpreadRef.current?.offsetHeight ?? 0;
@@ -142,7 +133,7 @@ const Hero = () => {
         const portalOffsetY =
             spreadHeight *
             (HERO_INTRO_PORTAL.top + HERO_INTRO_PORTAL.height * 0.5 - 0.5);
-        const zoomScale = 1 + exitProgress * 2.85;
+        const zoomScale = 1 + portalProgress * 2.45;
 
         introHost.style.setProperty('--hero-intro-progress', progress.toFixed(4));
         introHost.style.setProperty(
@@ -151,17 +142,17 @@ const Hero = () => {
         );
         introHost.style.setProperty(
             '--hero-intro-opening-progress',
-            openingProgress.toFixed(4)
+            hingeProgress.toFixed(4)
         );
         introHost.style.setProperty(
             '--hero-intro-botanical-progress',
-            botanicalProgress.toFixed(4)
+            riffleProgress.toFixed(4)
         );
         introHost.style.setProperty(
             '--hero-intro-hold-progress',
-            holdProgress.toFixed(4)
+            settleProgress.toFixed(4)
         );
-        introHost.style.setProperty('--hero-intro-exit-progress', exitProgress.toFixed(4));
+        introHost.style.setProperty('--hero-intro-exit-progress', portalProgress.toFixed(4));
         introHost.style.setProperty(
             '--hero-intro-cover-lift-progress',
             coverLiftProgress.toFixed(4)
@@ -184,18 +175,18 @@ const Hero = () => {
         );
         introHost.style.setProperty(
             '--hero-intro-scene-visibility',
-            Math.max(openingProgress, botanicalProgress * 0.85, holdProgress * 0.95).toFixed(
+            Math.max(hingeProgress * 0.8, riffleProgress * 0.9, settleProgress * 0.95).toFixed(
                 4
             )
         );
         introHost.style.setProperty('--hero-intro-zoom-scale', zoomScale.toFixed(4));
         introHost.style.setProperty(
             '--hero-intro-exit-x',
-            `${(-portalOffsetX * exitProgress * zoomScale).toFixed(2)}px`
+            `${(-portalOffsetX * portalProgress * zoomScale).toFixed(2)}px`
         );
         introHost.style.setProperty(
             '--hero-intro-exit-y',
-            `${(-portalOffsetY * exitProgress * zoomScale).toFixed(2)}px`
+            `${(-portalOffsetY * portalProgress * zoomScale).toFixed(2)}px`
         );
 
         introSceneRef.current?.setProgress(progress);
@@ -208,10 +199,9 @@ const Hero = () => {
         }
 
         introCompletionRef.current = true;
-        targetProgressRef.current = 1;
         progressRef.current = 1;
-        skipTweenRef.current?.kill();
-        skipTweenRef.current = null;
+        introTweenRef.current?.kill();
+        introTweenRef.current = null;
         syncIntroVisuals(1);
         introSceneRef.current?.setActive(false);
         setIsIntroComplete(true);
@@ -230,11 +220,7 @@ const Hero = () => {
         progressRef.current = progress;
         syncIntroVisuals(progress);
 
-        if (
-            progress >= 0.998 &&
-            targetProgressRef.current >= 0.998 &&
-            !introCompletionRef.current
-        ) {
+        if (progress >= 0.998 && !introCompletionRef.current) {
             finalizeIntro();
         }
     };
@@ -322,37 +308,6 @@ const Hero = () => {
             return undefined;
         }
 
-        const overlayElement = introOverlayRef.current;
-
-        if (!overlayElement) {
-            return undefined;
-        }
-
-        const handleWheel = (event) => {
-            event.preventDefault();
-
-            const viewportHeight = Math.max(window.innerHeight, 1);
-            const weightedDelta = event.deltaY + event.deltaX * 0.35;
-
-            skipTweenRef.current?.kill();
-            skipTweenRef.current = null;
-            targetProgressRef.current = clamp01(
-                targetProgressRef.current + (weightedDelta / viewportHeight) * 0.85
-            );
-        };
-
-        overlayElement.addEventListener('wheel', handleWheel, { passive: false });
-
-        return () => {
-            overlayElement.removeEventListener('wheel', handleWheel);
-        };
-    }, [isIntroActive]);
-
-    useEffect(() => {
-        if (!isIntroActive) {
-            return undefined;
-        }
-
         if (!supportsWebGL()) {
             setIsIntroFallback(true);
             setIsIntroSceneReady(false);
@@ -414,21 +369,25 @@ const Hero = () => {
             return undefined;
         }
 
-        const tick = () => {
-            const current = progressRef.current;
-            const target = targetProgressRef.current;
-            const delta = target - current;
-            const nextProgress =
-                Math.abs(delta) < 0.0006 ? target : current + delta * 0.16;
+        const tweenState = { value: progressRef.current };
 
-            applyIntroProgress(nextProgress);
-        };
-
-        gsap.ticker.add(tick);
-        tick();
+        introTweenRef.current?.kill();
+        syncIntroVisuals(progressRef.current);
+        introTweenRef.current = gsap.to(tweenState, {
+            value: 1,
+            duration: HERO_INTRO_DURATION_SECONDS,
+            ease: 'none',
+            onUpdate: () => {
+                applyIntroProgress(tweenState.value);
+            },
+            onComplete: () => {
+                finalizeIntro();
+            },
+        });
 
         return () => {
-            gsap.ticker.remove(tick);
+            introTweenRef.current?.kill();
+            introTweenRef.current = null;
         };
     }, [isIntroActive]);
 
@@ -694,70 +653,23 @@ const Hero = () => {
         };
     }, []);
 
-    const handleIntroPointerDown = (event) => {
-        if (!isIntroActive) {
-            return;
-        }
-
-        if (event.pointerType === 'mouse' && event.button !== 0) {
-            return;
-        }
-
-        skipTweenRef.current?.kill();
-        skipTweenRef.current = null;
-        dragStateRef.current.active = true;
-        dragStateRef.current.pointerId = event.pointerId;
-        dragStateRef.current.x = event.clientX;
-        dragStateRef.current.y = event.clientY;
-        event.currentTarget.setPointerCapture?.(event.pointerId);
-    };
-
-    const handleIntroPointerMove = (event) => {
-        const dragState = dragStateRef.current;
-
-        if (!isIntroActive || !dragState.active || dragState.pointerId !== event.pointerId) {
-            return;
-        }
-
-        const deltaX = event.clientX - dragState.x;
-        const deltaY = event.clientY - dragState.y;
-        const viewportWidth = Math.max(window.innerWidth, 1);
-        const weightedDelta = deltaX + deltaY * 0.16;
-
-        dragState.x = event.clientX;
-        dragState.y = event.clientY;
-        targetProgressRef.current = clamp01(
-            targetProgressRef.current + (weightedDelta / viewportWidth) * 2.35
-        );
-    };
-
-    const handleIntroPointerUp = (event) => {
-        if (dragStateRef.current.pointerId !== event.pointerId) {
-            return;
-        }
-
-        dragStateRef.current.active = false;
-        dragStateRef.current.pointerId = null;
-        event.currentTarget.releasePointerCapture?.(event.pointerId);
-    };
-
     const handleSkipIntro = () => {
         if (!isIntroActive) {
             return;
         }
 
-        skipTweenRef.current?.kill();
+        introTweenRef.current?.kill();
 
         const tweenState = {
-            value: targetProgressRef.current,
+            value: progressRef.current,
         };
 
-        skipTweenRef.current = gsap.to(tweenState, {
+        introTweenRef.current = gsap.to(tweenState, {
             value: 1,
-            duration: 0.72,
+            duration: 0.66,
             ease: 'power3.inOut',
             onUpdate: () => {
-                targetProgressRef.current = tweenState.value;
+                applyIntroProgress(tweenState.value);
             },
             onComplete: () => {
                 finalizeIntro();
@@ -800,11 +712,6 @@ const Hero = () => {
                 {isIntroActive ? (
                     <div
                         className={`hero__intro${isIntroFallback ? ' hero__intro--fallback' : ''}${isIntroSceneReady ? ' hero__intro--ready' : ''}`}
-                        ref={introOverlayRef}
-                        onPointerDown={handleIntroPointerDown}
-                        onPointerMove={handleIntroPointerMove}
-                        onPointerUp={handleIntroPointerUp}
-                        onPointerCancel={handleIntroPointerUp}
                     >
                         <div className="hero__intro-atmosphere" aria-hidden="true" />
                         <div className="hero__intro-grain" aria-hidden="true" />
@@ -815,15 +722,12 @@ const Hero = () => {
                                     Aesop Botanical Archive
                                 </span>
                                 <p className="hero__intro-instruction">
-                                    Drag or scroll to riffle through the botanical folio.
+                                    Opening the botanical folio.
                                 </p>
                             </div>
                             <button
                                 type="button"
                                 className="hero__intro-skip"
-                                onPointerDown={(event) => {
-                                    event.stopPropagation();
-                                }}
                                 onClick={handleSkipIntro}
                             >
                                 Skip
@@ -863,34 +767,19 @@ const Hero = () => {
                                         alt=""
                                         className="hero__intro-cover-image"
                                         draggable="false"
+                                        onError={(event) => {
+                                            event.currentTarget.style.opacity = '0';
+                                        }}
                                     />
                                 </div>
                             </div>
 
                             <div className="hero__intro-spread-shell" ref={introSpreadRef} aria-hidden="true">
                                 <div className="hero__intro-spread-frame">
-                                    <div className="hero__intro-spine" />
-                                    <div className="hero__intro-turn-shadow" />
-                                    <div className="hero__intro-page-stack hero__intro-page-stack--left" />
-                                    <div className="hero__intro-page-stack hero__intro-page-stack--right" />
                                     <HeroIntroFlipBook
                                         ref={introFlipBookRef}
                                         heroVideoSrc={heroVideo}
                                     />
-
-                                    <div className="hero__intro-portal">
-                                        <video
-                                            autoPlay
-                                            muted
-                                            loop
-                                            playsInline
-                                            preload="metadata"
-                                            className="hero__intro-portal-video"
-                                        >
-                                            <source src={heroVideo} type="video/mp4" />
-                                        </video>
-                                        <div className="hero__intro-portal-overlay" />
-                                    </div>
                                 </div>
                             </div>
                         </div>

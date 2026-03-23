@@ -11,8 +11,20 @@ import {
     progressBetween,
 } from './heroIntroConfig';
 
-const DPR_CAP = 1.35;
-const BOOK_SIZE = 3.9;
+const DPR_CAP = 1.3;
+const BOOK_SIZE = 4.1;
+
+const LOOKUP_NAMES = {
+    cover: ['Book_Cover_001', 'Book_Cover', 'Cover', 'cover'],
+    pageHolder: ['Page_Holder_001', 'Page_Holder', 'PageHolder', 'page_holder'],
+    frontSheets: ['Sheets_001', 'Sheets', 'Sheet_Front', 'pages_front'],
+    backSheets: ['Sheets_002', 'Sheet_Back', 'pages_back'],
+};
+
+const findObjectByNames = (root, names) =>
+    names
+        .map((name) => root.getObjectByName(name))
+        .find(Boolean) ?? null;
 
 const disposeMaterial = (material) => {
     if (!material) {
@@ -69,21 +81,21 @@ export const createHeroIntroScene = async ({ canvas }) => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, DPR_CAP));
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 40);
-    const focusTarget = new THREE.Vector3(0, 0.1, 0);
+    const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 42);
+    const focusTarget = new THREE.Vector3(0, 0.05, 0);
     const bookRig = new THREE.Group();
     scene.add(bookRig);
 
-    const ambient = new THREE.AmbientLight(0xf4e4c1, 1.05);
-    const keyLight = new THREE.SpotLight(0xffeed6, 2.45, 32, Math.PI * 0.19, 0.55, 1.2);
-    keyLight.position.set(4.8, 4.8, 7);
-    keyLight.target.position.set(0, 0.1, 0.2);
-    const rimLight = new THREE.DirectionalLight(0xcead81, 0.88);
-    rimLight.position.set(-4, 2.8, -2.4);
-    const fillLight = new THREE.PointLight(0xb37e4c, 0.55, 18, 2.2);
-    fillLight.position.set(-1.2, -0.4, 3.8);
+    const ambient = new THREE.AmbientLight(0xf0dfc2, 1.02);
+    const keyLight = new THREE.SpotLight(0xffedd1, 2.1, 34, Math.PI * 0.17, 0.62, 1.35);
+    keyLight.position.set(3.8, 4.2, 7.1);
+    keyLight.target.position.set(0.3, 0.04, 0.2);
+    const fillLight = new THREE.DirectionalLight(0xd3b08a, 0.58);
+    fillLight.position.set(-2.6, 1.8, -1.6);
+    const rimLight = new THREE.PointLight(0x9f6c45, 0.32, 18, 2);
+    rimLight.position.set(-1.8, -0.3, 4.6);
 
-    scene.add(ambient, keyLight, keyLight.target, rimLight, fillLight);
+    scene.add(ambient, keyLight, keyLight.target, fillLight, rimLight);
 
     const mtlLoader = new MTLLoader();
     mtlLoader.setPath(HERO_INTRO_ASSETS.modelPath);
@@ -103,8 +115,16 @@ export const createHeroIntroScene = async ({ canvas }) => {
 
         child.frustumCulled = true;
 
-        if (!Array.isArray(child.material) && child.material) {
-            child.material.side = THREE.FrontSide;
+        if (child.material) {
+            const materialsToAdjust = Array.isArray(child.material)
+                ? child.material
+                : [child.material];
+
+            materialsToAdjust.forEach((entry) => {
+                entry.side = THREE.FrontSide;
+                entry.transparent = false;
+                entry.depthWrite = true;
+            });
         }
     });
 
@@ -117,13 +137,15 @@ export const createHeroIntroScene = async ({ canvas }) => {
     book.scale.setScalar(BOOK_SIZE / maxDimension);
     bookRig.add(book);
 
-    const coverGroup = book.getObjectByName('Book_Cover_001');
-    const pageHolderGroup = book.getObjectByName('Page_Holder_001');
-    const sheetsFrontGroup = book.getObjectByName('Sheets_001');
-    const sheetsBackGroup = book.getObjectByName('Sheets_002');
+    const coverGroup = findObjectByNames(book, LOOKUP_NAMES.cover);
+    const pageHolderGroup = findObjectByNames(book, LOOKUP_NAMES.pageHolder);
+    const sheetsFrontGroup = findObjectByNames(book, LOOKUP_NAMES.frontSheets);
+    const sheetsBackGroup = findObjectByNames(book, LOOKUP_NAMES.backSheets);
 
     const basePose = {
+        coverRotationX: coverGroup?.rotation.x ?? 0,
         coverRotationY: coverGroup?.rotation.y ?? 0,
+        coverRotationZ: coverGroup?.rotation.z ?? 0,
         pageHolderRotationX: pageHolderGroup?.rotation.x ?? 0,
         pageHolderRotationY: pageHolderGroup?.rotation.y ?? 0,
         sheetsFrontY: sheetsFrontGroup?.position.y ?? 0,
@@ -146,113 +168,105 @@ export const createHeroIntroScene = async ({ canvas }) => {
         const coverProgress = easeOutCubic(
             progressBetween(progress, ...HERO_INTRO_SEGMENTS.cover)
         );
-        const openingProgress = easeInOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.opening)
+        const hingeProgress = easeInOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.hinge)
         );
-        const botanicalProgress = easeInOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.botanical)
+        const pageRiffleProgress = easeOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.pageRiffle)
         );
-        const holdProgress = easeOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.hold)
+        const settleProgress = easeOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.spreadSettle)
         );
-        const exitProgress = easeInOutCubic(
-            progressBetween(progress, ...HERO_INTRO_SEGMENTS.exit)
+        const portalProgress = easeInOutCubic(
+            progressBetween(progress, ...HERO_INTRO_SEGMENTS.portal)
         );
-        const coverLiftProgress = easeInOutCubic(progressBetween(progress, 0.06, 0.38));
-        const pageTurnProgress = easeOutCubic(progressBetween(progress, 0.24, 0.76));
-
-        const idleY = state.active ? Math.sin(time * 0.00062) : 0;
-        const idleX = state.active ? Math.cos(time * 0.00083) : 0;
+        const hingeOverlap = easeOutCubic(progressBetween(progress, 0.12, 0.44));
+        const archivalDriftX = state.active ? Math.sin(time * 0.00017) * 0.022 : 0;
+        const archivalDriftY = state.active ? Math.cos(time * 0.00013) * 0.014 : 0;
+        const driftProgress = coverProgress * 0.45 + hingeProgress * 0.55;
 
         bookRig.rotation.x =
-            mix(0.3, 0.03, Math.min(openingProgress + botanicalProgress * 0.28, 1)) +
-            idleX * 0.017 -
-            exitProgress * 0.04;
+            mix(0.21, 0.08, hingeOverlap) - portalProgress * 0.05 + archivalDriftY * driftProgress;
         bookRig.rotation.y =
-            mix(1.16, -0.08, Math.min(openingProgress + botanicalProgress * 0.38, 1)) +
-            idleY * 0.038;
-        bookRig.rotation.z = 0;
+            mix(0.92, 0.24, hingeOverlap) + archivalDriftX * driftProgress;
+        bookRig.rotation.z = mix(-0.015, 0.006, settleProgress);
 
-        bookRig.position.x =
-            mix(-1.22, 0.04, Math.min(openingProgress + botanicalProgress * 0.28, 1)) +
-            botanicalProgress * 0.12 +
-            exitProgress * 0.48;
-        bookRig.position.y =
-            mix(-0.62, 0.02, Math.min(openingProgress + botanicalProgress * 0.22, 1)) +
-            idleX * 0.05 -
-            exitProgress * 0.16;
+        bookRig.position.x = mix(-1.08, -0.04, hingeOverlap) + archivalDriftX * 0.28;
+        bookRig.position.y = mix(-0.26, 0.02, hingeOverlap) + archivalDriftY * 0.18;
         bookRig.position.z =
-            mix(-1.34, 0.12, openingProgress) +
-            botanicalProgress * 0.34 -
-            exitProgress * 1.18;
+            mix(-0.82, 0.12, hingeProgress) +
+            settleProgress * 0.14 -
+            portalProgress * 0.62;
 
         const rigScale =
-            mix(0.9, 1.16, openingProgress) +
-            botanicalProgress * 0.14 +
-            holdProgress * 0.04 +
-            exitProgress * 0.22;
+            mix(0.96, 1.05, hingeProgress) +
+            pageRiffleProgress * 0.03 +
+            settleProgress * 0.02 +
+            portalProgress * 0.09;
         bookRig.scale.setScalar(rigScale);
 
         camera.position.x =
-            mix(1.52, 0.28, openingProgress) + botanicalProgress * 0.14;
+            mix(1.42, 0.38, hingeProgress) +
+            settleProgress * 0.08 +
+            archivalDriftX * 0.6;
         camera.position.y =
-            mix(0.52, 0.18, openingProgress) +
-            idleY * 0.04 -
-            exitProgress * 0.06 +
-            coverProgress * 0.03;
+            mix(0.34, 0.18, hingeProgress) +
+            coverProgress * 0.04 +
+            archivalDriftY * 0.48 -
+            portalProgress * 0.04;
         camera.position.z =
-            mix(7.5, 4.68, openingProgress) -
-            botanicalProgress * 0.56 -
-            holdProgress * 0.28 -
-            exitProgress * 1.42;
+            mix(7.2, 5.32, hingeProgress) -
+            pageRiffleProgress * 0.32 -
+            settleProgress * 0.24 -
+            portalProgress * 1.72;
 
         focusTarget.set(
-            mix(0, 0.2, botanicalProgress),
-            mix(-0.06, 0.08, openingProgress) + holdProgress * 0.06,
-            mix(0, 0.18, holdProgress)
+            mix(0, 0.12, hingeProgress) + portalProgress * 0.06,
+            mix(-0.06, 0.04, hingeProgress) + settleProgress * 0.02,
+            mix(0, 0.16, settleProgress) + portalProgress * 0.1
         );
         camera.lookAt(focusTarget);
 
-        ambient.intensity = mix(0.92, 1.28, openingProgress * 0.55 + botanicalProgress * 0.45);
-        keyLight.intensity = mix(2.15, 3.15, openingProgress * 0.55 + holdProgress * 0.45);
-        fillLight.intensity = mix(0.42, 0.86, botanicalProgress);
+        ambient.intensity = mix(0.96, 1.14, hingeProgress + settleProgress * 0.18);
+        keyLight.intensity = mix(1.98, 2.36, hingeProgress + settleProgress * 0.2);
+        fillLight.intensity = mix(0.52, 0.7, settleProgress);
+        rimLight.intensity = mix(0.24, 0.38, pageRiffleProgress * 0.4 + settleProgress * 0.6);
 
         if (coverGroup) {
+            coverGroup.rotation.x = basePose.coverRotationX + hingeProgress * 0.01;
             coverGroup.rotation.y =
                 basePose.coverRotationY +
-                coverLiftProgress * 0.18 +
-                openingProgress * 0.08 +
-                pageTurnProgress * 0.03 +
-                idleY * 0.01;
+                coverProgress * 0.08 +
+                hingeOverlap * 0.22 +
+                pageRiffleProgress * 0.03;
+            coverGroup.rotation.z = basePose.coverRotationZ + hingeProgress * 0.015;
         }
 
         if (pageHolderGroup) {
             pageHolderGroup.rotation.x =
                 basePose.pageHolderRotationX -
-                openingProgress * 0.018 -
-                pageTurnProgress * 0.045 +
-                botanicalProgress * -0.012 +
-                idleX * 0.008;
+                hingeProgress * 0.018 -
+                pageRiffleProgress * 0.022;
             pageHolderGroup.rotation.y =
-                basePose.pageHolderRotationY + openingProgress * 0.04;
+                basePose.pageHolderRotationY + hingeProgress * 0.028;
         }
 
         if (sheetsFrontGroup) {
             sheetsFrontGroup.position.y =
-                basePose.sheetsFrontY + botanicalProgress * 0.03 + pageTurnProgress * 0.018;
+                basePose.sheetsFrontY + pageRiffleProgress * 0.024 + settleProgress * 0.01;
             sheetsFrontGroup.position.z =
-                basePose.sheetsFrontZ + holdProgress * 0.035 + pageTurnProgress * 0.045;
+                basePose.sheetsFrontZ + hingeProgress * 0.018 + pageRiffleProgress * 0.04;
             sheetsFrontGroup.rotation.y =
-                basePose.sheetsFrontRotationY + pageTurnProgress * 0.026;
+                basePose.sheetsFrontRotationY + pageRiffleProgress * 0.03;
         }
 
         if (sheetsBackGroup) {
             sheetsBackGroup.position.y =
-                basePose.sheetsBackY - botanicalProgress * 0.026 - pageTurnProgress * 0.014;
+                basePose.sheetsBackY - pageRiffleProgress * 0.018 + settleProgress * 0.008;
             sheetsBackGroup.position.z =
-                basePose.sheetsBackZ + openingProgress * 0.02 - pageTurnProgress * 0.028;
+                basePose.sheetsBackZ + hingeProgress * 0.014 - pageRiffleProgress * 0.022;
             sheetsBackGroup.rotation.y =
-                basePose.sheetsBackRotationY - pageTurnProgress * 0.022;
+                basePose.sheetsBackRotationY - pageRiffleProgress * 0.018;
         }
     };
 
