@@ -9,9 +9,9 @@
     }
 
     &__inner {
-        width: min(100%, 1460px);
+        width: min(1460px, calc(100% - (var(--page-gutter) * 2)));
         margin: 0 auto;
-        padding: 92px clamp(16px, 1.67vw, 32px) 120px;
+        padding: 92px 0 120px;
     }
 
     &__title-wrap {
@@ -548,7 +548,8 @@
 @media (max-width: 767px) {
     .cart-page {
         &__inner {
-            padding: 56px 16px 80px;
+            width: min(100%, calc(100% - (clamp(16px, 4.83vw, 20px) * 2)));
+            padding: 56px 0 80px;
         }
 
         &__title {

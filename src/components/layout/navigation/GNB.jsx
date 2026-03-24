@@ -4,7 +4,7 @@ import { useGNB } from './useGNB';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 
-const DESKTOP_BREAKPOINT = 1024;
+const DESKTOP_BREAKPOINT = 1440;
 
 const GNB = ({ transparent }) => {
     const [isDesktop, setIsDesktop] = useState(

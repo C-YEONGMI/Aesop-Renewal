@@ -10,7 +10,7 @@
     }
 
     &__shell {
-        width: min(1460px, calc(100% - 48px));
+        width: min(1460px, calc(100% - (var(--page-gutter) * 2)));
         margin: 0 auto;
         padding: 56px 0 120px;
     }
@@ -281,7 +281,7 @@
 
     @media (max-width: 767px) {
         &__shell {
-            width: calc(100% - 32px);
+            width: min(100%, calc(100% - (clamp(16px, 4.83vw, 20px) * 2)));
             padding: 40px 0 88px;
         }
 

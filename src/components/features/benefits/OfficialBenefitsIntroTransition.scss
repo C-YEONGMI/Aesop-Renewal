@@ -154,7 +154,7 @@
     }
 }
 
-@media (max-width: 1279px) {
+@media (max-width: 1439px) {
     .official-benefits-intro {
         &__hero-title,
         &__secondary-line {
@@ -169,9 +169,14 @@
 
 @media (max-width: 1023px) {
     .official-benefits-intro {
+        &__pin,
+        &__surface {
+            min-height: clamp(760px, 110vw, 980px);
+        }
+
         &__hero-title {
             top: 88px;
-            width: min(100%, 12ch);
+            width: min(calc(100% - (var(--page-gutter) * 2)), 12ch);
             font-size: clamp(40px, 8.2vw, 72px);
             letter-spacing: -0.04em;
 
@@ -181,11 +186,12 @@
         }
 
         &__secondary-line {
-            width: max-content;
-            max-width: none;
+            width: min(calc(100% - (var(--page-gutter) * 2)), 12ch);
+            max-width: 100%;
             font-size: clamp(36px, 5.2vw, 64px);
             letter-spacing: -0.04em;
-            white-space: nowrap;
+            line-height: 0.98;
+            white-space: normal;
 
             &--top {
                 top: clamp(176px, 28vh, 228px);
@@ -199,7 +205,7 @@
         &__product-wrap {
             bottom: -44px;
             width: min(64vw, 400px);
-            height: min(62vh, 560px);
+            height: min(58vh, 520px);
         }
 
         &__grid {
@@ -211,18 +217,24 @@
 
 @media (max-width: 767px) {
     .official-benefits-intro {
+        &__pin,
+        &__surface {
+            min-height: clamp(620px, 170vw, 820px);
+        }
+
         &__hero-title {
             top: 72px;
-            width: min(100%, 10ch);
+            width: min(calc(100% - (clamp(16px, 4.83vw, 20px) * 2)), 10ch);
             font-size: clamp(34px, 10vw, 52px);
         }
 
         &__secondary-line {
-            width: max-content;
-            max-width: none;
+            width: min(calc(100% - (clamp(16px, 4.83vw, 20px) * 2)), 11ch);
+            max-width: 100%;
             font-size: clamp(22px, 6vw, 32px);
             letter-spacing: -0.03em;
-            white-space: nowrap;
+            line-height: 1;
+            white-space: normal;
 
             &--top {
                 top: clamp(150px, 24vh, 186px);
@@ -236,7 +248,38 @@
         &__product-wrap {
             bottom: -24px;
             width: min(72vw, 320px);
-            height: min(54vh, 420px);
+            height: min(46vh, 380px);
+        }
+    }
+}
+
+@media (max-width: 359px) {
+    .official-benefits-intro {
+        &__pin,
+        &__surface {
+            min-height: 620px;
+        }
+
+        &__hero-title {
+            top: 68px;
+            font-size: 32px;
+        }
+
+        &__secondary-line {
+            font-size: 20px;
+
+            &--top {
+                top: 146px;
+            }
+
+            &--bottom {
+                top: 198px;
+            }
+        }
+
+        &__product-wrap {
+            width: min(78vw, 280px);
+            height: min(42vh, 320px);
         }
     }
 }

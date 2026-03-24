@@ -10,20 +10,20 @@
     }
 
     &__shell {
-        width: calc(100% - 32px);
+        width: min(100%, calc(100% - (var(--page-gutter) * 2)));
         margin: 0 auto;
         padding: 60px 0 100px;
     }
 
     &__inner {
-        width: min(1580px, 100%);
+        width: min(var(--content-max), 100%);
         margin: 0 auto;
     }
 
     &__body {
         display: grid;
-        grid-template-columns: 268px minmax(0, 1fr);
-        gap: 40px;
+        grid-template-columns: minmax(240px, 268px) minmax(0, 1fr);
+        gap: clamp(28px, 2.1vw, 40px);
         align-items: start;
     }
 
@@ -41,7 +41,7 @@
     }
 
     &__title-area {
-        margin-left: 308px;
+        margin-left: calc(clamp(240px, 18vw, 268px) + clamp(28px, 2.1vw, 40px));
         margin-bottom: 40px;
 
         h1 {
@@ -126,13 +126,13 @@
     }
 
     &__grid-stage {
-        padding: 40px 12px 12px;
+        padding: 40px 0 12px;
     }
 
     &__grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 40px 16px;
+        gap: clamp(28px, 2.6vw, 40px) clamp(12px, 1vw, 16px);
     }
 
     &__empty {
@@ -302,18 +302,19 @@
     }
 
     @media (max-width: 1760px) {
-        &__shell {
-            width: calc(100% - 64px);
-        }
-
         &__grid {
             grid-template-columns: repeat(3, minmax(0, 1fr));
         }
     }
 
-    @media (max-width: 1279px) {
+    @media (max-width: 1439px) {
+        &__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 1023px) {
         &__shell {
-            width: calc(100% - 40px);
             padding: 40px 0 88px;
         }
 
@@ -360,12 +361,103 @@
         }
 
         &__grid-stage {
-            padding: 10px;
+            padding: 16px 0 0;
         }
 
         &__grid {
-            grid-template-columns: 1fr;
-            gap: 32px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px 10px;
+        }
+
+        &__card-overlay {
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            gap: 8px;
+        }
+
+        &__card-badges {
+            gap: 4px;
+            max-width: calc(100% - 24px);
+
+            .badge {
+                height: 16px;
+                padding: 0 6px;
+                font-size: 10px;
+            }
+        }
+
+        &__wish-btn {
+            flex-basis: 16px;
+            width: 16px;
+            height: 16px;
+        }
+
+        &__card-img {
+            padding: 14px;
+        }
+
+        &__card-copy {
+            padding: 12px 0 2px;
+        }
+
+        &__card-copy-inner {
+            padding: 0 6px;
+        }
+
+        &__card-name {
+            margin-top: 6px;
+            line-height: 1.35;
+            -webkit-line-clamp: 2;
+            min-height: calc(1.35em * 2);
+        }
+
+        &__card-desc {
+            margin-top: 4px;
+            line-height: 1.45;
+            -webkit-line-clamp: 2;
+            min-height: calc(1.45em * 2);
+        }
+
+        &__card-price {
+            margin-top: 6px;
+        }
+
+        &__card-actions-inner {
+            height: 42px;
+            padding: 0;
+        }
+
+        &__add-btn {
+            &.add-to-cart-button {
+                font-size: clamp(11px, 3vw, 13px);
+                padding: 0 8px;
+            }
+        }
+    }
+
+    @media (max-width: 359px) {
+        &__shell {
+            width: calc(100% - 24px);
+        }
+
+        &__grid {
+            gap: 20px 8px;
+        }
+
+        &__card-img {
+            padding: 12px;
+        }
+
+        &__card-copy-inner {
+            padding: 0 4px;
+        }
+
+        &__add-btn {
+            &.add-to-cart-button {
+                font-size: 11px;
+                padding: 0 6px;
+            }
         }
     }
 }

@@ -46,6 +46,7 @@ const AboutTeaserSection = () => {
     const contentRef = useRef(null);
 
     useEffect(() => {
+        const mm = gsap.matchMedia();
         const ctx = gsap.context(() => {
             const pillarNodes = gsap.utils.toArray('.about-teaser__pillar');
             const videoEl = videoRef.current;
@@ -71,101 +72,207 @@ const AboutTeaserSection = () => {
                 hasPlaybackStartedRef.current = false;
             };
 
-            gsap.set(videoBoxRef.current, {
-                xPercent: -50,
-                yPercent: -50,
-                width: 850,
-                height: 478,
-                y: 0,
-                borderRadius: 0,
-                transformOrigin: 'center center',
-            });
+            mm.add('(min-width: 1024px)', () => {
+                gsap.set(videoBoxRef.current, {
+                    xPercent: -50,
+                    yPercent: -50,
+                    width: 850,
+                    height: 478,
+                    y: 0,
+                    borderRadius: 0,
+                    transformOrigin: 'center center',
+                });
 
-            gsap.set(videoRef.current, {
-                scale: 1,
-                filter: 'brightness(1)',
-                transformOrigin: 'center center',
-            });
+                gsap.set(videoRef.current, {
+                    scale: 1,
+                    filter: 'brightness(1)',
+                    transformOrigin: 'center center',
+                });
 
-            if (videoEl) {
-                videoEl.pause();
-                videoEl.currentTime = 0;
-            }
+                if (videoEl) {
+                    videoEl.pause();
+                    videoEl.currentTime = 0;
+                }
 
-            gsap.set(overlayRef.current, {
-                opacity: 0,
-                clipPath: 'inset(100% 0 0 0)',
-            });
+                gsap.set(overlayRef.current, {
+                    opacity: 0,
+                    clipPath: 'inset(100% 0 0 0)',
+                });
 
-            gsap.set(contentRef.current, {
-                opacity: 0,
-                y: 36,
-            });
+                gsap.set(contentRef.current, {
+                    opacity: 0,
+                    y: 36,
+                });
 
-            gsap.set(pillarNodes, {
-                opacity: 0,
-                y: 32,
-            });
+                gsap.set(pillarNodes, {
+                    opacity: 0,
+                    y: 32,
+                });
 
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: 'top top',
-                    end: `+=${ABOUT_SCROLL_DISTANCE}`,
-                    scrub: 1,
-                    pin: innerRef.current,
-                    invalidateOnRefresh: true,
-                    onUpdate: (self) => {
-                        if (self.progress > 0.02 && !hasPlaybackStartedRef.current) {
-                            hasPlaybackStartedRef.current = true;
-                            playVideo();
-                        }
+                const timeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top top',
+                        end: `+=${ABOUT_SCROLL_DISTANCE}`,
+                        scrub: 1,
+                        pin: innerRef.current,
+                        invalidateOnRefresh: true,
+                        onUpdate: (self) => {
+                            if (self.progress > 0.02 && !hasPlaybackStartedRef.current) {
+                                hasPlaybackStartedRef.current = true;
+                                playVideo();
+                            }
+                        },
+                        onLeaveBack: () => {
+                            resetVideo();
+                        },
                     },
-                    onLeaveBack: () => {
-                        resetVideo();
-                    },
-                },
-            })
-                .to(videoBoxRef.current, {
-                    width: () => window.innerWidth,
-                    height: () => window.innerHeight,
-                    ease: 'none',
-                    duration: 1,
-                })
-                .to(
-                    overlayRef.current,
-                    {
-                        opacity: 0.92,
-                        clipPath: 'inset(0% 0 0 0)',
+                });
+
+                timeline
+                    .to(videoBoxRef.current, {
+                        width: () => window.innerWidth,
+                        height: () => window.innerHeight,
                         ease: 'none',
-                        duration: 0.4,
+                        duration: 1,
+                    })
+                    .to(
+                        overlayRef.current,
+                        {
+                            opacity: 0.92,
+                            clipPath: 'inset(0% 0 0 0)',
+                            ease: 'none',
+                            duration: 0.4,
+                        },
+                        0.52
+                    )
+                    .to(
+                        contentRef.current,
+                        {
+                            opacity: 1,
+                            y: 0,
+                            ease: 'power2.out',
+                            duration: 0.38,
+                        },
+                        0.84
+                    )
+                    .to(
+                        pillarNodes,
+                        {
+                            opacity: 1,
+                            y: 0,
+                            stagger: 0.08,
+                            ease: 'power2.out',
+                            duration: 0.28,
+                        },
+                        0.94
+                    );
+
+                return () => {
+                    timeline.kill();
+                };
+            });
+
+            mm.add('(max-width: 1023px)', () => {
+                gsap.set(videoBoxRef.current, {
+                    clearProps: 'all',
+                    scale: 0.92,
+                    borderRadius: 28,
+                    transformOrigin: 'center center',
+                });
+
+                gsap.set(videoRef.current, {
+                    clearProps: 'all',
+                    scale: 1.02,
+                    transformOrigin: 'center center',
+                });
+
+                gsap.set(overlayRef.current, {
+                    opacity: 0.14,
+                    clipPath: 'inset(0% 0 0 0)',
+                });
+
+                gsap.set(contentRef.current, {
+                    opacity: 0,
+                    y: 28,
+                });
+
+                gsap.set(pillarNodes, {
+                    opacity: 0,
+                    y: 24,
+                });
+
+                const playTrigger = ScrollTrigger.create({
+                    trigger: sectionRef.current,
+                    start: 'top 85%',
+                    end: 'bottom top',
+                    onEnter: playVideo,
+                    onEnterBack: playVideo,
+                    onLeaveBack: resetVideo,
+                });
+
+                const timeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 82%',
+                        end: 'bottom 45%',
+                        scrub: 0.7,
                     },
-                    0.52
-                )
-                .to(
-                    contentRef.current,
-                    {
-                        opacity: 1,
-                        y: 0,
-                        ease: 'power2.out',
-                        duration: 0.38,
-                    },
-                    0.84
-                )
-                .to(
-                    pillarNodes,
-                    {
-                        opacity: 1,
-                        y: 0,
-                        stagger: 0.08,
-                        ease: 'power2.out',
-                        duration: 0.28,
-                    },
-                    0.94
-                );
+                });
+
+                timeline
+                    .to(
+                        videoBoxRef.current,
+                        {
+                            scale: 1,
+                            borderRadius: 0,
+                            ease: 'none',
+                            duration: 0.46,
+                        },
+                        0
+                    )
+                    .to(
+                        overlayRef.current,
+                        {
+                            opacity: 0.88,
+                            ease: 'none',
+                            duration: 0.46,
+                        },
+                        0.04
+                    )
+                    .to(
+                        contentRef.current,
+                        {
+                            opacity: 1,
+                            y: 0,
+                            ease: 'power2.out',
+                            duration: 0.2,
+                        },
+                        0.16
+                    )
+                    .to(
+                        pillarNodes,
+                        {
+                            opacity: 1,
+                            y: 0,
+                            stagger: 0.08,
+                            ease: 'power2.out',
+                            duration: 0.18,
+                        },
+                        0.22
+                    );
+
+                return () => {
+                    playTrigger.kill();
+                    timeline.kill();
+                };
+            });
         }, sectionRef);
 
-        return () => ctx.revert();
+        return () => {
+            ctx.revert();
+            mm.revert();
+        };
     }, []);
 
     return (

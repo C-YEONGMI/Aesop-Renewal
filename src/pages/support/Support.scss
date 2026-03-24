@@ -7,9 +7,9 @@
     &__header-space { height: 70px; }
 
     &__inner {
-        max-width: 960px;
+        width: min(960px, calc(100% - (var(--page-gutter) * 2)));
         margin: 0 auto;
-        padding: 60px 4% 100px;
+        padding: 60px 0 100px;
     }
 
     &__title { color: $brown-800; margin-bottom: 40px; }
@@ -17,11 +17,16 @@
     &__tabs {
         display: flex;
         align-items: stretch;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 0;
         border-bottom: 1px solid $brown-100;
         margin-bottom: 48px;
-        overflow: visible;
+        overflow-x: auto;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
     &__tab {
@@ -236,10 +241,23 @@
         margin-top: 8px;
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 1023px) {
         &__inquiry-head,
         &__inquiry-meta {
             flex-direction: column;
+        }
+    }
+
+    @media (max-width: 767px) {
+        &__inner {
+            width: min(100%, calc(100% - (clamp(16px, 4.83vw, 20px) * 2)));
+            padding: 48px 0 80px;
+        }
+
+        &__toggle,
+        &__login-link,
+        &__submit {
+            width: 100%;
         }
     }
 }

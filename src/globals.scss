@@ -120,6 +120,61 @@ $font-suit: 'SUIT Variable', sans-serif;
 $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
 
 // ============================================
+// Responsive Tokens
+// ============================================
+
+$desktop-reference-width: 1920px;
+$tablet-reference-width: 768px;
+$mobile-reference-width: 360px;
+
+$breakpoint-desktop-wide: 1439px;
+$breakpoint-desktop: 1439px;
+$breakpoint-tablet: 1023px;
+$breakpoint-mobile: 767px;
+$breakpoint-mobile-small: 359px;
+
+@mixin desktop-wide {
+    @media (min-width: #{$desktop-reference-width}) {
+        @content;
+    }
+}
+
+@mixin desktop-down {
+    @media (max-width: #{$breakpoint-desktop}) {
+        @content;
+    }
+}
+
+@mixin tablet-down {
+    @media (max-width: #{$breakpoint-tablet}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$breakpoint-mobile}) {
+        @content;
+    }
+}
+
+@mixin mobile-small {
+    @media (max-width: #{$breakpoint-mobile-small}) {
+        @content;
+    }
+}
+
+:root {
+    --page-gutter: clamp(20px, 3.75vw, 72px);
+    --page-gutter-wide: clamp(24px, 6vw, 120px);
+    --page-gutter-narrow: clamp(16px, 2.5vw, 32px);
+    --content-max: 1580px;
+    --layout-max: 1680px;
+    --section-space-lg: clamp(72px, 6.25vw, 120px);
+    --section-space-md: clamp(56px, 4.8vw, 88px);
+    --section-space-sm: clamp(40px, 3.6vw, 64px);
+}
+
+// ============================================
 // Text Styles
 // ============================================
 
@@ -131,16 +186,16 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 220px;
+    font-size: clamp(120px, 11.46vw, 220px);
     line-height: normal;
-    letter-spacing: -4.4px;
+    letter-spacing: clamp(-2.4px, -0.23vw, -4.4px);
 }
 
 .montage-100 {
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 100px;
+    font-size: clamp(64px, 5.2vw, 100px);
     line-height: 1;
     letter-spacing: -0.02em;
 }
@@ -148,7 +203,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 128px;
+    font-size: clamp(72px, 6.67vw, 128px);
     line-height: normal;
     letter-spacing: 0px;
 }
@@ -157,7 +212,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 80px;
+    font-size: clamp(48px, 4.17vw, 80px);
     line-height: 1;
 }
 
@@ -165,7 +220,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 48px;
+    font-size: clamp(34px, 2.5vw, 48px);
     line-height: normal;
 }
 
@@ -173,7 +228,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 32px;
+    font-size: clamp(24px, 1.67vw, 32px);
     line-height: normal;
     text-transform: uppercase;
 }
@@ -182,7 +237,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 30px;
+    font-size: clamp(24px, 1.56vw, 30px);
     line-height: normal;
 }
 
@@ -190,7 +245,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-montage;
     font-style: normal;
     font-weight: 400;
-    font-size: 24px;
+    font-size: clamp(20px, 1.25vw, 24px);
     line-height: normal;
 }
 
@@ -219,56 +274,56 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
 .suit-80-el {
     font-family: $font-suit;
     font-weight: 200;
-    font-size: 80px;
+    font-size: clamp(42px, 4.17vw, 80px);
     line-height: 1;
 }
 
 .suit-26-sb {
     font-family: $font-suit;
     font-weight: 600;
-    font-size: 26px;
+    font-size: clamp(22px, 1.35vw, 26px);
     line-height: 1.5;
 }
 
 .suit-24-r {
     font-family: $font-suit;
     font-weight: 400;
-    font-size: 24px;
+    font-size: clamp(20px, 1.25vw, 24px);
     line-height: 1.5;
 }
 
 .suit-24-sb {
     font-family: $font-suit;
     font-weight: 600;
-    font-size: 24px;
+    font-size: clamp(20px, 1.25vw, 24px);
     line-height: 1.5;
 }
 
 .suit-20-l {
     font-family: $font-suit;
     font-weight: 300;
-    font-size: 20px;
+    font-size: clamp(17px, 1.04vw, 20px);
     line-height: 1.5;
 }
 
 .suit-20-m {
     font-family: $font-suit;
     font-weight: 500;
-    font-size: 20px;
+    font-size: clamp(17px, 1.04vw, 20px);
     line-height: 1.5;
 }
 
 .suit-18-r {
     font-family: $font-suit;
     font-weight: 400;
-    font-size: 18px;
+    font-size: clamp(16px, 0.94vw, 18px);
     line-height: 1.5;
 }
 
 .suit-18-m {
     font-family: $font-suit;
     font-weight: 500;
-    font-size: 18px;
+    font-size: clamp(16px, 0.94vw, 18px);
     line-height: 1.5;
 }
 
@@ -301,23 +356,23 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-optima;
     font-style: normal;
     font-weight: 400;
-    font-size: 220px;
+    font-size: clamp(120px, 11.46vw, 220px);
     line-height: 1.5;
-    letter-spacing: -4.4px;
+    letter-spacing: clamp(-2.4px, -0.23vw, -4.4px);
 }
 
 .optima-70 {
     font-family: $font-optima;
     font-style: normal;
     font-weight: 400;
-    font-size: 70px;
+    font-size: clamp(42px, 3.65vw, 70px);
     line-height: 1.5;
 }
 .optima-48 {
     font-family: $font-optima;
     font-style: normal;
     font-weight: 400;
-    font-size: 48px;
+    font-size: clamp(34px, 2.5vw, 48px);
     line-height: normal;
 }
 
@@ -325,7 +380,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-optima;
     font-style: normal;
     font-weight: 400;
-    font-size: 40px;
+    font-size: clamp(28px, 2.08vw, 40px);
     line-height: normal;
     letter-spacing: -0.8px;
 }
@@ -334,7 +389,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-family: $font-optima;
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: clamp(17px, 1.04vw, 20px);
     line-height: normal;
 }
 

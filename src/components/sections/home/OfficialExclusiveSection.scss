@@ -2,7 +2,7 @@
 
 .official-exclusive {
     width: 100%;
-    height: 1080px;
+    min-height: clamp(860px, 56.25vw, 1080px);
     background-color: $bg-primary;
     position: relative;
     overflow: hidden;
@@ -26,7 +26,7 @@
     &__inner {
         position: relative;
         width: 100%;
-        height: 100%;
+        min-height: inherit;
         max-width: 1920px;
         margin: 0 auto;
         z-index: 2;
@@ -37,7 +37,7 @@
         top: 357px;
         left: 50%;
         transform: translateX(-50%);
-        width: 547px;
+        width: min(547px, calc(100% - 48px));
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -60,7 +60,7 @@
     }
 
     &__text-block {
-        width: 348px;
+        width: min(348px, 100%);
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -150,25 +150,32 @@
         opacity: 0;
     }
 
+    &__gallery {
+        display: none;
+    }
+
     @media (min-width: 1440px) {
         cursor: grab;
     }
 
-    @media (max-width: 1439px) {
+    @media (min-width: 1024px) and (max-width: 1439px) {
         height: auto;
-        padding: 96px 5% 120px;
+        padding: 96px var(--page-gutter) 120px;
 
         &__bg-logo {
-            top: 180px;
-            width: 420px;
+            top: 96px;
+            left: auto;
+            right: clamp(12px, 6vw, 64px);
+            width: min(34vw, 360px);
             height: auto;
+            transform: none;
         }
 
         &__inner {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: minmax(320px, 480px) minmax(0, 1fr);
             align-items: center;
-            gap: 48px;
+            gap: clamp(32px, 4vw, 72px);
         }
 
         &__content {
@@ -177,22 +184,153 @@
             left: auto;
             transform: none;
             width: min(547px, 100%);
+            max-width: 100%;
         }
 
         &__img {
             display: none;
         }
+
+        &__gallery {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(14px, 1.8vw, 20px);
+            width: min(100%, 620px);
+            margin-left: auto;
+        }
+
+        &__gallery-card {
+            position: relative;
+            min-height: 180px;
+            border: 1px solid rgba($brown-200, 0.72);
+            background:
+                radial-gradient(circle at 50% 18%, rgba($oatmeal, 0.72) 0%, rgba($oatmeal, 0.2) 44%, rgba($oatmeal, 0) 78%),
+                linear-gradient(180deg, rgba($brown-50, 0.94) 0%, rgba($bg-primary, 0.68) 100%);
+            overflow: hidden;
+            aspect-ratio: 1 / 1.08;
+
+            &:nth-child(1),
+            &:nth-child(4) {
+                aspect-ratio: 1 / 1.34;
+            }
+        }
+
+        &__gallery-image {
+            width: 100%;
+            height: 100%;
+            padding: clamp(16px, 2vw, 24px);
+            object-fit: contain;
+            display: block;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+        --official-tablet-image-scale: clamp(0.48, 0.33 + 0.03vw, 0.58);
+
+        padding: 88px var(--page-gutter) 96px;
+        min-height: clamp(760px, 114vw, 980px);
+
+        &__bg-logo {
+            top: clamp(176px, 23vw, 238px);
+            left: 50%;
+            right: auto;
+            width: min(48vw, 360px);
+            transform: translateX(-50%);
+        }
+
+        &__inner {
+            display: block;
+            min-height: clamp(620px, 92vw, 860px);
+        }
+
+        &__content {
+            position: absolute;
+            top: clamp(232px, 31vw, 312px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(440px, calc(100% - 220px));
+            align-items: center;
+            text-align: center;
+        }
+
+        &__copy,
+        &__headline-block,
+        &__text-block {
+            align-items: center;
+        }
+
+        &__text-block {
+            width: min(320px, 100%);
+        }
+
+        &__img {
+            display: block;
+            transform: scale(var(--official-tablet-image-scale));
+            transform-origin: top left;
+        }
+
+        &__img:nth-of-type(1) {
+            top: clamp(304px, 40vw, 376px) !important;
+            left: clamp(4px, 1.8vw, 18px) !important;
+        }
+
+        &__img:nth-of-type(2) {
+            top: clamp(166px, 22vw, 224px) !important;
+            left: clamp(92px, 12vw, 132px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.02));
+        }
+
+        &__img:nth-of-type(3) {
+            top: auto !important;
+            bottom: clamp(30px, 4vw, 48px) !important;
+            left: clamp(102px, 13vw, 148px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.03));
+        }
+
+        &__img:nth-of-type(4) {
+            top: auto !important;
+            bottom: clamp(128px, 15vw, 176px) !important;
+            left: auto !important;
+            right: clamp(110px, 12vw, 152px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.06));
+            transform-origin: top right;
+        }
+
+        &__img:nth-of-type(5) {
+            top: clamp(106px, 14vw, 148px) !important;
+            left: auto !important;
+            right: clamp(0px, 1vw, 10px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) + 0.01));
+            transform-origin: top right;
+        }
+
+        &__img:nth-of-type(6) {
+            top: clamp(378px, 48vw, 454px) !important;
+            left: auto !important;
+            right: clamp(0px, 1.6vw, 14px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.01));
+            transform-origin: top right;
+        }
+
+        &__gallery {
+            display: none;
+        }
     }
 
     @media (max-width: 767px) {
-        padding: 72px 20px 88px;
+        padding: 72px clamp(16px, 4.83vw, 20px) 88px;
 
         &__bg-logo {
-            width: 280px;
+            position: relative;
+            top: auto;
+            right: auto;
+            width: min(72vw, 240px);
+            margin: 0 auto 8px;
         }
 
         &__content {
             gap: 24px;
+            width: 100%;
         }
 
         &__title {
@@ -201,6 +339,20 @@
 
         &__text-block {
             width: 100%;
+        }
+
+        &__img {
+            display: none;
+        }
+
+        &__gallery {
+            display: none;
+        }
+    }
+
+    @media (max-width: 359px) {
+        &__title {
+            font-size: 32px;
         }
     }
 }

@@ -9,9 +9,9 @@
     &__header-space { height: 70px; }
 
     &__inner {
-        max-width: 1580px;
+        width: min(var(--content-max), calc(100% - (var(--page-gutter) * 2)));
         margin: 0 auto;
-        padding: 60px 4% 100px;
+        padding: 60px 0 100px;
         display: flex;
         flex-direction: column;
         gap: 32px;
@@ -815,6 +815,12 @@
             white-space: normal;
         }
 
+        &__hero-stats,
+        &__status-grid,
+        &__status-flow {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
         &__status-flow {
             gap: 20px;
         }
@@ -831,10 +837,44 @@
             align-items: flex-start;
             flex-direction: column;
         }
+
+        &__wish-card {
+            grid-template-columns: 96px minmax(0, 1fr);
+            align-items: start;
+        }
+
+        &__wish-media {
+            width: 96px;
+            height: 96px;
+        }
+
+        &__wish-side {
+            min-width: 0;
+            grid-column: 2;
+            width: 100%;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        &__wish-actions {
+            width: 100%;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        &__order-item {
+            grid-template-columns: 72px minmax(0, 1fr);
+            align-items: start;
+        }
+
+        &__order-item-price {
+            grid-column: 2 / 3;
+        }
     }
 
     @media (max-width: 767px) {
         &__inner {
+            width: min(100%, calc(100% - (clamp(16px, 4.83vw, 20px) * 2)));
             padding-top: 40px;
             gap: 24px;
         }

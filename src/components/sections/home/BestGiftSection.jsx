@@ -177,27 +177,41 @@ const BestGiftSection = () => {
     }, [activeIndex]);
 
     useLayoutEffect(() => {
+        const mm = gsap.matchMedia();
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                sectionRef.current.querySelectorAll(
-                    '.best-gift__left, .best-gift__center, .best-gift__right'
-                ),
-                { opacity: 0, y: 36 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    stagger: 0.12,
-                    ease: 'power2.out',
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 72%',
-                    },
-                }
-            );
+            const animateTargets = (selector) => {
+                gsap.fromTo(
+                    sectionRef.current.querySelectorAll(selector),
+                    { opacity: 0, y: 36 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        stagger: 0.12,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: sectionRef.current,
+                            start: 'top 72%',
+                        },
+                    }
+                );
+            };
+
+            mm.add('(min-width: 768px)', () => {
+                animateTargets('.best-gift__left, .best-gift__center, .best-gift__right');
+            });
+
+            mm.add('(max-width: 767px)', () => {
+                animateTargets(
+                    '.best-gift__left, .best-gift__center, .best-gift__img-point, .best-gift__text-box'
+                );
+            });
         }, sectionRef);
 
-        return () => ctx.revert();
+        return () => {
+            ctx.revert();
+            mm.revert();
+        };
     }, []);
 
     useLayoutEffect(() => {

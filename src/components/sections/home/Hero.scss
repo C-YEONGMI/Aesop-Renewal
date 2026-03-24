@@ -4,11 +4,12 @@
     --hero-wordmark-aesop-width: 52.5%;
     --hero-wordmark-ritual-width: 47.5%;
     --hero-wordmark-bottom-offset: clamp(34px, 5.76vw, 110px);
+    --hero-scroll-distance: clamp(1320px, 156vh, 2480px);
 
     position: relative;
     width: 100%;
-    height: calc(100vh + clamp(1680px, 188vh, 2480px));
-    min-height: 2140px;
+    height: calc(100vh + var(--hero-scroll-distance));
+    min-height: clamp(1760px, 182vh, 2140px);
     overflow: visible;
 
     &.hero--handoff-complete {
@@ -245,11 +246,22 @@
         }
     }
 
+    @media (max-width: 1023px) {
+        --hero-wordmark-bottom-offset: clamp(24px, 4.8vw, 64px);
+        --hero-scroll-distance: clamp(900px, 116vh, 1580px);
+
+        min-height: clamp(1440px, 164vh, 1760px);
+
+        &__wordmark {
+            transform: translateY(calc(var(--hero-wordmark-bottom-offset) + 1.4vh));
+        }
+    }
+
     @media (max-width: 767px) {
         --hero-wordmark-bottom-offset: clamp(22px, 5.76vw, 42px);
+        --hero-scroll-distance: clamp(720px, 96vh, 1180px);
 
-        height: calc(100vh + clamp(920px, 128vh, 1380px));
-        min-height: 1580px;
+        min-height: clamp(1280px, 140vh, 1500px);
 
         &__wordmark {
             transform: translateY(calc(var(--hero-wordmark-bottom-offset) + 1vh));

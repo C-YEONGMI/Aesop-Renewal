@@ -711,9 +711,15 @@
 
 @media (max-width: 767px) {
     .auth-page {
+        &__inner {
+            width: min(100%, calc(100% - (clamp(16px, 4.83vw, 20px) * 2)));
+            padding-left: 0;
+            padding-right: 0;
+        }
+
         &__inner--login {
             max-width: 100%;
-            padding: 72px 24px 56px;
+            padding: 72px 0 56px;
         }
 
         &__title--login {

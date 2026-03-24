@@ -84,7 +84,7 @@ const Header = ({ transparent = false, isVisible = true }) => {
                     <li className="search-li">
                         <ExpandableSearchBar
                             expandDirection="left"
-                            width={300}
+                            width={240}
                             onSearch={(query) => {
                                 if (query.trim()) {
                                     navigate(`/search?q=${encodeURIComponent(query)}`);

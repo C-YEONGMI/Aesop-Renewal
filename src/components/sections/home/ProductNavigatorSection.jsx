@@ -13,7 +13,7 @@ import './ProductNavigatorSection.scss';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DESKTOP_BREAKPOINT = 1280;
+const DESKTOP_BREAKPOINT = 1024;
 const SCROLL_STEP = 220;
 const SECTION_DESCRIPTION =
     '피부와 손길, 향과 공간에 이르기까지, 이솝의 다양한 제품군을 천천히 살펴보세요.';

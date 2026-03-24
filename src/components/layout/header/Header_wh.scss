@@ -13,7 +13,7 @@
 
 #header-wh .inner {
     width: 100%;
-    padding: 0 4%;
+    padding: 0 var(--page-gutter);
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -181,19 +181,35 @@
 @media (max-width: 1023px) {
     #header-wh .inner {
         height: 68px;
+        padding: 0 clamp(20px, 4vw, 28px);
     }
 
     #header-wh .depth1 {
-        gap: 20px;
+        gap: clamp(14px, 2vw, 20px);
     }
 }
 
 @media (max-width: 767px) {
     #header-wh .inner {
         height: 60px;
+        padding: 0 clamp(16px, 3.86vw, 20px);
     }
 
     #header-wh .depth1 {
         display: none;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+    #header-wh .inner {
+        padding: 0 clamp(20px, 2.8vw, 28px);
+    }
+
+    #header-wh .logo-svg {
+        width: 108px;
+    }
+
+    #header-wh .utl {
+        gap: 16px;
     }
 }

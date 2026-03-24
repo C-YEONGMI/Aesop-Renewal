@@ -56,7 +56,7 @@
 
 #header .inner {
     width: 100%;
-    padding: 0 4%;
+    padding: 0 var(--page-gutter);
     /* 좌우 여백을 주어 양끝에 붙되 꽉 막히지 않게 조정 */
     margin: 0 auto;
     /* 가운대로 정렬 필수 */
@@ -166,7 +166,7 @@
 @media (max-width: 1023px) {
     #header .inner {
         height: 68px;
-        padding: 0 24px;
+        padding: 0 clamp(20px, 4vw, 28px);
     }
 
     #header .logo-svg {
@@ -174,7 +174,7 @@
     }
 
     #header .utl {
-        gap: 20px;
+        gap: clamp(16px, 2.6vw, 20px);
     }
 }
 
@@ -188,7 +188,7 @@
 @media (max-width: 767px) {
     #header .inner {
         height: 60px;
-        padding: 0 16px;
+        padding: 0 clamp(16px, 3.86vw, 20px);
     }
 
     /* 로고: 피그마 93×40px */
@@ -237,5 +237,19 @@
         font-size: 10px;
         font-family: $font-suit;
         margin-left: 0;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+    #header .inner {
+        padding: 0 clamp(20px, 2.8vw, 28px);
+    }
+
+    #header .logo-svg {
+        width: 108px;
+    }
+
+    #header .utl {
+        gap: 16px;
     }
 }

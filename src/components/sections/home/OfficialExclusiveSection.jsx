@@ -137,6 +137,11 @@ const COPY = {
     body: '무료 배송과 반품, 샘플 증정, 기프트 포장 서비스까지\n공식몰에서만 경험할 수 있는 세심한 배려를 만나보세요.',
 };
 
+const RESPONSIVE_GALLERY_IMAGES = DECOR_FRAMES.map((frame) => ({
+    key: frame.key,
+    src: frame.layers.find((layer) => layer.key === 'primary')?.src ?? frame.layers[0]?.src,
+}));
+
 const OfficialExclusiveSection = () => {
     const sectionRef = useRef(null);
     const contentRef = useRef(null);
@@ -145,6 +150,24 @@ const OfficialExclusiveSection = () => {
     useEffect(() => {
         const mm = gsap.matchMedia();
         const ctx = gsap.context(() => {
+            const animateContentOnly = () => {
+                gsap.fromTo(
+                    contentRef.current,
+                    { autoAlpha: 0, y: 24 },
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.85,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: sectionRef.current,
+                            start: 'top 78%',
+                            once: true,
+                        },
+                    }
+                );
+            };
+
             mm.add('(min-width: 1440px)', () => {
                 const section = sectionRef.current;
                 const proxy = dragProxyRef.current;
@@ -339,22 +362,91 @@ const OfficialExclusiveSection = () => {
                 };
             });
 
-            mm.add('(max-width: 1439px)', () => {
-                gsap.fromTo(
-                    contentRef.current,
-                    { autoAlpha: 0, y: 24 },
-                    {
-                        autoAlpha: 1,
-                        y: 0,
-                        duration: 0.85,
-                        ease: 'power2.out',
-                        scrollTrigger: {
-                            trigger: sectionRef.current,
-                            start: 'top 78%',
-                            once: true,
+            mm.add('(min-width: 768px) and (max-width: 1023px)', () => {
+                const imageNodes = gsap.utils.toArray('.official-exclusive__img');
+                const floatNodes = gsap.utils.toArray('.official-exclusive__float');
+
+                if (!contentRef.current || !imageNodes.length) {
+                    animateContentOnly();
+                    return undefined;
+                }
+
+                const timeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 76%',
+                        once: true,
+                    },
+                });
+
+                gsap.set([contentRef.current, ...imageNodes], {
+                    willChange: 'transform, opacity',
+                });
+                gsap.set(floatNodes, { willChange: 'transform' });
+
+                timeline
+                    .fromTo(
+                        contentRef.current,
+                        { autoAlpha: 0, y: 26 },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            duration: 0.82,
+                            ease: 'power2.out',
+                            clearProps: 'willChange',
+                        }
+                    )
+                    .fromTo(
+                        imageNodes,
+                        { autoAlpha: 0, y: 84 },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            duration: 0.96,
+                            stagger: 0.08,
+                            ease: 'power3.out',
+                            clearProps: 'willChange',
                         },
-                    }
-                );
+                        0.12
+                    );
+
+                const floatTweens = floatNodes.map((node, index) => {
+                    const preset = IMAGE_MOTION_PRESETS[index % IMAGE_MOTION_PRESETS.length];
+
+                    return gsap
+                        .timeline({
+                            repeat: -1,
+                            delay: preset.delay,
+                            defaults: {
+                                ease: 'sine.inOut',
+                            },
+                        })
+                        .to(node, {
+                            y: preset.floatY * 0.78,
+                            duration: preset.duration * 0.42,
+                        })
+                        .to(node, {
+                            y: preset.floatY * -0.18,
+                            duration: preset.duration * 0.28,
+                        })
+                        .to(node, {
+                            y: 0,
+                            duration: preset.duration * 0.3,
+                        });
+                });
+
+                return () => {
+                    timeline.kill();
+                    floatTweens.forEach((tween) => tween.kill());
+                };
+            });
+
+            mm.add('(min-width: 1024px) and (max-width: 1439px)', () => {
+                animateContentOnly();
+            });
+
+            mm.add('(max-width: 767px)', () => {
+                animateContentOnly();
             });
         }, sectionRef);
 
@@ -441,6 +533,22 @@ const OfficialExclusiveSection = () => {
                     <div className="official-exclusive__btn-wrapper" data-node-id="762:2508">
                         <MoreBox to="/benefits/official" />
                     </div>
+                </div>
+
+                <div className="official-exclusive__gallery" aria-hidden="true">
+                    {RESPONSIVE_GALLERY_IMAGES.map((image) => (
+                        <div
+                            key={`responsive-${image.key}`}
+                            className="official-exclusive__gallery-card"
+                        >
+                            <img
+                                className="official-exclusive__gallery-image"
+                                src={image.src}
+                                alt=""
+                                draggable={false}
+                            />
+                        </div>
+                    ))}
                 </div>
 
                 <div className="official-exclusive__drag-proxy" ref={dragProxyRef} aria-hidden="true" />

@@ -2,11 +2,11 @@
 
 .new-arrival {
     width: 100%;
-    padding: clamp(80px, 8vw, 116px) clamp(20px, 6vw, 120px) clamp(88px, 8vw, 126px);
+    padding: clamp(80px, 8vw, 116px) var(--page-gutter-wide) clamp(88px, 8vw, 126px);
     background-color: $bg-primary;
 
     &__inner {
-        width: min(100%, 1680px);
+        width: min(100%, var(--layout-max));
         margin: 0 auto;
         display: grid;
         grid-template-columns: minmax(0, 730px) minmax(0, 847px);
@@ -110,7 +110,7 @@
         background-color: #000;
     }
 
-    @media (max-width: 1279px) {
+    @media (max-width: 1439px) {
         &__inner {
             grid-template-columns: minmax(0, 1fr);
             gap: 56px;
@@ -126,10 +126,19 @@
             width: min(100%, 847px);
             justify-self: center;
         }
+
+        &__header {
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        &__more-wrapper {
+            position: static;
+        }
     }
 
     @media (max-width: 767px) {
-        padding: 64px 20px 72px;
+        padding: 64px clamp(16px, 4.83vw, 20px) 72px;
 
         &__header {
             margin-bottom: 28px;
