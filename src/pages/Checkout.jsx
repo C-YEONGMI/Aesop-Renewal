@@ -8,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../components/ui/Select';
+import SampleSelector from '../components/pages/checkout/SampleSelector';
 import useCartStore from '../store/useCartStore';
 import useAuthStore from '../store/useAuthStore';
 import useOrderStore from '../store/useOrderStore';
@@ -41,6 +42,8 @@ const Checkout = () => {
     const navigate = useNavigate();
     const cartItems = useCartStore((state) => state.cartItems);
     const removeOrderedItems = useCartStore((state) => state.removeOrderedItems);
+    const selectedSamples = useCartStore((state) => state.selectedSamples);
+    const clearSamples = useCartStore((state) => state.clearSamples);
     const user = useAuthStore((state) => state.user);
     const createOrder = useOrderStore((state) => state.createOrder);
 
@@ -165,6 +168,7 @@ const Checkout = () => {
         const order = createOrder({
             userId: user?.id,
             items: checkedItems,
+            selectedSamples,
             shipping: {
                 ...form,
                 memo: shippingMemo,
@@ -176,6 +180,7 @@ const Checkout = () => {
         });
 
         removeOrderedItems(checkedItems.map((item) => item.cartId));
+        clearSamples();
     };
 
     if (checkedItems.length === 0) {
@@ -366,6 +371,8 @@ const Checkout = () => {
                                 </div>
                             </div>
                         </section>
+
+                        <SampleSelector />
 
                         <section className="checkout-page__section">
                             <div className="checkout-page__section-head">

@@ -9,6 +9,7 @@ const useCartStore = create(
             cartItems: [], // { cartId, productId, name, image, category, variant, quantity, price }
             isCartDialogOpen: false,
             cartDialogItem: null,
+            selectedSamples: [],
 
             // 장바구니 담기
             addToCart: (product, variantIndex = 0, options = {}) => {
@@ -115,8 +116,21 @@ const useCartStore = create(
                 set({ cartItems: get().cartItems.filter(item => !cartIds.includes(item.cartId)) });
             },
 
+            // 샘플 선택 토글
+            toggleSample: (sampleId) => {
+                const current = get().selectedSamples;
+                set({
+                    selectedSamples: current.includes(sampleId)
+                        ? current.filter((id) => id !== sampleId)
+                        : [...current, sampleId],
+                });
+            },
+
+            // 샘플 초기화
+            clearSamples: () => set({ selectedSamples: [] }),
+
             // 전체 비우기
-            clearCart: () => set({ cartItems: [] }),
+            clearCart: () => set({ cartItems: [], selectedSamples: [] }),
         }),
         {
             name: 'aesop-cart',

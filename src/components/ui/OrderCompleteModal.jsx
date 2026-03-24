@@ -57,7 +57,7 @@ const OrderCompleteModal = () => {
                             cx="36"
                             cy="36"
                             r="33"
-                            stroke="#1a1a1a"
+                            stroke="#a3b18a"
                             strokeWidth="2"
                             strokeLinecap="round"
                             fill="none"
@@ -65,7 +65,7 @@ const OrderCompleteModal = () => {
                         <polyline
                             className="order-complete__check"
                             points="24,37 32,45 48,29"
-                            stroke="#1a1a1a"
+                            stroke="#a3b18a"
                             strokeWidth="2.5"
                             strokeLinecap="round"
                             strokeLinejoin="round"
