@@ -5,6 +5,7 @@ import New from '../badge/New';
 import Exclusive from '../badge/Exclusive';
 import AddToCartButton from '../btn/AddToCartButton';
 import useCartStore from '../../../store/useCartStore';
+import useRequireLoginAction from '../../../hooks/useRequireLoginAction';
 import './BestboxSm.scss';
 
 const FALLBACK_IMAGE = 'https://kr.aesop.com/dw/image/v2/AARM_PRD/on/demandware.static/-/Sites-aesop-master-catalog/default/dwd34d3c3d/images/products/SK67/4936968889721/4936968889721_1.png';
@@ -14,6 +15,7 @@ const ADD_TO_CART_LABEL = '\uC7A5\uBC14\uAD6C\uB2C8 \uB2F4\uAE30';
 const BestboxSm = ({ product }) => {
     const navigate = useNavigate();
     const addToCart = useCartStore((state) => state.addToCart);
+    const requireLoginAction = useRequireLoginAction();
     const productData = product || {
         name: DEFAULT_NAME,
         badge: ['Best', 'New', 'Exclusive'],
@@ -34,7 +36,7 @@ const BestboxSm = ({ product }) => {
             return;
         }
 
-        addToCart(product, 0);
+        requireLoginAction(() => addToCart(product, 0));
     };
 
     const handleCardClick = () => {

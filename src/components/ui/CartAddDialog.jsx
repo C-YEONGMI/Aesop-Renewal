@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCategoryLabelFromValue } from '../../data/productCategories';
 import useCartStore from '../../store/useCartStore';
 import useProductStore from '../../store/useProductStore';
+import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import {
     Dialog,
     DialogClose,
@@ -26,6 +27,7 @@ const CartAddDialog = () => {
     const cartDialogItem = useCartStore((state) => state.cartDialogItem);
     const addToCart = useCartStore((state) => state.addToCart);
     const closeCartDialog = useCartStore((state) => state.closeCartDialog);
+    const requireLoginAction = useRequireLoginAction();
     const [recentlyAddedRecommendation, setRecentlyAddedRecommendation] = useState(null);
 
     const formattedPrice =
@@ -107,8 +109,10 @@ const CartAddDialog = () => {
     };
 
     const handleAddRecommendation = (product) => {
-        addToCart(product, 0, { showDialog: false, preserveDialog: true });
-        setRecentlyAddedRecommendation(product.name);
+        requireLoginAction(() => {
+            addToCart(product, 0, { showDialog: false, preserveDialog: true });
+            setRecentlyAddedRecommendation(product.name);
+        });
     };
 
     return (

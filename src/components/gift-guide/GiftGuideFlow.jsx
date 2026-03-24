@@ -6,6 +6,7 @@ import { giftGuideTree } from '../../data/giftGuideData';
 import useProductStore from '../../store/useProductStore';
 import useCartStore from '../../store/useCartStore';
 import useWishlistStore from '../../store/useWishlistStore';
+import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue } from '../../data/productCategories';
 import AddToCartButton from '../common/btn/AddToCartButton';
 import Best from '../common/badge/Best';
@@ -26,6 +27,7 @@ const GiftGuideFlow = () => {
     const addToCart = useCartStore((s) => s.addToCart);
     const wishlist = useWishlistStore((s) => s.wishlist);
     const toggleWishlist = useWishlistStore((s) => s.toggleWishlist);
+    const requireLoginAction = useRequireLoginAction();
     const [step1, setStep1] = useState(null);
     const [step2, setStep2] = useState(null);
     const [step3, setStep3] = useState(null);
@@ -213,7 +215,9 @@ const GiftGuideFlow = () => {
                                                 <button
                                                     type="button"
                                                     className={`products-page__wish-btn ${isWishlisted ? 'active' : ''}`}
-                                                    onClick={() => toggleWishlist(product.name)}
+                                                    onClick={() =>
+                                                        requireLoginAction(() => toggleWishlist(product.name))
+                                                    }
                                                     aria-label="위시리스트 추가"
                                                 >
                                                     <svg width="18" height="18" viewBox="0 0 24 24" fill={isWishlisted ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5">
@@ -236,7 +240,7 @@ const GiftGuideFlow = () => {
                                             </div>
                                             <div className="products-page__card-actions">
                                                 <div className="products-page__card-actions-inner">
-                                                    <AddToCartButton className="products-page__add-btn" text="장바구니 담기" width="100%" onClick={() => addToCart(product, 0)} />
+                                                    <AddToCartButton className="products-page__add-btn" text="장바구니 담기" width="100%" onClick={() => requireLoginAction(() => addToCart(product, 0))} />
                                                 </div>
                                             </div>
                                         </div>

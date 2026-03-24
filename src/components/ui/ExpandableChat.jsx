@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MessageCircle, RotateCcw, X } from 'lucide-react';
 import useCartStore from '../../store/useCartStore';
 import useProductStore from '../../store/useProductStore';
+import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import {
     getCategoryLabelFromValue,
     getCategoryRouteFromValue,
@@ -56,6 +57,7 @@ const ExpandableChat = ({ isOpen, onClose }) => {
     const location = useLocation();
     const products = useProductStore((state) => state.products);
     const addToCart = useCartStore((state) => state.addToCart);
+    const requireLoginAction = useRequireLoginAction();
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasStarted, setHasStarted] = useState(false);
@@ -430,7 +432,7 @@ const ExpandableChat = ({ isOpen, onClose }) => {
             navigate(action.to);
         }
         if (action.kind === 'add') {
-            addToCart(action.product, 0);
+            requireLoginAction(() => addToCart(action.product, 0));
         }
         if (action.kind === 'start') {
             startFlow(action.flowKey, { answers: action.answers, startIndex: action.startIndex });

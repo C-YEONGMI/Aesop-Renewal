@@ -141,8 +141,8 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 100px;
-    line-height: normal;
-    letter-spacing: -2px;
+    line-height: 1;
+    letter-spacing: -0.02em;
 }
 .montage-128 {
     font-family: $font-montage;

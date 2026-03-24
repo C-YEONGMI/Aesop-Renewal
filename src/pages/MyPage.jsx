@@ -18,6 +18,7 @@ import useCartStore from '../store/useCartStore';
 import useOrderStore from '../store/useOrderStore';
 import useWishlistStore from '../store/useWishlistStore';
 import useProductStore from '../store/useProductStore';
+import useRequireLoginAction from '../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue } from '../data/productCategories';
 import './MyPage.scss';
 
@@ -83,6 +84,7 @@ const MyPage = () => {
     const allOrders = useOrderStore((state) => state.orders);
     const wishlist = useWishlistStore((state) => state.wishlist);
     const products = useProductStore((state) => state.products);
+    const requireLoginAction = useRequireLoginAction();
     const [profileForm, setProfileForm] = useState({ name: '', email: '', phone: '' });
 
     useEffect(() => {
@@ -237,12 +239,14 @@ const MyPage = () => {
     };
 
     const handleWishlistAddToCart = (product) => {
-        addToCart(product, 0);
+        requireLoginAction(() => addToCart(product, 0));
     };
 
     const handleWishlistBuyNow = (product) => {
-        addToCart(product, 0, { showDialog: false });
-        navigate('/cart');
+        requireLoginAction(() => {
+            addToCart(product, 0, { showDialog: false });
+            navigate('/cart');
+        });
     };
 
     return (

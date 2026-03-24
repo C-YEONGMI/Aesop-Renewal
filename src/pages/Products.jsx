@@ -9,6 +9,7 @@ import ProductFilterRail from '../components/ui/ProductFilterRail';
 import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
+import useRequireLoginAction from '../hooks/useRequireLoginAction';
 import {
     PRODUCT_CATEGORY_CONFIG,
     getCategoryLabelFromValue,
@@ -61,6 +62,7 @@ const Products = () => {
     const wishlist = useWishlistStore((state) => state.wishlist);
     const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
     const addToCart = useCartStore((state) => state.addToCart);
+    const requireLoginAction = useRequireLoginAction();
 
     const [sort, setSort] = useState('default');
     const [activeCategories, setActiveCategories] = useState(() => (category ? [category] : []));
@@ -263,6 +265,14 @@ const Products = () => {
         syncRouteForCategories([]);
     };
 
+    const handleWishlistToggle = (productName) => {
+        requireLoginAction(() => toggleWishlist(productName));
+    };
+
+    const handleAddToCart = (product) => {
+        requireLoginAction(() => addToCart(product, 0));
+    };
+
     return (
         <div className="products-page">
             <div className="products-page__header-space" />
@@ -354,9 +364,7 @@ const Products = () => {
                                                                 className={`products-page__wish-btn ${
                                                                     isWishlisted ? 'active' : ''
                                                                 }`}
-                                                                onClick={() =>
-                                                                    toggleWishlist(product.name)
-                                                                }
+                                                                onClick={() => handleWishlistToggle(product.name)}
                                                                 aria-label="위시리스트 추가"
                                                             >
                                                                 <svg
@@ -412,7 +420,7 @@ const Products = () => {
                                                                     className="products-page__add-btn"
                                                                     text="장바구니 담기"
                                                                     width="100%"
-                                                                    onClick={() => addToCart(product, 0)}
+                                                                    onClick={() => handleAddToCart(product)}
                                                                 />
                                                             </div>
                                                         </div>

@@ -225,6 +225,7 @@
         align-items: center;
         gap: 16px;
         text-align: center;
+        pointer-events: auto;
     }
 
     &__summary-actions {
@@ -233,6 +234,18 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 12px;
+        pointer-events: auto;
+
+        .btn-more-box {
+            width: auto;
+            min-width: 134px;
+            padding-inline: 18px;
+            pointer-events: auto;
+        }
+
+        .btn-more-box:first-child {
+            padding-inline: 24px;
+        }
     }
 
     &__summary-heading {

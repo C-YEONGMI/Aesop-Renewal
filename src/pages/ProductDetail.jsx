@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
-import useAuthStore from '../store/useAuthStore';
+import useRequireLoginAction from '../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue, getCategoryRouteFromValue } from '../data/productCategories';
 import './ProductDetail.scss';
 
@@ -21,7 +21,7 @@ const ProductDetail = () => {
     const addToCart = useCartStore((state) => state.addToCart);
     const wishlist = useWishlistStore((state) => state.wishlist);
     const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const requireLoginAction = useRequireLoginAction();
 
     const product = products.find((item) => item.name === decodeURIComponent(id));
     const [selectedVariant, setSelectedVariant] = useState(0);
@@ -47,17 +47,18 @@ const ProductDetail = () => {
     const isWished = wishlist.includes(product.name);
 
     const handleAddToCart = () => {
-        addToCart(product, selectedVariant);
+        requireLoginAction(() => addToCart(product, selectedVariant));
     };
 
     const handleBuyNow = () => {
-        if (!isLoggedIn) {
-            navigate('/login');
-            return;
-        }
+        requireLoginAction(() => {
+            addToCart(product, selectedVariant, { showDialog: false });
+            navigate('/cart');
+        });
+    };
 
-        addToCart(product, selectedVariant, { showDialog: false });
-        navigate('/cart');
+    const handleWishlistToggle = () => {
+        requireLoginAction(() => toggleWishlist(product.name));
     };
 
     return (
@@ -126,7 +127,7 @@ const ProductDetail = () => {
                             <button
                                 type="button"
                                 className={`product-detail__wish-btn ${isWished ? 'active' : ''}`}
-                                onClick={() => toggleWishlist(product.name)}
+                                onClick={handleWishlistToggle}
                                 aria-label="위시리스트"
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill={isWished ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5">

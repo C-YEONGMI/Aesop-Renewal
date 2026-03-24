@@ -46,6 +46,11 @@
         height: clamp(16px, 1.04vw, 20px);
     }
 
+    &.is-inverted {
+        background-color: $oatmeal;
+        color: $brown-900;
+    }
+
     &:hover {
         transform: translateY(-2px);
         opacity: 0.9;
@@ -89,6 +94,11 @@
         svg {
             transform: rotate(90deg);
         }
+    }
+
+    &.is-inverted.is-active {
+        background: $brown-100;
+        color: $brown-900;
     }
 }
 

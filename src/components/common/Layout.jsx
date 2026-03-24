@@ -4,6 +4,7 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import FloatingButtons from './btn/FloatingButtons';
 import CartAddDialog from '../ui/CartAddDialog';
+import LoginRequiredModal from '../ui/LoginRequiredModal';
 import OrderCompleteModal from '../ui/OrderCompleteModal';
 
 // 전체 레이아웃 래퍼
@@ -118,6 +119,7 @@ const Layout = () => {
                 <Outlet />
             </main>
             <CartAddDialog />
+            <LoginRequiredModal />
             <OrderCompleteModal />
             <Footer />
             <FloatingButtons />

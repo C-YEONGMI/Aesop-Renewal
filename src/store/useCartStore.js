@@ -1,23 +1,57 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import useAuthStore from './useAuthStore';
 
-// 장바구니 스토어
-// cartId = productId + '-' + variantIndex (variant 기준 구분)
+const getActiveUserKey = () => useAuthStore.getState().user?.id || null;
+
+const getUserScopedValue = (collection, userKey, fallback = []) => {
+    if (!userKey) {
+        return fallback;
+    }
+
+    const value = collection?.[userKey];
+    return Array.isArray(value) ? value : fallback;
+};
+
+const buildNextUserCollection = (collection, userKey, value) => {
+    if (!userKey) {
+        return collection || {};
+    }
+
+    return {
+        ...(collection || {}),
+        [userKey]: value,
+    };
+};
+
+const syncCartStateWithAuth = () => {
+    const userKey = getActiveUserKey();
+    const state = useCartStore.getState();
+
+    useCartStore.setState({
+        cartItems: getUserScopedValue(state.cartItemsByUser, userKey),
+        selectedSamples: getUserScopedValue(state.selectedSamplesByUser, userKey),
+        isCartDialogOpen: false,
+        cartDialogItem: null,
+    });
+};
+
 const useCartStore = create(
     persist(
         (set, get) => ({
-            cartItems: [], // { cartId, productId, name, image, category, variant, quantity, price }
+            cartItems: [],
+            cartItemsByUser: {},
             isCartDialogOpen: false,
             cartDialogItem: null,
             selectedSamples: [],
+            selectedSamplesByUser: {},
 
-            // 장바구니 담기
             addToCart: (product, variantIndex = 0, options = {}) => {
                 const { showDialog = true, preserveDialog = false } = options;
                 const variant = product.variants[variantIndex];
                 const cartId = `${product.name}-${variantIndex}`;
                 const items = get().cartItems;
-                const existing = items.find(item => item.cartId === cartId);
+                const existing = items.find((item) => item.cartId === cartId);
                 const currentDialogState = {
                     isCartDialogOpen: get().isCartDialogOpen,
                     cartDialogItem: get().cartDialogItem,
@@ -31,36 +65,42 @@ const useCartStore = create(
                     price: variant.price,
                 };
                 const nextCartItems = existing
-                    ? items.map(item =>
-                        item.cartId === cartId
-                            ? { ...item, quantity: item.quantity + 1 }
-                            : item
-                    )
+                    ? items.map((item) =>
+                          item.cartId === cartId
+                              ? { ...item, quantity: item.quantity + 1 }
+                              : item
+                      )
                     : [
-                        ...items,
-                        {
-                            cartId,
-                            productName: product.name,
-                            category: product.category,
-                            image: variant.image,
-                            variant: variant.capacity || '',
-                            quantity: 1,
-                            price: variant.price,
-                            checked: true,
-                        },
-                    ];
+                          ...items,
+                          {
+                              cartId,
+                              productName: product.name,
+                              category: product.category,
+                              image: variant.image,
+                              variant: variant.capacity || '',
+                              quantity: 1,
+                              price: variant.price,
+                              checked: true,
+                          },
+                      ];
+                const userKey = getActiveUserKey();
 
-                set({
+                set((state) => ({
                     cartItems: nextCartItems,
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        nextCartItems
+                    ),
                     isCartDialogOpen: preserveDialog
                         ? currentDialogState.isCartDialogOpen
                         : showDialog,
                     cartDialogItem: preserveDialog
                         ? currentDialogState.cartDialogItem
                         : showDialog
-                            ? cartDialogItem
-                            : null,
-                });
+                          ? cartDialogItem
+                          : null,
+                }));
             },
 
             openCartDialog: (cartDialogItem) => {
@@ -77,66 +117,170 @@ const useCartStore = create(
                 });
             },
 
-            // 수량 변경
             updateQuantity: (cartId, quantity) => {
                 if (quantity < 1) return;
-                set({
-                    cartItems: get().cartItems.map(item =>
-                        item.cartId === cartId ? { ...item, quantity } : item
+
+                const nextCartItems = get().cartItems.map((item) =>
+                    item.cartId === cartId ? { ...item, quantity } : item
+                );
+                const userKey = getActiveUserKey();
+
+                set((state) => ({
+                    cartItems: nextCartItems,
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        nextCartItems
                     ),
-                });
+                }));
             },
 
-            // 개별 삭제
             removeItem: (cartId) => {
-                set({ cartItems: get().cartItems.filter(item => item.cartId !== cartId) });
-            },
+                const nextCartItems = get().cartItems.filter((item) => item.cartId !== cartId);
+                const userKey = getActiveUserKey();
 
-            // 선택 상태 토글
-            toggleCheck: (cartId) => {
-                set({
-                    cartItems: get().cartItems.map(item =>
-                        item.cartId === cartId ? { ...item, checked: !item.checked } : item
+                set((state) => ({
+                    cartItems: nextCartItems,
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        nextCartItems
                     ),
-                });
+                }));
             },
 
-            // 전체 선택/해제
+            toggleCheck: (cartId) => {
+                const nextCartItems = get().cartItems.map((item) =>
+                    item.cartId === cartId ? { ...item, checked: !item.checked } : item
+                );
+                const userKey = getActiveUserKey();
+
+                set((state) => ({
+                    cartItems: nextCartItems,
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        nextCartItems
+                    ),
+                }));
+            },
+
             toggleAll: (checked) => {
-                set({ cartItems: get().cartItems.map(item => ({ ...item, checked })) });
+                const nextCartItems = get().cartItems.map((item) => ({ ...item, checked }));
+                const userKey = getActiveUserKey();
+
+                set((state) => ({
+                    cartItems: nextCartItems,
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        nextCartItems
+                    ),
+                }));
             },
 
-            // 선택 삭제
             removeChecked: () => {
-                set({ cartItems: get().cartItems.filter(item => !item.checked) });
+                const nextCartItems = get().cartItems.filter((item) => !item.checked);
+                const userKey = getActiveUserKey();
+
+                set((state) => ({
+                    cartItems: nextCartItems,
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        nextCartItems
+                    ),
+                }));
             },
 
-            // 주문 완료 후 선택 항목 제거
             removeOrderedItems: (cartIds) => {
-                set({ cartItems: get().cartItems.filter(item => !cartIds.includes(item.cartId)) });
+                const nextCartItems = get().cartItems.filter(
+                    (item) => !cartIds.includes(item.cartId)
+                );
+                const userKey = getActiveUserKey();
+
+                set((state) => ({
+                    cartItems: nextCartItems,
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        nextCartItems
+                    ),
+                }));
             },
 
-            // 샘플 선택 토글
             toggleSample: (sampleId) => {
                 const current = get().selectedSamples;
-                set({
-                    selectedSamples: current.includes(sampleId)
-                        ? current.filter((id) => id !== sampleId)
-                        : [...current, sampleId],
-                });
+                const nextSamples = current.includes(sampleId)
+                    ? current.filter((id) => id !== sampleId)
+                    : [...current, sampleId];
+                const userKey = getActiveUserKey();
+
+                set((state) => ({
+                    selectedSamples: nextSamples,
+                    selectedSamplesByUser: buildNextUserCollection(
+                        state.selectedSamplesByUser,
+                        userKey,
+                        nextSamples
+                    ),
+                }));
             },
 
-            // 샘플 초기화
-            clearSamples: () => set({ selectedSamples: [] }),
+            clearSamples: () => {
+                const userKey = getActiveUserKey();
 
-            // 전체 비우기
-            clearCart: () => set({ cartItems: [], selectedSamples: [] }),
+                set((state) => ({
+                    selectedSamples: [],
+                    selectedSamplesByUser: buildNextUserCollection(
+                        state.selectedSamplesByUser,
+                        userKey,
+                        []
+                    ),
+                }));
+            },
+
+            clearCart: () => {
+                const userKey = getActiveUserKey();
+
+                set((state) => ({
+                    cartItems: [],
+                    selectedSamples: [],
+                    cartItemsByUser: buildNextUserCollection(
+                        state.cartItemsByUser,
+                        userKey,
+                        []
+                    ),
+                    selectedSamplesByUser: buildNextUserCollection(
+                        state.selectedSamplesByUser,
+                        userKey,
+                        []
+                    ),
+                }));
+            },
         }),
         {
             name: 'aesop-cart',
-            partialize: (state) => ({ cartItems: state.cartItems }),
+            partialize: (state) => ({
+                cartItems: state.cartItems,
+                cartItemsByUser: state.cartItemsByUser,
+                selectedSamples: state.selectedSamples,
+                selectedSamplesByUser: state.selectedSamplesByUser,
+            }),
         }
     )
 );
+
+useAuthStore.subscribe((state, previousState) => {
+    const previousUserId = previousState.user?.id || null;
+    const nextUserId = state.user?.id || null;
+
+    if (previousUserId === nextUserId && previousState.isLoggedIn === state.isLoggedIn) {
+        return;
+    }
+
+    syncCartStateWithAuth();
+});
+
+syncCartStateWithAuth();
 
 export default useCartStore;

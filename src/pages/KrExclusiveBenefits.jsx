@@ -1262,14 +1262,12 @@ const animateOutroSection = (scope) => {
         background,
         {
             autoAlpha: 0,
-            scale: 1.06,
-            filter: 'blur(10px) brightness(0.92)',
+            filter: 'blur(8px) brightness(0.94)',
         },
         {
             autoAlpha: 1,
-            scale: 1,
             filter: 'blur(0px) brightness(1)',
-            duration: 1.25,
+            duration: 1.1,
             ease: 'power2.out',
         },
         0.04
@@ -1296,27 +1294,12 @@ const createDesktopScrubAnimations = (scope) => {
         {
             trigger: '.kr-exclusive-packaging',
             selectors: ['.kr-exclusive-packaging__feature img'],
-            vars: { yPercent: -6, scale: 1.08 },
+            vars: { yPercent: -2 },
         },
         {
             trigger: '.kr-exclusive-packaging',
             selectors: ['.kr-exclusive-packaging__detail img'],
-            vars: { yPercent: -4, scale: 1.06 },
-        },
-        {
-            trigger: '.kr-exclusive-overview',
-            selectors: ['.kr-exclusive-overview__visual--top-right img'],
-            vars: { yPercent: -4, scale: 1.04 },
-        },
-        {
-            trigger: '.kr-exclusive-overview',
-            selectors: ['.kr-exclusive-overview__visual--bottom-left img'],
-            vars: { yPercent: 5, scale: 1.04 },
-        },
-        {
-            trigger: '.kr-exclusive-overview',
-            selectors: ['.kr-exclusive-overview__visual--bottom-right img'],
-            vars: { yPercent: -3, scale: 1.05 },
+            vars: { yPercent: -1.5 },
         },
     ];
 
@@ -1384,13 +1367,11 @@ const KrExclusiveBenefits = () => {
         const ctx = gsap.context(() => {
             mm.add('(prefers-reduced-motion: no-preference)', () => {
                 const heroCopyTargets = getScopedElements(pageElement, [
-                    '.kr-exclusive-hero__copy .kr-exclusive-hero__title span',
+                    '.kr-exclusive-hero__copy .kr-exclusive-hero__title',
                     '.kr-exclusive-hero__copy .kr-exclusive-page__eyebrow',
                     '.kr-exclusive-hero__copy .kr-exclusive-page__english-label',
                 ]);
-                const heroTitleLines = getScopedElements(pageElement, [
-                    '.kr-exclusive-hero__copy .kr-exclusive-hero__title span',
-                ]);
+                const heroTitle = pageElement.querySelector('.kr-exclusive-hero__copy .kr-exclusive-hero__title');
                 const heroEyebrow = pageElement.querySelector('.kr-exclusive-hero__copy .kr-exclusive-page__eyebrow');
                 const heroEnglishLabel = pageElement.querySelector('.kr-exclusive-hero__copy .kr-exclusive-page__english-label');
 
@@ -1399,9 +1380,9 @@ const KrExclusiveBenefits = () => {
                         defaults: { ease: 'power3.out' },
                     });
 
-                    if (heroTitleLines.length) {
+                    if (heroTitle) {
                         heroTimeline.fromTo(
-                            heroTitleLines,
+                            heroTitle,
                             {
                                 autoAlpha: 0,
                                 y: 40,
@@ -1412,7 +1393,6 @@ const KrExclusiveBenefits = () => {
                                 y: 0,
                                 clipPath: 'inset(0% 0% 0% 0%)',
                                 duration: 0.92,
-                                stagger: 0.1,
                             },
                             0.18
                         );
@@ -1493,9 +1473,9 @@ const KrExclusiveBenefits = () => {
                     <div className="kr-exclusive-page__inner kr-exclusive-hero__inner">
                         <div className="kr-exclusive-hero__copy">
                             <h1 className="kr-exclusive-hero__title montage-100" id="kr-exclusive-hero-title">
-                                {HERO.titleLines.map((line) => (
-                                    <span key={line}>{line}</span>
-                                ))}
+                                {HERO.titleLines[0]}
+                                <br />
+                                {HERO.titleLines[1]}
                             </h1>
                             <p className="kr-exclusive-page__eyebrow suit-26-sb">{HERO.eyebrow}</p>
                             <p className="kr-exclusive-page__english-label optima-20">
@@ -1539,6 +1519,9 @@ const KrExclusiveBenefits = () => {
                         </div>
                     </header>
 
+                </div>
+
+                <div className="kr-exclusive-page__wide-frame">
                     <div className="kr-exclusive-heritage__gallery">
                         <figure className="kr-exclusive-heritage__panel kr-exclusive-heritage__panel--left">
                             <img src={HERITAGE.leftImage.src} alt={HERITAGE.leftImage.alt} loading="lazy" />

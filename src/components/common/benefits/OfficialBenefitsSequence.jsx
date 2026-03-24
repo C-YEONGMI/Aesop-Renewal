@@ -354,8 +354,8 @@ const OfficialBenefitsSequence = () => {
                                 이솝의 세심한 서비스는 온라인까지 이어집니다.
                             </p>
                             <div className="official-benefits-sequence__summary-actions">
-                                <MoreBox text="제품 보기" to="/products" />
-                                <MoreBox text="메인으로" to="/" />
+                                <MoreBox text="View Product" to="/products" />
+                                <MoreBox text="Veiw Main" to="/" />
                             </div>
                         </div>
                     </div>

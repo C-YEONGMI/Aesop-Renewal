@@ -209,6 +209,7 @@ const Hero = () => {
 
                 hasCompletedLogoHandoffRef.current = true;
                 window.sessionStorage.setItem(HERO_LOGO_HANDOFF_STORAGE_KEY, 'true');
+                window.dispatchEvent(new Event('hero-logo-handoff-complete'));
                 collapseDistanceRef.current = Math.max(
                     sectionRef.current.offsetHeight - stageRef.current.offsetHeight,
                     0
