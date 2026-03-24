@@ -365,6 +365,19 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
     padding: 0;
 }
 
+html,
+body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+#root {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
 body {
     /* 폰트는 본문용 SUIT Variable (구현 기준서 참조) */
     font-family: $font-suit;

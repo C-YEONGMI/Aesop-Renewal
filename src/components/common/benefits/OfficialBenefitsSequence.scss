@@ -31,7 +31,7 @@
     }
 
     &__slide {
-        width: 100vw;
+        width: 100%;
         padding: clamp(52px, 7vh, 84px) clamp(32px, 5vw, 92px);
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(340px, 0.68fr);
