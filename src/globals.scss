@@ -367,7 +367,7 @@ $font-optima: 'Optima', 'Segoe UI', 'Candara', Geneva, sans-serif;
 
 html,
 body {
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     max-width: 100%;
 }
@@ -378,7 +378,7 @@ html {
 }
 
 #root {
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     max-width: 100%;
 }

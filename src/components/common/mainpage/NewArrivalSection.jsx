@@ -4,10 +4,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import NewArrivalGif from '../../../assets/New_R.gif';
 import NewArrivalThumb1 from '../../../assets/New_S1.png';
 import NewArrivalThumb2 from '../../../assets/New_S2.png';
+import productsData from '../../../data/products.json';
 import More from '../btn/more';
 import './NewArrivalSection.scss';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const NEW_ARRIVAL_PRODUCT =
+    productsData.products?.find((product) =>
+        product.variants?.some((variant) => variant.image?.includes('Above_Us_Steorra'))
+    ) || null;
+
+const NEW_ARRIVAL_PRODUCT_LINK = NEW_ARRIVAL_PRODUCT
+    ? `/product/${encodeURIComponent(NEW_ARRIVAL_PRODUCT.name)}`
+    : '/products/fragrance';
 
 const NewArrivalSection = () => {
     const sectionRef = useRef(null);
@@ -59,7 +69,7 @@ const NewArrivalSection = () => {
                             New Arrival
                         </h2>
                         <div className="new-arrival__more-wrapper" data-node-id="530:1785">
-                            <More text="more" to={`/product/${encodeURIComponent('어보브 어스, 스테오라 오 드 퍼퓸')}`} />
+                            <More text="more" to={NEW_ARRIVAL_PRODUCT_LINK} />
                         </div>
                     </div>
 
@@ -90,9 +100,9 @@ const NewArrivalSection = () => {
                             </p>
                         </div>
                         <p className="new-arrival__desc suit-18-r" data-node-id="530:1782">
-                            프랑킨센스, 라다넘, 바닐라 빈이 어우러져 앰버의 깊고 풍부한 향을 완성하고, 상쾌하고 시트러스에 가까운 스파이스 향을 지닌 과감한
+                            프랑킨센스와 밝은 우디 노트가 어우러져 깊고 또렷한 인상을 남기고,
                             <br />
-                            카다멈의 궤적이 조화롭게 어우러지는 향수
+                            차갑게 반짝이는 스파이스 향이 선명한 균형을 이루는 향수
                         </p>
                     </div>
                 </div>

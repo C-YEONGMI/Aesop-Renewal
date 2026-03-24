@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CalendarDays, ChevronDown, Eye, EyeOff } from 'lucide-react';
-import GNB_Logo from '../assets/GNB_Logo.svg?react';
 import { Calendar } from '../components/ui/Calendar';
 import {
     Select,
@@ -295,12 +294,13 @@ const Signup = () => {
 
             <div className="signup-page__shell">
                 <div className="signup-page__panel">
-                    <Link to="/" className="signup-page__logo" aria-label="Aesop home">
-                        <GNB_Logo className="signup-page__logo-mark" />
-                    </Link>
-
                     <div className="signup-page__intro">
-                        <span className="signup-page__intro-rule" aria-hidden="true" />
+                        <div className="signup-page__intro-copy">
+                            <h1 className="montage-80 signup-page__hero-title">Sign Up</h1>
+                            <p className="suit-12-r signup-page__hero-subtitle">
+                                계정 생성을 위해 아래 세부 정보를 입력 해 주세요.
+                            </p>
+                        </div>
                         <h1 className="optima-40 signup-page__title">이솝에 오신 것을 환영합니다.</h1>
                         <p className="suit-12-r signup-page__copy">
                             계정 생성을 위해 아래 세부 정보를 입력해 주세요.
