@@ -29,6 +29,7 @@ const Hero = () => {
     const sectionRef = useRef(null);
     const stageRef = useRef(null);
     const bgRef = useRef(null);
+    const overlayRef = useRef(null);
     const heroVideoRef = useRef(null);
     const contentRef = useRef(null);
     const aesopRef = useRef(null);
@@ -40,6 +41,7 @@ const Hero = () => {
     const introRef = useRef(null);
     const introVideoRef = useRef(null);
     const introBloomRef = useRef(null);
+    const introTintRef = useRef(null);
     const hasCompletedLogoHandoffRef = useRef(false);
     const collapseDistanceRef = useRef(0);
     const hasStartedIntroExitRef = useRef(false);
@@ -88,6 +90,8 @@ const Hero = () => {
             window.sessionStorage.setItem(HERO_INTRO_STORAGE_KEY, 'true');
         }
 
+        shouldWaitForHeroInteractionRef.current = false;
+
         if (!introRef.current) {
             setIsIntroVisible(false);
             setIsIntroTransitioning(false);
@@ -98,22 +102,32 @@ const Hero = () => {
 
         const introElement = introRef.current;
         const introBloomElement = introBloomRef.current;
+        const introTintElement = introTintRef.current;
         const introVideoElement = introVideoRef.current;
         const bgElement = bgRef.current;
+        const overlayElement = overlayRef.current;
         const contentElement = contentRef.current;
         const introRect = introElement.getBoundingClientRect();
         const targetScale = HERO_INTRO_PORTAL_SCALE;
         const targetX = -((HERO_INTRO_PORTAL_POINT.x - 0.5) * introRect.width * targetScale);
         const targetY = -((HERO_INTRO_PORTAL_POINT.y - 0.5) * introRect.height * targetScale);
 
-        gsap.killTweensOf([introElement, introBloomElement, introVideoElement, bgElement, contentElement]);
+        gsap.killTweensOf([
+            introElement,
+            introBloomElement,
+            introTintElement,
+            introVideoElement,
+            bgElement,
+            overlayElement,
+            contentElement,
+        ]);
 
         gsap.timeline({
             defaults: { ease: 'power3.inOut' },
             onComplete: () => {
                 setIsIntroVisible(false);
                 setIsIntroTransitioning(false);
-                gsap.set([introElement, introBloomElement, introVideoElement], {
+                gsap.set([introElement, introBloomElement, introTintElement, introVideoElement, overlayElement], {
                     clearProps: 'all',
                 });
 
@@ -127,13 +141,16 @@ const Hero = () => {
                 willChange: 'transform, opacity',
             })
             .set(introVideoElement, { willChange: 'transform' })
+            .set(contentElement, { willChange: 'transform, opacity' })
+            .set(introTintElement, { willChange: 'opacity' })
+            .set(overlayElement, { willChange: 'opacity' })
             .to(
                 introElement,
                 {
                     scale: targetScale,
                     x: targetX,
                     y: targetY,
-                    duration: 1.22,
+                    duration: 1.34,
                     ease: 'power4.inOut',
                 },
                 0
@@ -141,59 +158,87 @@ const Hero = () => {
             .to(
                 introVideoElement,
                 {
-                    scale: 1.08,
-                    duration: 1.22,
+                    scale: 1.1,
+                    duration: 1.34,
                     ease: 'power4.inOut',
                 },
                 0
+            )
+            .fromTo(
+                overlayElement,
+                { opacity: 0.74 },
+                {
+                    opacity: 1,
+                    duration: 1.12,
+                    ease: 'power2.out',
+                },
+                0.02
             )
             .to(
                 bgElement,
                 {
                     scale: 1,
-                    duration: 1.08,
+                    duration: 1.18,
+                    ease: 'power3.out',
+                },
+                0.06
+            )
+            .to(
+                introTintElement,
+                {
+                    opacity: 0,
+                    duration: 0.72,
                     ease: 'power2.out',
                 },
-                0.08
+                0.42
             )
             .fromTo(
                 contentElement,
-                { y: 22 },
+                { y: 28, opacity: 0.16 },
                 {
                     y: 0,
-                    duration: 0.82,
+                    opacity: 1,
+                    duration: 0.96,
                     ease: 'power2.out',
                 },
-                0.28
+                0.3
             )
             .to(
                 introBloomElement,
                 {
-                    opacity: 0.9,
-                    duration: 0.55,
+                    opacity: 0.78,
+                    duration: 0.66,
                     ease: 'power2.out',
                 },
-                0.2
+                0.18
             )
             .to(
                 introElement,
                 {
                     opacity: 0,
-                    duration: 0.42,
+                    duration: 0.58,
                     ease: 'power2.out',
                 },
-                0.8
+                0.72
             )
             .to(
                 introBloomElement,
                 {
                     opacity: 0,
-                    duration: 0.34,
+                    duration: 0.46,
                     ease: 'power2.out',
                 },
-                0.92
+                0.94
             );
     }, []);
+
+    const handleSkipIntro = useCallback((event) => {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+
+        introVideoRef.current?.pause();
+        completeIntro();
+    }, [completeIntro]);
 
     const handleIntroVideoError = useCallback(() => {
         if (introVideoSource !== heroVideo) {
@@ -576,7 +621,7 @@ const Hero = () => {
                     <video ref={heroVideoRef} muted loop playsInline preload="metadata" className="hero__video">
                         <source src={heroVideo} type="video/mp4" />
                     </video>
-                    <div className="hero__overlay" />
+                    <div className="hero__overlay" ref={overlayRef} />
                 </div>
 
                 {isIntroVisible && (
@@ -597,13 +642,13 @@ const Hero = () => {
                             >
                                 <source src={introVideoSource} type="video/mp4" />
                             </video>
-                            <div className="hero__intro-tint" />
+                            <div className="hero__intro-tint" ref={introTintRef} />
                         </div>
                         <div className="hero__intro-bloom" ref={introBloomRef} />
                         <button
                             type="button"
                             className="hero__intro-skip"
-                            onClick={completeIntro}
+                            onClick={handleSkipIntro}
                         >
                             Skip
                         </button>
