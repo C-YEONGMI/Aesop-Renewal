@@ -11,6 +11,11 @@
     overflow: hidden;
     cursor: pointer;
 
+    &:focus-visible {
+        outline: 2px solid rgba($brown-500, 0.85);
+        outline-offset: 3px;
+    }
+
     .badges {
         display: flex;
         gap: 8px;

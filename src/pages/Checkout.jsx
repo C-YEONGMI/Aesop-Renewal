@@ -1,6 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { Check, ChevronDown, Lock, Package, RotateCcw, Shield, Truck } from 'lucide-react';
+import { Check, Lock, Package, RotateCcw, Shield, Truck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../components/ui/Select';
 import useCartStore from '../store/useCartStore';
 import useAuthStore from '../store/useAuthStore';
 import useOrderStore from '../store/useOrderStore';
@@ -78,6 +85,10 @@ const Checkout = () => {
     const handleFieldChange = (event) => {
         const { name, value, type, checked } = event.target;
         setForm((current) => ({ ...current, [name]: type === 'checkbox' ? checked : value }));
+    };
+
+    const handleSelectFieldChange = (name) => (value) => {
+        setForm((current) => ({ ...current, [name]: value }));
     };
 
     const handleCardNumberChange = (index, value) => {
@@ -325,19 +336,24 @@ const Checkout = () => {
                                 <div className="checkout-page__field checkout-page__field--full">
                                     <label htmlFor="checkout-memo">배송 메모</label>
                                     <div className="checkout-page__select-wrap">
-                                        <select
-                                            id="checkout-memo"
-                                            name="memo"
+                                        <Select
                                             value={form.memo}
-                                            onChange={handleFieldChange}
+                                            onValueChange={handleSelectFieldChange('memo')}
                                         >
-                                            {SHIPPING_MEMO_OPTIONS.map((option) => (
-                                                <option key={option} value={option}>
-                                                    {option}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <ChevronDown size={16} className="checkout-page__select-icon" />
+                                            <SelectTrigger
+                                                id="checkout-memo"
+                                                className="checkout-page__select-trigger suit-16-r"
+                                            >
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="checkout-page__select-content">
+                                                {SHIPPING_MEMO_OPTIONS.map((option) => (
+                                                    <SelectItem key={option} value={option}>
+                                                        {option}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
 
                                     {form.memo === '직접 입력' ? (
@@ -449,22 +465,24 @@ const Checkout = () => {
                                             <div className="checkout-page__field">
                                                 <label htmlFor="checkout-installment">할부</label>
                                                 <div className="checkout-page__select-wrap">
-                                                    <select
-                                                        id="checkout-installment"
-                                                        name="installment"
+                                                    <Select
                                                         value={form.installment}
-                                                        onChange={handleFieldChange}
+                                                        onValueChange={handleSelectFieldChange('installment')}
                                                     >
-                                                        {INSTALLMENT_OPTIONS.map((option) => (
-                                                            <option key={option} value={option}>
-                                                                {option}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <ChevronDown
-                                                        size={16}
-                                                        className="checkout-page__select-icon"
-                                                    />
+                                                        <SelectTrigger
+                                                            id="checkout-installment"
+                                                            className="checkout-page__select-trigger suit-16-r"
+                                                        >
+                                                            <SelectValue />
+                                                        </SelectTrigger>
+                                                        <SelectContent className="checkout-page__select-content">
+                                                            {INSTALLMENT_OPTIONS.map((option) => (
+                                                                <SelectItem key={option} value={option}>
+                                                                    {option}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
                                                 </div>
                                             </div>
                                         </div>
@@ -533,22 +551,24 @@ const Checkout = () => {
                                         <div className="checkout-page__field">
                                             <label htmlFor="checkout-virtual-bank">은행 선택</label>
                                             <div className="checkout-page__select-wrap">
-                                                <select
-                                                    id="checkout-virtual-bank"
-                                                    name="bank"
+                                                <Select
                                                     value={form.bank}
-                                                    onChange={handleFieldChange}
+                                                    onValueChange={handleSelectFieldChange('bank')}
                                                 >
-                                                    {BANK_OPTIONS.map((option) => (
-                                                        <option key={option} value={option}>
-                                                            {option}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                                <ChevronDown
-                                                    size={16}
-                                                    className="checkout-page__select-icon"
-                                                />
+                                                    <SelectTrigger
+                                                        id="checkout-virtual-bank"
+                                                        className="checkout-page__select-trigger suit-16-r"
+                                                    >
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="checkout-page__select-content">
+                                                        {BANK_OPTIONS.map((option) => (
+                                                            <SelectItem key={option} value={option}>
+                                                                {option}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
                                         </div>
                                     </div>
@@ -559,22 +579,24 @@ const Checkout = () => {
                                         <div className="checkout-page__field">
                                             <label htmlFor="checkout-transfer-bank">은행 선택</label>
                                             <div className="checkout-page__select-wrap">
-                                                <select
-                                                    id="checkout-transfer-bank"
-                                                    name="bank"
+                                                <Select
                                                     value={form.bank}
-                                                    onChange={handleFieldChange}
+                                                    onValueChange={handleSelectFieldChange('bank')}
                                                 >
-                                                    {BANK_OPTIONS.map((option) => (
-                                                        <option key={option} value={option}>
-                                                            {option}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                                <ChevronDown
-                                                    size={16}
-                                                    className="checkout-page__select-icon"
-                                                />
+                                                    <SelectTrigger
+                                                        id="checkout-transfer-bank"
+                                                        className="checkout-page__select-trigger suit-16-r"
+                                                    >
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="checkout-page__select-content">
+                                                        {BANK_OPTIONS.map((option) => (
+                                                            <SelectItem key={option} value={option}>
+                                                                {option}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
                                         </div>
                                     </div>

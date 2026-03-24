@@ -214,7 +214,8 @@
 
     &__field input,
     &__field textarea,
-    &__field select {
+    &__field select,
+    &__field .checkout-page__select-trigger {
         min-height: 50px;
         border: 1px solid rgba($brown-100, 0.95);
         background: rgba($bg-primary, 0.56);
@@ -249,19 +250,14 @@
         position: relative;
     }
 
-    &__select-wrap select {
-        appearance: none;
+    &__select-trigger {
         width: 100%;
-        padding-right: 44px;
+        justify-content: space-between;
+        border-radius: 16px;
     }
 
-    &__select-icon {
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba($brown-400, 0.94);
-        pointer-events: none;
+    &__select-content {
+        min-width: min(320px, calc(100vw - 32px));
     }
 
     &__address-row,

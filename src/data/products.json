@@ -336,7 +336,7 @@
             {
                 "capacity": "5.5g",
                 "price": 29000,
-                "image": "https://kr.aesop.com/dw/image/v2/AARM_PRD/on/demandware.static/-/Sites-aesop-master-catalog/ko_KR/dw76bc2cc6/images/products/SK52/Aesop-Skin-Protective-Lip-Balm-SPF30-5-5g-large.jpg?bgcolor=fffef2&q=70&sfrm=jpg&sh=430&sm=cut&sw=430"
+                "image": "/product-images/protective-lip-balm-spf30.png"
             }
         ],
         "badge": ["Best"],
@@ -1738,7 +1738,7 @@
             {
                 "capacity": "키트",
                 "price": 63000,
-                "image": "https://kr.aesop.com/dw/image/v2/AARM_PRD/on/demandware.static/-/Sites-aesop-master-catalog/ko_KR/dwbc198837/images/products/APB324/Aesop_Kits_Fragrance_Anthology_Volume_I_Front_A_2000x2000px.png"
+                "image": "/product-images/fragrance-anthology-volume-i.png"
             }
         ],
         "badge": ["New", "Best"],

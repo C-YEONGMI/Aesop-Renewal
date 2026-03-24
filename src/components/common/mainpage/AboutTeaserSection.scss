@@ -185,7 +185,8 @@
 
     &__logo {
         position: absolute;
-        top: 864px;
+        top: auto;
+        bottom: -28px;
         left: 0;
         width: 874px;
         z-index: 0;

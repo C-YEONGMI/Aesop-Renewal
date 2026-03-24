@@ -31,6 +31,7 @@
         position: absolute;
         inset: 0;
         z-index: 0;
+        will-change: transform;
     }
 
     &__video {
@@ -49,6 +50,100 @@
             rgba($bg-overlay, 0.1) 40%,
             rgba($bg-overlay, 0.6) 100%
         );
+    }
+
+    &__intro {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        overflow: hidden;
+        isolation: isolate;
+        pointer-events: auto;
+    }
+
+    &__intro-shell {
+        position: absolute;
+        inset: 0;
+        background: #120c08;
+        will-change: transform, opacity;
+    }
+
+    &__intro-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        transform: scale(1.01);
+        filter: saturate(0.96) contrast(1.03);
+    }
+
+    &__intro-tint {
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(
+                180deg,
+                rgba(18, 12, 8, 0.18) 0%,
+                rgba(18, 12, 8, 0.04) 36%,
+                rgba(18, 12, 8, 0.52) 100%
+            ),
+            radial-gradient(
+                circle at 74% 46%,
+                rgba($oatmeal, 0.08) 0%,
+                rgba($oatmeal, 0.03) 18%,
+                rgba($oatmeal, 0) 44%
+            );
+        pointer-events: none;
+    }
+
+    &__intro-bloom {
+        position: absolute;
+        inset: -16%;
+        z-index: 1;
+        opacity: 0;
+        pointer-events: none;
+        background: radial-gradient(
+            circle at 74% 46%,
+            rgba($oatmeal, 0.5) 0%,
+            rgba($oatmeal, 0.14) 22%,
+            rgba($oatmeal, 0) 54%
+        );
+    }
+
+    &__intro-skip {
+        position: absolute;
+        top: clamp(22px, 2.5vw, 40px);
+        right: clamp(18px, 2.5vw, 40px);
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 72px;
+        min-height: 38px;
+        padding: 0 16px;
+        border: 1px solid rgba($oatmeal, 0.32);
+        border-radius: 999px;
+        background: rgba(18, 12, 8, 0.26);
+        color: rgba($oatmeal, 0.92);
+        font-size: 0.73rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        transition:
+            background-color 0.3s ease,
+            border-color 0.3s ease,
+            opacity 0.3s ease;
+        backdrop-filter: blur(10px);
+
+        &:hover {
+            background: rgba(18, 12, 8, 0.42);
+            border-color: rgba($oatmeal, 0.52);
+        }
+    }
+
+    &__intro--transitioning {
+        .hero__intro-skip {
+            opacity: 0;
+        }
     }
 
     &__content {
@@ -158,6 +253,16 @@
 
         &__wordmark {
             transform: translateY(calc(var(--hero-wordmark-bottom-offset) + 1vh));
+        }
+
+        &__intro-skip {
+            top: 18px;
+            right: 16px;
+            min-width: 64px;
+            min-height: 34px;
+            padding: 0 14px;
+            font-size: 0.69rem;
+            letter-spacing: 0.14em;
         }
     }
 }

@@ -11,8 +11,7 @@
     &__panel {
         padding: 24px 24px 10px;
         border: 1px solid rgba($brown-200, 0.9);
-        background:
-            linear-gradient(180deg, rgba($oatmeal, 0.98) 0%, rgba($brown-50, 0.96) 100%);
+        background-color: rgba($oatmeal, 0.98);
         box-shadow: 0 20px 40px rgba($brown-900, 0.05);
         backdrop-filter: blur(12px);
     }

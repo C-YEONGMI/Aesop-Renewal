@@ -5,6 +5,7 @@ import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
 import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
 import useAuthStore from '../../../store/useAuthStore';
 import useCartStore from '../../../store/useCartStore';
+import { formatCategoryLabel } from '../../../data/productCategories';
 
 const AccountIcon = () => (
     <svg
@@ -57,7 +58,7 @@ const Header_wh = () => {
                             <a href="/products">PRODUCTS</a>
                             <ul className="depth2">
                                 <li><a href="/products/skincare">SKIN CARE</a></li>
-                                <li><a href="/products/fragrance">Perfume</a></li>
+                                <li><a href="/products/fragrance">{formatCategoryLabel('Perfume')}</a></li>
                                 <li><a href="/products/home">HOME & LIVING</a></li>
                                 <li><a href="/products/hair">HAIR & SHAVING</a></li>
                                 <li><a href="/products/body">HAND & BODY</a></li>

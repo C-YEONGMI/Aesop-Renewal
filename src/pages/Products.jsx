@@ -5,6 +5,13 @@ import Best from '../components/common/badge/Best';
 import New from '../components/common/badge/New';
 import Exclusive from '../components/common/badge/Exclusive';
 import ProductFilterRail from '../components/ui/ProductFilterRail';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../components/ui/Select';
 import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
@@ -262,17 +269,21 @@ const Products = () => {
                                     </p>
                                 </div>
 
-                                <select
-                                    className="products-page__sort suit-14-m"
+                                <Select
                                     value={sort}
-                                    onChange={(event) => setSort(event.target.value)}
+                                    onValueChange={setSort}
                                 >
-                                    {SORT_OPTIONS.map((option) => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
+                                    <SelectTrigger className="products-page__sort-trigger suit-14-m">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="products-page__sort-content">
+                                        {SORT_OPTIONS.map((option) => (
+                                            <SelectItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
 
                             {filtered.length === 0 ? (

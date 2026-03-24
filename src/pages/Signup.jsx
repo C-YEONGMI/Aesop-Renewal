@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronDown, Eye, EyeOff } from 'lucide-react';
+import { CalendarDays, ChevronDown, Eye, EyeOff } from 'lucide-react';
 import GNB_Logo from '../assets/GNB_Logo.svg?react';
+import { Calendar } from '../components/ui/Calendar';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../components/ui/Select';
 import useAuthStore from '../store/useAuthStore';
 import './Signup.scss';
 
@@ -32,6 +40,35 @@ const getTodayString = () => {
     return `${year}-${month}-${day}`;
 };
 
+const parseDateString = (value) => {
+    if (!value) {
+        return undefined;
+    }
+
+    const [year, month, day] = value.split('-').map(Number);
+
+    if (!year || !month || !day) {
+        return undefined;
+    }
+
+    return new Date(year, month - 1, day);
+};
+
+const formatDateValue = (value) => {
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const formatDateDisplay = (value) => {
+    if (!value) {
+        return 'YYYY.MM.DD';
+    }
+
+    return value.replace(/-/g, '.');
+};
+
 const Signup = () => {
     const navigate = useNavigate();
     const signup = useAuthStore((state) => state.signup);
@@ -44,6 +81,41 @@ const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
     const [userIdStatus, setUserIdStatus] = useState('idle');
+    const [isBirthCalendarOpen, setIsBirthCalendarOpen] = useState(false);
+    const birthDateFieldRef = useRef(null);
+    const selectedBirthDate = useMemo(() => parseDateString(form.birthDate), [form.birthDate]);
+    const todayDate = useMemo(() => parseDateString(getTodayString()), []);
+    const firstBirthMonth = useMemo(() => new Date(1900, 0, 1), []);
+
+    useEffect(() => {
+        if (!isBirthCalendarOpen) {
+            return undefined;
+        }
+
+        const handlePointerDown = (event) => {
+            if (!birthDateFieldRef.current?.contains(event.target)) {
+                setIsBirthCalendarOpen(false);
+                setActiveField('');
+            }
+        };
+
+        const handleEscape = (event) => {
+            if (event.key === 'Escape') {
+                setIsBirthCalendarOpen(false);
+                setActiveField('');
+            }
+        };
+
+        document.addEventListener('mousedown', handlePointerDown);
+        document.addEventListener('touchstart', handlePointerDown);
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            document.removeEventListener('mousedown', handlePointerDown);
+            document.removeEventListener('touchstart', handlePointerDown);
+            document.removeEventListener('keydown', handleEscape);
+        };
+    }, [isBirthCalendarOpen]);
 
     const clearFieldError = (name) => {
         setErrors((current) => {
@@ -76,6 +148,20 @@ const Signup = () => {
         }
 
         setForm((current) => ({ ...current, [name]: nextValue }));
+    };
+
+    const handleBirthDateSelect = (nextDate) => {
+        if (!nextDate) {
+            return;
+        }
+
+        clearFieldError('birthDate');
+        setForm((current) => ({
+            ...current,
+            birthDate: formatDateValue(nextDate),
+        }));
+        setIsBirthCalendarOpen(false);
+        setActiveField('');
     };
 
     const handleUserIdBlur = () => {
@@ -346,22 +432,54 @@ const Signup = () => {
                                 </label>
                                 <span className="signup-page__hint suit-12-r">달력에서 선택</span>
                             </div>
-                            <div className="signup-page__control signup-page__control--date">
-                                <input
+                            <div
+                                className="signup-page__control signup-page__control--date"
+                                ref={birthDateFieldRef}
+                            >
+                                <button
                                     id="signup-birth-date"
                                     className={`${getControlClassName(
                                         'birthDate',
-                                        'signup-page__date-input'
+                                        'signup-page__date-trigger'
                                     )} suit-16-r`}
-                                    name="birthDate"
-                                    type="date"
-                                    value={form.birthDate}
-                                    onChange={handleChange}
-                                    onFocus={() => setActiveField('birthDate')}
-                                    onBlur={() => setActiveField('')}
-                                    max={getTodayString()}
-                                    min="1900-01-01"
-                                />
+                                    type="button"
+                                    aria-haspopup="dialog"
+                                    aria-expanded={isBirthCalendarOpen}
+                                    onClick={() => {
+                                        const nextOpen = !isBirthCalendarOpen;
+                                        setIsBirthCalendarOpen(nextOpen);
+                                        setActiveField(nextOpen ? 'birthDate' : '');
+                                    }}
+                                >
+                                    <span
+                                        className={`signup-page__date-trigger-value${
+                                            form.birthDate ? ' signup-page__date-trigger-value--filled' : ''
+                                        }`}
+                                    >
+                                        {formatDateDisplay(form.birthDate)}
+                                    </span>
+                                    <span className="signup-page__date-trigger-meta">
+                                        <CalendarDays size={16} className="signup-page__date-trigger-icon" />
+                                        <ChevronDown size={14} className="signup-page__date-trigger-chevron" />
+                                    </span>
+                                </button>
+                                {isBirthCalendarOpen ? (
+                                    <div className="signup-page__date-popover" role="dialog" aria-modal="false">
+                                        <Calendar
+                                            mode="single"
+                                            selected={selectedBirthDate}
+                                            onSelect={handleBirthDateSelect}
+                                            defaultMonth={selectedBirthDate || new Date(1996, 0, 1)}
+                                            captionLayout="dropdown"
+                                            startMonth={firstBirthMonth}
+                                            endMonth={todayDate}
+                                            disabled={[
+                                                { before: firstBirthMonth },
+                                                { after: todayDate },
+                                            ]}
+                                        />
+                                    </div>
+                                ) : null}
                             </div>
                             {errors.birthDate ? (
                                 <p className="signup-page__message signup-page__message--error suit-12-r">
@@ -375,22 +493,33 @@ const Signup = () => {
                                 성별
                             </label>
                             <div className="signup-page__control">
-                                <select
-                                    id="signup-gender"
-                                    className={`${getControlClassName('gender', 'signup-page__select')} suit-16-r`}
-                                    name="gender"
+                                <Select
                                     value={form.gender}
-                                    onChange={handleChange}
-                                    onFocus={() => setActiveField('gender')}
-                                    onBlur={() => setActiveField('')}
+                                    onValueChange={(value) => {
+                                        clearFieldError('gender');
+                                        setForm((current) => ({ ...current, gender: value }));
+                                    }}
+                                    onOpenChange={(open) => {
+                                        setActiveField(open ? 'gender' : '');
+                                    }}
                                 >
-                                    {GENDER_OPTIONS.map((option) => (
-                                        <option key={option.value || 'placeholder'} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                <ChevronDown size={14} className="signup-page__select-icon" />
+                                    <SelectTrigger
+                                        id="signup-gender"
+                                        className={`${getControlClassName(
+                                            'gender',
+                                            'signup-page__select-trigger'
+                                        )} suit-16-r`}
+                                    >
+                                        <SelectValue placeholder={GENDER_OPTIONS[0].label} />
+                                    </SelectTrigger>
+                                    <SelectContent className="signup-page__select-content">
+                                        {GENDER_OPTIONS.filter((option) => option.value).map((option) => (
+                                            <SelectItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             {errors.gender ? (
                                 <p className="signup-page__message signup-page__message--error suit-12-r">

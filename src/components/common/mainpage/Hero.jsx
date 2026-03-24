@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import heroVideo from '../../../assets/Hero_MP4.mp4';
@@ -9,9 +9,27 @@ import './Hero.scss';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const HERO_INTRO_STORAGE_KEY = 'aesop-hero-intro-video-complete-v1';
+const HERO_INTRO_VIDEO_PATH = '/Hero-intro.mp4';
+const HERO_INTRO_PORTAL_POINT = { x: 0.77, y: 0.46 };
+const HERO_INTRO_PORTAL_SCALE = 2.2;
+
+const getInitialIntroVisibility = () => {
+    if (typeof window === 'undefined') {
+        return false;
+    }
+
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const hasSeenIntro = window.sessionStorage.getItem(HERO_INTRO_STORAGE_KEY) === 'true';
+
+    return !prefersReducedMotion && !hasSeenIntro;
+};
+
 const Hero = () => {
     const sectionRef = useRef(null);
     const stageRef = useRef(null);
+    const bgRef = useRef(null);
+    const heroVideoRef = useRef(null);
     const contentRef = useRef(null);
     const aesopRef = useRef(null);
     const ritualRef = useRef(null);
@@ -19,9 +37,289 @@ const Hero = () => {
     const flightShellRef = useRef(null);
     const flightAesopRef = useRef(null);
     const flightLogoRef = useRef(null);
+    const introRef = useRef(null);
+    const introVideoRef = useRef(null);
+    const introBloomRef = useRef(null);
     const hasCompletedLogoHandoffRef = useRef(false);
     const collapseDistanceRef = useRef(0);
+    const hasStartedIntroExitRef = useRef(false);
+    const initialIntroVisibleRef = useRef(getInitialIntroVisibility());
+    const shouldWaitForHeroInteractionRef = useRef(initialIntroVisibleRef.current);
     const [isHandoffComplete, setIsHandoffComplete] = useState(false);
+    const [isIntroVisible, setIsIntroVisible] = useState(initialIntroVisibleRef.current);
+    const [isIntroTransitioning, setIsIntroTransitioning] = useState(false);
+    const [introVideoSource, setIntroVideoSource] = useState(HERO_INTRO_VIDEO_PATH);
+
+    const pauseHeroVideo = useCallback(() => {
+        heroVideoRef.current?.pause();
+    }, []);
+
+    const playHeroVideo = useCallback(() => {
+        const videoElement = heroVideoRef.current;
+
+        if (!videoElement) {
+            return;
+        }
+
+        const playPromise = videoElement.play();
+        playPromise?.catch(() => {});
+    }, []);
+
+    const hideIntroImmediately = useCallback((markAsSeen = true) => {
+        if (markAsSeen && typeof window !== 'undefined') {
+            window.sessionStorage.setItem(HERO_INTRO_STORAGE_KEY, 'true');
+        }
+
+        shouldWaitForHeroInteractionRef.current = markAsSeen;
+
+        hasStartedIntroExitRef.current = true;
+        setIsIntroTransitioning(false);
+        setIsIntroVisible(false);
+    }, []);
+
+    const completeIntro = useCallback(() => {
+        if (hasStartedIntroExitRef.current) {
+            return;
+        }
+
+        hasStartedIntroExitRef.current = true;
+
+        if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem(HERO_INTRO_STORAGE_KEY, 'true');
+        }
+
+        if (!introRef.current) {
+            setIsIntroVisible(false);
+            setIsIntroTransitioning(false);
+            return;
+        }
+
+        setIsIntroTransitioning(true);
+
+        const introElement = introRef.current;
+        const introBloomElement = introBloomRef.current;
+        const introVideoElement = introVideoRef.current;
+        const bgElement = bgRef.current;
+        const contentElement = contentRef.current;
+        const introRect = introElement.getBoundingClientRect();
+        const targetScale = HERO_INTRO_PORTAL_SCALE;
+        const targetX = -((HERO_INTRO_PORTAL_POINT.x - 0.5) * introRect.width * targetScale);
+        const targetY = -((HERO_INTRO_PORTAL_POINT.y - 0.5) * introRect.height * targetScale);
+
+        gsap.killTweensOf([introElement, introBloomElement, introVideoElement, bgElement, contentElement]);
+
+        gsap.timeline({
+            defaults: { ease: 'power3.inOut' },
+            onComplete: () => {
+                setIsIntroVisible(false);
+                setIsIntroTransitioning(false);
+                gsap.set([introElement, introBloomElement, introVideoElement], {
+                    clearProps: 'all',
+                });
+
+                if (bgElement) {
+                    gsap.set(bgElement, { clearProps: 'transform' });
+                }
+            },
+        })
+            .set(introElement, {
+                transformOrigin: '50% 50%',
+                willChange: 'transform, opacity',
+            })
+            .set(introVideoElement, { willChange: 'transform' })
+            .to(
+                introElement,
+                {
+                    scale: targetScale,
+                    x: targetX,
+                    y: targetY,
+                    duration: 1.22,
+                    ease: 'power4.inOut',
+                },
+                0
+            )
+            .to(
+                introVideoElement,
+                {
+                    scale: 1.08,
+                    duration: 1.22,
+                    ease: 'power4.inOut',
+                },
+                0
+            )
+            .to(
+                bgElement,
+                {
+                    scale: 1,
+                    duration: 1.08,
+                    ease: 'power2.out',
+                },
+                0.08
+            )
+            .fromTo(
+                contentElement,
+                { y: 22 },
+                {
+                    y: 0,
+                    duration: 0.82,
+                    ease: 'power2.out',
+                },
+                0.28
+            )
+            .to(
+                introBloomElement,
+                {
+                    opacity: 0.9,
+                    duration: 0.55,
+                    ease: 'power2.out',
+                },
+                0.2
+            )
+            .to(
+                introElement,
+                {
+                    opacity: 0,
+                    duration: 0.42,
+                    ease: 'power2.out',
+                },
+                0.8
+            )
+            .to(
+                introBloomElement,
+                {
+                    opacity: 0,
+                    duration: 0.34,
+                    ease: 'power2.out',
+                },
+                0.92
+            );
+    }, []);
+
+    const handleIntroVideoError = useCallback(() => {
+        if (introVideoSource !== heroVideo) {
+            setIntroVideoSource(heroVideo);
+            return;
+        }
+
+        hideIntroImmediately();
+    }, [hideIntroImmediately, introVideoSource]);
+
+    useEffect(() => {
+        if (!isIntroVisible) {
+            return undefined;
+        }
+
+        const html = document.documentElement;
+        const body = document.body;
+        const previous = {
+            htmlOverflow: html.style.overflow,
+            bodyOverflow: body.style.overflow,
+            htmlOverscroll: html.style.overscrollBehavior,
+            bodyOverscroll: body.style.overscrollBehavior,
+            bodyTouchAction: body.style.touchAction,
+        };
+
+        html.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
+        html.style.overscrollBehavior = 'none';
+        body.style.overscrollBehavior = 'none';
+        body.style.touchAction = 'none';
+
+        return () => {
+            html.style.overflow = previous.htmlOverflow;
+            body.style.overflow = previous.bodyOverflow;
+            html.style.overscrollBehavior = previous.htmlOverscroll;
+            body.style.overscrollBehavior = previous.bodyOverscroll;
+            body.style.touchAction = previous.bodyTouchAction;
+        };
+    }, [isIntroVisible]);
+
+    useEffect(() => {
+        if (!isIntroVisible || !introVideoRef.current) {
+            return undefined;
+        }
+
+        pauseHeroVideo();
+        hasStartedIntroExitRef.current = false;
+
+        if (bgRef.current) {
+            gsap.set(bgRef.current, {
+                scale: 1.06,
+                transformOrigin: '50% 50%',
+            });
+        }
+
+        const videoElement = introVideoRef.current;
+        const playPromise = videoElement.play();
+
+        if (playPromise?.catch) {
+            playPromise.catch(() => {
+                hideIntroImmediately(false);
+            });
+        }
+
+        return () => {
+            if (bgRef.current) {
+                gsap.set(bgRef.current, { clearProps: 'transform' });
+            }
+        };
+    }, [hideIntroImmediately, isIntroVisible, introVideoSource, pauseHeroVideo]);
+
+    useEffect(() => {
+        if (isIntroVisible || isIntroTransitioning) {
+            pauseHeroVideo();
+            return undefined;
+        }
+
+        if (!shouldWaitForHeroInteractionRef.current) {
+            playHeroVideo();
+            return undefined;
+        }
+
+        pauseHeroVideo();
+
+        const stageElement = stageRef.current;
+        let hasActivated = false;
+
+        const activateHeroVideo = () => {
+            if (hasActivated) {
+                return;
+            }
+
+            const sectionRect = sectionRef.current?.getBoundingClientRect();
+
+            if (
+                !sectionRect ||
+                sectionRect.bottom <= 0 ||
+                sectionRect.top >= window.innerHeight
+            ) {
+                return;
+            }
+
+            hasActivated = true;
+            shouldWaitForHeroInteractionRef.current = false;
+            playHeroVideo();
+        };
+
+        stageElement?.addEventListener('pointerdown', activateHeroVideo, { passive: true });
+        stageElement?.addEventListener('touchstart', activateHeroVideo, { passive: true });
+        stageElement?.addEventListener('wheel', activateHeroVideo, { passive: true });
+        window.addEventListener('scroll', activateHeroVideo, { passive: true });
+
+        return () => {
+            stageElement?.removeEventListener('pointerdown', activateHeroVideo);
+            stageElement?.removeEventListener('touchstart', activateHeroVideo);
+            stageElement?.removeEventListener('wheel', activateHeroVideo);
+            window.removeEventListener('scroll', activateHeroVideo);
+        };
+    }, [isIntroTransitioning, isIntroVisible, pauseHeroVideo, playHeroVideo]);
+
+    useEffect(
+        () => () => {
+            pauseHeroVideo();
+        },
+        [pauseHeroVideo]
+    );
 
     useLayoutEffect(() => {
         if (!isHandoffComplete) {
@@ -274,12 +572,43 @@ const Hero = () => {
             ref={sectionRef}
         >
             <div className="hero__stage" ref={stageRef}>
-                <div className="hero__bg">
-                    <video autoPlay muted loop playsInline className="hero__video">
+                <div className="hero__bg" ref={bgRef}>
+                    <video ref={heroVideoRef} muted loop playsInline preload="metadata" className="hero__video">
                         <source src={heroVideo} type="video/mp4" />
                     </video>
                     <div className="hero__overlay" />
                 </div>
+
+                {isIntroVisible && (
+                    <div
+                        className={`hero__intro${isIntroTransitioning ? ' hero__intro--transitioning' : ''}`}
+                    >
+                        <div className="hero__intro-shell" ref={introRef}>
+                            <video
+                                autoPlay
+                                muted
+                                playsInline
+                                preload="auto"
+                                key={introVideoSource}
+                                className="hero__intro-video"
+                                ref={introVideoRef}
+                                onEnded={completeIntro}
+                                onError={handleIntroVideoError}
+                            >
+                                <source src={introVideoSource} type="video/mp4" />
+                            </video>
+                            <div className="hero__intro-tint" />
+                        </div>
+                        <div className="hero__intro-bloom" ref={introBloomRef} />
+                        <button
+                            type="button"
+                            className="hero__intro-skip"
+                            onClick={completeIntro}
+                        >
+                            Skip
+                        </button>
+                    </div>
+                )}
 
                 <div className="hero__content" ref={contentRef}>
                     <div className="hero__wordmark">

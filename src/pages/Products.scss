@@ -80,13 +80,24 @@
         color: $brown-500;
     }
 
-    &__sort {
+    &__sort,
+    &__sort-trigger {
         min-width: 176px;
         padding: 8px 12px;
         border: 1px solid $brown-200;
         background-color: rgba($oatmeal, 0.95);
         color: $brown-700;
         outline: none;
+    }
+
+    &__sort-trigger {
+        width: 176px;
+        flex: 0 0 176px;
+        min-height: 42px;
+        border-radius: 12px;
+        box-shadow: none;
+        justify-content: space-between;
+        padding: 0 12px;
     }
 
     &__grid-stage {
@@ -315,9 +326,11 @@
             align-items: stretch;
         }
 
-        &__sort {
+        &__sort,
+        &__sort-trigger {
             width: 100%;
             min-width: 0;
+            flex-basis: auto;
         }
 
         &__grid-stage {

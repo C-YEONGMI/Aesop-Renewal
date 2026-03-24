@@ -11,7 +11,10 @@ const ProductCard = ({ product }) => {
     const getFullImageUrl = (url) => {
         if (!url) return '';
         // 이미 주소에 http가 포함되어 있다면 그대로 사용, 아니면 도메인을 앞에 붙여줍니다.
-        return url.startsWith('http') ? url : `https://kr.aesop.com${url}`;
+        if (url.startsWith('http') || url.startsWith('/')) {
+            return url;
+        }
+        return `https://kr.aesop.com${url}`;
     };
 
     // 가격 포맷팅 함수 (숫자일 경우 콤마 추가)

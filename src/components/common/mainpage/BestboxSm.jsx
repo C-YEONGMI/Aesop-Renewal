@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Best from '../badge/Best';
 import New from '../badge/New';
 import Exclusive from '../badge/Exclusive';
@@ -11,6 +12,7 @@ const DEFAULT_NAME = '\uC81C\uD488\uBA85 \uB4E4\uC5B4\uAC00\uB294 \uACF5\uAC04\u
 const ADD_TO_CART_LABEL = '\uC7A5\uBC14\uAD6C\uB2C8 \uB2F4\uAE30';
 
 const BestboxSm = ({ product }) => {
+    const navigate = useNavigate();
     const addToCart = useCartStore((state) => state.addToCart);
     const productData = product || {
         name: DEFAULT_NAME,
@@ -35,8 +37,34 @@ const BestboxSm = ({ product }) => {
         addToCart(product, 0);
     };
 
+    const handleCardClick = () => {
+        if (!product) {
+            return;
+        }
+
+        navigate(`/product/${encodeURIComponent(product.name)}`);
+    };
+
+    const handleCardKeyDown = (event) => {
+        if (!product) {
+            return;
+        }
+
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleCardClick();
+        }
+    };
+
     return (
-        <div className="bestboxSm">
+        <div
+            className="bestboxSm"
+            role={product ? 'link' : undefined}
+            tabIndex={product ? 0 : undefined}
+            onClick={handleCardClick}
+            onKeyDown={handleCardKeyDown}
+            aria-label={product ? `${product.name} 상세보기` : undefined}
+        >
             <div className="badges">
                 {productData.badge.includes('Best') && <Best />}
                 {productData.badge.includes('New') && <New />}

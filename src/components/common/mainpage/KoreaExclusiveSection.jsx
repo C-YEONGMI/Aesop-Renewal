@@ -52,7 +52,7 @@ const KoreaExclusiveSection = () => {
                         한정 보자기 패키지와 함께 만나보세요.
                     </p>
                     {/* 클릭 시 해당 제품 상세페이지로 이동하도록 Link 설정 (임시 url) */}
-                    <MoreBox to="/product/Korea%20Exclusive%20Set" />
+                    <MoreBox to="/benefits/kr-exclusive" />
                 </div>
 
                 {/* 중앙 대표 이미지 (522x729) */}

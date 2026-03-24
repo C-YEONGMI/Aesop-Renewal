@@ -38,6 +38,9 @@ export const PRODUCT_CATEGORY_CONFIG = Object.fromEntries(
 export const normalizeCategoryValue = (value = '') =>
     value.toLowerCase().replace(/[^a-z]/g, '');
 
+export const formatCategoryLabel = (value = '') =>
+    normalizeCategoryValue(value) === 'perfume' ? value.toUpperCase() : value;
+
 export const getProductCategoryConfig = (value = '') => {
     const normalizedValue = normalizeCategoryValue(value);
 
@@ -49,7 +52,7 @@ export const getProductCategoryConfig = (value = '') => {
 };
 
 export const getCategoryLabelFromValue = (value = '') =>
-    getProductCategoryConfig(value)?.label || value;
+    formatCategoryLabel(getProductCategoryConfig(value)?.label || value);
 
 export const getCategorySlugFromValue = (value = '') =>
     getProductCategoryConfig(value)?.slug || '';
@@ -89,35 +92,35 @@ export const inferProductCategoryLabel = (product = {}) => {
     const name = product.name || '';
 
     if (prefix === 'APB') {
-        return PRODUCT_CATEGORY_CONFIG.kits.label;
+        return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.kits.label);
     }
 
     if (prefix === 'HR' || prefix === 'ASH') {
-        return PRODUCT_CATEGORY_CONFIG.hair.label;
+        return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.hair.label);
     }
 
     if (['BM', 'BT', 'BS', 'VL'].includes(prefix)) {
-        return PRODUCT_CATEGORY_CONFIG.body.label;
+        return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.body.label);
     }
 
     if (['HM', 'AHM', 'BB'].includes(prefix)) {
-        return PRODUCT_CATEGORY_CONFIG.home.label;
+        return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.home.label);
     }
 
     if (prefix === 'FR') {
         if (hasCategoryKeyword(name, HOME_FRAGRANCE_KEYWORDS)) {
-            return PRODUCT_CATEGORY_CONFIG.home.label;
+            return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.home.label);
         }
 
-        return PRODUCT_CATEGORY_CONFIG.fragrance.label;
+        return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.fragrance.label);
     }
 
     if (prefix === 'SK') {
         if (hasCategoryKeyword(name, HAIR_SKIN_KEYWORDS)) {
-            return PRODUCT_CATEGORY_CONFIG.hair.label;
+            return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.hair.label);
         }
 
-        return PRODUCT_CATEGORY_CONFIG.skincare.label;
+        return formatCategoryLabel(PRODUCT_CATEGORY_CONFIG.skincare.label);
     }
 
     return fallbackCategory;
