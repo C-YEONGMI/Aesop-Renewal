@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import useProductStore from '../store/useProductStore';
+import { getCategoryLabelFromValue } from '../data/productCategories';
 import './Search.scss';
 
 const Search = () => {
@@ -63,7 +64,7 @@ const Search = () => {
                                         <div className="search-page__card-img">
                                             <img src={p.variants[0]?.image} alt={p.name} />
                                         </div>
-                                        <p className="suit-12-r">{p.category}</p>
+                                        <p className="suit-12-r">{getCategoryLabelFromValue(p.category)}</p>
                                         <p className="suit-16-m">{p.name}</p>
                                         <p className="suit-14-m">{p.variants[0]?.price?.toLocaleString()}원</p>
                                     </Link>

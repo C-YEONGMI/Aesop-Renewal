@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import products from '../data/products.json';
+import { getCategoryLabelFromValue } from '../data/productCategories';
 import './ProductList.css';
 
 // 개별 제품 카드를 위한 컴포넌트 (용량 선택 기능 포함)
@@ -20,7 +21,7 @@ const ProductCard = ({ item }) => {
                 <img src={selectedVariant.image} alt={item.name} />
             </div>
             <div className="info-box">
-                <span className="category-tag">{item.category}</span>
+                <span className="category-tag">{getCategoryLabelFromValue(item.category)}</span>
                 <h3 className="name">{item.name}</h3>
                 <p className="desc">{item.description}</p>
 
@@ -72,7 +73,7 @@ const ProductList = () => {
                         className={`category-tab ${activeCategory === cat ? 'active' : ''}`}
                         onClick={() => setActiveCategory(cat)}
                     >
-                        {cat}
+                        {cat === 'All' ? cat : getCategoryLabelFromValue(cat)}
                     </button>
                 ))}
             </nav>

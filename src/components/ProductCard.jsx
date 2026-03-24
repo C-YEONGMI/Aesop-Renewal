@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getCategoryLabelFromValue } from '../data/productCategories';
 
 const ProductCard = ({ product }) => {
     // 2. 현재 선택된 용량 정보를 상태로 관리합니다. (기본값: 첫 번째 용량)
@@ -35,7 +36,7 @@ const ProductCard = ({ product }) => {
             </div>
 
             <div className="product-info-section">
-                <span className="category-label">{product.category}</span>
+                <span className="category-label">{getCategoryLabelFromValue(product.category)}</span>
                 <h3 className="product-title">{product.name}</h3>
 
                 {/* 6. 설명 및 더보기 기능: props로 받은 데이터는 product인데 item으로 잘못 쓰인 곳을 수정했습니다. */}

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ShoppingBag, Check, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getCategoryLabelFromValue } from '../../data/productCategories';
 import useCartStore from '../../store/useCartStore';
 import useProductStore from '../../store/useProductStore';
 import {
@@ -141,7 +142,7 @@ const CartAddDialog = () => {
                         <div className="cart-add-dialog__copy">
                             <div className="cart-add-dialog__copy-main">
                                 <p className="cart-add-dialog__category suit-14-m">
-                                    {cartDialogItem.category}
+                                    {getCategoryLabelFromValue(cartDialogItem.category)}
                                 </p>
                                 <p className="cart-add-dialog__name suit-24-r">
                                     {cartDialogItem.productName}
@@ -192,7 +193,7 @@ const CartAddDialog = () => {
 
                                         <div className="cart-add-dialog__recommendation-copy">
                                             <p className="cart-add-dialog__recommendation-category suit-12-r">
-                                                {product.category}
+                                                {getCategoryLabelFromValue(product.category)}
                                             </p>
                                             <p className="cart-add-dialog__recommendation-name suit-14-m">
                                                 {product.name}

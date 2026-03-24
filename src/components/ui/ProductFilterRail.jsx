@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, RotateCcw, X } from 'lucide-react';
 import './ProductFilterRail.scss';
 
 const FilterSection = ({ title, defaultOpen = false, children }) => {
@@ -77,6 +77,9 @@ const ProductFilterRail = ({
     categories,
     activeCategories,
     onCategoryToggle,
+    giftFilterOptions = [],
+    activeGiftFilters = [],
+    onGiftFilterToggle,
     priceRangeOptions,
     activePriceRanges,
     onPriceRangeToggle,
@@ -92,6 +95,16 @@ const ProductFilterRail = ({
                     label: category.label,
                 })),
         [categories]
+    );
+
+    const giftFilterItems = useMemo(
+        () =>
+            giftFilterOptions.map((filter) => ({
+                key: `gift-${filter.filterId}`,
+                value: filter.filterId,
+                label: filter.filterName,
+            })),
+        [giftFilterOptions]
     );
 
     const priceRangeItems = useMemo(
@@ -123,6 +136,22 @@ const ProductFilterRail = ({
             });
         });
 
+        activeGiftFilters.forEach((filterId) => {
+            const activeGiftFilterItem = giftFilterItems.find(
+                (filter) => filter.value === filterId
+            );
+
+            if (!activeGiftFilterItem || !onGiftFilterToggle) {
+                return;
+            }
+
+            items.push({
+                key: activeGiftFilterItem.key,
+                label: activeGiftFilterItem.label,
+                onRemove: () => onGiftFilterToggle(filterId),
+            });
+        });
+
         activePriceRanges.forEach((rangeValue) => {
             const activePriceRangeItem = priceRangeItems.find(
                 (range) => range.value === rangeValue
@@ -142,9 +171,12 @@ const ProductFilterRail = ({
         return items;
     }, [
         activeCategories,
+        activeGiftFilters,
         activePriceRanges,
         categoryItems,
+        giftFilterItems,
         onCategoryToggle,
+        onGiftFilterToggle,
         onPriceRangeToggle,
         priceRangeItems,
     ]);
@@ -155,6 +187,14 @@ const ProductFilterRail = ({
                 (category) => !activeCategories.includes(category.value)
             ),
         [activeCategories, categoryItems]
+    );
+
+    const availableGiftFilterItems = useMemo(
+        () =>
+            giftFilterItems.filter(
+                (filter) => !activeGiftFilters.includes(filter.value)
+            ),
+        [activeGiftFilters, giftFilterItems]
     );
 
     const availablePriceRangeItems = useMemo(
@@ -174,12 +214,12 @@ const ProductFilterRail = ({
 
                         <motion.div layout className="product-filter-rail__selected">
                             <AnimatePresence mode="popLayout" initial={false}>
-                                {selectedItems.length > 0 ? (
-                                    <motion.div
-                                        key="selected-items"
-                                        layout
-                                        className="product-filter-rail__selected-active"
-                                    >
+                                <motion.div
+                                    key={selectedItems.length > 0 ? 'selected-items' : 'selected-empty'}
+                                    layout
+                                    className="product-filter-rail__selected-active"
+                                >
+                                    {selectedItems.length > 0 ? (
                                         <motion.div
                                             layout
                                             className="product-filter-rail__selected-list"
@@ -193,25 +233,25 @@ const ProductFilterRail = ({
                                                 />
                                             ))}
                                         </motion.div>
-
-                                        <motion.button
+                                    ) : (
+                                        <motion.p
                                             layout
-                                            type="button"
-                                            className="product-filter-rail__clear-button suit-12-r"
-                                            onClick={onClearAllFilters}
+                                            className="product-filter-rail__selected-empty suit-14-m"
                                         >
-                                            전체 해제
-                                        </motion.button>
-                                    </motion.div>
-                                ) : (
-                                    <motion.p
-                                        key="selected-empty"
+                                            선택된 필터가 없습니다
+                                        </motion.p>
+                                    )}
+
+                                    <motion.button
                                         layout
-                                        className="product-filter-rail__selected-empty suit-14-m"
+                                        type="button"
+                                        className="product-filter-rail__clear-button suit-12-r"
+                                        onClick={onClearAllFilters}
                                     >
-                                        선택한 필터가 없습니다
-                                    </motion.p>
-                                )}
+                                        <RotateCcw size={13} strokeWidth={1.8} />
+                                        전체 해제
+                                    </motion.button>
+                                </motion.div>
                             </AnimatePresence>
                         </motion.div>
 
@@ -222,15 +262,32 @@ const ProductFilterRail = ({
                                         <motion.li layout key={category.key}>
                                             <FilterChip
                                                 item={category}
-                                                onClick={() =>
-                                                    onCategoryToggle(category.value)
-                                                }
+                                                onClick={() => onCategoryToggle(category.value)}
                                             />
                                         </motion.li>
                                     ))}
                                 </AnimatePresence>
                             </motion.ul>
                         </FilterSection>
+
+                        {giftFilterItems.length > 0 && onGiftFilterToggle ? (
+                            <FilterSection title="상황별 추천">
+                                <motion.ul layout className="product-filter-rail__category-list">
+                                    <AnimatePresence mode="popLayout" initial={false}>
+                                        {availableGiftFilterItems.map((filter) => (
+                                            <motion.li layout key={filter.key}>
+                                                <FilterChip
+                                                    item={filter}
+                                                    onClick={() =>
+                                                        onGiftFilterToggle(filter.value)
+                                                    }
+                                                />
+                                            </motion.li>
+                                        ))}
+                                    </AnimatePresence>
+                                </motion.ul>
+                            </FilterSection>
+                        ) : null}
 
                         <FilterSection title="가격대">
                             <motion.div layout className="product-filter-rail__option-list">

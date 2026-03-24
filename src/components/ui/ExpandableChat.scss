@@ -27,7 +27,7 @@
         flex-direction: column;
         overflow: hidden;
         border: 1px solid rgba($brown-200, 0.72);
-        border-radius: 24px;
+        border-radius: 4px;
         background: linear-gradient(180deg, rgba($oatmeal, 0.98) 0%, rgba($brown-50, 0.98) 100%);
         box-shadow: 0 28px 70px rgba($brown-900, 0.24);
         backdrop-filter: blur(10px);
@@ -138,7 +138,7 @@
         @extend .suit-14-m;
         max-width: min(82%, 280px);
         padding: 12px 14px;
-        border-radius: 18px;
+        border-radius: 4px;
         line-height: 1.6;
         word-break: keep-all;
         white-space: pre-line;
@@ -206,7 +206,7 @@
         min-height: 40px;
         padding: 0 14px;
         border: 1px solid rgba($brown-200, 0.9);
-        border-radius: 14px;
+        border-radius: 4px;
         color: $brown-800;
         background: rgba($oatmeal, 0.96);
         box-shadow: 0 8px 16px rgba($brown-900, 0.06);
@@ -255,7 +255,7 @@
         gap: 12px;
         padding: 14px;
         border: 1px solid rgba($brown-200, 0.88);
-        border-radius: 18px;
+        border-radius: 4px;
         background: rgba($oatmeal, 0.98);
         box-shadow: 0 10px 18px rgba($brown-900, 0.06);
     }
@@ -264,7 +264,7 @@
         width: 64px;
         height: 64px;
         flex: 0 0 64px;
-        border-radius: 14px;
+        border-radius: 4px;
         overflow: hidden;
         background: rgba($brown-50, 0.8);
 
@@ -312,7 +312,7 @@
     &__card-tag {
         @extend .suit-12-r;
         padding: 5px 8px;
-        border-radius: 999px;
+        border-radius: 4px;
         color: $brown-700;
         background: rgba($brown-100, 0.84);
     }
@@ -332,7 +332,7 @@
         @extend .suit-14-m;
         min-height: 34px;
         padding: 0 12px;
-        border-radius: 999px;
+        border-radius: 4px;
         color: $oatmeal;
         background: linear-gradient(135deg, $brown-700 0%, $brown-800 100%);
 
@@ -362,7 +362,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        border-radius: 999px;
+        border-radius: 4px;
         color: $oatmeal;
         background: linear-gradient(135deg, $brown-700 0%, $brown-800 100%);
         box-shadow: 0 10px 20px rgba($brown-900, 0.12);
@@ -389,7 +389,7 @@
     &__composer {
         display: none;
         border: 1px solid rgba($brown-200, 0.92);
-        border-radius: 18px;
+        border-radius: 4px;
         background-color: rgba($oatmeal, 0.92);
         box-shadow: 0 12px 26px rgba($brown-900, 0.08);
 
@@ -426,7 +426,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        border-radius: 999px;
+        border-radius: 4px;
         color: $oatmeal;
         background: linear-gradient(135deg, $brown-700 0%, $brown-800 100%);
         box-shadow: 0 10px 20px rgba($brown-900, 0.16);
@@ -454,7 +454,7 @@
         transform-origin: bottom center;
 
         &__panel {
-            border-radius: 22px;
+            border-radius: 4px;
         }
 
         &__body {

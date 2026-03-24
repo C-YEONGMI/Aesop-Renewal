@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.scss';
 import Bt_Logo from '../../../assets/Bt_Logo.svg?react';
 import Bt_instargram from '../../../assets/Bt_instargram.svg?react';
@@ -25,11 +26,11 @@ const Footer = () => {
                         <div className="bttext">
                             <span className="title">Orders &amp; Support</span>
                             <div className="btlinks">
-                                <span className="text"><a href="#">Contact Us</a></span>
-                                <span className="text"><a href="#">FAQ</a></span>
-                                <span className="text"><a href="#">Shipping</a></span>
-                                <span className="text"><a href="#">Returns</a></span>
-                                <span className="text"><a href="#">Terms &amp; Conditions</a></span>
+                                <span className="text"><Link to="/support/contact">Contact Us</Link></span>
+                                <span className="text"><Link to="/support/faq">FAQ</Link></span>
+                                <span className="text"><Link to="/support/faq">Shipping</Link></span>
+                                <span className="text"><Link to="/support/faq">Returns</Link></span>
+                                <span className="text"><Link to="/support">Terms &amp; Conditions</Link></span>
                             </div>
                         </div>
 

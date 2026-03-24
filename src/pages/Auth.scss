@@ -319,6 +319,7 @@
     &__submit {
         width: 100%;
         padding: 16px;
+        border-radius: 4px;
         background-color: $brown-800;
         color: $oatmeal;
         border: none;
@@ -412,15 +413,197 @@
         }
     }
 
-    &__social-icons {
+    &__social-stack {
         display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__social-long-button {
+        width: 100%;
+        min-height: 52px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 4px;
+        box-shadow: none;
+        background-color: #fff;
+        color: #1f1f1f;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        gap: 18px;
+        font-family: $font-suit;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: 0;
+        cursor: pointer;
+        transition:
+            transform 0.2s ease,
+            background-color 0.2s ease;
+
+        &:hover {
+            transform: translateY(-1px);
+        }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: none;
+        }
+    }
+
+    &__social-long-button-content {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    &__social-long-button--google {
+        background-color: #fff;
+        box-shadow: none;
+
+        &:active {
+            background-color: #f8f9fa;
+            box-shadow: none;
+        }
+    }
+
+    &__social-long-button--kakao {
+        background: #FEE500;
+        background-color: #FEE500;
+        color: #191600;
+        box-shadow: none;
+
+        &:active {
+            background-color: #f5dd00;
+            box-shadow: none;
+        }
+    }
+
+    &__social-long-button--naver {
+        background-color: #03c75a;
+        color: #ffffff;
+        box-shadow: none;
+
+        &:active {
+            background-color: #02b452;
+            box-shadow: none;
+        }
+
+        .auth-page__social-long-button-icon svg {
+            transform: translateX(-1px);
+        }
+    }
+
+    &__social-long-button-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        img,
+        svg {
+            display: block;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    &__social-long-button-text {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        min-width: 0;
+    }
+
+    &__modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background-color: rgba(28, 20, 14, 0.48);
+        backdrop-filter: blur(2px);
+    }
+
+    &__modal-panel {
+        width: min(100%, 440px);
+        border: 1px solid rgba($brown-200, 0.92);
+        background-color: rgba($oatmeal, 0.98);
+        box-shadow: 0 28px 60px rgba(33, 24, 17, 0.2);
+        padding: 28px 24px 24px;
+    }
+
+    &__modal-title {
+        color: $brown-800;
+        margin-bottom: 14px;
+        text-align: center;
+    }
+
+    &__social-notice {
+        margin-top: 18px;
+        padding: 16px 18px;
+        border: 1px solid rgba($brown-200, 0.92);
+        background-color: rgba($oatmeal, 0.78);
+        color: $brown-700;
+    }
+
+    &__social-notice-text {
+        line-height: 1.7;
+    }
+
+    &__social-notice-id {
+        margin-top: 10px;
+        color: $brown-800;
+
+        strong {
+            font-weight: 600;
+        }
+    }
+
+    &__social-notice-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    &__social-notice-btn {
+        padding: 10px 14px;
+        border: 1px solid rgba($brown-300, 0.92);
+        background: transparent;
+        color: $brown-700;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+
+        &:hover {
+            background-color: rgba($brown-700, 0.08);
+            border-color: rgba($brown-500, 0.92);
+        }
+    }
+
+    &__social-notice-btn--primary {
+        background-color: $brown-800;
+        border-color: $brown-800;
+        color: $oatmeal;
+
+        &:hover {
+            background-color: $brown-900;
+            border-color: $brown-900;
+            color: $oatmeal;
+        }
     }
 
     &__social-icon-button {
         width: 56px;
         height: 56px;
+        margin: 18px auto 0;
         border-radius: 999px;
         border: 0;
         display: inline-flex;
@@ -501,6 +684,25 @@
     }
 }
 
+.gsi-material-button-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 20px;
+    margin-right: 0;
+    width: 20px;
+
+    svg {
+        display: block;
+        height: 20px;
+        width: 20px;
+    }
+}
+
+.gsi-material-button-contents {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @keyframes auth-page-spin {
     to {
         transform: rotate(360deg);
@@ -530,6 +732,18 @@
         &__social-icon-button {
             width: 52px;
             height: 52px;
+        }
+
+        &__social-notice-actions {
+            flex-direction: column;
+        }
+
+        &__modal-backdrop {
+            padding: 18px;
+        }
+
+        &__modal-panel {
+            padding: 24px 18px 20px;
         }
     }
 }

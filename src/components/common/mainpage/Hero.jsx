@@ -9,21 +9,7 @@ import './Hero.scss';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HERO_INTRO_STORAGE_KEY = 'aesop-hero-intro-video-complete-v1';
-const HERO_INTRO_VIDEO_PATH = '/Hero-intro.mp4';
-const HERO_INTRO_PORTAL_POINT = { x: 0.77, y: 0.46 };
-const HERO_INTRO_PORTAL_SCALE = 2.2;
-
-const getInitialIntroVisibility = () => {
-    if (typeof window === 'undefined') {
-        return false;
-    }
-
-    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    const hasSeenIntro = window.sessionStorage.getItem(HERO_INTRO_STORAGE_KEY) === 'true';
-
-    return !prefersReducedMotion && !hasSeenIntro;
-};
+const HERO_LOGO_HANDOFF_STORAGE_KEY = 'hero-logo-handoff-complete';
 
 const Hero = () => {
     const sectionRef = useRef(null);
@@ -38,19 +24,16 @@ const Hero = () => {
     const flightShellRef = useRef(null);
     const flightAesopRef = useRef(null);
     const flightLogoRef = useRef(null);
-    const introRef = useRef(null);
-    const introVideoRef = useRef(null);
-    const introBloomRef = useRef(null);
-    const introTintRef = useRef(null);
-    const hasCompletedLogoHandoffRef = useRef(false);
+    const hasCompletedLogoHandoffRef = useRef(
+        typeof window !== 'undefined' &&
+            window.sessionStorage.getItem(HERO_LOGO_HANDOFF_STORAGE_KEY) === 'true'
+    );
     const collapseDistanceRef = useRef(0);
-    const hasStartedIntroExitRef = useRef(false);
-    const initialIntroVisibleRef = useRef(getInitialIntroVisibility());
-    const shouldWaitForHeroInteractionRef = useRef(initialIntroVisibleRef.current);
-    const [isHandoffComplete, setIsHandoffComplete] = useState(false);
-    const [isIntroVisible, setIsIntroVisible] = useState(initialIntroVisibleRef.current);
-    const [isIntroTransitioning, setIsIntroTransitioning] = useState(false);
-    const [introVideoSource, setIntroVideoSource] = useState(HERO_INTRO_VIDEO_PATH);
+    const [isHandoffComplete, setIsHandoffComplete] = useState(
+        () =>
+            typeof window !== 'undefined' &&
+            window.sessionStorage.getItem(HERO_LOGO_HANDOFF_STORAGE_KEY) === 'true'
+    );
 
     const pauseHeroVideo = useCallback(() => {
         heroVideoRef.current?.pause();
@@ -67,297 +50,10 @@ const Hero = () => {
         playPromise?.catch(() => {});
     }, []);
 
-    const hideIntroImmediately = useCallback((markAsSeen = true) => {
-        if (markAsSeen && typeof window !== 'undefined') {
-            window.sessionStorage.setItem(HERO_INTRO_STORAGE_KEY, 'true');
-        }
-
-        shouldWaitForHeroInteractionRef.current = markAsSeen;
-
-        hasStartedIntroExitRef.current = true;
-        setIsIntroTransitioning(false);
-        setIsIntroVisible(false);
-    }, []);
-
-    const completeIntro = useCallback(() => {
-        if (hasStartedIntroExitRef.current) {
-            return;
-        }
-
-        hasStartedIntroExitRef.current = true;
-
-        if (typeof window !== 'undefined') {
-            window.sessionStorage.setItem(HERO_INTRO_STORAGE_KEY, 'true');
-        }
-
-        shouldWaitForHeroInteractionRef.current = false;
-
-        if (!introRef.current) {
-            setIsIntroVisible(false);
-            setIsIntroTransitioning(false);
-            return;
-        }
-
-        setIsIntroTransitioning(true);
-
-        const introElement = introRef.current;
-        const introBloomElement = introBloomRef.current;
-        const introTintElement = introTintRef.current;
-        const introVideoElement = introVideoRef.current;
-        const bgElement = bgRef.current;
-        const overlayElement = overlayRef.current;
-        const contentElement = contentRef.current;
-        const introRect = introElement.getBoundingClientRect();
-        const targetScale = HERO_INTRO_PORTAL_SCALE;
-        const targetX = -((HERO_INTRO_PORTAL_POINT.x - 0.5) * introRect.width * targetScale);
-        const targetY = -((HERO_INTRO_PORTAL_POINT.y - 0.5) * introRect.height * targetScale);
-
-        gsap.killTweensOf([
-            introElement,
-            introBloomElement,
-            introTintElement,
-            introVideoElement,
-            bgElement,
-            overlayElement,
-            contentElement,
-        ]);
-
-        gsap.timeline({
-            defaults: { ease: 'power3.inOut' },
-            onComplete: () => {
-                setIsIntroVisible(false);
-                setIsIntroTransitioning(false);
-                gsap.set([introElement, introBloomElement, introTintElement, introVideoElement, overlayElement], {
-                    clearProps: 'all',
-                });
-
-                if (bgElement) {
-                    gsap.set(bgElement, { clearProps: 'transform' });
-                }
-            },
-        })
-            .set(introElement, {
-                transformOrigin: '50% 50%',
-                willChange: 'transform, opacity',
-            })
-            .set(introVideoElement, { willChange: 'transform' })
-            .set(contentElement, { willChange: 'transform, opacity' })
-            .set(introTintElement, { willChange: 'opacity' })
-            .set(overlayElement, { willChange: 'opacity' })
-            .to(
-                introElement,
-                {
-                    scale: targetScale,
-                    x: targetX,
-                    y: targetY,
-                    duration: 1.34,
-                    ease: 'power4.inOut',
-                },
-                0
-            )
-            .to(
-                introVideoElement,
-                {
-                    scale: 1.1,
-                    duration: 1.34,
-                    ease: 'power4.inOut',
-                },
-                0
-            )
-            .fromTo(
-                overlayElement,
-                { opacity: 0.74 },
-                {
-                    opacity: 1,
-                    duration: 1.12,
-                    ease: 'power2.out',
-                },
-                0.02
-            )
-            .to(
-                bgElement,
-                {
-                    scale: 1,
-                    duration: 1.18,
-                    ease: 'power3.out',
-                },
-                0.06
-            )
-            .to(
-                introTintElement,
-                {
-                    opacity: 0,
-                    duration: 0.72,
-                    ease: 'power2.out',
-                },
-                0.42
-            )
-            .fromTo(
-                contentElement,
-                { y: 28, opacity: 0.16 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.96,
-                    ease: 'power2.out',
-                },
-                0.3
-            )
-            .to(
-                introBloomElement,
-                {
-                    opacity: 0.78,
-                    duration: 0.66,
-                    ease: 'power2.out',
-                },
-                0.18
-            )
-            .to(
-                introElement,
-                {
-                    opacity: 0,
-                    duration: 0.58,
-                    ease: 'power2.out',
-                },
-                0.72
-            )
-            .to(
-                introBloomElement,
-                {
-                    opacity: 0,
-                    duration: 0.46,
-                    ease: 'power2.out',
-                },
-                0.94
-            );
-    }, []);
-
-    const handleSkipIntro = useCallback((event) => {
-        event?.preventDefault?.();
-        event?.stopPropagation?.();
-
-        introVideoRef.current?.pause();
-        completeIntro();
-    }, [completeIntro]);
-
-    const handleIntroVideoError = useCallback(() => {
-        if (introVideoSource !== heroVideo) {
-            setIntroVideoSource(heroVideo);
-            return;
-        }
-
-        hideIntroImmediately();
-    }, [hideIntroImmediately, introVideoSource]);
-
     useEffect(() => {
-        if (!isIntroVisible) {
-            return undefined;
-        }
-
-        const html = document.documentElement;
-        const body = document.body;
-        const previous = {
-            htmlOverflow: html.style.overflow,
-            bodyOverflow: body.style.overflow,
-            htmlOverscroll: html.style.overscrollBehavior,
-            bodyOverscroll: body.style.overscrollBehavior,
-            bodyTouchAction: body.style.touchAction,
-        };
-
-        html.style.overflow = 'hidden';
-        body.style.overflow = 'hidden';
-        html.style.overscrollBehavior = 'none';
-        body.style.overscrollBehavior = 'none';
-        body.style.touchAction = 'none';
-
-        return () => {
-            html.style.overflow = previous.htmlOverflow;
-            body.style.overflow = previous.bodyOverflow;
-            html.style.overscrollBehavior = previous.htmlOverscroll;
-            body.style.overscrollBehavior = previous.bodyOverscroll;
-            body.style.touchAction = previous.bodyTouchAction;
-        };
-    }, [isIntroVisible]);
-
-    useEffect(() => {
-        if (!isIntroVisible || !introVideoRef.current) {
-            return undefined;
-        }
-
-        pauseHeroVideo();
-        hasStartedIntroExitRef.current = false;
-
-        if (bgRef.current) {
-            gsap.set(bgRef.current, {
-                scale: 1.06,
-                transformOrigin: '50% 50%',
-            });
-        }
-
-        const videoElement = introVideoRef.current;
-        const playPromise = videoElement.play();
-
-        if (playPromise?.catch) {
-            playPromise.catch(() => {
-                hideIntroImmediately(false);
-            });
-        }
-
-        return () => {
-            if (bgRef.current) {
-                gsap.set(bgRef.current, { clearProps: 'transform' });
-            }
-        };
-    }, [hideIntroImmediately, isIntroVisible, introVideoSource, pauseHeroVideo]);
-
-    useEffect(() => {
-        if (isIntroVisible || isIntroTransitioning) {
-            pauseHeroVideo();
-            return undefined;
-        }
-
-        if (!shouldWaitForHeroInteractionRef.current) {
-            playHeroVideo();
-            return undefined;
-        }
-
-        pauseHeroVideo();
-
-        const stageElement = stageRef.current;
-        let hasActivated = false;
-
-        const activateHeroVideo = () => {
-            if (hasActivated) {
-                return;
-            }
-
-            const sectionRect = sectionRef.current?.getBoundingClientRect();
-
-            if (
-                !sectionRect ||
-                sectionRect.bottom <= 0 ||
-                sectionRect.top >= window.innerHeight
-            ) {
-                return;
-            }
-
-            hasActivated = true;
-            shouldWaitForHeroInteractionRef.current = false;
-            playHeroVideo();
-        };
-
-        stageElement?.addEventListener('pointerdown', activateHeroVideo, { passive: true });
-        stageElement?.addEventListener('touchstart', activateHeroVideo, { passive: true });
-        stageElement?.addEventListener('wheel', activateHeroVideo, { passive: true });
-        window.addEventListener('scroll', activateHeroVideo, { passive: true });
-
-        return () => {
-            stageElement?.removeEventListener('pointerdown', activateHeroVideo);
-            stageElement?.removeEventListener('touchstart', activateHeroVideo);
-            stageElement?.removeEventListener('wheel', activateHeroVideo);
-            window.removeEventListener('scroll', activateHeroVideo);
-        };
-    }, [isIntroTransitioning, isIntroVisible, pauseHeroVideo, playHeroVideo]);
+        playHeroVideo();
+        return undefined;
+    }, [playHeroVideo]);
 
     useEffect(
         () => () => {
@@ -390,6 +86,18 @@ const Hero = () => {
     useLayoutEffect(() => {
         const headerElement = document.querySelector('#header');
         const headerLogo = document.querySelector('[data-header-logo]');
+
+        if (hasCompletedLogoHandoffRef.current) {
+            if (!headerElement || !headerLogo) {
+                return undefined;
+            }
+
+            headerElement.setAttribute('data-hero-logo-visible', 'true');
+            gsap.set(headerLogo, { clearProps: 'opacity' });
+            return () => {
+                gsap.set(headerLogo, { clearProps: 'opacity' });
+            };
+        }
 
         if (
             !headerElement ||
@@ -500,6 +208,7 @@ const Hero = () => {
                 }
 
                 hasCompletedLogoHandoffRef.current = true;
+                window.sessionStorage.setItem(HERO_LOGO_HANDOFF_STORAGE_KEY, 'true');
                 collapseDistanceRef.current = Math.max(
                     sectionRef.current.offsetHeight - stageRef.current.offsetHeight,
                     0
@@ -605,7 +314,9 @@ const Hero = () => {
         }, sectionRef);
 
         return () => {
-            headerElement.removeAttribute('data-hero-logo-visible');
+            if (!hasCompletedLogoHandoffRef.current) {
+                headerElement.removeAttribute('data-hero-logo-visible');
+            }
             gsap.set(headerLogo, { clearProps: 'opacity' });
             ctx.revert();
         };
@@ -624,58 +335,31 @@ const Hero = () => {
                     <div className="hero__overlay" ref={overlayRef} />
                 </div>
 
-                {isIntroVisible && (
-                    <div
-                        className={`hero__intro${isIntroTransitioning ? ' hero__intro--transitioning' : ''}`}
-                    >
-                        <div className="hero__intro-shell" ref={introRef}>
-                            <video
-                                autoPlay
-                                muted
-                                playsInline
-                                preload="auto"
-                                key={introVideoSource}
-                                className="hero__intro-video"
-                                ref={introVideoRef}
-                                onEnded={completeIntro}
-                                onError={handleIntroVideoError}
-                            >
-                                <source src={introVideoSource} type="video/mp4" />
-                            </video>
-                            <div className="hero__intro-tint" ref={introTintRef} />
+                {!isHandoffComplete && (
+                    <>
+                        <div className="hero__content" ref={contentRef}>
+                            <div className="hero__wordmark">
+                                <span className="hero__wordmark-aesop" ref={aesopRef}>
+                                    <HeroAesop aria-label="Aesop" />
+                                </span>
+                                <span className="hero__wordmark-ritual" ref={ritualRef}>
+                                    <HeroRitual aria-label="Ritual" />
+                                </span>
+                            </div>
                         </div>
-                        <div className="hero__intro-bloom" ref={introBloomRef} />
-                        <button
-                            type="button"
-                            className="hero__intro-skip"
-                            onClick={handleSkipIntro}
-                        >
-                            Skip
-                        </button>
-                    </div>
+
+                        <div className="hero__wordmark-flight" ref={flightRef} aria-hidden="true">
+                            <div className="hero__wordmark-flight-shell" ref={flightShellRef}>
+                                <span className="hero__wordmark-flight-mark" ref={flightAesopRef}>
+                                    <HeroAesop />
+                                </span>
+                                <span className="hero__wordmark-flight-mark hero__wordmark-flight-mark--logo" ref={flightLogoRef}>
+                                    <HeaderLogo />
+                                </span>
+                            </div>
+                        </div>
+                    </>
                 )}
-
-                <div className="hero__content" ref={contentRef}>
-                    <div className="hero__wordmark">
-                        <span className="hero__wordmark-aesop" ref={aesopRef}>
-                            <HeroAesop aria-label="Aesop" />
-                        </span>
-                        <span className="hero__wordmark-ritual" ref={ritualRef}>
-                            <HeroRitual aria-label="Ritual" />
-                        </span>
-                    </div>
-                </div>
-
-                <div className="hero__wordmark-flight" ref={flightRef} aria-hidden="true">
-                    <div className="hero__wordmark-flight-shell" ref={flightShellRef}>
-                        <span className="hero__wordmark-flight-mark" ref={flightAesopRef}>
-                            <HeroAesop />
-                        </span>
-                        <span className="hero__wordmark-flight-mark hero__wordmark-flight-mark--logo" ref={flightLogoRef}>
-                            <HeaderLogo />
-                        </span>
-                    </div>
-                </div>
             </div>
         </section>
     );

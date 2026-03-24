@@ -15,6 +15,8 @@ const INITIAL_STATUS = {
     message: '잠시만 기다려 주세요. 계정 정보를 안전하게 불러오고 있습니다.',
 };
 
+const callbackRequestCache = new Map();
+
 const SocialAuthCallback = () => {
     const navigate = useNavigate();
     const { provider = '' } = useParams();
@@ -38,21 +40,38 @@ const SocialAuthCallback = () => {
                 return;
             }
 
-            try {
-                const searchParams = new URLSearchParams(window.location.search);
-                const { profile } = await completeRedirectSocialLogin(provider, searchParams);
-                const result = completeSocialLogin(provider, profile);
+            const callbackKey = `${provider}:${window.location.search}`;
 
-                if (!result.success) {
-                    throw new Error(result.message || `${getSocialProviderLabel(provider)} 로그인을 완료하지 못했습니다.`);
-                }
+            if (!callbackRequestCache.has(callbackKey)) {
+                callbackRequestCache.set(
+                    callbackKey,
+                    (async () => {
+                        const searchParams = new URLSearchParams(window.location.search);
+                        const { profile } = await completeRedirectSocialLogin(provider, searchParams);
+                        const result = completeSocialLogin(provider, profile);
+
+                        if (!result.success) {
+                            throw new Error(
+                                result.message || `${getSocialProviderLabel(provider)} 로그인을 완료하지 못했습니다.`
+                            );
+                        }
+
+                        return consumeSocialReturnTo();
+                    })()
+                );
+            }
+
+            try {
+                const nextPath = await callbackRequestCache.get(callbackKey);
 
                 if (!isActive) {
                     return;
                 }
 
-                navigate(consumeSocialReturnTo(), { replace: true });
+                navigate(nextPath, { replace: true });
             } catch (error) {
+                callbackRequestCache.delete(callbackKey);
+
                 if (!isActive) {
                     return;
                 }

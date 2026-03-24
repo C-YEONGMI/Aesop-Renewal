@@ -90,14 +90,39 @@
         outline: none;
     }
 
-    &__sort-trigger {
+    &__sort-wrap {
+        position: relative;
         width: 176px;
         flex: 0 0 176px;
+    }
+
+    &__sort-trigger {
+        width: 176px;
+        display: block;
         min-height: 42px;
-        border-radius: 12px;
+        border-radius: 4px;
         box-shadow: none;
-        justify-content: space-between;
-        padding: 0 12px;
+        padding: 0 36px 0 12px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        cursor: pointer;
+
+        &:focus-visible,
+        &:focus {
+            border-color: $brown-200;
+            background-color: rgba($oatmeal, 0.95);
+            box-shadow: none;
+        }
+    }
+
+    &__sort-icon {
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        color: $brown-400;
+        pointer-events: none;
     }
 
     &__grid-stage {
@@ -327,6 +352,7 @@
         }
 
         &__sort,
+        &__sort-wrap,
         &__sort-trigger {
             width: 100%;
             min-width: 0;

@@ -457,7 +457,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 999px;
+        border-radius: 4px;
         color: $oatmeal;
         background: #c53a40;
         box-shadow: 0 8px 16px rgba($brown-900, 0.16);
@@ -472,7 +472,7 @@
 
     &__status-segment {
         height: 5px;
-        border-radius: 999px;
+        border-radius: 4px;
         background: rgba($brown-100, 0.7);
 
         &.is-active {

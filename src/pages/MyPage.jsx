@@ -18,6 +18,7 @@ import useCartStore from '../store/useCartStore';
 import useOrderStore from '../store/useOrderStore';
 import useWishlistStore from '../store/useWishlistStore';
 import useProductStore from '../store/useProductStore';
+import { getCategoryLabelFromValue } from '../data/productCategories';
 import './MyPage.scss';
 
 const TABS = [
@@ -491,7 +492,7 @@ const MyPage = () => {
                                                         <img src={variant.image} alt={product.name} />
                                                     </Link>
                                                     <Link to={productPath} className="mypage__wish-copy">
-                                                        <p className="optima-16 mypage__wish-category">{product.category}</p>
+                                                        <p className="optima-16 mypage__wish-category">{getCategoryLabelFromValue(product.category)}</p>
                                                         <p className="suit-18-r mypage__wish-name">{product.name}</p>
                                                         <p className="suit-14-m mypage__wish-meta">
                                                             {variant.capacity || '대표 구성'}

@@ -6,23 +6,23 @@ export const PRODUCT_CATEGORY_GROUPS = [
     },
     {
         slug: 'fragrance',
-        label: 'Perfume',
+        label: 'PERFUME',
         aliases: ['Fragrance', 'Perfume', 'PERFUME'],
     },
     {
         slug: 'home',
-        label: 'HOME & LIVING',
-        aliases: ['Home', 'Home & Living', 'HOME & LIVING'],
+        label: 'HOME · LIVING',
+        aliases: ['Home', 'Home · Living', 'HOME · LIVING'],
     },
     {
         slug: 'hair',
-        label: 'HAIR & SHAVING',
-        aliases: ['Hair', 'Hair & Shaving', 'HAIR & SHAVING'],
+        label: 'HAIR · SHAVING',
+        aliases: ['Hair', 'Hair · Shaving', 'HAIR · SHAVING'],
     },
     {
         slug: 'body',
-        label: 'HAND & BODY',
-        aliases: ['Body', 'Body & Hand', 'Hand & Body', 'HAND & BODY'],
+        label: 'HAND · BODY',
+        aliases: ['Body', 'Body · Hand', 'Hand · Body', 'HAND · BODY'],
     },
     {
         slug: 'kits',
@@ -38,8 +38,15 @@ export const PRODUCT_CATEGORY_CONFIG = Object.fromEntries(
 export const normalizeCategoryValue = (value = '') =>
     value.toLowerCase().replace(/[^a-z]/g, '');
 
-export const formatCategoryLabel = (value = '') =>
-    normalizeCategoryValue(value) === 'perfume' ? value.toUpperCase() : value;
+export const formatCategoryLabel = (value = '') => {
+    const matchedCategory = getProductCategoryConfig(value);
+
+    if (matchedCategory) {
+        return matchedCategory.label;
+    }
+
+    return normalizeCategoryValue(value) === 'perfume' ? value.toUpperCase() : value;
+};
 
 export const getProductCategoryConfig = (value = '') => {
     const normalizedValue = normalizeCategoryValue(value);

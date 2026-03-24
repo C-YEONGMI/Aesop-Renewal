@@ -1,21 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import AddToCartButton from '../components/common/btn/AddToCartButton';
 import Best from '../components/common/badge/Best';
 import New from '../components/common/badge/New';
 import Exclusive from '../components/common/badge/Exclusive';
 import ProductFilterRail from '../components/ui/ProductFilterRail';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '../components/ui/Select';
 import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
-import { PRODUCT_CATEGORY_CONFIG, getCategorySlugFromValue } from '../data/productCategories';
+import {
+    PRODUCT_CATEGORY_CONFIG,
+    getCategoryLabelFromValue,
+    getCategorySlugFromValue,
+} from '../data/productCategories';
 import { getClassification } from '../components/gnb/menuData';
 import './Products.scss';
 
@@ -33,6 +31,9 @@ const PRICE_RANGE_OPTIONS = [
     { value: '100000-200000', label: '10~20만원', min: 100000, max: 200000 },
     { value: '200000-plus', label: '20만원 이상', min: 200000, max: Number.POSITIVE_INFINITY },
 ];
+
+const formatBreadcrumbLabel = (value = '') =>
+    value.replace(/[A-Za-z]+/g, (word) => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`);
 
 const renderBadge = (badge) => {
     switch (badge) {
@@ -56,12 +57,14 @@ const Products = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const products = useProductStore((state) => state.products);
+    const giftFilters = useProductStore((state) => state.giftFilters);
     const wishlist = useWishlistStore((state) => state.wishlist);
     const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
     const addToCart = useCartStore((state) => state.addToCart);
 
     const [sort, setSort] = useState('default');
     const [activeCategories, setActiveCategories] = useState(() => (category ? [category] : []));
+    const [activeGiftFilters, setActiveGiftFilters] = useState([]);
     const [activePriceRanges, setActivePriceRanges] = useState([]);
     const skipRouteCategorySyncRef = useRef(false);
 
@@ -107,6 +110,34 @@ const Products = () => {
         );
     }, [activeCategories, products, subcategoryFilteredProducts]);
 
+    const selectedGiftProductNames = useMemo(() => {
+        if (activeGiftFilters.length === 0) {
+            return [];
+        }
+
+        return [
+            ...new Set(
+                activeGiftFilters.flatMap((filterId) => {
+                    const selectedFilter = giftFilters.find(
+                        (filter) => filter.filterId === filterId
+                    );
+
+                    return selectedFilter?.recommendedProducts || [];
+                })
+            ),
+        ];
+    }, [activeGiftFilters, giftFilters]);
+
+    const giftFilteredProducts = useMemo(() => {
+        if (selectedGiftProductNames.length === 0) {
+            return categoryFilteredProducts;
+        }
+
+        return categoryFilteredProducts.filter((product) =>
+            selectedGiftProductNames.includes(product.name)
+        );
+    }, [categoryFilteredProducts, selectedGiftProductNames]);
+
     const categoryOptions = useMemo(
         () => [
             {
@@ -146,7 +177,7 @@ const Products = () => {
             : '전체 제품';
 
     const filtered = useMemo(() => {
-        let list = [...categoryFilteredProducts];
+        let list = [...giftFilteredProducts];
 
         if (activePriceRanges.length > 0) {
             list = list.filter((product) => {
@@ -184,7 +215,7 @@ const Products = () => {
             default:
                 return list;
         }
-    }, [activePriceRanges, categoryFilteredProducts, sort]);
+    }, [activePriceRanges, giftFilteredProducts, sort]);
 
     const syncRouteForCategories = (nextCategories) => {
         const nextPath =
@@ -217,8 +248,17 @@ const Products = () => {
         );
     };
 
+    const handleGiftFilterToggle = (filterId) => {
+        setActiveGiftFilters((current) =>
+            current.includes(filterId)
+                ? current.filter((value) => value !== filterId)
+                : [...current, filterId]
+        );
+    };
+
     const handleClearAllFilters = () => {
         setActiveCategories([]);
+        setActiveGiftFilters([]);
         setActivePriceRanges([]);
         syncRouteForCategories([]);
     };
@@ -236,13 +276,13 @@ const Products = () => {
                             {classificationMatch && category ? (
                                 <>
                                     <Link to={`/products/${category}`}>
-                                        {PRODUCT_CATEGORY_CONFIG[category]?.label || category}
+                                        {formatBreadcrumbLabel(PRODUCT_CATEGORY_CONFIG[category]?.label || category)}
                                     </Link>
                                     <span> / </span>
-                                    <span>{breadcrumbLabel}</span>
+                                    <span>{formatBreadcrumbLabel(breadcrumbLabel)}</span>
                                 </>
                             ) : (
-                                <span>{breadcrumbLabel}</span>
+                                <span>{formatBreadcrumbLabel(breadcrumbLabel)}</span>
                             )}
                         </nav>
                         <h1 className="montage-80">{pageTitle}</h1>
@@ -254,6 +294,9 @@ const Products = () => {
                                 categories={categoryOptions}
                                 activeCategories={activeCategories}
                                 onCategoryToggle={handleCategoryToggle}
+                                giftFilterOptions={giftFilters}
+                                activeGiftFilters={activeGiftFilters}
+                                onGiftFilterToggle={handleGiftFilterToggle}
                                 priceRangeOptions={PRICE_RANGE_OPTIONS}
                                 activePriceRanges={activePriceRanges}
                                 onPriceRangeToggle={handlePriceRangeToggle}
@@ -269,21 +312,21 @@ const Products = () => {
                                     </p>
                                 </div>
 
-                                <Select
-                                    value={sort}
-                                    onValueChange={setSort}
-                                >
-                                    <SelectTrigger className="products-page__sort-trigger suit-14-m">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent className="products-page__sort-content">
+                                <div className="products-page__sort-wrap">
+                                    <select
+                                        className="products-page__sort-trigger suit-14-m"
+                                        value={sort}
+                                        onChange={(event) => setSort(event.target.value)}
+                                        aria-label="상품 정렬"
+                                    >
                                         {SORT_OPTIONS.map((option) => (
-                                            <SelectItem key={option.value} value={option.value}>
+                                            <option key={option.value} value={option.value}>
                                                 {option.label}
-                                            </SelectItem>
+                                            </option>
                                         ))}
-                                    </SelectContent>
-                                </Select>
+                                    </select>
+                                    <ChevronDown className="products-page__sort-icon" size={16} strokeWidth={1.8} />
+                                </div>
                             </div>
 
                             {filtered.length === 0 ? (
@@ -349,7 +392,7 @@ const Products = () => {
                                                         <div className="products-page__card-copy">
                                                             <div className="products-page__card-copy-inner">
                                                                 <p className="products-page__card-category suit-12-r">
-                                                                    {categoryConfig?.label || product.category}
+                                                                    {categoryConfig?.label || getCategoryLabelFromValue(product.category)}
                                                                 </p>
                                                                 <p className="products-page__card-name suit-18-m">
                                                                     {product.name}

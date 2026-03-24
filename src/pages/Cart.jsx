@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import RollingNumber from '../components/ui/RollingNumber';
 import useAuthStore from '../store/useAuthStore';
 import useCartStore from '../store/useCartStore';
+import { getCategoryLabelFromValue } from '../data/productCategories';
 import './Cart.scss';
 
 const SHIPPING_FEE = 3000;
@@ -216,7 +217,7 @@ const Cart = () => {
                                                             </p>
                                                         ) : null}
                                                         {item.category ? (
-                                                            <p className="cart-page__item-meta">{item.category}</p>
+                                                            <p className="cart-page__item-meta">{getCategoryLabelFromValue(item.category)}</p>
                                                         ) : null}
                                                     </div>
                                                 </div>

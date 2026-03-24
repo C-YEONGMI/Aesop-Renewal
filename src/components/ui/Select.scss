@@ -10,7 +10,7 @@
         gap: 12px;
         padding: 0 14px;
         border: 1px solid rgba($brown-200, 0.94);
-        border-radius: 14px;
+        border-radius: 4px;
         background: rgba($oatmeal, 0.96);
         color: $brown-800;
         box-shadow:
@@ -63,7 +63,7 @@
         max-height: min(24rem, var(--radix-select-content-available-height));
         overflow: hidden;
         border: 1px solid rgba($brown-200, 0.96);
-        border-radius: 18px;
+        border-radius: 4px;
         background: rgba($oatmeal, 0.98);
         color: $brown-800;
         box-shadow:
@@ -103,7 +103,7 @@
         width: 100%;
         min-height: 40px;
         padding: 9px 12px 9px 34px;
-        border-radius: 12px;
+        border-radius: 4px;
         color: $brown-700;
         font-family: $font-suit;
         font-size: 14px;

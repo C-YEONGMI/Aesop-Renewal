@@ -14,10 +14,11 @@ gsap.registerPlugin(ScrollTrigger);
 // ⚠️ Math.random() 기반 랜덤 진열 사용 금지 (가이드 기준)
 const BestProductsSection = () => {
     const sectionRef = useRef(null);
+    const products = Array.isArray(productsData?.products) ? productsData.products : [];
 
     // mainPageContent.js의 고정 상품명 기준으로 필터링
     const bestProducts = BEST_PRODUCT_NAMES.map((name) =>
-        productsData.find((p) => p.name === name)
+        products.find((product) => product.name === name)
     ).filter(Boolean);
 
     useEffect(() => {

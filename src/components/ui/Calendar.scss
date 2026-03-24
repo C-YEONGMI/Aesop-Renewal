@@ -4,7 +4,7 @@
     width: min(320px, 100%);
     padding: 14px;
     border: 1px solid rgba($brown-200, 0.86);
-    border-radius: 20px;
+    border-radius: 4px;
     background:
         linear-gradient(180deg, rgba($oatmeal, 0.98) 0%, rgba($bg-primary, 0.88) 100%);
     box-shadow:
@@ -62,7 +62,7 @@
         width: 34px;
         height: 34px;
         border: 1px solid rgba($brown-200, 0.9);
-        border-radius: 10px;
+        border-radius: 4px;
         background: rgba($oatmeal, 0.85);
         color: rgba($brown-600, 0.95);
         transition:
@@ -100,7 +100,7 @@
         min-height: 34px;
         height: 34px;
         padding: 0 10px;
-        border-radius: 10px;
+        border-radius: 4px;
         box-shadow: none;
         background: rgba($oatmeal, 0.94);
     }
@@ -131,7 +131,7 @@
         height: 34px;
         padding: 0 28px 0 12px;
         border: 1px solid rgba($brown-200, 0.92);
-        border-radius: 10px;
+        border-radius: 4px;
         background: rgba($oatmeal, 0.94);
         color: $brown-700;
         appearance: none;
@@ -166,7 +166,7 @@
         width: 40px;
         height: 40px;
         border: 1px solid transparent;
-        border-radius: 12px;
+        border-radius: 4px;
         background: transparent;
         color: $brown-700;
         transition:
@@ -231,7 +231,7 @@
         &__nav-button,
         &__dropdown,
         &__day-button {
-            border-radius: 10px;
+            border-radius: 4px;
         }
     }
 }

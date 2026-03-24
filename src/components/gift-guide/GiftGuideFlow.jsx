@@ -6,6 +6,7 @@ import { giftGuideTree } from '../../data/giftGuideData';
 import useProductStore from '../../store/useProductStore';
 import useCartStore from '../../store/useCartStore';
 import useWishlistStore from '../../store/useWishlistStore';
+import { getCategoryLabelFromValue } from '../../data/productCategories';
 import AddToCartButton from '../common/btn/AddToCartButton';
 import Best from '../common/badge/Best';
 import New from '../common/badge/New';
@@ -227,7 +228,7 @@ const GiftGuideFlow = () => {
                                         <div className="products-page__card-info">
                                             <div className="products-page__card-copy">
                                                 <div className="products-page__card-copy-inner">
-                                                    <p className="products-page__card-category suit-12-r">{product.category}</p>
+                                                    <p className="products-page__card-category suit-12-r">{getCategoryLabelFromValue(product.category)}</p>
                                                     <p className="products-page__card-name suit-18-m">{product.name}</p>
                                                     <p className="products-page__card-desc suit-14-m">{product.description}</p>
                                                     <p className="products-page__card-price suit-16-r">{product.variants[0]?.price?.toLocaleString()}원</p>

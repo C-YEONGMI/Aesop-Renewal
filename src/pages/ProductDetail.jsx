@@ -4,7 +4,7 @@ import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
 import useAuthStore from '../store/useAuthStore';
-import { getCategoryRouteFromValue } from '../data/productCategories';
+import { getCategoryLabelFromValue, getCategoryRouteFromValue } from '../data/productCategories';
 import './ProductDetail.scss';
 
 const TABS = [
@@ -43,6 +43,7 @@ const ProductDetail = () => {
 
     const variant = product.variants[selectedVariant] || product.variants[0];
     const categoryPath = getCategoryRouteFromValue(product.category);
+    const categoryLabel = getCategoryLabelFromValue(product.category);
     const isWished = wishlist.includes(product.name);
 
     const handleAddToCart = () => {
@@ -66,7 +67,7 @@ const ProductDetail = () => {
                 <nav className="product-detail__breadcrumb suit-14-m">
                     <Link to="/">홈</Link>
                     <span> / </span>
-                    <Link to={categoryPath}>{product.category}</Link>
+                    <Link to={categoryPath}>{categoryLabel}</Link>
                     <span> / </span>
                     <span>{product.name}</span>
                 </nav>
@@ -89,7 +90,7 @@ const ProductDetail = () => {
                             </div>
                         ) : null}
 
-                        <p className="product-detail__category suit-14-m">{product.category}</p>
+                        <p className="product-detail__category suit-14-m">{categoryLabel}</p>
                         <h1 className="product-detail__name optima-40">{product.name}</h1>
                         <p className="product-detail__desc suit-18-r">{product.description}</p>
 
@@ -137,7 +138,7 @@ const ProductDetail = () => {
                         <div className="product-detail__benefits suit-14-m">
                             <p>· 공식몰 단독 샘플 증정</p>
                             <p>· 선물 포장 서비스 가능</p>
-                            <p>· 5만원 이상 무료배송</p>
+                            <p>· 회원 무료배송</p>
                         </div>
                     </div>
                 </div>
@@ -176,7 +177,7 @@ const ProductDetail = () => {
 
                                 <section className="product-detail__detail-block">
                                     <h2 className="product-detail__detail-title optima-20">배송 & 반품</h2>
-                                    <p>5만원 이상 무료배송 · 수령 후 7일 이내 반품 가능</p>
+                                    <p>회원 무료배송 · 수령 후 7일 이내 반품 가능</p>
                                 </section>
                             </div>
                         ) : null}

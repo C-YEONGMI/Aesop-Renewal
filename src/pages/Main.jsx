@@ -12,7 +12,6 @@ import KoreaExclusiveSection from '../components/common/mainpage/KoreaExclusiveS
 import AboutTeaserSection from '../components/common/mainpage/AboutTeaserSection';
 import NewArrivalSection from '../components/common/mainpage/NewArrivalSection';
 import ProductNavigatorSection from '../components/common/mainpage/ProductNavigatorSection';
-import RitualNotesSection from '../components/common/mainpage/RitualNotesSection';
 
 import './Main.scss';
 
@@ -48,7 +47,6 @@ const Main = () => {
 
             {/* 10. Product Navigator: 카테고리 탐색 진입점 */}
             <ProductNavigatorSection />
-            <RitualNotesSection />
         </>
     );
 };

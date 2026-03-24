@@ -69,7 +69,7 @@
         align-self: flex-start;
         min-height: 42px;
         padding: 0 18px;
-        border-radius: 999px;
+        border-radius: 4px;
         text-decoration: none;
         color: $brown-700;
         background: rgba($brown-100, 0.5);
@@ -127,7 +127,7 @@
     &__inquiry-status {
         flex-shrink: 0;
         padding: 8px 12px;
-        border-radius: 999px;
+        border-radius: 4px;
         color: $brown-800;
         background: rgba($point-pink, 0.18);
     }

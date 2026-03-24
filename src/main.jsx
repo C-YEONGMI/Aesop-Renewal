@@ -1,11 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import './globals.scss'
-import App from './App.jsx' // Note: This will be updated by bash command later, or I should update it now.
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import App from './App.jsx';
+import './globals.scss';
+import './index.css';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const root = createRoot(document.getElementById('root'));
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+
+root.render(
+    <StrictMode>
+        <GoogleOAuthProvider clientId={googleClientId}>
+            <App />
+        </GoogleOAuthProvider>
+    </StrictMode>
+);

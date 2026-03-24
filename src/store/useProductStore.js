@@ -27,7 +27,8 @@ const normalizeProductData = (products) =>
 const useProductStore = create(
     persist(
         (set, get) => ({
-            products: normalizeProductData(productsData),
+            products: normalizeProductData(productsData.products || []),
+            giftFilters: Array.isArray(productsData.giftFilters) ? productsData.giftFilters : [],
             recentlyViewed: [],
 
             getByCategory: (category) =>

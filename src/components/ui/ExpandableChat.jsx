@@ -3,7 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MessageCircle, RotateCcw, X } from 'lucide-react';
 import useCartStore from '../../store/useCartStore';
 import useProductStore from '../../store/useProductStore';
-import { getCategoryRouteFromValue, getCategorySlugFromValue } from '../../data/productCategories';
+import {
+    getCategoryLabelFromValue,
+    getCategoryRouteFromValue,
+    getCategorySlugFromValue,
+} from '../../data/productCategories';
 import {
     GIFT_FLOW,
     HOME_OPTIONS,
@@ -121,7 +125,7 @@ const ExpandableChat = ({ isOpen, onClose }) => {
         title: product.name,
         description,
         tags,
-        meta: `${product.category} · ${getPrimaryVariant(product).capacity || ''} · ${formatPrice(getPrimaryPrice(product))}`,
+        meta: `${getCategoryLabelFromValue(product.category)} · ${getPrimaryVariant(product).capacity || ''} · ${formatPrice(getPrimaryPrice(product))}`,
         image: getPrimaryVariant(product).image,
         actions: [
             { label: '장바구니 담기', kind: 'add', product },
@@ -272,10 +276,10 @@ const ExpandableChat = ({ isOpen, onClose }) => {
                 createCardsMessage(nextIdRef.current++, [
                     ...(activeProduct
                         ? [
-                              buildProductCard(activeProduct, '현재 보고 있는 제품', '지금 보고 있는 제품을 기준으로 장바구니 담기 또는 비슷한 제품 비교가 가능합니다.', ['현재 제품', activeProduct.category],),
+                              buildProductCard(activeProduct, '현재 보고 있는 제품', '지금 보고 있는 제품을 기준으로 장바구니 담기 또는 비슷한 제품 비교가 가능합니다.', ['현재 제품', getCategoryLabelFromValue(activeProduct.category)],),
                           ]
                         : []),
-                    ...similarProducts.map((product) => buildProductCard(product, '비슷한 제품', '같은 카테고리 안에서 함께 비교해 보기 좋은 선택입니다.', ['비슷한 결', product.category])),
+                    ...similarProducts.map((product) => buildProductCard(product, '비슷한 제품', '같은 카테고리 안에서 함께 비교해 보기 좋은 선택입니다.', ['비슷한 결', getCategoryLabelFromValue(product.category)])),
                 ])
             );
         }
