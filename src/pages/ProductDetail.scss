@@ -1,10 +1,12 @@
-@use "../globals.scss" as *;
+@use '../globals.scss' as *;
 
 .product-detail {
     background-color: $bg-primary;
     min-height: 100vh;
 
-    &__header-space { height: 70px; }
+    &__header-space {
+        height: 70px;
+    }
 
     &__not-found {
         padding: 120px 4%;
@@ -34,7 +36,9 @@
             color: $brown-400;
             text-decoration: none;
 
-            &:hover { color: $brown-700; }
+            &:hover {
+                color: $brown-700;
+            }
         }
     }
 
@@ -69,8 +73,13 @@
         height: fit-content;
     }
 
-    &__badges { display: flex; gap: 6px; }
-    &__category { color: $brown-400; }
+    &__badges {
+        display: flex;
+        gap: 6px;
+    }
+    &__category {
+        color: $brown-400;
+    }
 
     &__name {
         margin: 0;
@@ -146,7 +155,9 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
 
-        &:hover { background-color: $brown-900; }
+        &:hover {
+            background-color: $brown-900;
+        }
     }
 
     &__wish-btn {
@@ -160,8 +171,12 @@
         cursor: pointer;
         transition: color 0.3s ease;
 
-        &.active,
-        &:hover { color: $brown-700; }
+        &.active {
+            color: $point-pink;
+        }
+        &:hover {
+            color: $point-pink;
+        }
     }
 
     &__benefits {
@@ -173,7 +188,9 @@
         color: $brown-400;
     }
 
-    &__tabs { border-top: 1px solid $brown-200; }
+    &__tabs {
+        border-top: 1px solid $brown-200;
+    }
 
     &__tab-list {
         display: grid;
@@ -229,7 +246,9 @@
         gap: 10px;
     }
 
-    &__no-review { color: $brown-300; }
+    &__no-review {
+        color: $brown-300;
+    }
 }
 
 @media (max-width: 767px) {

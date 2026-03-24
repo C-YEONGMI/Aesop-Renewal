@@ -4,6 +4,7 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import FloatingButtons from './btn/FloatingButtons';
 import CartAddDialog from '../ui/CartAddDialog';
+import OrderCompleteModal from '../ui/OrderCompleteModal';
 
 // 전체 레이아웃 래퍼
 // - 홈 Hero 구간: transparent 헤더 (흰색 텍스트)
@@ -117,6 +118,7 @@ const Layout = () => {
                 <Outlet />
             </main>
             <CartAddDialog />
+            <OrderCompleteModal />
             <Footer />
             <FloatingButtons />
         </>

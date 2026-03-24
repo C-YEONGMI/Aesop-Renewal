@@ -176,8 +176,6 @@ const Checkout = () => {
         });
 
         removeOrderedItems(checkedItems.map((item) => item.cartId));
-        alert(`주문이 완료되었습니다.\n주문번호: ${order.id}`);
-        navigate('/mypage/orders');
     };
 
     if (checkedItems.length === 0) {

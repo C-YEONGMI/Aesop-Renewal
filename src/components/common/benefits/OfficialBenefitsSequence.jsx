@@ -5,6 +5,7 @@ import officialProductImage from '../../../assets/official_product.png';
 import bodyCleanserImage from '../../../assets/Configuration_bodycleanser.png';
 import perfumeImage from '../../../assets/Configuration_Perfume.png';
 import handCreamImage from '../../../assets/Configuration_HandCream.png';
+import sampleImage from '../../../assets/sample_img.png';
 import soapImage from '../../../assets/Configuration_soap.png';
 import giftCardImage from '../../../assets/Configuration_GiftCard.png';
 import OfficialBenefitsIntroTransition from './OfficialBenefitsIntroTransition';
@@ -31,8 +32,8 @@ const BENEFIT_CARDS = [
             '주문과 함께 샘플을 선택해 새로운 제품을 집에서도 경험할 수 있습니다.',
             '아직 만나보지 못한 제품까지 경험해 보세요.',
         ],
-        image: handCreamImage,
-        imageAlt: '샘플 경험을 상징하는 이솝 핸드 케어 이미지',
+        image: sampleImage,
+        imageAlt: '샘플 경험을 상징하는 이솝 샘플 이미지',
         theme: 'sand',
     },
     {

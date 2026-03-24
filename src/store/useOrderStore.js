@@ -6,6 +6,7 @@ const useOrderStore = create(
     persist(
         (set, get) => ({
             orders: [],
+            isOrderCompleteOpen: false,
 
             // 주문 저장
             createOrder: (orderData) => {
@@ -15,9 +16,11 @@ const useOrderStore = create(
                     status: '주문완료',
                     createdAt: new Date().toISOString(),
                 };
-                set({ orders: [newOrder, ...get().orders] });
+                set({ orders: [newOrder, ...get().orders], isOrderCompleteOpen: true });
                 return newOrder;
             },
+
+            closeOrderComplete: () => set({ isOrderCompleteOpen: false }),
 
             // 사용자별 주문 조회
             getOrdersByUser: (userId) => {

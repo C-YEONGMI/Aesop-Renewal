@@ -48,7 +48,7 @@ export const menuData = [
                 ],
             },
             {
-                label: 'FRAGRANCE',
+                label: 'PERFUME',
                 path: '/products/fragrance',
                 children: [
                     { label: 'Floral', path: '/products/fragrance/floral', classification: { category: 'Fragrance', subcategory: 'Floral' } },

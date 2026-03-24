@@ -59,7 +59,7 @@ const NewArrivalSection = () => {
                             New Arrival
                         </h2>
                         <div className="new-arrival__more-wrapper" data-node-id="530:1785">
-                            <More text="more" to="/product/Above%20Us%20Steorra" />
+                            <More text="more" to={`/product/${encodeURIComponent('어보브 어스, 스테오라 오 드 퍼퓸')}`} />
                         </div>
                     </div>
 
