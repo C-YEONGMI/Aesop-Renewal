@@ -5,6 +5,7 @@ import kakaoLogoImage from '../../assets/kakao-logo.png';
 import useAuthStore from '../../store/useAuthStore';
 import {
     beginSocialLogin,
+    consumeSocialReturnTo,
     prepareRedirectSocialLogin,
 } from '../../lib/socialAuth';
 import './Auth.scss';
@@ -26,6 +27,7 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const login = useAuthStore((state) => state.login);
+    const completeSocialLogin = useAuthStore((state) => state.completeSocialLogin);
     const ensureTestAccount = useAuthStore((state) => state.ensureTestAccount);
     const [form, setForm] = useState({ identifier: '', password: '' });
     const [error, setError] = useState('');
@@ -107,7 +109,20 @@ const Login = () => {
         closeSocialNotice();
 
         try {
-            await beginSocialLogin('google', { returnTo: postLoginPath });
+            const result = await beginSocialLogin('google', { returnTo: postLoginPath });
+            const profile = result?.profile;
+
+            if (!profile) {
+                throw new Error('Google 계정 정보를 가져오지 못했습니다.');
+            }
+
+            const loginResult = completeSocialLogin('google', profile);
+
+            if (!loginResult.success) {
+                throw new Error(loginResult.message || 'Google 로그인을 완료하지 못했습니다.');
+            }
+
+            navigate(consumeSocialReturnTo(), { replace: true });
         } catch (nextError) {
             setError(nextError.message || 'Google 로그인 처리 중 문제가 발생했습니다.');
         }
@@ -350,8 +365,6 @@ const Login = () => {
                             <a
                                 href={naverLoginHref || '#'}
                                 className="auth-page__social-notice-btn auth-page__social-notice-btn--primary suit-14-m"
-                                target="_blank"
-                                rel="noreferrer"
                             >
                                 네이버 로그인 계속
                             </a>

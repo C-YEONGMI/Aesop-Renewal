@@ -124,7 +124,7 @@ const CartAddDialog = () => {
                 <DialogHeader className="cart-add-dialog__header">
                     <p className="cart-add-dialog__eyebrow suit-12-r">Shopping Bag</p>
                     <DialogTitle className="cart-add-dialog__title optima-40">
-                        장바구니에 담았습니다
+                        장바구니에 담았습니다.
                     </DialogTitle>
                     <DialogDescription
                         className="cart-add-dialog__description suit-16-r"
