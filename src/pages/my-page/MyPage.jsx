@@ -443,7 +443,7 @@ const MyPage = () => {
                                                                 <img src={item.image} alt={item.productName} />
                                                             </div>
                                                             <div className="mypage__order-item-copy">
-                                                                <p className="suit-16-r">{item.productName}</p>
+                                                                <p className="suit-14-m">{item.productName}</p>
                                                                 <p className="suit-14-m">{item.variant} · {item.quantity}개</p>
                                                             </div>
                                                             <div className="mypage__order-item-price suit-14-m">

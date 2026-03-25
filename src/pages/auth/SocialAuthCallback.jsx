@@ -100,8 +100,8 @@ const SocialAuthCallback = () => {
                         <span className="auth-page__status-spinner" aria-hidden="true" />
                     ) : null}
 
-                    <h1 className="auth-page__status-title optima-40">{status.title}</h1>
-                    <p className="auth-page__status-message suit-16-r">{status.message}</p>
+                    <h1 className="auth-page__status-title optima-20">{status.title}</h1>
+                    <p className="auth-page__status-message suit-14-m">{status.message}</p>
 
                     {status.type === 'error' ? (
                         <div className="auth-page__status-actions suit-14-m">
