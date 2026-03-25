@@ -15,7 +15,7 @@ import {
     getCategoryLabelFromValue,
     getCategorySlugFromValue,
 } from '../../data/productCategories';
-import { getClassification } from '../../components/layout/navigation/menuData';
+import { getClassification, menuData } from '../../components/layout/navigation/menuData';
 import './Products.scss';
 
 const SORT_OPTIONS = [
@@ -35,6 +35,10 @@ const PRICE_RANGE_OPTIONS = [
 
 const formatBreadcrumbLabel = (value = '') =>
     value.replace(/[A-Za-z]+/g, (word) => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`);
+
+const getCategorySlugFromPath = (path = '') => path.split('/').filter(Boolean)[1] || '';
+
+const getSubcategorySlugFromPath = (path = '') => path.split('/').filter(Boolean)[2] || '';
 
 const renderBadge = (badge) => {
     switch (badge) {
@@ -140,6 +144,27 @@ const Products = () => {
         );
     }, [categoryFilteredProducts, selectedGiftProductNames]);
 
+    const productNavigationCategories = useMemo(() => {
+        const productsMenu = menuData.find((item) => item.label === 'PRODUCTS');
+
+        return (productsMenu?.children || []).map((item) => {
+            const slug = getCategorySlugFromPath(item.path);
+
+            return {
+                slug,
+                label: item.label,
+                path: item.path,
+                count: products.filter(
+                    (product) => getCategorySlugFromValue(product.category) === slug
+                ).length,
+                children: (item.children || []).map((child) => ({
+                    ...child,
+                    slug: getSubcategorySlugFromPath(child.path),
+                })),
+            };
+        });
+    }, [products]);
+
     const categoryOptions = useMemo(
         () => [
             {
@@ -158,12 +183,24 @@ const Products = () => {
         [products]
     );
 
+    const activeCategorySlug = routeCategorySlug || activeCategories[0] || '';
+
+    const activeNavigationCategory = useMemo(
+        () =>
+            productNavigationCategories.find((item) => item.slug === activeCategorySlug) || null,
+        [activeCategorySlug, productNavigationCategories]
+    );
+
     const activeCategoryLabels = useMemo(
         () =>
             activeCategories
-                .map((slug) => PRODUCT_CATEGORY_CONFIG[slug]?.label)
+                .map(
+                    (slug) =>
+                        productNavigationCategories.find((item) => item.slug === slug)?.label ||
+                        PRODUCT_CATEGORY_CONFIG[slug]?.label
+                )
                 .filter(Boolean),
-        [activeCategories]
+        [activeCategories, productNavigationCategories]
     );
 
     const pageTitle = classificationMatch
@@ -233,10 +270,15 @@ const Products = () => {
         });
     };
 
+    const handleCategorySelect = (categorySlug) => {
+        const nextCategories = categorySlug ? [categorySlug] : [];
+
+        setActiveCategories(nextCategories);
+        syncRouteForCategories(nextCategories);
+    };
+
     const handleCategoryToggle = (categorySlug) => {
-        const nextCategories = activeCategories.includes(categorySlug)
-            ? activeCategories.filter((slug) => slug !== categorySlug)
-            : [...activeCategories, categorySlug];
+        const nextCategories = activeCategories.includes(categorySlug) ? [] : [categorySlug];
 
         setActiveCategories(nextCategories);
         syncRouteForCategories(nextCategories);
@@ -311,10 +353,62 @@ const Products = () => {
                                 activePriceRanges={activePriceRanges}
                                 onPriceRangeToggle={handlePriceRangeToggle}
                                 onClearAllFilters={handleClearAllFilters}
+                                showCategorySection={false}
+                                includeCategorySummary={false}
                             />
                         </div>
 
                         <div className="products-page__content">
+                            <section className="products-page__category-nav" aria-label="Product category navigation">
+                                <div className="products-page__category-tabs">
+                                    <button
+                                        type="button"
+                                        className={`products-page__category-tab suit-14-m ${
+                                            activeCategories.length === 0 ? 'is-active' : ''
+                                        }`}
+                                        onClick={() => handleCategorySelect('')}
+                                    >
+                                        전체
+                                    </button>
+
+                                    {productNavigationCategories.map((item) => (
+                                        <button
+                                            key={item.slug}
+                                            type="button"
+                                            className={`products-page__category-tab suit-14-m ${
+                                                activeCategorySlug === item.slug ? 'is-active' : ''
+                                            }`}
+                                            onClick={() => handleCategorySelect(item.slug)}
+                                        >
+                                            {item.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {activeNavigationCategory?.children?.length ? (
+                                    <div className="products-page__subcategory-panel">
+                                        <p className="products-page__subcategory-heading suit-12-r">
+                                            {activeNavigationCategory.label}
+                                        </p>
+
+                                        <div className="products-page__subcategory-links">
+                                            {activeNavigationCategory.children.map((item) => (
+                                                <Link
+                                                    key={item.path}
+                                                    to={item.path}
+                                                    state={{ preserveScroll: true }}
+                                                    className={`products-page__subcategory-link suit-16-r ${
+                                                        subcategory === item.slug ? 'is-active' : ''
+                                                    }`}
+                                                >
+                                                    {item.label}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : null}
+                            </section>
+
                             <div className="products-page__toolbar">
                                 <div className="products-page__toolbar-copy">
                                     <p className="suit-16-r products-page__count">
