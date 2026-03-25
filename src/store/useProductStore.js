@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import productsData from '../data/products.json';
+import protectiveLipBalmSpf30Image from '../assets/Protective Lip Balm SPF30.png';
 import { inferProductCategoryLabel, normalizeCategoryValue } from '../data/productCategories';
 
 const BROKEN_IMAGE_URLS = new Map([
@@ -8,6 +9,7 @@ const BROKEN_IMAGE_URLS = new Map([
         'https://kr.aesop.com/dw/image/v2/AARM_PRD/on/demandware.static/-/Sites-aesop-master-catalog/ko_KR/dw76bc2cc6/images/products/SK52/Aesop-Skin-Protective-Lip-Balm-SPF30-5-5g-large.png',
         'https://kr.aesop.com/dw/image/v2/AARM_PRD/on/demandware.static/-/Sites-aesop-master-catalog/ko_KR/dw76bc2cc6/images/products/SK52/Aesop-Skin-Protective-Lip-Balm-SPF30-5-5g-large.jpg?bgcolor=fffef2&q=70&sfrm=jpg&sh=430&sm=cut&sw=430',
     ],
+    ['/src/assets/Protective Lip Balm SPF30.png', protectiveLipBalmSpf30Image],
 ]);
 const normalizeImageUrl = (url = '') => BROKEN_IMAGE_URLS.get(url) || url;
 
