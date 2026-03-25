@@ -1,4 +1,4 @@
-import { fail, handleCors, readJsonBody, requirePost, success } from '../../_shared.js';
+import { fail, handleCors, readJsonBody, requirePost, success } from '../_shared.js';
 
 const NAVER_TOKEN_ENDPOINT = 'https://nid.naver.com/oauth2.0/token';
 const NAVER_USERINFO_ENDPOINT = 'https://openapi.naver.com/v1/nid/me';

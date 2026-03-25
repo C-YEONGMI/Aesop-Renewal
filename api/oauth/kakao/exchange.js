@@ -1,4 +1,4 @@
-import { fail, handleCors, readJsonBody, requirePost, success } from '../../_shared.js';
+import { fail, handleCors, readJsonBody, requirePost, success } from '../_shared.js';
 
 const KAKAO_TOKEN_ENDPOINT = 'https://kauth.kakao.com/oauth/token';
 const KAKAO_USERINFO_ENDPOINT = 'https://kapi.kakao.com/v2/user/me';
