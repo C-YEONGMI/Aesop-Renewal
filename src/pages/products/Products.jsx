@@ -413,25 +413,19 @@ const Products = () => {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="products-page__subcategory-panel">
-                                            <p className="products-page__subcategory-heading suit-12-r">
-                                                {activeNavigationCategory.displayLabel}
-                                            </p>
-
-                                            <div className="products-page__subcategory-links">
-                                                {activeNavigationCategory.children.map((item) => (
-                                                    <Link
-                                                        key={item.path}
-                                                        to={item.path}
-                                                        state={{ preserveScroll: true }}
-                                                        className={`products-page__subcategory-link suit-16-r ${
-                                                            subcategory === item.slug ? 'is-active' : ''
-                                                        }`}
-                                                    >
-                                                        {item.displayLabel}
-                                                    </Link>
-                                                ))}
-                                            </div>
+                                        <div className="products-page__subcategory-links">
+                                            {activeNavigationCategory.children.map((item) => (
+                                                <Link
+                                                    key={item.path}
+                                                    to={item.path}
+                                                    state={{ preserveScroll: true }}
+                                                    className={`products-page__subcategory-link suit-16-r ${
+                                                        subcategory === item.slug ? 'is-active' : ''
+                                                    }`}
+                                                >
+                                                    {item.displayLabel}
+                                                </Link>
+                                            ))}
                                         </div>
                                     )
                                 ) : null}
