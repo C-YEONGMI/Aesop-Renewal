@@ -1,4 +1,4 @@
-@use "../../globals.scss" as *;
+@use '../../globals.scss' as *;
 
 .products-page {
     background-color: $bg-primary;
@@ -62,6 +62,80 @@
         }
     }
 
+    &__category-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    &__category-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    &__category-tab {
+        min-height: 36px;
+        padding: 0 14px;
+        border: 1px solid $brown-200;
+        background-color: rgba($oatmeal, 0.92);
+        color: $brown-500;
+        transition:
+            border-color 0.2s ease,
+            background-color 0.2s ease,
+            color 0.2s ease;
+
+        &:hover {
+            border-color: $brown-500;
+            color: $brown-800;
+        }
+
+        &.is-active {
+            border-color: $brown-900;
+            background-color: $brown-900;
+            color: $oatmeal;
+        }
+    }
+
+    &__subcategory-panel {
+        display: grid;
+        grid-template-columns: minmax(120px, auto) minmax(0, 1fr);
+        gap: 16px 28px;
+        align-items: start;
+    }
+
+    &__subcategory-heading {
+        color: $brown-400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    &__subcategory-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 18px;
+    }
+
+    &__subcategory-link {
+        color: $brown-500;
+        padding-bottom: 3px;
+        border-bottom: 1px solid transparent;
+        transition:
+            color 0.2s ease,
+            border-color 0.2s ease;
+
+        &:hover {
+            color: $brown-800;
+            border-bottom-color: rgba($brown-400, 0.7);
+        }
+
+        &.is-active {
+            color: $brown-800;
+            border-bottom-color: $brown-800;
+        }
+    }
+
     &__toolbar {
         display: flex;
         align-items: flex-end;
@@ -106,6 +180,7 @@
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
+        color-scheme: light;
         cursor: pointer;
 
         &:focus-visible,
@@ -113,6 +188,18 @@
             border-color: $brown-200;
             background-color: rgba($oatmeal, 0.95);
             box-shadow: none;
+        }
+
+        option {
+            background: $oatmeal;
+            color: $brown-800;
+        }
+
+        option:checked,
+        option:hover,
+        option:focus-visible {
+            background: rgba($brown-100, 0.84);
+            color: $brown-900;
         }
     }
 
@@ -208,7 +295,9 @@
         justify-content: center;
         color: $brown-400;
         pointer-events: auto;
-        transition: color 0.3s ease, transform 0.3s ease;
+        transition:
+            color 0.3s ease,
+            transform 0.3s ease;
 
         &.active {
             color: $point-pink;
@@ -345,6 +434,15 @@
             gap: 28px;
         }
 
+        &__category-nav {
+            margin-bottom: 24px;
+        }
+
+        &__subcategory-panel {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
         &__rail {
             padding-top: 0;
             position: relative;
@@ -359,6 +457,21 @@
     @media (max-width: 767px) {
         &__title-area {
             margin-bottom: 28px;
+        }
+
+        &__category-tabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        &__category-tab {
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+
+        &__subcategory-links {
+            gap: 10px 14px;
         }
 
         &__toolbar {

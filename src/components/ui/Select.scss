@@ -71,6 +71,12 @@
             inset 0 1px 0 rgba($oatmeal, 0.94);
         transform-origin: var(--radix-select-content-transform-origin);
         animation: aesop-select-fade-in 0.18s ease-out;
+        -webkit-tap-highlight-color: transparent;
+
+        &::selection {
+            background: rgba($brown-200, 0.9);
+            color: $brown-900;
+        }
     }
 
     &__viewport {
@@ -109,25 +115,41 @@
         font-size: 14px;
         line-height: 1.4;
         outline: none;
+        cursor: default;
         user-select: none;
+        -webkit-tap-highlight-color: transparent;
         transition:
             background-color 0.16s ease,
             color 0.16s ease;
 
         &[data-highlighted] {
-            background: rgba($bg-primary, 0.88);
+            background: rgba($brown-100, 0.72);
             color: $brown-900;
         }
 
         &[data-state='checked'] {
-            background: rgba($brown-50, 0.96);
-            color: $brown-900;
+            background: rgba($brown-700, 0.94);
+            color: $oatmeal;
+        }
+
+        &[data-state='checked'][data-highlighted] {
+            background: rgba($brown-800, 0.96);
+            color: $oatmeal;
         }
 
         &[data-disabled] {
             opacity: 0.44;
             pointer-events: none;
         }
+
+        &::selection {
+            background: rgba($brown-200, 0.9);
+            color: $brown-900;
+        }
+    }
+
+    &__item[data-state='checked'] &__item-indicator {
+        color: $oatmeal;
     }
 
     &__item-indicator {

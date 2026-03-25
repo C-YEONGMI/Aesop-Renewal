@@ -84,6 +84,8 @@ const ProductFilterRail = ({
     activePriceRanges,
     onPriceRangeToggle,
     onClearAllFilters,
+    showCategorySection = true,
+    includeCategorySummary = true,
 }) => {
     const categoryItems = useMemo(
         () =>
@@ -120,21 +122,23 @@ const ProductFilterRail = ({
     const selectedItems = useMemo(() => {
         const items = [];
 
-        activeCategories.forEach((slug) => {
-            const activeCategoryItem = categoryItems.find(
-                (category) => category.value === slug
-            );
+        if (includeCategorySummary) {
+            activeCategories.forEach((slug) => {
+                const activeCategoryItem = categoryItems.find(
+                    (category) => category.value === slug
+                );
 
-            if (!activeCategoryItem) {
-                return;
-            }
+                if (!activeCategoryItem) {
+                    return;
+                }
 
-            items.push({
-                key: activeCategoryItem.key,
-                label: activeCategoryItem.label,
-                onRemove: () => onCategoryToggle(slug),
+                items.push({
+                    key: activeCategoryItem.key,
+                    label: activeCategoryItem.label,
+                    onRemove: () => onCategoryToggle(slug),
+                });
             });
-        });
+        }
 
         activeGiftFilters.forEach((filterId) => {
             const activeGiftFilterItem = giftFilterItems.find(
@@ -175,6 +179,7 @@ const ProductFilterRail = ({
         activePriceRanges,
         categoryItems,
         giftFilterItems,
+        includeCategorySummary,
         onCategoryToggle,
         onGiftFilterToggle,
         onPriceRangeToggle,
@@ -238,7 +243,7 @@ const ProductFilterRail = ({
                                             layout
                                             className="product-filter-rail__selected-empty suit-14-m"
                                         >
-                                            선택된 필터가 없습니다
+                                            No filters selected
                                         </motion.p>
                                     )}
 
@@ -249,29 +254,31 @@ const ProductFilterRail = ({
                                         onClick={onClearAllFilters}
                                     >
                                         <RotateCcw size={13} strokeWidth={1.8} />
-                                        전체 해제
+                                        Clear all
                                     </motion.button>
                                 </motion.div>
                             </AnimatePresence>
                         </motion.div>
 
-                        <FilterSection title="카테고리">
-                            <motion.ul layout className="product-filter-rail__category-list">
-                                <AnimatePresence mode="popLayout" initial={false}>
-                                    {availableCategoryItems.map((category) => (
-                                        <motion.li layout key={category.key}>
-                                            <FilterChip
-                                                item={category}
-                                                onClick={() => onCategoryToggle(category.value)}
-                                            />
-                                        </motion.li>
-                                    ))}
-                                </AnimatePresence>
-                            </motion.ul>
-                        </FilterSection>
+                        {showCategorySection ? (
+                            <FilterSection title="Category">
+                                <motion.ul layout className="product-filter-rail__category-list">
+                                    <AnimatePresence mode="popLayout" initial={false}>
+                                        {availableCategoryItems.map((category) => (
+                                            <motion.li layout key={category.key}>
+                                                <FilterChip
+                                                    item={category}
+                                                    onClick={() => onCategoryToggle(category.value)}
+                                                />
+                                            </motion.li>
+                                        ))}
+                                    </AnimatePresence>
+                                </motion.ul>
+                            </FilterSection>
+                        ) : null}
 
                         {giftFilterItems.length > 0 && onGiftFilterToggle ? (
-                            <FilterSection title="상황별 추천">
+                            <FilterSection title="Gift Filters">
                                 <motion.ul layout className="product-filter-rail__category-list">
                                     <AnimatePresence mode="popLayout" initial={false}>
                                         {availableGiftFilterItems.map((filter) => (
@@ -289,7 +296,7 @@ const ProductFilterRail = ({
                             </FilterSection>
                         ) : null}
 
-                        <FilterSection title="가격대">
+                        <FilterSection title="Price">
                             <motion.div layout className="product-filter-rail__option-list">
                                 <AnimatePresence mode="popLayout" initial={false}>
                                     {availablePriceRangeItems.map((range) => (

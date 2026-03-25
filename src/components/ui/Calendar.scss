@@ -136,6 +136,7 @@
         color: $brown-700;
         appearance: none;
         outline: none;
+        color-scheme: light;
         transition:
             border-color 0.2s ease,
             box-shadow 0.2s ease;
@@ -143,6 +144,18 @@
         &:focus-visible {
             border-color: rgba($brown-500, 0.86);
             box-shadow: 0 0 0 3px rgba($brown-200, 0.22);
+        }
+
+        option {
+            background: $oatmeal;
+            color: $brown-800;
+        }
+
+        option:checked,
+        option:hover,
+        option:focus-visible {
+            background: rgba($brown-100, 0.84);
+            color: $brown-900;
         }
     }
 
