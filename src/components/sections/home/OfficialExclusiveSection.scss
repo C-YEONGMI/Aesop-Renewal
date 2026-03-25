@@ -159,73 +159,91 @@
     }
 
     @media (min-width: 1024px) and (max-width: 1439px) {
-        height: auto;
+        --official-tablet-wide-image-scale: clamp(0.66, 0.48 + 0.02vw, 0.78);
+
         padding: 96px var(--page-gutter) 120px;
+        min-height: clamp(820px, 78vw, 980px);
 
         &__bg-logo {
-            top: 96px;
-            left: auto;
-            right: clamp(12px, 6vw, 64px);
-            width: min(34vw, 360px);
+            top: clamp(176px, 16vw, 230px);
+            left: 50%;
+            right: auto;
+            width: min(34vw, 420px);
             height: auto;
-            transform: none;
+            transform: translateX(-50%);
         }
 
         &__inner {
-            display: grid;
-            grid-template-columns: minmax(320px, 480px) minmax(0, 1fr);
-            align-items: center;
-            gap: clamp(32px, 4vw, 72px);
+            display: block;
+            min-height: clamp(700px, 64vw, 840px);
         }
 
         &__content {
-            position: relative;
-            top: auto;
-            left: auto;
-            transform: none;
-            width: min(547px, 100%);
-            max-width: 100%;
+            position: absolute;
+            top: clamp(284px, 26vw, 352px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(500px, calc(100% - 360px));
+            max-width: none;
+            gap: 28px;
         }
 
         &__img {
-            display: none;
+            display: block;
+            transform: scale(var(--official-tablet-wide-image-scale));
+            transform-origin: top left;
+        }
+
+        &__img:nth-of-type(1) {
+            top: clamp(312px, 30vw, 360px) !important;
+            left: clamp(8px, 1.4vw, 28px) !important;
+        }
+
+        &__img:nth-of-type(2) {
+            top: clamp(188px, 18vw, 236px) !important;
+            left: clamp(82px, 8.4vw, 132px) !important;
+            transform: scale(calc(var(--official-tablet-wide-image-scale) - 0.04));
+        }
+
+        &__img:nth-of-type(3) {
+            top: auto !important;
+            bottom: clamp(42px, 4vw, 60px) !important;
+            left: clamp(120px, 12vw, 176px) !important;
+            transform: scale(calc(var(--official-tablet-wide-image-scale) - 0.04));
+        }
+
+        &__img:nth-of-type(4) {
+            top: auto !important;
+            bottom: clamp(148px, 13vw, 188px) !important;
+            left: auto !important;
+            right: clamp(120px, 12vw, 184px) !important;
+            transform: scale(calc(var(--official-tablet-wide-image-scale) - 0.08));
+            transform-origin: top right;
+        }
+
+        &__img:nth-of-type(5) {
+            top: clamp(118px, 11vw, 156px) !important;
+            left: auto !important;
+            right: clamp(8px, 1vw, 30px) !important;
+            transform: scale(calc(var(--official-tablet-wide-image-scale) - 0.01));
+            transform-origin: top right;
+        }
+
+        &__img:nth-of-type(6) {
+            top: clamp(386px, 36vw, 454px) !important;
+            left: auto !important;
+            right: clamp(22px, 2.2vw, 48px) !important;
+            transform: scale(calc(var(--official-tablet-wide-image-scale) - 0.02));
+            transform-origin: top right;
         }
 
         &__gallery {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: clamp(14px, 1.8vw, 20px);
-            width: min(100%, 620px);
-            margin-left: auto;
-        }
-
-        &__gallery-card {
-            position: relative;
-            min-height: 180px;
-            border: 1px solid rgba($brown-200, 0.72);
-            background:
-                radial-gradient(circle at 50% 18%, rgba($oatmeal, 0.72) 0%, rgba($oatmeal, 0.2) 44%, rgba($oatmeal, 0) 78%),
-                linear-gradient(180deg, rgba($brown-50, 0.94) 0%, rgba($bg-primary, 0.68) 100%);
-            overflow: hidden;
-            aspect-ratio: 1 / 1.08;
-
-            &:nth-child(1),
-            &:nth-child(4) {
-                aspect-ratio: 1 / 1.34;
-            }
-        }
-
-        &__gallery-image {
-            width: 100%;
-            height: 100%;
-            padding: clamp(16px, 2vw, 24px);
-            object-fit: contain;
-            display: block;
+            display: none;
         }
     }
 
     @media (min-width: 768px) and (max-width: 1023px) {
-        --official-tablet-image-scale: clamp(0.48, 0.33 + 0.03vw, 0.58);
+        --official-tablet-image-scale: clamp(0.46, 0.34 + 0.02vw, 0.56);
 
         padding: 88px var(--page-gutter) 96px;
         min-height: clamp(760px, 114vw, 980px);
@@ -245,22 +263,22 @@
 
         &__content {
             position: absolute;
-            top: clamp(232px, 31vw, 312px);
+            top: clamp(248px, 33vw, 318px);
             left: 50%;
             transform: translateX(-50%);
-            width: min(440px, calc(100% - 220px));
-            align-items: center;
-            text-align: center;
+            width: min(430px, calc(100% - 240px));
+            align-items: flex-start;
+            text-align: left;
         }
 
         &__copy,
         &__headline-block,
         &__text-block {
-            align-items: center;
+            align-items: flex-start;
         }
 
         &__text-block {
-            width: min(320px, 100%);
+            width: min(336px, 100%);
         }
 
         &__img {
@@ -270,45 +288,45 @@
         }
 
         &__img:nth-of-type(1) {
-            top: clamp(304px, 40vw, 376px) !important;
-            left: clamp(4px, 1.8vw, 18px) !important;
+            top: clamp(316px, 41vw, 384px) !important;
+            left: clamp(-4px, 0.4vw, 10px) !important;
         }
 
         &__img:nth-of-type(2) {
-            top: clamp(166px, 22vw, 224px) !important;
-            left: clamp(92px, 12vw, 132px) !important;
-            transform: scale(calc(var(--official-tablet-image-scale) - 0.02));
+            top: clamp(184px, 24vw, 232px) !important;
+            left: clamp(58px, 7.8vw, 96px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.03));
         }
 
         &__img:nth-of-type(3) {
             top: auto !important;
-            bottom: clamp(30px, 4vw, 48px) !important;
-            left: clamp(102px, 13vw, 148px) !important;
-            transform: scale(calc(var(--official-tablet-image-scale) - 0.03));
+            bottom: clamp(46px, 5vw, 66px) !important;
+            left: clamp(82px, 10vw, 122px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.04));
         }
 
         &__img:nth-of-type(4) {
             top: auto !important;
-            bottom: clamp(128px, 15vw, 176px) !important;
+            bottom: clamp(142px, 15vw, 186px) !important;
             left: auto !important;
-            right: clamp(110px, 12vw, 152px) !important;
-            transform: scale(calc(var(--official-tablet-image-scale) - 0.06));
+            right: clamp(82px, 9vw, 124px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.08));
             transform-origin: top right;
         }
 
         &__img:nth-of-type(5) {
-            top: clamp(106px, 14vw, 148px) !important;
+            top: clamp(122px, 16vw, 158px) !important;
             left: auto !important;
-            right: clamp(0px, 1vw, 10px) !important;
-            transform: scale(calc(var(--official-tablet-image-scale) + 0.01));
+            right: clamp(-4px, 0.6vw, 8px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.01));
             transform-origin: top right;
         }
 
         &__img:nth-of-type(6) {
-            top: clamp(378px, 48vw, 454px) !important;
+            top: clamp(398px, 52vw, 474px) !important;
             left: auto !important;
-            right: clamp(0px, 1.6vw, 14px) !important;
-            transform: scale(calc(var(--official-tablet-image-scale) - 0.01));
+            right: clamp(0px, 1vw, 12px) !important;
+            transform: scale(calc(var(--official-tablet-image-scale) - 0.02));
             transform-origin: top right;
         }
 

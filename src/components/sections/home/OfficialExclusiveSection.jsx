@@ -168,6 +168,90 @@ const OfficialExclusiveSection = () => {
                 );
             };
 
+            const createResponsiveFloatAnimation = ({
+                start = 'top 76%',
+                contentY = 26,
+                imageY = 84,
+                floatFactor = 0.78,
+            } = {}) => {
+                const imageNodes = gsap.utils.toArray('.official-exclusive__img');
+                const floatNodes = gsap.utils.toArray('.official-exclusive__float');
+
+                if (!contentRef.current || !imageNodes.length) {
+                    animateContentOnly();
+                    return undefined;
+                }
+
+                const timeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start,
+                        once: true,
+                    },
+                });
+
+                gsap.set([contentRef.current, ...imageNodes], {
+                    willChange: 'transform, opacity',
+                });
+                gsap.set(floatNodes, { willChange: 'transform' });
+
+                timeline
+                    .fromTo(
+                        contentRef.current,
+                        { autoAlpha: 0, y: contentY },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            duration: 0.82,
+                            ease: 'power2.out',
+                            clearProps: 'willChange',
+                        }
+                    )
+                    .fromTo(
+                        imageNodes,
+                        { autoAlpha: 0, y: imageY },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            duration: 0.96,
+                            stagger: 0.08,
+                            ease: 'power3.out',
+                            clearProps: 'willChange',
+                        },
+                        0.12
+                    );
+
+                const floatTweens = floatNodes.map((node, index) => {
+                    const preset = IMAGE_MOTION_PRESETS[index % IMAGE_MOTION_PRESETS.length];
+
+                    return gsap
+                        .timeline({
+                            repeat: -1,
+                            delay: preset.delay,
+                            defaults: {
+                                ease: 'sine.inOut',
+                            },
+                        })
+                        .to(node, {
+                            y: preset.floatY * floatFactor,
+                            duration: preset.duration * 0.42,
+                        })
+                        .to(node, {
+                            y: preset.floatY * -0.18,
+                            duration: preset.duration * 0.28,
+                        })
+                        .to(node, {
+                            y: 0,
+                            duration: preset.duration * 0.3,
+                        });
+                });
+
+                return () => {
+                    timeline.kill();
+                    floatTweens.forEach((tween) => tween.kill());
+                };
+            };
+
             mm.add('(min-width: 1440px)', () => {
                 const section = sectionRef.current;
                 const proxy = dragProxyRef.current;
@@ -363,86 +447,21 @@ const OfficialExclusiveSection = () => {
             });
 
             mm.add('(min-width: 768px) and (max-width: 1023px)', () => {
-                const imageNodes = gsap.utils.toArray('.official-exclusive__img');
-                const floatNodes = gsap.utils.toArray('.official-exclusive__float');
-
-                if (!contentRef.current || !imageNodes.length) {
-                    animateContentOnly();
-                    return undefined;
-                }
-
-                const timeline = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 76%',
-                        once: true,
-                    },
+                return createResponsiveFloatAnimation({
+                    start: 'top 76%',
+                    contentY: 26,
+                    imageY: 84,
+                    floatFactor: 0.72,
                 });
-
-                gsap.set([contentRef.current, ...imageNodes], {
-                    willChange: 'transform, opacity',
-                });
-                gsap.set(floatNodes, { willChange: 'transform' });
-
-                timeline
-                    .fromTo(
-                        contentRef.current,
-                        { autoAlpha: 0, y: 26 },
-                        {
-                            autoAlpha: 1,
-                            y: 0,
-                            duration: 0.82,
-                            ease: 'power2.out',
-                            clearProps: 'willChange',
-                        }
-                    )
-                    .fromTo(
-                        imageNodes,
-                        { autoAlpha: 0, y: 84 },
-                        {
-                            autoAlpha: 1,
-                            y: 0,
-                            duration: 0.96,
-                            stagger: 0.08,
-                            ease: 'power3.out',
-                            clearProps: 'willChange',
-                        },
-                        0.12
-                    );
-
-                const floatTweens = floatNodes.map((node, index) => {
-                    const preset = IMAGE_MOTION_PRESETS[index % IMAGE_MOTION_PRESETS.length];
-
-                    return gsap
-                        .timeline({
-                            repeat: -1,
-                            delay: preset.delay,
-                            defaults: {
-                                ease: 'sine.inOut',
-                            },
-                        })
-                        .to(node, {
-                            y: preset.floatY * 0.78,
-                            duration: preset.duration * 0.42,
-                        })
-                        .to(node, {
-                            y: preset.floatY * -0.18,
-                            duration: preset.duration * 0.28,
-                        })
-                        .to(node, {
-                            y: 0,
-                            duration: preset.duration * 0.3,
-                        });
-                });
-
-                return () => {
-                    timeline.kill();
-                    floatTweens.forEach((tween) => tween.kill());
-                };
             });
 
             mm.add('(min-width: 1024px) and (max-width: 1439px)', () => {
-                animateContentOnly();
+                return createResponsiveFloatAnimation({
+                    start: 'top 74%',
+                    contentY: 28,
+                    imageY: 96,
+                    floatFactor: 0.82,
+                });
             });
 
             mm.add('(max-width: 767px)', () => {

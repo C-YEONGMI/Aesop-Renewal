@@ -31,7 +31,9 @@ const MobileNav = ({
         <nav className="gnb-mobile">
             <button
                 type="button"
-                className={`gnb-mobile__toggle${transparent ? ' gnb-mobile__toggle--transparent' : ''}`}
+                className={`gnb-mobile__toggle${transparent ? ' gnb-mobile__toggle--transparent' : ''}${
+                    mobileOpen ? ' gnb-mobile__toggle--open' : ''
+                }`}
                 onClick={toggleMobile}
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileOpen}
