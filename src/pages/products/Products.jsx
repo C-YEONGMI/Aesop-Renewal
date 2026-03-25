@@ -397,30 +397,8 @@ const Products = () => {
                                 </div>
 
                                 {activeNavigationCategory?.children?.length ? (
-                                    <div
-                                        className={`products-page__subcategory-panel ${
-                                            isSubcategoryView
-                                                ? 'products-page__subcategory-panel--subcategory'
-                                                : ''
-                                        }`}
-                                    >
-                                        <p
-                                            className={`products-page__subcategory-heading suit-12-r ${
-                                                isSubcategoryView
-                                                    ? 'products-page__subcategory-heading--subcategory'
-                                                    : ''
-                                            }`}
-                                        >
-                                            {activeNavigationCategory.displayLabel}
-                                        </p>
-
-                                        <div
-                                            className={`products-page__subcategory-links ${
-                                                isSubcategoryView
-                                                    ? 'products-page__subcategory-links--subcategory'
-                                                    : ''
-                                            }`}
-                                        >
+                                    isSubcategoryView ? (
+                                        <div className="products-page__subcategory-links products-page__subcategory-links--subcategory">
                                             {activeNavigationCategory.children.map((item) => (
                                                 <Link
                                                     key={item.path}
@@ -428,13 +406,34 @@ const Products = () => {
                                                     state={{ preserveScroll: true }}
                                                     className={`products-page__subcategory-link suit-16-r ${
                                                         subcategory === item.slug ? 'is-active' : ''
-                                                    } ${isSubcategoryView ? 'is-subcategory-view' : ''}`}
+                                                    } is-subcategory-view`}
                                                 >
                                                     {item.displayLabel}
                                                 </Link>
                                             ))}
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className="products-page__subcategory-panel">
+                                            <p className="products-page__subcategory-heading suit-12-r">
+                                                {activeNavigationCategory.displayLabel}
+                                            </p>
+
+                                            <div className="products-page__subcategory-links">
+                                                {activeNavigationCategory.children.map((item) => (
+                                                    <Link
+                                                        key={item.path}
+                                                        to={item.path}
+                                                        state={{ preserveScroll: true }}
+                                                        className={`products-page__subcategory-link suit-16-r ${
+                                                            subcategory === item.slug ? 'is-active' : ''
+                                                        }`}
+                                                    >
+                                                        {item.displayLabel}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )
                                 ) : null}
                             </section>
 
