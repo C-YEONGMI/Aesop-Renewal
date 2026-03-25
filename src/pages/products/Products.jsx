@@ -35,6 +35,7 @@ const PRICE_RANGE_OPTIONS = [
 
 const formatBreadcrumbLabel = (value = '') =>
     value.replace(/[A-Za-z]+/g, (word) => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`);
+const formatCategoryDisplayLabel = (value = '') => value.replace(/\s*&\s*/g, ' · ');
 
 const getCategorySlugFromPath = (path = '') => path.split('/').filter(Boolean)[1] || '';
 
@@ -153,6 +154,7 @@ const Products = () => {
             return {
                 slug,
                 label: item.label,
+                displayLabel: formatCategoryDisplayLabel(item.label),
                 path: item.path,
                 count: products.filter(
                     (product) => getCategorySlugFromValue(product.category) === slug
@@ -160,6 +162,7 @@ const Products = () => {
                 children: (item.children || []).map((child) => ({
                     ...child,
                     slug: getSubcategorySlugFromPath(child.path),
+                    displayLabel: formatCategoryDisplayLabel(child.label),
                 })),
             };
         });
@@ -196,21 +199,22 @@ const Products = () => {
             activeCategories
                 .map(
                     (slug) =>
-                        productNavigationCategories.find((item) => item.slug === slug)?.label ||
-                        PRODUCT_CATEGORY_CONFIG[slug]?.label
+                        productNavigationCategories.find((item) => item.slug === slug)?.displayLabel ||
+                        formatCategoryDisplayLabel(PRODUCT_CATEGORY_CONFIG[slug]?.label || '')
                 )
                 .filter(Boolean),
         [activeCategories, productNavigationCategories]
     );
 
     const pageTitle = classificationMatch
-        ? classificationMatch.subcategory
+        ? formatCategoryDisplayLabel(classificationMatch.subcategory)
         : activeCategoryLabels.length === 1
             ? activeCategoryLabels[0]
             : 'Products';
+    const isSubcategoryView = Boolean(classificationMatch);
 
     const breadcrumbLabel = classificationMatch
-        ? classificationMatch.subcategory
+        ? formatCategoryDisplayLabel(classificationMatch.subcategory)
         : activeCategoryLabels.length === 1
             ? activeCategoryLabels[0]
             : '전체 제품';
@@ -328,7 +332,9 @@ const Products = () => {
                             {classificationMatch && category ? (
                                 <>
                                     <Link to={`/products/${category}`}>
-                                        {formatBreadcrumbLabel(PRODUCT_CATEGORY_CONFIG[category]?.label || category)}
+                                        {formatCategoryDisplayLabel(
+                                            formatBreadcrumbLabel(PRODUCT_CATEGORY_CONFIG[category]?.label || category)
+                                        )}
                                     </Link>
                                     <span> / </span>
                                     <span>{formatBreadcrumbLabel(breadcrumbLabel)}</span>
@@ -359,7 +365,12 @@ const Products = () => {
                         </div>
 
                         <div className="products-page__content">
-                            <section className="products-page__category-nav" aria-label="Product category navigation">
+                            <section
+                                className={`products-page__category-nav ${
+                                    isSubcategoryView ? 'products-page__category-nav--subcategory' : ''
+                                }`}
+                                aria-label="Product category navigation"
+                            >
                                 <div className="products-page__category-tabs">
                                     <button
                                         type="button"
@@ -380,18 +391,36 @@ const Products = () => {
                                             }`}
                                             onClick={() => handleCategorySelect(item.slug)}
                                         >
-                                            {item.label}
+                                            {item.displayLabel}
                                         </button>
                                     ))}
                                 </div>
 
                                 {activeNavigationCategory?.children?.length ? (
-                                    <div className="products-page__subcategory-panel">
-                                        <p className="products-page__subcategory-heading suit-12-r">
-                                            {activeNavigationCategory.label}
+                                    <div
+                                        className={`products-page__subcategory-panel ${
+                                            isSubcategoryView
+                                                ? 'products-page__subcategory-panel--subcategory'
+                                                : ''
+                                        }`}
+                                    >
+                                        <p
+                                            className={`products-page__subcategory-heading suit-12-r ${
+                                                isSubcategoryView
+                                                    ? 'products-page__subcategory-heading--subcategory'
+                                                    : ''
+                                            }`}
+                                        >
+                                            {activeNavigationCategory.displayLabel}
                                         </p>
 
-                                        <div className="products-page__subcategory-links">
+                                        <div
+                                            className={`products-page__subcategory-links ${
+                                                isSubcategoryView
+                                                    ? 'products-page__subcategory-links--subcategory'
+                                                    : ''
+                                            }`}
+                                        >
                                             {activeNavigationCategory.children.map((item) => (
                                                 <Link
                                                     key={item.path}
@@ -399,9 +428,9 @@ const Products = () => {
                                                     state={{ preserveScroll: true }}
                                                     className={`products-page__subcategory-link suit-16-r ${
                                                         subcategory === item.slug ? 'is-active' : ''
-                                                    }`}
+                                                    } ${isSubcategoryView ? 'is-subcategory-view' : ''}`}
                                                 >
-                                                    {item.label}
+                                                    {item.displayLabel}
                                                 </Link>
                                             ))}
                                         </div>
@@ -497,7 +526,10 @@ const Products = () => {
                                                         <div className="products-page__card-copy">
                                                             <div className="products-page__card-copy-inner">
                                                                 <p className="products-page__card-category suit-12-r">
-                                                                    {categoryConfig?.label || getCategoryLabelFromValue(product.category)}
+                                                                    {formatCategoryDisplayLabel(
+                                                                        categoryConfig?.label ||
+                                                                            getCategoryLabelFromValue(product.category)
+                                                                    )}
                                                                 </p>
                                                                 <p className="products-page__card-name suit-18-m">
                                                                     {product.name}

@@ -69,6 +69,11 @@
         margin-bottom: 28px;
     }
 
+    &__category-nav--subcategory {
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
     &__category-tabs {
         display: flex;
         flex-wrap: wrap;
@@ -105,16 +110,33 @@
         align-items: start;
     }
 
+    &__subcategory-panel--subcategory {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 18px 22px;
+        border: 1px solid rgba($brown-200, 0.88);
+        background: rgba($oatmeal, 0.74);
+    }
+
     &__subcategory-heading {
         color: $brown-400;
         letter-spacing: 0.08em;
         text-transform: uppercase;
     }
 
+    &__subcategory-heading--subcategory {
+        color: $brown-300;
+        letter-spacing: 0.14em;
+    }
+
     &__subcategory-links {
         display: flex;
         flex-wrap: wrap;
         gap: 12px 18px;
+    }
+
+    &__subcategory-links--subcategory {
+        gap: 10px 12px;
     }
 
     &__subcategory-link {
@@ -133,6 +155,25 @@
         &.is-active {
             color: $brown-800;
             border-bottom-color: $brown-800;
+        }
+
+        &.is-subcategory-view {
+            padding: 10px 14px;
+            border: 1px solid rgba($brown-200, 0.9);
+            background: rgba($brown-50, 0.84);
+        }
+
+        &.is-subcategory-view:hover {
+            border-bottom-color: transparent;
+            border-color: rgba($brown-500, 0.82);
+            background: rgba($brown-100, 0.46);
+        }
+
+        &.is-subcategory-view.is-active {
+            color: $oatmeal;
+            border-color: $brown-900;
+            border-bottom-color: $brown-900;
+            background: $brown-900;
         }
     }
 
@@ -443,6 +484,11 @@
             gap: 8px;
         }
 
+        &__subcategory-panel--subcategory {
+            padding: 16px 18px;
+            gap: 10px;
+        }
+
         &__rail {
             padding-top: 0;
             position: relative;
@@ -472,6 +518,10 @@
 
         &__subcategory-links {
             gap: 10px 14px;
+        }
+
+        &__subcategory-links--subcategory {
+            gap: 8px 10px;
         }
 
         &__toolbar {
