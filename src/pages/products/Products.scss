@@ -143,6 +143,7 @@
     }
 
     &__card {
+        position: relative;
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -153,6 +154,19 @@
         background-color: $bg-product;
         aspect-ratio: 1 / 1;
         overflow: hidden;
+    }
+
+    &__sold-out-overlay {
+        position: absolute;
+        inset: 0;
+        background-color: rgba($brown-900, 0.2);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    &__sold-out-label {
+        color: $brown-900;
+        letter-spacing: 0.05em;
     }
 
     &__card-overlay {

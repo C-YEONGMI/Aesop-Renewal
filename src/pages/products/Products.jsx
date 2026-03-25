@@ -350,7 +350,10 @@ const Products = () => {
                                             const isWishlisted = wishlist.includes(product.name);
 
                                             return (
-                                                <div key={product.name} className="products-page__card">
+                                                <div key={product.name} className={`products-page__card${product.status === false ? ' is-sold-out' : ''}`}>
+                                                    {product.status === false && (
+                                                        <div className="products-page__sold-out-overlay" />
+                                                    )}
                                                     <div className="products-page__card-img-wrap">
                                                         <div className="products-page__card-overlay">
                                                             <div className="products-page__card-badges">
@@ -418,8 +421,9 @@ const Products = () => {
                                                             <div className="products-page__card-actions-inner">
                                                                 <AddToCartButton
                                                                     className="products-page__add-btn"
-                                                                    text="장바구니 담기"
+                                                                    text={product.status === false ? '품절' : '장바구니 담기'}
                                                                     width="100%"
+                                                                    disabled={product.status === false}
                                                                     onClick={() => handleAddToCart(product)}
                                                                 />
                                                             </div>

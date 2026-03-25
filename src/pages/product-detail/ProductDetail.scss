@@ -144,6 +144,16 @@
             background-color: $brown-700;
             color: $oatmeal;
         }
+
+        &:disabled {
+            border-color: $brown-300;
+            color: $brown-300;
+            cursor: not-allowed;
+
+            &:hover {
+                background: none;
+            }
+        }
     }
 
     &__buy-btn {
@@ -154,6 +164,16 @@
         color: $oatmeal;
         cursor: pointer;
         transition: background-color 0.3s ease;
+
+        &:disabled {
+            border-color: $brown-300;
+            background-color: $brown-300;
+            cursor: not-allowed;
+
+            &:hover {
+                background-color: $brown-300;
+            }
+        }
 
         &:hover {
             background-color: $brown-900;

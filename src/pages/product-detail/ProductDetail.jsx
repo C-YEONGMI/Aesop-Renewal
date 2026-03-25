@@ -118,11 +118,11 @@ const ProductDetail = () => {
                         ) : null}
 
                         <div className="product-detail__actions">
-                            <button type="button" className="product-detail__add-btn suit-18-m" onClick={handleAddToCart}>
-                                장바구니 담기
+                            <button type="button" className="product-detail__add-btn suit-18-m" onClick={handleAddToCart} disabled={product.status === false}>
+                                {product.status === false ? '품절' : '장바구니 담기'}
                             </button>
-                            <button type="button" className="product-detail__buy-btn suit-18-m" onClick={handleBuyNow}>
-                                바로 구매
+                            <button type="button" className="product-detail__buy-btn suit-18-m" onClick={handleBuyNow} disabled={product.status === false}>
+                                {product.status === false ? '품절' : '바로 구매'}
                             </button>
                             <button
                                 type="button"

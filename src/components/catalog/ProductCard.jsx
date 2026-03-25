@@ -24,9 +24,12 @@ const ProductCard = ({ product }) => {
         return num.toLocaleString();
     };
 
+    const isSoldOut = product.status === false;
+
     return (
-        <div className="product-card">
+        <div className={`product-card${isSoldOut ? ' sold-out' : ''}`}>
             <div className="product-image-section">
+                {isSoldOut && <span className="sold-out-badge">품절</span>}
                 {/* 5. 보정된 이미지 주소(getFullImageUrl)를 src에 넣어줍니다. */}
                 <img
                     src={getFullImageUrl(selectedVariant.image)}
