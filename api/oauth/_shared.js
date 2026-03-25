@@ -1,7 +1,8 @@
 const json = (response, status, payload) => {
-    response.status(status).setHeader('Content-Type', 'application/json; charset=utf-8');
+    response.statusCode = status;
+    response.setHeader('Content-Type', 'application/json; charset=utf-8');
     response.setHeader('Cache-Control', 'no-store');
-    response.send(JSON.stringify(payload));
+    response.end(JSON.stringify(payload));
 };
 
 const readBody = async (request) => {
@@ -31,7 +32,8 @@ export const handleCors = (request, response) => {
     response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (request.method === 'OPTIONS') {
-        response.status(204).end();
+        response.statusCode = 204;
+        response.end();
         return true;
     }
 
