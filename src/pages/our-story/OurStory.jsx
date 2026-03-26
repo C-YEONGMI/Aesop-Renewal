@@ -376,6 +376,23 @@ const OurStory = () => {
             const mm = gsap.matchMedia();
 
             mm.add('(prefers-reduced-motion: no-preference)', () => {
+                const isMobileStory = window.matchMedia('(max-width: 768px)').matches;
+                const hideValuesCopy = () => {
+                    gsap.to(valuesTextsRef.current, {
+                        autoAlpha: 0,
+                        y: -40,
+                        duration: 0.25,
+                        overwrite: 'auto',
+                    });
+                };
+                const showValuesCopy = () => {
+                    gsap.to(valuesTextsRef.current, {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.25,
+                        overwrite: 'auto',
+                    });
+                };
                 // 페이지 진입 텍스트 fade-in
                 gsap.to(subtitleRef.current, {
                     autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.3,
@@ -478,6 +495,17 @@ const OurStory = () => {
                     once: true,
                     onEnter: () => drawLinePath(originsLineRef.current, 3.3),
                 });
+
+                if (isMobileStory) {
+                    ScrollTrigger.create({
+                        trigger: storyMidRef.current,
+                        start: '16% top',
+                        end: '100% top',
+                        onEnter: hideValuesCopy,
+                        onEnterBack: hideValuesCopy,
+                        onLeaveBack: showValuesCopy,
+                    });
+                }
 
                 // 탭 스크롤 전환 (900vh 기준)
                 // Naming:39%(351vh), Formulation:52%(468vh), Architecture:65%(585vh), Approach:78%(702vh)
@@ -587,6 +615,7 @@ const OurStory = () => {
 
             // ── reduced-motion fallback ────────────────────────────────────
             mm.add('(prefers-reduced-motion: reduce)', () => {
+                const isMobileStory = window.matchMedia('(max-width: 768px)').matches;
                 gsap.set([...formChars, ...archChars, ...sustainChars], { y: 0 });
                 gsap.set(subtitleRef.current, { autoAlpha: 1, y: 0 });
                 gsap.set(initLines, { autoAlpha: 1, y: 0 });
@@ -610,6 +639,17 @@ const OurStory = () => {
                     trigger: heroRef.current, start: '57.14% top',
                     onEnter: () => updateSlide(2), onLeaveBack: () => updateSlide(1),
                 });
+
+                if (isMobileStory) {
+                    ScrollTrigger.create({
+                        trigger: storyMidRef.current,
+                        start: '16% top',
+                        end: '100% top',
+                        onEnter: () => gsap.set(valuesTextsRef.current, { autoAlpha: 0, y: -40 }),
+                        onEnterBack: () => gsap.set(valuesTextsRef.current, { autoAlpha: 0, y: -40 }),
+                        onLeaveBack: () => gsap.set(valuesTextsRef.current, { autoAlpha: 1, y: 0 }),
+                    });
+                }
 
                 const LINE_MAP_RM = {
                     origins:      originsLineRef,
