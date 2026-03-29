@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import './GiftGuideFlow.scss';
 import '../../../pages/products/Products.scss';
 import { giftGuideTree } from '../../../data/giftGuideData';
+import { useAppDispatch, useAppSelector } from '../../../app/store/hooks';
+import { selectWishlistItems } from '../../../app/store/selectors/wishlistSelectors';
+import { toggleWishlistItem } from '../../../app/store/slices/wishlistSlice';
 import useProductStore from '../../../store/useProductStore';
 import useCartStore from '../../../store/useCartStore';
-import useWishlistStore from '../../../store/useWishlistStore';
 import useRequireLoginAction from '../../../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue } from '../../../data/productCategories';
 import AddToCartButton from '../../common/button/AddToCartButton';
@@ -23,10 +25,10 @@ const renderBadge = (badge) => {
 };
 
 const GiftGuideFlow = () => {
+    const dispatch = useAppDispatch();
     const products = useProductStore((s) => s.products);
     const addToCart = useCartStore((s) => s.addToCart);
-    const wishlist = useWishlistStore((s) => s.wishlist);
-    const toggleWishlist = useWishlistStore((s) => s.toggleWishlist);
+    const wishlist = useAppSelector(selectWishlistItems);
     const requireLoginAction = useRequireLoginAction();
     const [step1, setStep1] = useState(null);
     const [step2, setStep2] = useState(null);
@@ -216,7 +218,9 @@ const GiftGuideFlow = () => {
                                                     type="button"
                                                     className={`products-page__wish-btn ${isWishlisted ? 'active' : ''}`}
                                                     onClick={() =>
-                                                        requireLoginAction(() => toggleWishlist(product.name))
+                                                        requireLoginAction(() =>
+                                                            dispatch(toggleWishlistItem(product.name))
+                                                        )
                                                     }
                                                     aria-label="위시리스트 추가"
                                                 >

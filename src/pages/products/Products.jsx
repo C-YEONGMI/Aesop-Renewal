@@ -6,9 +6,11 @@ import Best from '../../components/common/badge/Best';
 import New from '../../components/common/badge/New';
 import Exclusive from '../../components/common/badge/Exclusive';
 import ProductFilterRail from '../../components/ui/ProductFilterRail';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import { selectWishlistItems } from '../../app/store/selectors/wishlistSelectors';
+import { toggleWishlistItem } from '../../app/store/slices/wishlistSlice';
 import useProductStore from '../../store/useProductStore';
 import useCartStore from '../../store/useCartStore';
-import useWishlistStore from '../../store/useWishlistStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import {
     PRODUCT_CATEGORY_CONFIG,
@@ -62,10 +64,10 @@ const Products = () => {
     const { category, subcategory } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const products = useProductStore((state) => state.products);
     const giftFilters = useProductStore((state) => state.giftFilters);
-    const wishlist = useWishlistStore((state) => state.wishlist);
-    const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
+    const wishlist = useAppSelector(selectWishlistItems);
     const addToCart = useCartStore((state) => state.addToCart);
     const requireLoginAction = useRequireLoginAction();
 
@@ -312,7 +314,7 @@ const Products = () => {
     };
 
     const handleWishlistToggle = (productName) => {
-        requireLoginAction(() => toggleWishlist(productName));
+        requireLoginAction(() => dispatch(toggleWishlistItem(productName)));
     };
 
     const handleAddToCart = (product) => {

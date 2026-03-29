@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Provider } from 'react-redux';
 import App from './app/App.jsx';
+import store from './app/store';
 import './globals.scss';
 import './index.css';
 
@@ -10,8 +12,10 @@ const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 root.render(
     <StrictMode>
-        <GoogleOAuthProvider clientId={googleClientId}>
-            <App />
-        </GoogleOAuthProvider>
+        <Provider store={store}>
+            <GoogleOAuthProvider clientId={googleClientId}>
+                <App />
+            </GoogleOAuthProvider>
+        </Provider>
     </StrictMode>
 );

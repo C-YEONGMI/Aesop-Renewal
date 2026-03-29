@@ -13,10 +13,11 @@ import {
     User,
 } from 'lucide-react';
 import Badge from '../../components/common/badge/Badge';
+import { useAppSelector } from '../../app/store/hooks';
+import { selectWishlistItems } from '../../app/store/selectors/wishlistSelectors';
 import useAuthStore from '../../store/useAuthStore';
 import useCartStore from '../../store/useCartStore';
 import useOrderStore from '../../store/useOrderStore';
-import useWishlistStore from '../../store/useWishlistStore';
 import useProductStore from '../../store/useProductStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue } from '../../data/productCategories';
@@ -82,7 +83,7 @@ const MyPage = () => {
     const updateProfile = useAuthStore((state) => state.updateProfile);
     const addToCart = useCartStore((state) => state.addToCart);
     const allOrders = useOrderStore((state) => state.orders);
-    const wishlist = useWishlistStore((state) => state.wishlist);
+    const wishlist = useAppSelector(selectWishlistItems);
     const products = useProductStore((state) => state.products);
     const requireLoginAction = useRequireLoginAction();
     const [profileForm, setProfileForm] = useState({ name: '', email: '', phone: '' });

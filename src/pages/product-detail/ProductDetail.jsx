@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import { selectWishlistItems } from '../../app/store/selectors/wishlistSelectors';
+import { toggleWishlistItem } from '../../app/store/slices/wishlistSlice';
 import useProductStore from '../../store/useProductStore';
 import useCartStore from '../../store/useCartStore';
-import useWishlistStore from '../../store/useWishlistStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue, getCategoryRouteFromValue } from '../../data/productCategories';
 import './ProductDetail.scss';
@@ -16,11 +18,11 @@ const TABS = [
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const products = useProductStore((state) => state.products);
     const addRecentlyViewed = useProductStore((state) => state.addRecentlyViewed);
     const addToCart = useCartStore((state) => state.addToCart);
-    const wishlist = useWishlistStore((state) => state.wishlist);
-    const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
+    const wishlist = useAppSelector(selectWishlistItems);
     const requireLoginAction = useRequireLoginAction();
 
     const product = products.find((item) => item.name === decodeURIComponent(id));
@@ -58,7 +60,7 @@ const ProductDetail = () => {
     };
 
     const handleWishlistToggle = () => {
-        requireLoginAction(() => toggleWishlist(product.name));
+        requireLoginAction(() => dispatch(toggleWishlistItem(product.name)));
     };
 
     return (
