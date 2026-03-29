@@ -1,7 +1,9 @@
 import React from 'react';
 import { Gift } from 'lucide-react';
 import Swal from 'sweetalert2';
-import useCartStore from '../../../store/useCartStore';
+import { useAppDispatch, useAppSelector } from '../../../app/store/hooks';
+import { selectSelectedSamples } from '../../../app/store/selectors/cartSelectors';
+import { toggleSample } from '../../../app/store/slices/cartSlice';
 import sampleImg from '../../../assets/sample_img.png';
 import './SampleSelector.scss';
 
@@ -15,8 +17,8 @@ const SAMPLE_LIST = [
 ];
 
 const SampleSelector = () => {
-    const selectedSamples = useCartStore((state) => state.selectedSamples);
-    const toggleSample = useCartStore((state) => state.toggleSample);
+    const dispatch = useAppDispatch();
+    const selectedSamples = useAppSelector(selectSelectedSamples);
 
     const handleToggle = (sampleId) => {
         const isSelected = selectedSamples.includes(sampleId);
@@ -31,7 +33,7 @@ const SampleSelector = () => {
             return;
         }
 
-        toggleSample(sampleId);
+        dispatch(toggleSample(sampleId));
     };
 
     return (

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import { addToCart } from '../../app/store/slices/cartSlice';
 import { selectWishlistItems } from '../../app/store/selectors/wishlistSelectors';
 import { toggleWishlistItem } from '../../app/store/slices/wishlistSlice';
 import useProductStore from '../../store/useProductStore';
-import useCartStore from '../../store/useCartStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue, getCategoryRouteFromValue } from '../../data/productCategories';
 import './ProductDetail.scss';
@@ -21,7 +21,6 @@ const ProductDetail = () => {
     const dispatch = useAppDispatch();
     const products = useProductStore((state) => state.products);
     const addRecentlyViewed = useProductStore((state) => state.addRecentlyViewed);
-    const addToCart = useCartStore((state) => state.addToCart);
     const wishlist = useAppSelector(selectWishlistItems);
     const requireLoginAction = useRequireLoginAction();
 
@@ -49,12 +48,20 @@ const ProductDetail = () => {
     const isWished = wishlist.includes(product.name);
 
     const handleAddToCart = () => {
-        requireLoginAction(() => addToCart(product, selectedVariant));
+        requireLoginAction(() =>
+            dispatch(addToCart({ product, variantIndex: selectedVariant }))
+        );
     };
 
     const handleBuyNow = () => {
         requireLoginAction(() => {
-            addToCart(product, selectedVariant, { showDialog: false });
+            dispatch(
+                addToCart({
+                    product,
+                    variantIndex: selectedVariant,
+                    options: { showDialog: false },
+                })
+            );
             navigate('/cart');
         });
     };

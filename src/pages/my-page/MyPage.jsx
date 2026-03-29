@@ -13,10 +13,10 @@ import {
     User,
 } from 'lucide-react';
 import Badge from '../../components/common/badge/Badge';
-import { useAppSelector } from '../../app/store/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import { addToCart } from '../../app/store/slices/cartSlice';
 import { selectWishlistItems } from '../../app/store/selectors/wishlistSelectors';
 import useAuthStore from '../../store/useAuthStore';
-import useCartStore from '../../store/useCartStore';
 import useOrderStore from '../../store/useOrderStore';
 import useProductStore from '../../store/useProductStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
@@ -77,11 +77,11 @@ const MyPage = () => {
             ? requestedOrderStage
             : 'all';
 
+    const dispatch = useAppDispatch();
     const user = useAuthStore((state) => state.user);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const logout = useAuthStore((state) => state.logout);
     const updateProfile = useAuthStore((state) => state.updateProfile);
-    const addToCart = useCartStore((state) => state.addToCart);
     const allOrders = useOrderStore((state) => state.orders);
     const wishlist = useAppSelector(selectWishlistItems);
     const products = useProductStore((state) => state.products);
@@ -240,12 +240,18 @@ const MyPage = () => {
     };
 
     const handleWishlistAddToCart = (product) => {
-        requireLoginAction(() => addToCart(product, 0));
+        requireLoginAction(() => dispatch(addToCart({ product, variantIndex: 0 })));
     };
 
     const handleWishlistBuyNow = (product) => {
         requireLoginAction(() => {
-            addToCart(product, 0, { showDialog: false });
+            dispatch(
+                addToCart({
+                    product,
+                    variantIndex: 0,
+                    options: { showDialog: false },
+                })
+            );
             navigate('/cart');
         });
     };

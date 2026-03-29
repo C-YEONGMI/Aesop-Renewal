@@ -3,8 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Header_wh.scss';
 import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
 import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
+import { useAppSelector } from '../../../app/store/hooks';
+import { selectCartTotalQuantity } from '../../../app/store/selectors/cartSelectors';
 import useAuthStore from '../../../store/useAuthStore';
-import useCartStore from '../../../store/useCartStore';
 import { formatCategoryLabel } from '../../../data/productCategories';
 
 const AccountIcon = () => (
@@ -26,9 +27,7 @@ const AccountIcon = () => (
 const Header_wh = () => {
     const navigate = useNavigate();
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const totalCount = useCartStore((state) =>
-        state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
-    );
+    const totalCount = useAppSelector(selectCartTotalQuantity);
 
     const handleLogoClick = (event) => {
         event.preventDefault();

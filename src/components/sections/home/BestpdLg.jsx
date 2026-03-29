@@ -1,10 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../app/store/hooks';
+import { addToCart } from '../../../app/store/slices/cartSlice';
 import Best from '../../common/badge/Best';
 import New from '../../common/badge/New';
 import Exclusive from '../../common/badge/Exclusive';
 import AddToCartButton from '../../common/button/AddToCartButton';
-import useCartStore from '../../../store/useCartStore';
 import useRequireLoginAction from '../../../hooks/useRequireLoginAction';
 import './BestpdLg.scss';
 
@@ -14,7 +15,7 @@ const ADD_TO_CART_LABEL = '\uC7A5\uBC14\uAD6C\uB2C8 \uB2F4\uAE30';
 
 const BestpdLg = ({ product }) => {
     const navigate = useNavigate();
-    const addToCart = useCartStore((state) => state.addToCart);
+    const dispatch = useAppDispatch();
     const requireLoginAction = useRequireLoginAction();
     const productData = product || {
         name: DEFAULT_NAME,
@@ -36,7 +37,7 @@ const BestpdLg = ({ product }) => {
             return;
         }
 
-        requireLoginAction(() => addToCart(product, 0));
+        requireLoginAction(() => dispatch(addToCart({ product, variantIndex: 0 })));
     };
 
     const handleCardClick = () => {

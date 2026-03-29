@@ -3,7 +3,8 @@ import { gsap } from 'gsap';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.scss';
 import GNB_Logo from '../../../assets/GNB_Logo.svg?react';
-import useCartStore from '../../../store/useCartStore';
+import { useAppSelector } from '../../../app/store/hooks';
+import { selectCartTotalQuantity } from '../../../app/store/selectors/cartSelectors';
 import useAuthStore from '../../../store/useAuthStore';
 import ExpandableSearchBar from '../../ui/ExpandableSearchBar';
 import GNB from '../navigation/GNB';
@@ -27,9 +28,7 @@ const AccountIcon = () => (
 const Header = ({ transparent = false, isVisible = true }) => {
     const navigate = useNavigate();
     const headerRef = useRef(null);
-    const totalCount = useCartStore((state) =>
-        state.cartItems.reduce((sum, item) => sum + item.quantity, 0)
-    );
+    const totalCount = useAppSelector(selectCartTotalQuantity);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
     useLayoutEffect(() => {

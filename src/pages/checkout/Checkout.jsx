@@ -1,6 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Check, Lock, Package, RotateCcw, Shield, Truck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import {
+    selectCartShippingFee,
+    selectCartSubtotal,
+    selectCartTotalAmount,
+    selectCheckedCartItems,
+    selectSelectedSamples,
+} from '../../app/store/selectors/cartSelectors';
+import { clearSamples, removeOrderedItems } from '../../app/store/slices/cartSlice';
 import {
     Select,
     SelectContent,
@@ -9,7 +18,6 @@ import {
     SelectValue,
 } from '../../components/ui/Select';
 import SampleSelector from '../../components/features/checkout/SampleSelector';
-import useCartStore from '../../store/useCartStore';
 import useAuthStore from '../../store/useAuthStore';
 import useOrderStore from '../../store/useOrderStore';
 import './Checkout.scss';
@@ -40,20 +48,14 @@ const AGREEMENT_ITEMS = [
 
 const Checkout = () => {
     const navigate = useNavigate();
-    const cartItems = useCartStore((state) => state.cartItems);
-    const removeOrderedItems = useCartStore((state) => state.removeOrderedItems);
-    const selectedSamples = useCartStore((state) => state.selectedSamples);
-    const clearSamples = useCartStore((state) => state.clearSamples);
+    const dispatch = useAppDispatch();
+    const checkedItems = useAppSelector(selectCheckedCartItems);
+    const subtotal = useAppSelector(selectCartSubtotal);
+    const shippingFee = useAppSelector(selectCartShippingFee);
+    const total = useAppSelector(selectCartTotalAmount);
+    const selectedSamples = useAppSelector(selectSelectedSamples);
     const user = useAuthStore((state) => state.user);
     const createOrder = useOrderStore((state) => state.createOrder);
-
-    const checkedItems = useMemo(() => cartItems.filter((item) => item.checked), [cartItems]);
-    const subtotal = useMemo(
-        () => checkedItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
-        [checkedItems]
-    );
-    const shippingFee = subtotal === 0 ? 0 : subtotal >= 50000 ? 0 : 3000;
-    const total = subtotal + shippingFee;
 
     const [form, setForm] = useState({
         name: user?.name || '',
@@ -179,8 +181,8 @@ const Checkout = () => {
             total,
         });
 
-        removeOrderedItems(checkedItems.map((item) => item.cartId));
-        clearSamples();
+        dispatch(removeOrderedItems(checkedItems.map((item) => item.cartId)));
+        dispatch(clearSamples());
     };
 
     if (checkedItems.length === 0) {

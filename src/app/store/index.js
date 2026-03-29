@@ -4,6 +4,7 @@ import cartReducer from './slices/cartSlice';
 import productReducer from './slices/productSlice';
 import wishlistReducer from './slices/wishlistSlice';
 import { createPreloadedState } from './preloadedState';
+import { initializeCartBridge } from './bridges/cartBridge';
 import { initializeWishlistBridge } from './bridges/wishlistBridge';
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     preloadedState: createPreloadedState(),
 });
 
+initializeCartBridge(store);
 initializeWishlistBridge(store);
 
 export default store;

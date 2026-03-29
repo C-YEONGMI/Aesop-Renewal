@@ -4,10 +4,10 @@ import './GiftGuideFlow.scss';
 import '../../../pages/products/Products.scss';
 import { giftGuideTree } from '../../../data/giftGuideData';
 import { useAppDispatch, useAppSelector } from '../../../app/store/hooks';
+import { addToCart } from '../../../app/store/slices/cartSlice';
 import { selectWishlistItems } from '../../../app/store/selectors/wishlistSelectors';
 import { toggleWishlistItem } from '../../../app/store/slices/wishlistSlice';
 import useProductStore from '../../../store/useProductStore';
-import useCartStore from '../../../store/useCartStore';
 import useRequireLoginAction from '../../../hooks/useRequireLoginAction';
 import { getCategoryLabelFromValue } from '../../../data/productCategories';
 import AddToCartButton from '../../common/button/AddToCartButton';
@@ -27,7 +27,6 @@ const renderBadge = (badge) => {
 const GiftGuideFlow = () => {
     const dispatch = useAppDispatch();
     const products = useProductStore((s) => s.products);
-    const addToCart = useCartStore((s) => s.addToCart);
     const wishlist = useAppSelector(selectWishlistItems);
     const requireLoginAction = useRequireLoginAction();
     const [step1, setStep1] = useState(null);
@@ -244,7 +243,7 @@ const GiftGuideFlow = () => {
                                             </div>
                                             <div className="products-page__card-actions">
                                                 <div className="products-page__card-actions-inner">
-                                                    <AddToCartButton className="products-page__add-btn" text="장바구니 담기" width="100%" onClick={() => requireLoginAction(() => addToCart(product, 0))} />
+                                                    <AddToCartButton className="products-page__add-btn" text="장바구니 담기" width="100%" onClick={() => requireLoginAction(() => dispatch(addToCart({ product, variantIndex: 0 })))} />
                                                 </div>
                                             </div>
                                         </div>

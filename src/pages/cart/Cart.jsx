@@ -2,13 +2,25 @@ import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import RollingNumber from '../../components/ui/RollingNumber';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import {
+    selectAllCartItemsChecked,
+    selectCartItems,
+    selectCartShippingFee,
+    selectCartSubtotal,
+    selectCartTotalAmount,
+    selectCheckedCartItems,
+} from '../../app/store/selectors/cartSelectors';
+import {
+    removeChecked,
+    removeItem,
+    toggleAll,
+    toggleCheck,
+    updateQuantity,
+} from '../../app/store/slices/cartSlice';
 import useAuthStore from '../../store/useAuthStore';
-import useCartStore from '../../store/useCartStore';
 import { getCategoryLabelFromValue } from '../../data/productCategories';
 import './Cart.scss';
-
-const SHIPPING_FEE = 3000;
-const FREE_SHIPPING = 50000;
 
 const getEstimatedArrivalLabel = () => {
     const date = new Date();
@@ -61,19 +73,14 @@ const PriceValue = ({ value, className = '' }) => (
 
 const Cart = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const cartItems = useCartStore((state) => state.cartItems);
-    const updateQuantity = useCartStore((state) => state.updateQuantity);
-    const removeItem = useCartStore((state) => state.removeItem);
-    const toggleCheck = useCartStore((state) => state.toggleCheck);
-    const toggleAll = useCartStore((state) => state.toggleAll);
-    const removeChecked = useCartStore((state) => state.removeChecked);
-
-    const checkedItems = cartItems.filter((item) => item.checked);
-    const subtotal = checkedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const shipping = subtotal >= FREE_SHIPPING ? 0 : subtotal > 0 ? SHIPPING_FEE : 0;
-    const total = subtotal + shipping;
-    const allChecked = cartItems.length > 0 && cartItems.every((item) => item.checked);
+    const cartItems = useAppSelector(selectCartItems);
+    const checkedItems = useAppSelector(selectCheckedCartItems);
+    const subtotal = useAppSelector(selectCartSubtotal);
+    const shipping = useAppSelector(selectCartShippingFee);
+    const total = useAppSelector(selectCartTotalAmount);
+    const allChecked = useAppSelector(selectAllCartItemsChecked);
     const estimatedArrivalLabel = getEstimatedArrivalLabel();
 
     const handleOrder = () => {
@@ -96,8 +103,8 @@ const Cart = () => {
             return;
         }
 
-        toggleAll(false);
-        toggleCheck(cartId);
+        dispatch(toggleAll(false));
+        dispatch(toggleCheck(cartId));
         navigate('/checkout');
     };
 
@@ -155,7 +162,7 @@ const Cart = () => {
                                 <div className="cart-page__toolbar">
                                     <CartCheckbox
                                         checked={allChecked}
-                                        onClick={() => toggleAll(!allChecked)}
+                                        onClick={() => dispatch(toggleAll(!allChecked))}
                                         ariaLabel="전체 선택"
                                     >
                                         전체 선택
@@ -164,7 +171,7 @@ const Cart = () => {
                                     <button
                                         type="button"
                                         className="cart-page__delete-selected"
-                                        onClick={removeChecked}
+                                        onClick={() => dispatch(removeChecked())}
                                         disabled={checkedItems.length === 0}
                                     >
                                         선택 삭제
@@ -194,7 +201,7 @@ const Cart = () => {
                                                 <div className="cart-page__item-check-cell">
                                                     <CartCheckbox
                                                         checked={item.checked}
-                                                        onClick={() => toggleCheck(item.cartId)}
+                                                        onClick={() => dispatch(toggleCheck(item.cartId))}
                                                         className="cart-page__checkbox--row"
                                                         ariaLabel={`${item.productName} 선택`}
                                                     />
@@ -228,7 +235,12 @@ const Cart = () => {
                                                             type="button"
                                                             className="cart-page__quantity-btn"
                                                             onClick={() =>
-                                                                updateQuantity(item.cartId, item.quantity - 1)
+                                                                dispatch(
+                                                                    updateQuantity({
+                                                                        cartId: item.cartId,
+                                                                        quantity: item.quantity - 1,
+                                                                    })
+                                                                )
                                                             }
                                                             aria-label={`${item.productName} 수량 줄이기`}
                                                         >
@@ -244,7 +256,12 @@ const Cart = () => {
                                                             type="button"
                                                             className="cart-page__quantity-btn"
                                                             onClick={() =>
-                                                                updateQuantity(item.cartId, item.quantity + 1)
+                                                                dispatch(
+                                                                    updateQuantity({
+                                                                        cartId: item.cartId,
+                                                                        quantity: item.quantity + 1,
+                                                                    })
+                                                                )
                                                             }
                                                             aria-label={`${item.productName} 수량 늘리기`}
                                                         >
@@ -271,7 +288,7 @@ const Cart = () => {
                                                     <button
                                                         type="button"
                                                         className="cart-page__delete-item"
-                                                        onClick={() => removeItem(item.cartId)}
+                                                        onClick={() => dispatch(removeItem(item.cartId))}
                                                     >
                                                         삭제
                                                     </button>

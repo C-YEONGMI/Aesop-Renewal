@@ -1,8 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ShoppingBag, Check, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import {
+    selectCartDialogItem,
+    selectIsCartDialogOpen,
+} from '../../app/store/selectors/cartSelectors';
+import { addToCart, closeCartDialog } from '../../app/store/slices/cartSlice';
 import { getCategoryLabelFromValue } from '../../data/productCategories';
-import useCartStore from '../../store/useCartStore';
 import useProductStore from '../../store/useProductStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import {
@@ -22,11 +27,10 @@ const getPrimaryPrice = (product) => product?.variants?.[0]?.price ?? Number.MAX
 
 const CartAddDialog = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const products = useProductStore((state) => state.products);
-    const isCartDialogOpen = useCartStore((state) => state.isCartDialogOpen);
-    const cartDialogItem = useCartStore((state) => state.cartDialogItem);
-    const addToCart = useCartStore((state) => state.addToCart);
-    const closeCartDialog = useCartStore((state) => state.closeCartDialog);
+    const isCartDialogOpen = useAppSelector(selectIsCartDialogOpen);
+    const cartDialogItem = useAppSelector(selectCartDialogItem);
     const requireLoginAction = useRequireLoginAction();
     const [recentlyAddedRecommendation, setRecentlyAddedRecommendation] = useState(null);
 
@@ -99,18 +103,24 @@ const CartAddDialog = () => {
 
     const handleOpenChange = (nextOpen) => {
         if (!nextOpen) {
-            closeCartDialog();
+            dispatch(closeCartDialog());
         }
     };
 
     const handleGoToCart = () => {
-        closeCartDialog();
+        dispatch(closeCartDialog());
         navigate('/cart');
     };
 
     const handleAddRecommendation = (product) => {
         requireLoginAction(() => {
-            addToCart(product, 0, { showDialog: false, preserveDialog: true });
+            dispatch(
+                addToCart({
+                    product,
+                    variantIndex: 0,
+                    options: { showDialog: false, preserveDialog: true },
+                })
+            );
             setRecentlyAddedRecommendation(product.name);
         });
     };

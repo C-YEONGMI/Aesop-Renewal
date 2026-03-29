@@ -7,10 +7,10 @@ import New from '../../components/common/badge/New';
 import Exclusive from '../../components/common/badge/Exclusive';
 import ProductFilterRail from '../../components/ui/ProductFilterRail';
 import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import { addToCart } from '../../app/store/slices/cartSlice';
 import { selectWishlistItems } from '../../app/store/selectors/wishlistSelectors';
 import { toggleWishlistItem } from '../../app/store/slices/wishlistSlice';
 import useProductStore from '../../store/useProductStore';
-import useCartStore from '../../store/useCartStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import {
     PRODUCT_CATEGORY_CONFIG,
@@ -68,7 +68,6 @@ const Products = () => {
     const products = useProductStore((state) => state.products);
     const giftFilters = useProductStore((state) => state.giftFilters);
     const wishlist = useAppSelector(selectWishlistItems);
-    const addToCart = useCartStore((state) => state.addToCart);
     const requireLoginAction = useRequireLoginAction();
 
     const [sort, setSort] = useState('default');
@@ -318,7 +317,7 @@ const Products = () => {
     };
 
     const handleAddToCart = (product) => {
-        requireLoginAction(() => addToCart(product, 0));
+        requireLoginAction(() => dispatch(addToCart({ product, variantIndex: 0 })));
     };
 
     return (

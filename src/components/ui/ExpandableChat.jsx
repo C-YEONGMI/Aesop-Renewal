@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MessageCircle, RotateCcw, X } from 'lucide-react';
-import useCartStore from '../../store/useCartStore';
+import { useAppDispatch } from '../../app/store/hooks';
+import { addToCart } from '../../app/store/slices/cartSlice';
 import useProductStore from '../../store/useProductStore';
 import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 import {
@@ -55,8 +56,8 @@ const getKstSupportStatus = () => {
 const ExpandableChat = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useAppDispatch();
     const products = useProductStore((state) => state.products);
-    const addToCart = useCartStore((state) => state.addToCart);
     const requireLoginAction = useRequireLoginAction();
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -432,7 +433,9 @@ const ExpandableChat = ({ isOpen, onClose }) => {
             navigate(action.to);
         }
         if (action.kind === 'add') {
-            requireLoginAction(() => addToCart(action.product, 0));
+            requireLoginAction(() =>
+                dispatch(addToCart({ product: action.product, variantIndex: 0 }))
+            );
         }
         if (action.kind === 'start') {
             startFlow(action.flowKey, { answers: action.answers, startIndex: action.startIndex });
